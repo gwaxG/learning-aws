@@ -1,0 +1,172 @@
+{
+  "slug": "integration",
+  "title": "Decoupling & Integration",
+  "domains": [
+    2,
+    3
+  ],
+  "essentials": [
+    {
+      "heading": "Why decouple?",
+      "body": "**Loose coupling** lets components fail, scale, and deploy independently. Instead of service A calling service B synchronously (a tight chain where B's outage breaks A), you put a **queue or topic** between them. Benefits: **resilience** (a slow/down consumer doesn't break the producer), **buffering** (absorb traffic spikes — write to queue fast, process at your own pace), and **independent scaling** (scale producers and consumers separately based on queue depth)."
+    },
+    {
+      "heading": "SQS — Standard vs FIFO",
+      "body": "Fully managed message queue, **pull-based** (consumers poll). **Standard**: nearly unlimited throughput, **at-least-once** delivery (possible duplicates), **best-effort ordering**. **FIFO** (`.fifo` suffix): **exactly-once** processing, strict ordering within a *message group*, up to 300 msg/s (3000 with batching). Key knobs: **visibility timeout** (message hidden after receive so others don't process it; extend if processing is slow), **DLQ** (dead-letter queue after N failed receives via `maxReceiveCount`), **long polling** (`ReceiveMessage WaitTimeSeconds` up to 20s — fewer empty responses, lower cost than short polling). Max retention 14 days, max message size 256 KB."
+    },
+    {
+      "heading": "SNS — pub/sub fan-out",
+      "body": "**Push-based** publish/subscribe. Publishers send to a **topic**; the topic pushes to all **subscriptions** (SQS, Lambda, HTTP/S, email, SMS, Kinesis Firehose). One message → many consumers. **Standard** topics (high throughput, best-effort order) and **FIFO** topics (ordered, dedup; only deliver to SQS FIFO). **Message filtering** with subscription filter policies. Supports server-side encryption."
+    },
+    {
+      "heading": "SNS + SQS fan-out pattern",
+      "body": "The classic decoupling pattern: publish **once** to an SNS topic, which fans out to **multiple SQS queues** (one per consumer). Each consumer gets its own buffered, durable queue and processes at its own pace — add new consumers without touching producers. Combine with **SQS DLQs** per queue for failure isolation. Enable **raw message delivery** to avoid SNS-envelope wrapping in the SQS payload."
+    },
+    {
+      "heading": "Amazon MQ vs SQS/SNS",
+      "body": "**Amazon MQ** is managed **ActiveMQ / RabbitMQ** — choose it when migrating an existing app that already uses **open protocols** (JMS, AMQP, MQTT, STOMP, OpenWire). SQS/SNS use AWS proprietary APIs and scale almost infinitely with near-zero ops, but require code changes to adopt. Rule of thumb: **new cloud-native app → SQS/SNS**; **lift-and-shift of a legacy broker app → Amazon MQ**."
+    },
+    {
+      "heading": "EventBridge — event bus",
+      "body": "Serverless **event bus** for event-driven architectures. Routes events via **rules** (content-based pattern matching on the JSON event) to targets (Lambda, SQS, SNS, Step Functions, etc.). Distinct from SNS: **SaaS partner integrations** (Zendesk, Datadog…), **schema registry**, **archive & replay**, and **scheduled rules / EventBridge Scheduler** (cron / rate). Use **EventBridge** for routing/filtering many event sources and AWS-service events; use **SNS** for simple high-throughput fan-out to subscribers."
+    },
+    {
+      "heading": "Step Functions — workflow orchestration",
+      "body": "Serverless **state machine** to orchestrate multi-step workflows (Lambdas, ECS, SNS, SQS…) with retries, error handling, parallel and choice states, visualized as a graph. **Standard** workflows: up to 1 year, exactly-once, full execution history — for long-running, auditable orchestration. **Express** workflows: up to 5 minutes, at-least-once, high-volume/high-event-rate, billed by request+duration — for streaming/IoT/short jobs."
+    },
+    {
+      "heading": "API Gateway — REST vs HTTP",
+      "body": "Managed front door for APIs. **HTTP APIs**: cheaper, lower latency, simpler — JWT/OIDC + Lambda proxy, good default. **REST APIs**: full feature set — **API keys/usage plans**, **request/response validation & transformation (VTL)**, **caching**, **WAF**, edge-optimized/private endpoints. Cross-cutting: **throttling** (rate + burst, protects backends from spikes), **caching** (lowers backend load & latency), **authorizers** (Cognito, Lambda, IAM)."
+    }
+  ],
+  "labs": [
+    {
+      "id": "int-sqs-dlq",
+      "title": "SQS queue with a dead-letter queue",
+      "intro": "Create a **main queue** and a **DLQ**. Messages that fail processing `maxReceiveCount` times are moved to the DLQ for inspection — isolating poison messages so they don't block the queue.",
+      "cli": "# 1. Create the DLQ first and grab its ARN\nDLQ_URL=$(aws sqs create-queue --queue-name orders-dlq --query QueueUrl --output text)\nDLQ_ARN=$(aws sqs get-queue-attributes --queue-url \"$DLQ_URL\" \\\n  --attribute-names QueueArn --query Attributes.QueueArn --output text)\n\n# 2. Create the main queue with a redrive policy + long polling\naws sqs create-queue --queue-name orders --attributes \"{\n  \\\"RedrivePolicy\\\": \\\"{\\\\\\\"deadLetterTargetArn\\\\\\\":\\\\\\\"$DLQ_ARN\\\\\\\",\\\\\\\"maxReceiveCount\\\\\\\":\\\\\\\"3\\\\\\\"}\\\",\n  \\\"VisibilityTimeout\\\": \\\"60\\\",\n  \\\"ReceiveMessageWaitTimeSeconds\\\": \\\"20\\\"\n}\"\n\n# 3. Send & long-poll receive\nQ_URL=$(aws sqs get-queue-url --queue-name orders --query QueueUrl --output text)\naws sqs send-message --queue-url \"$Q_URL\" --message-body '{\"orderId\":1}'\naws sqs receive-message --queue-url \"$Q_URL\" --wait-time-seconds 20",
+      "pulumi": "import json\nimport pulumi_aws as aws\n\ndlq = aws.sqs.Queue(\"orders-dlq\", name=\"orders-dlq\")\n\nmain = aws.sqs.Queue(\n    \"orders\",\n    name=\"orders\",\n    visibility_timeout_seconds=60,\n    receive_wait_time_seconds=20,  # long polling\n    redrive_policy=dlq.arn.apply(\n        lambda arn: json.dumps(\n            {\"deadLetterTargetArn\": arn, \"maxReceiveCount\": 3}\n        )\n    ),\n)",
+      "note": "**Cleanup:** `aws sqs delete-queue --queue-url \"$Q_URL\"` and the same for the DLQ (or `pulumi destroy`). Deleted queue names cannot be recreated for ~60s."
+    },
+    {
+      "id": "int-sns-fanout",
+      "title": "SNS topic fanning out to an SQS queue",
+      "intro": "Build the **SNS + SQS fan-out** pattern: an SNS topic pushes each published message to a subscribed SQS queue. The queue needs a **policy allowing SNS to send messages** to it.",
+      "cli": "# 1. Topic + queue\nTOPIC_ARN=$(aws sns create-topic --name events --query TopicArn --output text)\nQ_URL=$(aws sqs create-queue --queue-name events-consumer --query QueueUrl --output text)\nQ_ARN=$(aws sqs get-queue-attributes --queue-url \"$Q_URL\" \\\n  --attribute-names QueueArn --query Attributes.QueueArn --output text)\n\n# 2. Allow SNS to send to the queue\naws sqs set-queue-attributes --queue-url \"$Q_URL\" --attributes \"{\n  \\\"Policy\\\": \\\"{\\\\\\\"Version\\\\\\\":\\\\\\\"2012-10-17\\\\\\\",\\\\\\\"Statement\\\\\\\":[{\\\\\\\"Effect\\\\\\\":\\\\\\\"Allow\\\\\\\",\\\\\\\"Principal\\\\\\\":{\\\\\\\"Service\\\\\\\":\\\\\\\"sns.amazonaws.com\\\\\\\"},\\\\\\\"Action\\\\\\\":\\\\\\\"sqs:SendMessage\\\\\\\",\\\\\\\"Resource\\\\\\\":\\\\\\\"$Q_ARN\\\\\\\",\\\\\\\"Condition\\\\\\\":{\\\\\\\"ArnEquals\\\\\\\":{\\\\\\\"aws:SourceArn\\\\\\\":\\\\\\\"$TOPIC_ARN\\\\\\\"}}}]}\\\"\n}\"\n\n# 3. Subscribe queue to topic with raw delivery, then publish\naws sns subscribe --topic-arn \"$TOPIC_ARN\" --protocol sqs --notification-endpoint \"$Q_ARN\" \\\n  --attributes '{\"RawMessageDelivery\":\"true\"}'\naws sns publish --topic-arn \"$TOPIC_ARN\" --message 'hello fan-out'\naws sqs receive-message --queue-url \"$Q_URL\" --wait-time-seconds 20",
+      "pulumi": "import json\nimport pulumi_aws as aws\n\ntopic = aws.sns.Topic(\"events\", name=\"events\")\nqueue = aws.sqs.Queue(\"events-consumer\", name=\"events-consumer\")\n\n# Allow this topic to send to the queue\naws.sqs.QueuePolicy(\n    \"events-consumer-policy\",\n    queue_url=queue.id,\n    policy=pulumi.Output.all(queue.arn, topic.arn).apply(\n        lambda args: json.dumps(\n            {\n                \"Version\": \"2012-10-17\",\n                \"Statement\": [\n                    {\n                        \"Effect\": \"Allow\",\n                        \"Principal\": {\"Service\": \"sns.amazonaws.com\"},\n                        \"Action\": \"sqs:SendMessage\",\n                        \"Resource\": args[0],\n                        \"Condition\": {\"ArnEquals\": {\"aws:SourceArn\": args[1]}},\n                    }\n                ],\n            }\n        )\n    ),\n)\n\naws.sns.TopicSubscription(\n    \"events-to-queue\",\n    topic=topic.arn,\n    protocol=\"sqs\",\n    endpoint=queue.arn,\n    raw_message_delivery=True,\n)",
+      "note": "**Cleanup:** `aws sns delete-topic --topic-arn \"$TOPIC_ARN\"` (removes subscriptions) and `aws sqs delete-queue --queue-url \"$Q_URL\"`, or `pulumi destroy`. Add more queues to the same topic to fan out to more consumers."
+    }
+  ],
+  "questions": [
+    {
+      "id": "int-q1",
+      "domain": 2,
+      "stem": "An e-commerce checkout service writes orders directly to an order-processing service over HTTP. During flash sales the processing service is overwhelmed and orders are lost. Which change best decouples the two and absorbs the spikes?",
+      "options": [
+        "Increase the processing service's HTTP request timeout to 5 minutes",
+        "Put the checkout service behind an Application Load Balancer with more targets",
+        "Have checkout write orders to an SQS queue that the processing service polls and scales on",
+        "Move the processing service to a larger instance type"
+      ],
+      "answer": 2,
+      "explanation": "Correct: an SQS queue buffers the burst — checkout writes quickly and the processing service consumes at its own pace, scaling on queue depth, so no orders are lost. An ALB (A) only distributes load, it doesn't buffer when all targets are saturated. A longer timeout (C) still drops requests once capacity is exceeded and ties up the producer. A bigger instance (D) is vertical scaling that still has a fixed ceiling and keeps the tight synchronous coupling."
+    },
+    {
+      "id": "int-q2",
+      "domain": 3,
+      "stem": "A payments pipeline requires that each transaction is processed exactly once and that transactions for a given account are processed in the order received. Which messaging option meets this?",
+      "options": [
+        "SQS FIFO queue using the account ID as the message group ID",
+        "SNS Standard topic",
+        "SQS Standard queue",
+        "Amazon Kinesis Data Streams with a single shard"
+      ],
+      "answer": 0,
+      "explanation": "Correct: SQS FIFO provides exactly-once processing and strict ordering within a message group; using account ID as the group ID orders per-account while allowing parallelism across accounts. SQS Standard (A) is at-least-once with best-effort ordering. An SNS Standard topic (B) is pub/sub, not a queue, and is best-effort. A single-shard Kinesis stream (D) orders globally but does not guarantee exactly-once processing and serializes all accounts."
+    },
+    {
+      "id": "int-q3",
+      "domain": 2,
+      "stem": "When a new image is uploaded to S3, the company needs three independent consumers — a thumbnail generator, a metadata indexer, and an audit logger — to each receive and process the event with its own buffered, durable backlog. What is the most appropriate architecture?",
+      "options": [
+        "Invoke all three Lambda functions synchronously from the upload service",
+        "Publish to an SNS topic with three SQS queues subscribed, one per consumer",
+        "Use one SNS topic with three Lambda subscriptions and no queues",
+        "Write directly to a single SQS queue read by all three consumers"
+      ],
+      "answer": 1,
+      "explanation": "Correct: the SNS + SQS fan-out pattern publishes once and delivers a copy to each consumer's own queue, giving independent, durable, buffered backlogs and easy addition of new consumers. A single shared queue (B) means each message is consumed by only one consumer, not all three. Synchronous invocation (C) tightly couples the producer to all three and loses buffering. SNS-to-Lambda only (D) provides fan-out but no per-consumer durable buffer — a Lambda outage risks dropped events without a queue to retain them."
+    },
+    {
+      "id": "int-q4",
+      "domain": 3,
+      "stem": "A team is migrating a legacy on-premises Java application to AWS. The app communicates between components using JMS and AMQP and the team wants minimal code changes. Which service should they use?",
+      "options": [
+        "Amazon SQS",
+        "Amazon SNS",
+        "Amazon EventBridge",
+        "Amazon MQ"
+      ],
+      "answer": 3,
+      "explanation": "Correct: Amazon MQ is a managed ActiveMQ/RabbitMQ broker that supports open protocols like JMS, AMQP, MQTT, and STOMP, so an existing protocol-based app migrates with minimal code change. SQS (A) and SNS (B) use AWS-proprietary APIs and would require rewriting the messaging layer. EventBridge (D) is an event bus for routing/filtering events, not a drop-in broker for JMS/AMQP clients."
+    },
+    {
+      "id": "int-q5",
+      "domain": 2,
+      "stem": "Consumers occasionally take longer than expected to process an SQS message, and the same message is being picked up and processed by a second consumer before the first finishes. Which settings address this? (Choose two)",
+      "options": [
+        "Increase the queue's visibility timeout (or extend it per-message during processing)",
+        "Switch from long polling to short polling",
+        "Have the consumer call ChangeMessageVisibility to extend the timeout while still working",
+        "Reduce the message retention period"
+      ],
+      "answer": [
+        0,
+        2
+      ],
+      "explanation": "Correct: increasing the visibility timeout (A) keeps the message hidden long enough for processing to finish, and calling ChangeMessageVisibility (D) lets a consumer extend the timeout dynamically when work runs long — both prevent duplicate pickup. Short polling (B) only changes how receives are sampled, not visibility, and would not help. Reducing retention (C) controls how long unconsumed messages live in the queue and is unrelated to the double-processing problem."
+    },
+    {
+      "id": "int-q6",
+      "domain": 3,
+      "stem": "An order-fulfillment process must coordinate several steps — validate payment, reserve inventory, schedule shipping — with retries, branching on failures, and a full audit trail of each execution that may run for hours. Which service is the best fit?",
+      "options": [
+        "A chain of SNS topics triggering Lambdas",
+        "AWS Step Functions Express workflow",
+        "AWS Step Functions Standard workflow",
+        "A single large Lambda function with try/except blocks"
+      ],
+      "answer": 2,
+      "explanation": "Correct: Step Functions Standard workflows orchestrate multi-step processes with built-in retries, error handling, branching, exactly-once execution, and a full visual audit history for up to a year — ideal for long-running, auditable business processes. Express workflows (B) cap at 5 minutes and are at-least-once with limited history, suited to high-volume short tasks. SNS-chained Lambdas (C) lack centralized orchestration, state, and an audit trail. One big Lambda (D) maxes out at 15 minutes and pushes all orchestration logic into fragile custom code."
+    },
+    {
+      "id": "int-q7",
+      "domain": 2,
+      "stem": "A public REST API backed by Lambda experiences traffic spikes that overwhelm a downstream database. The team wants to cap the request rate reaching the backend and reduce repeated identical calls without changing the Lambda code. Which API Gateway features should they use? (Choose two)",
+      "options": [
+        "Enable response caching on the REST API",
+        "Enable throttling (rate and burst limits) on the API stage/method",
+        "Disable the API's CloudWatch logging",
+        "Switch the API from REST to WebSocket"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Correct: throttling (A) enforces rate and burst limits so the backend is shielded from spikes, and response caching (B) serves repeated identical requests from the cache, cutting backend/database load — both without touching Lambda. A WebSocket API (C) is for bidirectional real-time messaging and doesn't address request-rate protection for this REST workload. Disabling logging (D) only reduces observability and has no effect on backend load."
+    },
+    {
+      "id": "int-q8",
+      "domain": 3,
+      "stem": "A company wants to route events from multiple sources — AWS service events, a custom application, and a third-party SaaS monitoring product (Datadog) — to different targets based on the event content, and to be able to archive and replay events. Which service is purpose-built for this?",
+      "options": [
+        "Amazon SQS",
+        "AWS Step Functions",
+        "Amazon SNS",
+        "Amazon EventBridge"
+      ],
+      "answer": 3,
+      "explanation": "Correct: EventBridge is the event bus designed for content-based routing via rules, native SaaS partner integrations (e.g., Datadog), AWS-service event ingestion, and archive/replay. SNS (A) does fan-out but lacks rich content-based rule matching, SaaS partner event sources, and archive/replay. SQS (C) is a point-to-point queue, not a routing bus. Step Functions (D) orchestrates workflows rather than routing events from many sources to many targets."
+    }
+  ]
+}

@@ -1,0 +1,165 @@
+{
+  "slug": "serverless-containers",
+  "title": "Serverless & Containers",
+  "domains": [
+    3,
+    4
+  ],
+  "essentials": [
+    {
+      "heading": "Lambda fundamentals",
+      "body": "**Event-driven** functions: you upload code, AWS runs it on demand. **Triggers** come from many sources (API Gateway, S3, SQS, EventBridge, DynamoDB Streams). Key limits: **15-min max timeout**, **512 MB–10 GB `/tmp`** ephemeral disk, **128 MB–10 GB memory** where **CPU scales with memory** (more RAM = more vCPU). Deployment package limit 50 MB zipped / 250 MB unzipped (or 10 GB container image). **Pricing** = number of requests + GB-seconds (memory × duration). No charge when idle = **scale to zero**."
+    },
+    {
+      "heading": "Lambda concurrency, cold starts, throttling",
+      "body": "**Concurrency** = number of executions running at once. **Reserved concurrency** caps (and guarantees) a function's slice of the account limit; setting it to 0 disables the function. **Provisioned concurrency** pre-initializes execution environments to eliminate **cold starts** (latency from spinning up a new env, worse in VPC/large packages). Exceeding available concurrency causes **throttling** (HTTP 429 / `TooManyRequestsException`). Account default is 1,000 concurrent executions per Region (adjustable)."
+    },
+    {
+      "heading": "Lambda in a VPC + event sources",
+      "body": "A function placed **in a VPC** uses Hyperplane ENIs to reach private resources (RDS, ElastiCache). It then has **no internet access** unless you add a **NAT Gateway** (or VPC endpoints) in a private subnet. Common event sources: **S3** (object created/deleted), **API Gateway** (sync HTTP), **SQS** (poll-based, batches), **EventBridge** (schedules + event rules), **DynamoDB Streams / Kinesis** (ordered stream processing). SQS/streams use an **event source mapping** that Lambda polls."
+    },
+    {
+      "heading": "ECS: EC2 launch type vs Fargate",
+      "body": "**ECS** orchestrates Docker containers via **task definitions** (blueprint) and **services** (keep N tasks running + integrate with ALB). **EC2 launch type**: you manage the cluster of EC2 instances (patching, capacity, cost optimization with Spot/Reserved) — best when you need GPU, specific instance types, or maximum control. **Fargate**: **serverless containers** — no servers to provision or patch, you just pick vCPU/memory per task and pay per running task. Choose Fargate to remove node management and for spiky/variable workloads."
+    },
+    {
+      "heading": "EKS vs ECS — when to choose",
+      "body": "**ECS** is AWS-native, simpler, tightly integrated with AWS (IAM, ALB, CloudWatch) — lowest operational overhead for teams all-in on AWS. **EKS** runs **managed Kubernetes** — choose it when you need the Kubernetes ecosystem (Helm, operators, portability across clouds) or already have K8s expertise. EKS has a control-plane hourly charge and more complexity. Both can run on **EC2 or Fargate** data planes."
+    },
+    {
+      "heading": "ECR — image registry",
+      "body": "**Elastic Container Registry** is the managed, private Docker/OCI **image registry**. Push images with `docker push` after `aws ecr get-login-password`. Integrates with ECS, EKS, and Lambda container images. Features: image **scanning** for vulnerabilities, **lifecycle policies** to expire old images, encryption at rest, and cross-Region/cross-account replication. Images are stored in S3 under the hood; you pay for storage + data transfer."
+    },
+    {
+      "heading": "Serverless vs containers vs EC2: cost & ops trade-offs",
+      "body": "**Lambda (serverless)**: **pay-per-use**, **scale to zero**, zero server management — ideal for spiky, event-driven, short (<15 min) workloads; can get expensive at sustained high volume. **Fargate**: serverless containers for long-running/larger apps without node mgmt; pay per task while running. **ECS/EKS on EC2**: lowest unit cost at steady high utilization (Spot/Savings Plans) but you own patching/scaling. Rule of thumb: unpredictable/low traffic → Lambda; containerized services without ops → Fargate; steady heavy load needing control → EC2."
+    }
+  ],
+  "labs": [
+    {
+      "id": "srv-lambda-deploy",
+      "title": "Deploy and invoke a Python Lambda",
+      "intro": "Package a tiny Python function, create it with an execution role, and **invoke** it synchronously.",
+      "cli": "# Zip the handler (file lambda_function.py with def handler(event, context))\nzip function.zip lambda_function.py\n\n# Create the function (role must have lambda basic execution policy)\naws lambda create-function \\\n  --function-name hello-srv \\\n  --runtime python3.12 \\\n  --handler lambda_function.handler \\\n  --zip-file fileb://function.zip \\\n  --role arn:aws:iam::111122223333:role/lambda-basic-role \\\n  --timeout 15 --memory-size 256\n\n# Invoke and capture output\naws lambda invoke --function-name hello-srv \\\n  --payload '{\"name\":\"world\"}' --cli-binary-format raw-in-base64-out out.json\ncat out.json",
+      "pulumi": "import json\nimport pulumi\nimport pulumi_aws as aws\n\nrole = aws.iam.Role(\n    \"lambda-role\",\n    assume_role_policy=json.dumps({\n        \"Version\": \"2012-10-17\",\n        \"Statement\": [{\n            \"Action\": \"sts:AssumeRole\",\n            \"Effect\": \"Allow\",\n            \"Principal\": {\"Service\": \"lambda.amazonaws.com\"},\n        }],\n    }),\n)\n\naws.iam.RolePolicyAttachment(\n    \"lambda-basic\",\n    role=role.name,\n    policy_arn=\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\",\n)\n\nfn = aws.lambda_.Function(\n    \"hello-srv\",\n    runtime=\"python3.12\",\n    handler=\"lambda_function.handler\",\n    role=role.arn,\n    timeout=15,\n    memory_size=256,\n    code=pulumi.FileArchive(\"./function.zip\"),\n)\n\npulumi.export(\"function_name\", fn.name)",
+      "note": "**Cleanup**: `aws lambda delete-function --function-name hello-srv` then delete the IAM role/attachment. With Pulumi run `pulumi destroy`. Local files: `rm function.zip out.json`."
+    },
+    {
+      "id": "srv-fargate-service",
+      "title": "Run a container on ECS Fargate",
+      "intro": "Register a **Fargate task definition** and run it as a one-off task (no EC2 nodes to manage).",
+      "cli": "# Create the cluster\naws ecs create-cluster --cluster-name srv-cluster\n\n# Register a Fargate task definition (taskdef.json defines an nginx container,\n# requiresCompatibilities=[FARGATE], cpu=256, memory=512, executionRoleArn set)\naws ecs register-task-definition --cli-input-json file://taskdef.json\n\n# Run one task on Fargate in your subnets/SG\naws ecs run-task \\\n  --cluster srv-cluster \\\n  --launch-type FARGATE \\\n  --task-definition srv-web \\\n  --network-configuration 'awsvpcConfiguration={subnets=[subnet-0abc],securityGroups=[sg-0def],assignPublicIp=ENABLED}'",
+      "pulumi": "import pulumi\nimport pulumi_aws as aws\n\ncluster = aws.ecs.Cluster(\"srv-cluster\")\n\ntask = aws.ecs.TaskDefinition(\n    \"srv-web\",\n    family=\"srv-web\",\n    cpu=\"256\",\n    memory=\"512\",\n    network_mode=\"awsvpc\",\n    requires_compatibilities=[\"FARGATE\"],\n    container_definitions=pulumi.Output.json_dumps([{\n        \"name\": \"web\",\n        \"image\": \"nginx:latest\",\n        \"portMappings\": [{\"containerPort\": 80, \"protocol\": \"tcp\"}],\n        \"essential\": True,\n    }]),\n)\n\npulumi.export(\"task_arn\", task.arn)\npulumi.export(\"cluster_name\", cluster.name)",
+      "note": "**Cleanup**: `aws ecs deregister-task-definition --task-definition srv-web:1` then `aws ecs delete-cluster --cluster srv-cluster` (stop running tasks first). With Pulumi run `pulumi destroy`. Fargate bills only while tasks run, so stopped tasks cost nothing."
+    }
+  ],
+  "questions": [
+    {
+      "id": "srv-q1",
+      "domain": 3,
+      "stem": "A data pipeline must process each uploaded image within seconds of arrival in an S3 bucket. Volume is highly unpredictable: hundreds of files some hours, none for days. Processing takes about 20 seconds per file. The team wants the most cost-effective, low-ops compute. What should they use?",
+      "options": [
+        "A Lambda function triggered by an S3 event notification",
+        "An ECS service on EC2 launch type running 24/7",
+        "An EKS cluster with a CronJob",
+        "An Auto Scaling group of EC2 instances polling the bucket"
+      ],
+      "answer": 0,
+      "explanation": "Correct: Lambda triggered by S3 events is event-driven, scales to zero (no cost during idle days), and 20s is well within the 15-min limit. EC2 ASG and an always-on ECS/EC2 service cost money while idle and add ops overhead. EKS with a CronJob runs on a schedule, not per-object, and is the heaviest to operate."
+    },
+    {
+      "id": "srv-q2",
+      "domain": 3,
+      "stem": "A Lambda function that connects to an RDS database in private subnets works after deployment but suddenly cannot reach the public internet to call an external payment API. What change most likely caused this and how do you fix outbound internet access? (Choose two)",
+      "options": [
+        "The function was placed in a VPC, which removes default internet access",
+        "Increase the function's reserved concurrency",
+        "Add a NAT Gateway in a public subnet and route the private subnets to it",
+        "Enable provisioned concurrency to restore internet access"
+      ],
+      "answer": [
+        0,
+        2
+      ],
+      "explanation": "Correct: Putting a Lambda in a VPC attaches it to your subnets and removes the default internet path; a Lambda in private subnets needs a NAT Gateway (or VPC endpoint) for outbound internet. Concurrency settings (reserved or provisioned) control scaling and cold starts, not network reachability."
+    },
+    {
+      "id": "srv-q3",
+      "domain": 4,
+      "stem": "A company runs containerized microservices and wants to eliminate all server patching, OS management, and cluster capacity planning while staying on ECS. Which launch type meets this with the least operational effort?",
+      "options": [
+        "ECS on EC2 launch type with a Spot Auto Scaling group",
+        "ECS on EC2 launch type with On-Demand instances",
+        "Self-managed Kubernetes on EC2",
+        "ECS on AWS Fargate"
+      ],
+      "answer": 3,
+      "explanation": "Correct: Fargate is serverless containers — no EC2 nodes to patch, scale, or plan capacity for; you only specify vCPU/memory per task. Both EC2 launch types require you to manage the instance fleet. Self-managed Kubernetes on EC2 is the most operationally heavy option."
+    },
+    {
+      "id": "srv-q4",
+      "domain": 3,
+      "stem": "A customer-facing Lambda behind API Gateway shows high p99 latency for the first request after idle periods, while warm requests are fast. The function is in a VPC with a large dependency package. What is the most direct fix for the latency spikes?",
+      "options": [
+        "Lower the function timeout to 3 seconds",
+        "Set reserved concurrency to 0",
+        "Configure provisioned concurrency on the function",
+        "Switch the runtime to a higher memory tier only"
+      ],
+      "answer": 2,
+      "explanation": "Correct: The spikes are cold starts; provisioned concurrency keeps environments pre-initialized so the first request avoids init latency. Lowering timeout doesn't reduce init time. Reserved concurrency of 0 disables the function. More memory can help slightly but does not pre-warm environments the way provisioned concurrency does."
+    },
+    {
+      "id": "srv-q5",
+      "domain": 4,
+      "stem": "An engineering team already operates heavily with Kubernetes tooling (Helm charts, custom operators) on-premises and wants to lift workloads to AWS with minimal rework while keeping portability across clouds. Which service best fits?",
+      "options": [
+        "Amazon EKS",
+        "AWS App Runner",
+        "AWS Lambda with container images",
+        "Amazon ECS with Fargate"
+      ],
+      "answer": 0,
+      "explanation": "Correct: EKS is managed Kubernetes, so existing Helm charts, operators, and K8s skills transfer directly and remain portable. ECS is AWS-proprietary orchestration requiring rework of K8s manifests. Lambda is for functions, not full K8s workloads. App Runner is a simplified PaaS without Kubernetes compatibility."
+    },
+    {
+      "id": "srv-q6",
+      "domain": 3,
+      "stem": "A Lambda function processes messages from an SQS queue via an event source mapping. During traffic spikes, downstream RDS gets overwhelmed because too many Lambda invocations run at once. Which setting limits how many concurrent executions this function can use?",
+      "options": [
+        "Reserved concurrency",
+        "The function memory size",
+        "Provisioned concurrency",
+        "The SQS visibility timeout"
+      ],
+      "answer": 0,
+      "explanation": "Correct: Reserved concurrency caps the maximum concurrent executions for the function, protecting the downstream database from overload. Provisioned concurrency pre-warms environments but doesn't cap the maximum. Memory size affects CPU/cost, not concurrency limits. Visibility timeout controls message redelivery, not parallelism."
+    },
+    {
+      "id": "srv-q7",
+      "domain": 4,
+      "stem": "A team needs a private, managed registry to store and scan their Docker images for vulnerabilities before deploying to ECS and EKS, with automatic expiry of old images. Which AWS service provides this?",
+      "options": [
+        "AWS CodeArtifact",
+        "Amazon S3 with object versioning",
+        "Docker Hub private repositories",
+        "Amazon Elastic Container Registry (ECR)"
+      ],
+      "answer": 3,
+      "explanation": "Correct: ECR is the managed private container registry with built-in image scanning and lifecycle policies to expire old images, integrating natively with ECS, EKS, and Lambda. S3 stores objects, not OCI images with registry semantics. CodeArtifact is for software packages (npm, pip, Maven), not container images. Docker Hub is third-party, not an AWS service."
+    },
+    {
+      "id": "srv-q8",
+      "domain": 4,
+      "stem": "A long-running containerized batch job runs continuously at steady, high CPU utilization 24/7. The team wants the lowest possible compute cost and is willing to manage infrastructure. Which option is most cost-effective?",
+      "options": [
+        "ECS on Fargate with on-demand tasks",
+        "AWS Lambda invoked on a schedule",
+        "EKS on Fargate",
+        "ECS on EC2 launch type using Spot Instances or Savings Plans"
+      ],
+      "answer": 3,
+      "explanation": "Correct: For steady, high-utilization 24/7 workloads where the team accepts managing infrastructure, ECS on EC2 with Spot or a Compute Savings Plan gives the lowest unit cost. Lambda has a 15-min cap and is costly at sustained high volume. Fargate (on ECS or EKS) removes ops but carries a premium versus optimized EC2 for constant heavy load."
+    }
+  ]
+}

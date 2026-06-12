@@ -1,0 +1,172 @@
+{
+  "slug": "iam-security",
+  "title": "IAM & Security",
+  "domains": [
+    1
+  ],
+  "essentials": [
+    {
+      "heading": "Policy evaluation logic",
+      "body": "IAM evaluation always follows this order: an **explicit `Deny`** wins over everything, then an **explicit `Allow`** is required, and the default is an **implicit deny**. So if no policy explicitly allows an action, it is denied; if any policy explicitly denies it, no allow can override it. For a single account, AWS unions all applicable **identity-based** policies (attached to a user/group/role) and **resource-based** policies (attached to S3 buckets, KMS keys, SQS, etc.). Resource-based policies grant access to a `Principal` and enable cross-account access without `AssumeRole`."
+    },
+    {
+      "heading": "Users vs groups vs roles, and STS",
+      "body": "An **IAM user** has long-lived credentials (password, access keys) and is ideal for nothing on AWS workloads. **Groups** only collect users to attach managed policies; groups cannot be nested and cannot be a principal. **Roles** have no long-term credentials; a trusted principal *assumes* the role and `sts:AssumeRole` returns **temporary credentials** (access key, secret key, session token). Always prefer roles for EC2/Lambda/ECS and for humans via IAM Identity Center, because temporary credentials auto-expire and avoid hardcoded keys."
+    },
+    {
+      "heading": "MFA, password policy, and root protection",
+      "body": "Protect the **root user**: enable MFA on it, delete its access keys, and use it only for the few tasks that require root (e.g. closing the account, changing support plan). Enforce a strong **account password policy** (length, rotation, complexity, reuse prevention). Require **MFA** for privileged actions; you can enforce it in policy with the condition `aws:MultiFactorAuthPresent` being `true`, or use `aws:MultiFactorAuthAge` to require recent MFA. Hardware/virtual MFA adds a second factor beyond the password."
+    },
+    {
+      "heading": "Cross-account access, AssumeRole & permission boundaries",
+      "body": "For **cross-account** access, create a role in the target (trusting) account whose **trust policy** lists the source account/principal under `Principal` and allows `sts:AssumeRole`; the source identity needs a matching `sts:AssumeRole` permission. Add `ExternalId` to defeat the confused-deputy problem for third parties. A **permission boundary** is a managed policy attached to a user or role that sets the *maximum* permissions; effective permissions are the **intersection** of the boundary and the identity policies (it never grants on its own). This lets you safely delegate IAM admin to developers."
+    },
+    {
+      "heading": "KMS and encryption at rest",
+      "body": "**KMS** manages encryption keys and performs **envelope encryption**: KMS generates a data key, you encrypt data locally with the plaintext data key, then store the KMS-encrypted data key alongside the ciphertext. **AWS-managed keys** (alias `aws/<service>`) are free and auto-rotated but cannot be controlled via a key policy you edit; **customer-managed keys (CMK)** let you define a **key policy**, grants, rotation, and cross-account use, and cost per key/per request. Access to a KMS key requires permission in BOTH the key policy and (for cross-account) the caller's IAM policy. KMS keys are **regional** and cannot be exported."
+    },
+    {
+      "heading": "Secrets Manager vs SSM Parameter Store",
+      "body": "Both store config/secrets encrypted with KMS. **Secrets Manager** adds native **automatic rotation** (via Lambda, with built-in support for RDS), cross-region replication, and charges per secret + API call. **SSM Parameter Store** is **free** for standard parameters and good for plain config and secrets that do not need built-in rotation; `SecureString` parameters are KMS-encrypted. Choose Secrets Manager when you need automatic credential rotation; choose Parameter Store for cost-sensitive config or hierarchical parameters. Parameter Store can also reference a Secrets Manager secret."
+    },
+    {
+      "heading": "AWS Organizations and SCPs",
+      "body": "**AWS Organizations** groups accounts under a management account into **OUs** for consolidated billing and central governance. **Service Control Policies (SCPs)** are guardrails that set the **maximum** permissions for member accounts/OUs; like permission boundaries they **never grant**, they only filter. Effective access in a member account is the intersection of SCPs and IAM policies; SCPs do **not** apply to the management account. Use SCPs to enforce things like 'deny all actions outside eu-west-1' or 'deny disabling CloudTrail' across many accounts."
+    }
+  ],
+  "labs": [
+    {
+      "id": "iam-role-ec2",
+      "title": "EC2 instance role with S3 read-only via instance profile",
+      "intro": "Create an IAM **role** that EC2 can assume, attach **AmazonS3ReadOnlyAccess**, wrap it in an **instance profile**, and attach it to an instance. This is the *correct* pattern instead of putting access keys on the instance: the EC2 metadata service vends rotating temporary credentials automatically.",
+      "cli": "# 1) Trust policy allowing EC2 to assume the role\ncat > trust.json <<'EOF'\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [{\n    \"Effect\": \"Allow\",\n    \"Principal\": {\"Service\": \"ec2.amazonaws.com\"},\n    \"Action\": \"sts:AssumeRole\"\n  }]\n}\nEOF\n\naws iam create-role --role-name ec2-s3-readonly \\\n  --assume-role-policy-document file://trust.json\n\naws iam attach-role-policy --role-name ec2-s3-readonly \\\n  --policy-arn arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess\n\n# 2) Instance profile (required to attach a role to EC2)\naws iam create-instance-profile --instance-profile-name ec2-s3-readonly\naws iam add-role-to-instance-profile \\\n  --instance-profile-name ec2-s3-readonly --role-name ec2-s3-readonly\n\n# 3) Attach to a running instance\naws ec2 associate-iam-instance-profile \\\n  --instance-id i-0123456789abcdef0 \\\n  --iam-instance-profile Name=ec2-s3-readonly\n\n# Verify from inside the instance (IMDSv2):\n# TOKEN=$(curl -s -X PUT http://169.254.169.254/latest/api/token -H 'X-aws-ec2-metadata-token-ttl-seconds: 60')\n# curl -s -H \"X-aws-ec2-metadata-token: $TOKEN\" http://169.254.169.254/latest/meta-data/iam/security-credentials/ec2-s3-readonly",
+      "pulumi": "import json\nimport pulumi_aws as aws\n\nrole = aws.iam.Role(\n    \"ec2-s3-readonly\",\n    assume_role_policy=json.dumps({\n        \"Version\": \"2012-10-17\",\n        \"Statement\": [{\n            \"Effect\": \"Allow\",\n            \"Principal\": {\"Service\": \"ec2.amazonaws.com\"},\n            \"Action\": \"sts:AssumeRole\",\n        }],\n    }),\n)\n\naws.iam.RolePolicyAttachment(\n    \"s3-readonly\",\n    role=role.name,\n    policy_arn=\"arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess\",\n)\n\nprofile = aws.iam.InstanceProfile(\"ec2-s3-readonly\", role=role.name)\n\n# attach to an instance:\n# aws.ec2.Instance(\"app\", ami=..., instance_type=\"t3.micro\",\n#                  iam_instance_profile=profile.name)",
+      "note": "Cleanup (reverse order): `aws ec2 disassociate-iam-instance-profile --association-id <id>`, `aws iam remove-role-from-instance-profile --instance-profile-name ec2-s3-readonly --role-name ec2-s3-readonly`, `aws iam delete-instance-profile --instance-profile-name ec2-s3-readonly`, `aws iam detach-role-policy --role-name ec2-s3-readonly --policy-arn arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess`, then `aws iam delete-role --role-name ec2-s3-readonly`. With Pulumi just run `pulumi destroy`. A role cannot be deleted while a policy is still attached or while it is in an instance profile."
+    },
+    {
+      "id": "iam-kms-key",
+      "title": "Create a customer-managed KMS key with a key policy and a scoped IAM policy",
+      "intro": "Create a **customer-managed KMS key (CMK)** with rotation enabled, give it a human-readable **alias**, and attach a least-privilege IAM policy that lets a role *use* the key for encrypt/decrypt only. Remember: access needs an allow in BOTH the key policy and the IAM policy for cross-account, and the key policy must not lock you out of `kms:*` from the account root.",
+      "cli": "# 1) Create the CMK and enable annual rotation\nKEY_ID=$(aws kms create-key \\\n  --description \"app data key\" \\\n  --query KeyMetadata.KeyId --output text)\n\naws kms enable-key-rotation --key-id \"$KEY_ID\"\n\n# 2) Friendly alias\naws kms create-alias --alias-name alias/app-data \\\n  --target-key-id \"$KEY_ID\"\n\n# 3) Least-privilege IAM policy: use the key, not manage it\ncat > use-key.json <<EOF\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [{\n    \"Effect\": \"Allow\",\n    \"Action\": [\"kms:Encrypt\",\"kms:Decrypt\",\"kms:GenerateDataKey\"],\n    \"Resource\": \"arn:aws:kms:eu-west-1:111122223333:key/$KEY_ID\"\n  }]\n}\nEOF\n\naws iam create-policy --policy-name use-app-data-key \\\n  --policy-document file://use-key.json",
+      "pulumi": "import json\nimport pulumi_aws as aws\n\nkey = aws.kms.Key(\n    \"app-data\",\n    description=\"app data key\",\n    enable_key_rotation=True,\n    deletion_window_in_days=7,\n)\n\naws.kms.Alias(\"app-data-alias\", name=\"alias/app-data\", target_key_id=key.key_id)\n\nuse_policy = aws.iam.Policy(\n    \"use-app-data-key\",\n    policy=key.arn.apply(lambda arn: json.dumps({\n        \"Version\": \"2012-10-17\",\n        \"Statement\": [{\n            \"Effect\": \"Allow\",\n            \"Action\": [\"kms:Encrypt\", \"kms:Decrypt\", \"kms:GenerateDataKey\"],\n            \"Resource\": arn,\n        }],\n    })),\n)",
+      "note": "Cleanup: KMS keys cannot be deleted immediately. Run `aws kms schedule-key-deletion --key-id $KEY_ID --pending-window-in-days 7` (minimum 7 days); during the window you can cancel with `cancel-key-deletion`. Delete the alias first with `aws kms delete-alias --alias-name alias/app-data` and remove the IAM policy with `aws iam delete-policy --policy-arn <arn>`. With Pulumi, `pulumi destroy` schedules deletion using `deletion_window_in_days`. Disabling rotation is not required before deletion."
+    },
+    {
+      "id": "iam-cross-account-role",
+      "title": "Cross-account role with ExternalId",
+      "intro": "Create a role in the **trusting** (target) account that a principal in another (trusted) account can assume, protected by an **ExternalId** to prevent the confused-deputy problem. The source identity must also be granted `sts:AssumeRole` on this role's ARN.",
+      "cli": "# In the TRUSTING account (account 111122223333):\ncat > trust.json <<'EOF'\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [{\n    \"Effect\": \"Allow\",\n    \"Principal\": {\"AWS\": \"arn:aws:iam::444455556666:root\"},\n    \"Action\": \"sts:AssumeRole\",\n    \"Condition\": {\"StringEquals\": {\"sts:ExternalId\": \"unique-shared-secret\"}}\n  }]\n}\nEOF\n\naws iam create-role --role-name partner-readonly \\\n  --assume-role-policy-document file://trust.json\naws iam attach-role-policy --role-name partner-readonly \\\n  --policy-arn arn:aws:iam::aws:policy/ReadOnlyAccess\n\n# In the TRUSTED account, assume it:\naws sts assume-role \\\n  --role-arn arn:aws:iam::111122223333:role/partner-readonly \\\n  --role-session-name demo --external-id unique-shared-secret",
+      "pulumi": "import json\nimport pulumi_aws as aws\n\nrole = aws.iam.Role(\n    \"partner-readonly\",\n    assume_role_policy=json.dumps({\n        \"Version\": \"2012-10-17\",\n        \"Statement\": [{\n            \"Effect\": \"Allow\",\n            \"Principal\": {\"AWS\": \"arn:aws:iam::444455556666:root\"},\n            \"Action\": \"sts:AssumeRole\",\n            \"Condition\": {\"StringEquals\": {\"sts:ExternalId\": \"unique-shared-secret\"}},\n        }],\n    }),\n)\n\naws.iam.RolePolicyAttachment(\n    \"partner-readonly-attach\",\n    role=role.name,\n    policy_arn=\"arn:aws:iam::aws:policy/ReadOnlyAccess\",\n)",
+      "note": "Cleanup: `aws iam detach-role-policy --role-name partner-readonly --policy-arn arn:aws:iam::aws:policy/ReadOnlyAccess` then `aws iam delete-role --role-name partner-readonly`. With Pulumi run `pulumi destroy`. Never reuse a guessable ExternalId across partners; treat it as a per-customer value."
+    }
+  ],
+  "questions": [
+    {
+      "id": "iam-q1",
+      "stem": "An EC2 instance running a web app must read objects from a single S3 bucket. What is the MOST secure way to grant this access?",
+      "options": [
+        "Attach an IAM role (via an instance profile) with an S3 read policy scoped to that bucket",
+        "Store an IAM user's access key and secret key in the application's environment variables",
+        "Embed long-lived credentials in the AMI used to launch the instance",
+        "Make the S3 bucket public and restrict access by the instance's security group"
+      ],
+      "answer": 0,
+      "explanation": "An IAM role attached through an instance profile vends automatically rotating temporary credentials via the instance metadata service, so there are no long-lived secrets to leak or rotate manually - this is the AWS best practice for EC2 workloads. Storing access keys in env vars or baking them into an AMI creates long-lived credentials that can leak and must be rotated by hand. Making the bucket public exposes data to the internet, and security groups operate at the network layer and do not control S3 access at all.",
+      "domain": 1
+    },
+    {
+      "id": "iam-q2",
+      "stem": "A developer's identity policy allows `s3:DeleteObject`, but an SCP on the account's OU denies all `s3:Delete*` actions, and a bucket policy explicitly allows `s3:DeleteObject`. Can the developer delete the object?",
+      "options": [
+        "Yes, because the identity policy allows the action",
+        "No, because an explicit deny (the SCP) overrides any allow",
+        "It depends on which policy was created most recently",
+        "Yes, because the bucket policy explicitly allows the action"
+      ],
+      "answer": 1,
+      "explanation": "An explicit deny always wins, and an SCP is a guardrail evaluated before identity and resource policies - if the SCP denies the action it is denied regardless of any allow. The identity and bucket policy allows are real, but they cannot override the explicit deny in the SCP. Policy creation time is irrelevant to IAM evaluation; order of creation never affects the decision.",
+      "domain": 1
+    },
+    {
+      "id": "iam-q3",
+      "stem": "A SaaS provider needs to access resources in your account on your behalf. You want to follow AWS best practice to prevent the confused-deputy problem. What should you configure? (Choose two)",
+      "options": [
+        "Create a cross-account IAM role whose trust policy references the provider's account",
+        "Require an `ExternalId` condition in the role's trust policy",
+        "Make the resources public so the provider can reach them",
+        "Create an IAM user and share its access keys with the provider"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "The recommended pattern is a cross-account role assumed by the third party (no shared long-lived credentials), with an ExternalId condition so a malicious tenant of the SaaS cannot trick the provider into accessing your account - this directly mitigates the confused-deputy problem. Sharing IAM user access keys creates leakable long-lived credentials and is explicitly discouraged. Making resources public removes access control entirely and is never the secure answer.",
+      "domain": 1
+    },
+    {
+      "id": "iam-q4",
+      "stem": "Your security team wants to let developers create and manage IAM roles for their apps, but must guarantee those roles can never exceed a defined set of permissions. What should they use?",
+      "options": [
+        "A permission boundary attached to the roles the developers create",
+        "A service control policy attached only to the management account",
+        "A resource-based policy on each application's resources",
+        "An IAM group containing all the developers"
+      ],
+      "answer": 0,
+      "explanation": "A permission boundary sets the maximum permissions an identity can have; effective permissions are the intersection of the boundary and the attached policies, so even if a developer grants broad permissions the boundary caps them. SCPs attached to the management account have no effect - SCPs do not apply to the management account. Groups only bundle users and do not cap delegated role permissions. A resource-based policy controls access to a specific resource, not the ceiling of permissions on the roles being created.",
+      "domain": 1
+    },
+    {
+      "id": "iam-q5",
+      "stem": "An application stores database credentials that must be rotated automatically every 30 days with minimal custom code. Which service is the BEST fit?",
+      "options": [
+        "An encrypted S3 object accessed via a bucket policy",
+        "AWS Secrets Manager",
+        "Hardcoded credentials encrypted with a KMS key",
+        "SSM Parameter Store standard parameters"
+      ],
+      "answer": 1,
+      "explanation": "Secrets Manager provides native automatic rotation, including built-in rotation support for RDS and other databases, which directly meets the 'rotate automatically with minimal code' requirement. Standard Parameter Store has no built-in rotation, so you would have to build it yourself. An encrypted S3 object and KMS-encrypted hardcoded credentials still require you to implement rotation manually and add no rotation feature.",
+      "domain": 1
+    },
+    {
+      "id": "iam-q6",
+      "stem": "You must ensure that no member account in your organization can launch resources outside the eu-west-1 region. What is the MOST effective control?",
+      "options": [
+        "Use a permission boundary on the management account",
+        "Attach an IAM policy denying other regions to every user in every account",
+        "Enable MFA on the root user of each account",
+        "Apply a service control policy on the OU that denies actions when the requested region is not eu-west-1"
+      ],
+      "answer": 3,
+      "explanation": "An SCP applied at the OU level enforces a region guardrail across all member accounts centrally using a condition like `aws:RequestedRegion`, and no identity in those accounts can exceed it. Attaching IAM policies to every user is error-prone, must be maintained per account, and can be bypassed by new users or roles. MFA on root improves account security but does nothing to restrict regions. A permission boundary on the management account neither propagates to member accounts nor is it the org-wide guardrail mechanism.",
+      "domain": 1
+    },
+    {
+      "id": "iam-q7",
+      "stem": "A compliance rule requires that you control key rotation, define a custom key policy, and grant another AWS account permission to decrypt data. Which KMS option meets ALL requirements?",
+      "options": [
+        "An AWS-owned key",
+        "SSE-S3 server-side encryption",
+        "A customer-managed key (CMK) with a key policy granting the other account",
+        "An AWS-managed key (alias aws/s3)"
+      ],
+      "answer": 2,
+      "explanation": "Only a customer-managed key lets you edit the key policy, control rotation settings, and grant cross-account access by naming the other account as a principal in the key policy (the caller also needs IAM permission). AWS-managed keys and AWS-owned keys do not expose an editable key policy and cannot be shared cross-account. SSE-S3 uses keys fully managed by S3 with no customer control over policy, rotation, or cross-account sharing.",
+      "domain": 1
+    },
+    {
+      "id": "iam-q8",
+      "stem": "Following least privilege, how should you handle the AWS account root user after setting up the account?",
+      "options": [
+        "Use the root user for daily administration so permissions are never blocked",
+        "Create access keys for the root user and store them in Secrets Manager",
+        "Delete the root user entirely to remove the risk",
+        "Enable MFA on root, delete any root access keys, and create IAM roles/users for everyday work"
+      ],
+      "answer": 3,
+      "explanation": "Best practice is to secure root with MFA, remove its access keys, and perform all routine work through least-privilege IAM identities, reserving root only for the handful of tasks that require it. Using root daily violates least privilege and exposes the most powerful credential. Creating root access keys (even stored in Secrets Manager) keeps a dangerous long-lived credential that should not exist. The root user cannot be deleted - it is intrinsic to the account.",
+      "domain": 1
+    }
+  ]
+}

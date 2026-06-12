@@ -1,0 +1,165 @@
+{
+  "slug": "monitoring",
+  "title": "Monitoring & Auditing",
+  "domains": [
+    1,
+    2
+  ],
+  "essentials": [
+    {
+      "heading": "CloudWatch Metrics",
+      "body": "**Metrics** are time-ordered data points in a **namespace** (e.g. `AWS/EC2`). **Basic monitoring** ships EC2 metrics every **5 min** for free; **detailed monitoring** is **1 min** (paid, opt-in). CloudWatch does **not** see in-guest stats like memory or disk usage by default. **Custom metrics** are pushed via `put-metric-data` (standard res = 1 min, **high-resolution** down to 1 sec). Metrics are regional and identified by namespace + name + **dimensions**."
+    },
+    {
+      "heading": "CloudWatch Alarms",
+      "body": "An **alarm** watches a single metric (or a **metric math** expression) against a **threshold** over N periods. States: `OK`, `ALARM`, `INSUFFICIENT_DATA`. Actions target **SNS** (notify), **Auto Scaling** (scale in/out), or **EC2** (stop/terminate/recover). A **composite alarm** combines child alarms with AND/OR rules to cut noise. Classic pattern: high-CPU alarm -> SNS topic -> email and an ASG scale-out policy."
+    },
+    {
+      "heading": "CloudWatch Logs",
+      "body": "Logs live in **log groups** (retention setting) containing **log streams**. The **CloudWatch agent** (not the OS) is required to push **memory and disk** metrics plus application logs from EC2/on-prem. **Logs Insights** runs interactive queries over log groups. **Subscription filters** stream matching log events in near real time to **Lambda, Kinesis Data Streams/Firehose, or OpenSearch** for processing or centralization."
+    },
+    {
+      "heading": "CloudTrail — API Auditing",
+      "body": "CloudTrail records **API activity** for governance and audit. **Management events** (control-plane, e.g. `RunInstances`) are logged free by default; **data events** (high-volume data-plane, e.g. S3 `GetObject`, Lambda `Invoke`) are opt-in and billable. Create a **multi-region trail** to capture all regions into one S3 bucket; add an **org trail** for all accounts. **Log file integrity validation** produces signed digests so you can prove logs were not tampered with. Events appear in **Event history** for 90 days even without a trail."
+    },
+    {
+      "heading": "AWS Config — Compliance State",
+      "body": "Config records the **configuration state** of resources over time and evaluates them against **Config rules** (AWS-managed or custom Lambda). It answers *\"is this resource compliant, and how did its config change?\"* via **configuration history** and **timeline**. **Remediation** actions (often SSM Automation documents) can auto-fix non-compliant resources. **Conformance packs** bundle rules. Config is about desired-state compliance, not API calls or performance."
+    },
+    {
+      "heading": "CloudWatch vs CloudTrail vs Config (exam trap)",
+      "body": "Pick by the verb in the question: **CloudWatch** = performance/operations (metrics, alarms, logs — *how is it performing?*). **CloudTrail** = API audit (*who made this API call, when, from where?*). **Config** = compliance/configuration state and change history (*is this resource configured correctly, and what changed?*). \"Who deleted the security group?\" -> CloudTrail. \"Was the SG ever open to 0.0.0.0/0?\" -> Config. \"Is CPU too high?\" -> CloudWatch."
+    },
+    {
+      "heading": "EventBridge & X-Ray",
+      "body": "**EventBridge** (CloudWatch Events) routes events via **rules** to targets (Lambda, SNS, SQS, Step Functions) for ops automation — react to AWS API calls, Config changes, or scheduled cron expressions. **X-Ray** provides **distributed tracing** and a **service map** to find latency and errors across microservices/Lambda. Use X-Ray for *\"where is the bottleneck in this request path?\"*, not CloudWatch metrics alone."
+    }
+  ],
+  "labs": [
+    {
+      "id": "mon-cpu-alarm",
+      "title": "CPU alarm that notifies an SNS topic",
+      "intro": "Create an **SNS topic**, subscribe an email, then a **CloudWatch alarm** on EC2 `CPUUtilization` that fires the topic when CPU exceeds 80% for 2 periods.",
+      "cli": "TOPIC_ARN=$(aws sns create-topic --name cpu-alerts --query TopicArn --output text)\naws sns subscribe --topic-arn \"$TOPIC_ARN\" --protocol email --notification-endpoint you@example.com\n\naws cloudwatch put-metric-alarm \\\n  --alarm-name high-cpu \\\n  --namespace AWS/EC2 \\\n  --metric-name CPUUtilization \\\n  --dimensions Name=InstanceId,Value=i-0123456789abcdef0 \\\n  --statistic Average --period 300 --evaluation-periods 2 \\\n  --threshold 80 --comparison-operator GreaterThanThreshold \\\n  --alarm-actions \"$TOPIC_ARN\"",
+      "pulumi": "import pulumi_aws as aws\n\ntopic = aws.sns.Topic(\"cpu-alerts\")\n\naws.sns.TopicSubscription(\n    \"cpu-email\",\n    topic=topic.arn,\n    protocol=\"email\",\n    endpoint=\"you@example.com\",\n)\n\naws.cloudwatch.MetricAlarm(\n    \"high-cpu\",\n    namespace=\"AWS/EC2\",\n    metric_name=\"CPUUtilization\",\n    statistic=\"Average\",\n    period=300,\n    evaluation_periods=2,\n    threshold=80,\n    comparison_operator=\"GreaterThanThreshold\",\n    dimensions={\"InstanceId\": \"i-0123456789abcdef0\"},\n    alarm_actions=[topic.arn],\n)",
+      "note": "**Cleanup:** delete the alarm (`aws cloudwatch delete-alarms --alarm-names high-cpu`) and the topic (`aws sns delete-topic --topic-arn $TOPIC_ARN`), or `pulumi destroy`. Confirm the email subscription or the topic stays in `PendingConfirmation`."
+    },
+    {
+      "id": "mon-trail",
+      "title": "Multi-region CloudTrail trail to S3",
+      "intro": "Create an S3 bucket with a CloudTrail bucket policy, then a **multi-region** trail with **log file validation** enabled so all-region API activity is captured and tamper-evident.",
+      "cli": "aws s3api create-bucket --bucket my-org-trail-logs --region us-east-1\n# attach the CloudTrail service bucket policy (s3:GetBucketAcl + s3:PutObject) before next step\n\naws cloudtrail create-trail \\\n  --name org-audit-trail \\\n  --s3-bucket-name my-org-trail-logs \\\n  --is-multi-region-trail \\\n  --enable-log-file-validation\n\naws cloudtrail start-logging --name org-audit-trail",
+      "pulumi": "import json\nimport pulumi_aws as aws\n\nbucket = aws.s3.BucketV2(\"trail-logs\")\n\naws.s3.BucketPolicy(\n    \"trail-policy\",\n    bucket=bucket.id,\n    policy=bucket.arn.apply(lambda arn: json.dumps({\n        \"Version\": \"2012-10-17\",\n        \"Statement\": [\n            {\"Sid\": \"AclCheck\", \"Effect\": \"Allow\",\n             \"Principal\": {\"Service\": \"cloudtrail.amazonaws.com\"},\n             \"Action\": \"s3:GetBucketAcl\", \"Resource\": arn},\n            {\"Sid\": \"Write\", \"Effect\": \"Allow\",\n             \"Principal\": {\"Service\": \"cloudtrail.amazonaws.com\"},\n             \"Action\": \"s3:PutObject\",\n             \"Resource\": f\"{arn}/AWSLogs/*\",\n             \"Condition\": {\"StringEquals\": {\"s3:x-amz-acl\": \"bucket-owner-full-control\"}}},\n        ],\n    })),\n)\n\naws.cloudtrail.Trail(\n    \"org-audit-trail\",\n    s3_bucket_name=bucket.id,\n    is_multi_region_trail=True,\n    enable_log_file_validation=True,\n)",
+      "note": "**Cleanup:** `aws cloudtrail delete-trail --name org-audit-trail`, then empty and delete the bucket, or `pulumi destroy`. Note the bucket policy must exist before `create-trail` or it fails validation."
+    }
+  ],
+  "questions": [
+    {
+      "id": "mon-q1",
+      "domain": 2,
+      "stem": "A security team needs to determine **which IAM user deleted a specific security group** and from what source IP. Which service provides this?",
+      "options": [
+        "AWS X-Ray",
+        "AWS Config",
+        "Amazon CloudWatch Metrics",
+        "AWS CloudTrail"
+      ],
+      "answer": 3,
+      "explanation": "CloudTrail logs API calls including the identity, time, and source IP of the `DeleteSecurityGroup` call — the audit \"who did what\" question. CloudWatch tracks performance metrics, not API callers. Config records compliance/configuration state and change history but not the caller identity of every API action. X-Ray is for distributed request tracing."
+    },
+    {
+      "id": "mon-q2",
+      "domain": 2,
+      "stem": "An auditor asks whether a particular S3 bucket was **ever publicly accessible** and to see the **timeline of its configuration changes**. Which service answers this best?",
+      "options": [
+        "Amazon CloudWatch Logs Insights",
+        "AWS Config",
+        "AWS CloudTrail",
+        "Amazon EventBridge"
+      ],
+      "answer": 1,
+      "explanation": "AWS Config records resource configuration state over time and provides a configuration timeline plus rule compliance — ideal for \"was it ever public?\". CloudTrail shows the API calls but not a clean compliance/state timeline. Logs Insights queries log content, not resource config. EventBridge routes events but does not store config history."
+    },
+    {
+      "id": "mon-q3",
+      "domain": 1,
+      "stem": "An administrator wants EC2 **memory utilization** and **disk space** visible in CloudWatch. What is required?",
+      "options": [
+        "Create a CloudTrail data event selector",
+        "Enable detailed monitoring on the instance",
+        "Install and configure the CloudWatch agent on the instance",
+        "Turn on AWS Config recording"
+      ],
+      "answer": 2,
+      "explanation": "Memory and disk are in-guest metrics the hypervisor cannot see, so the CloudWatch agent must be installed to push them as custom metrics. Detailed monitoring only changes EC2 metric frequency (5 min to 1 min) and still excludes memory/disk. CloudTrail logs API calls; Config records configuration state — neither reports OS-level usage."
+    },
+    {
+      "id": "mon-q4",
+      "domain": 1,
+      "stem": "A web tier on Auto Scaling must add instances when **average CPU stays above 70% for several minutes**. Which approach is correct?",
+      "options": [
+        "Create a CloudTrail trail and a Lambda subscription filter",
+        "Enable AWS Config with a CPU compliance rule",
+        "Use X-Ray to trace high-CPU requests and scale manually",
+        "Create a CloudWatch alarm on CPUUtilization that triggers an Auto Scaling scaling policy"
+      ],
+      "answer": 3,
+      "explanation": "A CloudWatch metric alarm on `CPUUtilization` with an evaluation period, wired to an Auto Scaling policy, is the standard scale-out pattern. CloudTrail/subscription filters handle API logs, not scaling triggers. Config evaluates configuration compliance, not real-time CPU. X-Ray traces requests and does not drive scaling."
+    },
+    {
+      "id": "mon-q5",
+      "domain": 2,
+      "stem": "A compliance requirement states that audit logs of all API activity must be **tamper-evident** and cover **every AWS Region**. Which configuration meets this? (Choose two)",
+      "options": [
+        "Set CloudWatch Logs retention to never expire",
+        "Create a multi-region CloudTrail trail",
+        "Enable CloudTrail log file integrity validation",
+        "Enable EC2 detailed monitoring in every region"
+      ],
+      "answer": [
+        1,
+        2
+      ],
+      "explanation": "A multi-region trail captures API activity across all regions, and log file integrity validation produces signed digests proving logs were not altered — together they satisfy the requirement. Detailed monitoring concerns EC2 metric frequency, unrelated to audit logs. CloudWatch Logs retention controls how long log data is kept, not regional API coverage or tamper-evidence."
+    },
+    {
+      "id": "mon-q6",
+      "domain": 1,
+      "stem": "An operations team wants to **automatically run a Lambda function** whenever an EC2 instance changes to the `stopped` state. Which service routes this event?",
+      "options": [
+        "AWS Config remediation",
+        "Amazon CloudWatch Alarms",
+        "Amazon EventBridge",
+        "Amazon CloudWatch Logs subscription filter"
+      ],
+      "answer": 2,
+      "explanation": "EventBridge rules match AWS service events (such as an EC2 instance state-change) and route them to targets like Lambda — the event-driven automation tool. CloudWatch alarms react to metric thresholds, not discrete state-change events. Config remediation fixes non-compliant resources, not arbitrary state events. Subscription filters stream log content, not service events."
+    },
+    {
+      "id": "mon-q7",
+      "domain": 2,
+      "stem": "When a Config rule marks an S3 bucket as **non-compliant** (e.g. encryption disabled), how can the issue be fixed **automatically**?",
+      "options": [
+        "Attach an SSM Automation document as a Config remediation action",
+        "Add a CloudTrail data event selector for the bucket",
+        "Create a CloudWatch composite alarm",
+        "Enable high-resolution custom metrics"
+      ],
+      "answer": 0,
+      "explanation": "Config remediation actions invoke SSM Automation documents to auto-fix non-compliant resources (e.g. enable encryption). Composite alarms aggregate metric alarms and cannot remediate. CloudTrail data events log object-level access, not remediation. High-resolution metrics affect sampling granularity, unrelated to compliance fixes."
+    },
+    {
+      "id": "mon-q8",
+      "domain": 1,
+      "stem": "A team running microservices on Lambda and ECS needs to find **which downstream call is adding latency** to a request flowing through several services. Which tool is most appropriate?",
+      "options": [
+        "Amazon CloudWatch Metrics dashboards",
+        "CloudWatch Logs Insights",
+        "AWS CloudTrail",
+        "AWS X-Ray"
+      ],
+      "answer": 3,
+      "explanation": "X-Ray provides distributed tracing and a service map that pinpoints latency and errors across services in a request path. CloudWatch dashboards show aggregate metrics but not per-request end-to-end traces. CloudTrail audits API calls, not request latency. Logs Insights queries log text and lacks an automatic cross-service trace map."
+    }
+  ]
+}

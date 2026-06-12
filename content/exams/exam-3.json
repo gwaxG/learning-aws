@@ -1,0 +1,876 @@
+{
+  "id": 3,
+  "title": "Mock Exam 3",
+  "minutes": 130,
+  "questions": [
+    {
+      "id": "e3-q1",
+      "domain": 1,
+      "stem": "A company stores customer PII in an S3 bucket. Security requires that objects be encrypted with a key whose rotation and usage are auditable and controlled by the company, and that all decrypt calls appear in CloudTrail. Which approach is MOST appropriate?",
+      "options": [
+        "Use client-side encryption with keys stored in the application code",
+        "Use SSE-S3 with Amazon S3 managed keys",
+        "Use SSE-KMS with a customer managed key",
+        "Disable encryption and rely on bucket policies"
+      ],
+      "answer": 2,
+      "explanation": "SSE-KMS with a customer managed key gives control over key policy, rotation, and produces CloudTrail entries for every encrypt/decrypt call. SSE-S3 keys are AWS managed and decrypt calls are not individually auditable. Hardcoding keys is insecure and unmanageable."
+    },
+    {
+      "id": "e3-q2",
+      "domain": 1,
+      "stem": "An organization wants developers in a member account to assume a role in a central logging account, but only when their requests originate from the corporate IP range. Which IAM mechanism enforces the IP restriction?",
+      "options": [
+        "A resource-based policy on CloudTrail",
+        "A permissions boundary on the developer users",
+        "An SCP attached to the logging account",
+        "A Condition block with aws:SourceIp in the role's trust policy"
+      ],
+      "answer": 3,
+      "explanation": "A Condition with aws:SourceIp in the role trust policy restricts who can assume the role based on source IP. Permissions boundaries cap effective permissions but do not filter by IP at assume time. SCPs limit account-wide actions but are not the standard tool for IP-conditioned cross-account assumption."
+    },
+    {
+      "id": "e3-q3",
+      "domain": 1,
+      "stem": "A web application running on EC2 needs to read secrets from AWS Secrets Manager. What is the MOST secure way to grant access without storing long-term credentials?",
+      "options": [
+        "Store credentials in environment variables in user data",
+        "Use the root account access keys",
+        "Attach an IAM role to the EC2 instance via an instance profile",
+        "Embed an IAM user's access keys in the AMI"
+      ],
+      "answer": 2,
+      "explanation": "An IAM role attached through an instance profile supplies temporary, automatically rotated credentials via the instance metadata service, eliminating long-term secrets. Embedding access keys in an AMI or user data exposes them. Root keys should never be used by applications."
+    },
+    {
+      "id": "e3-q4",
+      "domain": 1,
+      "stem": "A company must ensure no IAM user across the entire AWS Organization can disable CloudTrail or delete the trail's logs, even if granted admin in a member account. Which control achieves this?",
+      "options": [
+        "A bucket policy on the log bucket",
+        "An IAM permissions boundary on each user",
+        "A Service Control Policy denying cloudtrail:StopLogging and related actions",
+        "Enabling MFA on all users"
+      ],
+      "answer": 2,
+      "explanation": "An SCP with an explicit Deny on CloudTrail stop/delete actions overrides any allow in member accounts, since SCPs set the maximum permissions. Permissions boundaries must be applied per principal and can be removed by account admins. Bucket policies and MFA do not prevent stopping the trail itself."
+    },
+    {
+      "id": "e3-q5",
+      "domain": 1,
+      "stem": "An application uses KMS to encrypt large objects. The team wants to reduce the number of KMS API calls and associated cost while still using unique data keys per object. Which technique should they use?",
+      "options": [
+        "Call Encrypt directly on the full object payload each time",
+        "Use a single data key for all objects forever",
+        "Use envelope encryption with GenerateDataKey and cache data keys client-side",
+        "Switch to SSE-S3 to avoid KMS entirely"
+      ],
+      "answer": 2,
+      "explanation": "Envelope encryption with GenerateDataKey, combined with local data key caching, reduces direct KMS calls while preserving per-object data keys. Calling Encrypt on full payloads is limited to 4 KB and is costly. Reusing one key forever weakens security, and SSE-S3 abandons the KMS control requirement."
+    },
+    {
+      "id": "e3-q6",
+      "domain": 1,
+      "stem": "A SaaS provider needs to let customers grant it cross-account access to their accounts securely, preventing the confused deputy problem. Which trust policy element should the provider require customers to include?",
+      "options": [
+        "An ExternalId condition",
+        "kms:ViaService",
+        "aws:RequestedRegion",
+        "aws:SourceVpc"
+      ],
+      "answer": 0,
+      "explanation": "The ExternalId condition in the role trust policy prevents the confused deputy problem by requiring a shared secret known only to the customer and the SaaS provider when assuming the role. The other conditions address VPC origin, region, or KMS service context, not cross-account third-party trust."
+    },
+    {
+      "id": "e3-q7",
+      "domain": 1,
+      "stem": "A company wants to centrally manage and rotate database credentials used by multiple Lambda functions with minimal operational effort. Which service is BEST suited?",
+      "options": [
+        "AWS Secrets Manager with automatic rotation",
+        "AWS KMS",
+        "Storing credentials in Lambda environment variables",
+        "AWS Systems Manager Parameter Store standard parameters"
+      ],
+      "answer": 0,
+      "explanation": "Secrets Manager supports built-in automatic rotation for supported databases via a rotation Lambda, centralizing credential management with low effort. Parameter Store standard parameters lack native rotation. Environment variables are static and insecure. KMS encrypts data but does not manage or rotate credentials."
+    },
+    {
+      "id": "e3-q8",
+      "domain": 1,
+      "stem": "Auditors require a record of every configuration change to AWS resources and the ability to evaluate resources against compliance rules continuously. Which service provides this?",
+      "options": [
+        "AWS Trusted Advisor",
+        "AWS CloudTrail",
+        "Amazon CloudWatch",
+        "AWS Config"
+      ],
+      "answer": 3,
+      "explanation": "AWS Config records configuration history and continuously evaluates resources against managed or custom rules for compliance. CloudTrail records API activity but not resource configuration state over time. CloudWatch handles metrics and logs, and Trusted Advisor gives best-practice checks, not continuous config evaluation."
+    },
+    {
+      "id": "e3-q9",
+      "domain": 1,
+      "stem": "A company must encrypt EBS volumes for all new EC2 instances by default in a region without relying on developers to enable it manually. What should they do?",
+      "options": [
+        "Manually encrypt each volume after launch",
+        "Add a tag policy requiring encryption",
+        "Use an SCP to deny ec2:RunInstances",
+        "Enable EBS encryption by default in the account/region settings"
+      ],
+      "answer": 3,
+      "explanation": "Enabling EBS encryption by default at the account/region level ensures all newly created volumes are encrypted automatically. Tag policies do not enforce encryption. Denying RunInstances blocks launches entirely, and manual encryption is error-prone and not automatic."
+    },
+    {
+      "id": "e3-q10",
+      "domain": 1,
+      "stem": "A financial app must protect against application-layer attacks such as SQL injection and cross-site scripting at the edge. Which combination should be used? (Choose two)",
+      "options": [
+        "Network ACLs on the subnet",
+        "Amazon Inspector",
+        "Security groups allowing all inbound HTTP",
+        "Attach WAF to CloudFront or Application Load Balancer",
+        "AWS WAF with managed rule groups"
+      ],
+      "answer": [
+        3,
+        4
+      ],
+      "explanation": "AWS WAF with managed rule groups inspects HTTP requests for SQLi and XSS and is attached to CloudFront, ALB, or API Gateway. Network ACLs and security groups operate at network/transport layers, not application content. Inspector assesses workload vulnerabilities but does not filter live traffic."
+    },
+    {
+      "id": "e3-q11",
+      "domain": 1,
+      "stem": "A company wants to provide temporary, federated access to the AWS Management Console for employees authenticated through their existing corporate SAML 2.0 identity provider. Which AWS service enables this?",
+      "options": [
+        "Amazon Cognito user pools",
+        "IAM SAML 2.0 identity provider with role assumption",
+        "IAM users with passwords",
+        "AWS Directory Service Simple AD only"
+      ],
+      "answer": 1,
+      "explanation": "Configuring an IAM SAML 2.0 identity provider lets employees federate from a corporate IdP and assume IAM roles for console access without separate IAM users. Cognito targets application end users, not console federation. IAM users defeat the SSO goal, and Simple AD alone does not provide SAML console federation."
+    },
+    {
+      "id": "e3-q12",
+      "domain": 1,
+      "stem": "An S3 bucket must be accessible only from a specific VPC and never over the public internet. Which two configurations enforce this? (Choose two)",
+      "options": [
+        "Create a gateway VPC endpoint for S3",
+        "Make the bucket public and rely on IAM",
+        "Use an internet gateway with a NAT",
+        "Enable S3 Transfer Acceleration",
+        "Add a bucket policy with aws:SourceVpce condition"
+      ],
+      "answer": [
+        0,
+        4
+      ],
+      "explanation": "A gateway VPC endpoint keeps S3 traffic within the AWS network, and a bucket policy condition on aws:SourceVpce restricts access to that endpoint only. Making the bucket public contradicts the requirement. NAT/IGW and Transfer Acceleration route over the public internet path."
+    },
+    {
+      "id": "e3-q13",
+      "domain": 1,
+      "stem": "A team needs to detect compromised credentials, cryptocurrency mining, and unusual API activity across accounts with minimal setup. Which service should they enable?",
+      "options": [
+        "Amazon Macie",
+        "Amazon GuardDuty",
+        "Amazon Detective only",
+        "AWS Config"
+      ],
+      "answer": 1,
+      "explanation": "GuardDuty is a managed threat-detection service that analyzes CloudTrail, VPC Flow Logs, and DNS logs to detect compromised credentials, crypto mining, and anomalous API behavior with minimal setup. Macie focuses on sensitive data discovery in S3. Config tracks configuration compliance, and Detective is for investigation after findings."
+    },
+    {
+      "id": "e3-q14",
+      "domain": 1,
+      "stem": "A company wants to ensure that an S3 bucket cannot be made public regardless of bucket policies or ACLs applied later. What should they configure?",
+      "options": [
+        "Add an explicit allow in the bucket policy",
+        "Enable S3 Block Public Access at the bucket or account level",
+        "Enable versioning",
+        "Use a VPC endpoint"
+      ],
+      "answer": 1,
+      "explanation": "S3 Block Public Access overrides and prevents public access settings via ACLs and bucket policies, and can be enforced at the account level. Versioning protects against overwrites, not public exposure. A VPC endpoint controls network path, not public-access settings on the bucket."
+    },
+    {
+      "id": "e3-q15",
+      "domain": 1,
+      "stem": "An application must discover and classify sensitive data such as credit card numbers stored in hundreds of S3 buckets. Which service is purpose-built for this?",
+      "options": [
+        "Amazon GuardDuty",
+        "AWS Config",
+        "AWS Shield",
+        "Amazon Macie"
+      ],
+      "answer": 3,
+      "explanation": "Amazon Macie uses machine learning and pattern matching to discover and classify sensitive data like PII and credit card numbers in S3. GuardDuty detects threats, Config tracks configuration compliance, and Shield protects against DDoS attacks."
+    },
+    {
+      "id": "e3-q16",
+      "domain": 1,
+      "stem": "A company requires that API calls to a sensitive Lambda function be allowed only from a particular AWS Organization. Which IAM condition key should the resource policy use?",
+      "options": [
+        "aws:userid",
+        "aws:PrincipalOrgID",
+        "lambda:FunctionArn",
+        "aws:SourceIp"
+      ],
+      "answer": 1,
+      "explanation": "aws:PrincipalOrgID restricts access to principals belonging to a specified AWS Organization, ideal for org-wide access control. aws:userid targets a single principal, aws:SourceIp filters by network address, and lambda:FunctionArn identifies the function, not the caller's org."
+    },
+    {
+      "id": "e3-q17",
+      "domain": 1,
+      "stem": "A regulated workload must use hardware security modules that the company controls exclusively for cryptographic operations and key storage, with single-tenant dedicated hardware. Which service meets this?",
+      "options": [
+        "AWS KMS with AWS managed keys",
+        "AWS Secrets Manager",
+        "AWS CloudHSM",
+        "AWS Certificate Manager"
+      ],
+      "answer": 2,
+      "explanation": "AWS CloudHSM provides dedicated, single-tenant FIPS 140-2 Level 3 hardware security modules under the customer's exclusive control. KMS is multi-tenant managed. Secrets Manager stores secrets and ACM manages TLS certificates, neither providing dedicated HSM hardware."
+    },
+    {
+      "id": "e3-q18",
+      "domain": 1,
+      "stem": "A company wants to grant a third-party auditor read-only access to billing and resource configurations without creating long-term credentials. Which approach is BEST?",
+      "options": [
+        "Create an IAM user and email the access keys",
+        "Share root credentials temporarily",
+        "Add the auditor to the AWS Organizations management account",
+        "Create a cross-account IAM role with a read-only policy that the auditor assumes"
+      ],
+      "answer": 3,
+      "explanation": "A cross-account IAM role granting read-only access lets the auditor assume the role using temporary credentials, avoiding shared long-term secrets. Sharing root credentials is dangerous. Emailing access keys is insecure, and adding them to the management account grants excessive privilege."
+    },
+    {
+      "id": "e3-q19",
+      "domain": 1,
+      "stem": "A company needs to enforce that all newly created resources include a CostCenter tag, and prevent creation otherwise across the organization. Which mechanism is MOST effective?",
+      "options": [
+        "AWS Budgets",
+        "An SCP combined with IAM policy conditions requiring aws:RequestTag",
+        "Cost Explorer",
+        "CloudWatch alarms"
+      ],
+      "answer": 1,
+      "explanation": "IAM/SCP policies using the aws:RequestTag condition (with a Deny when the tag is absent) prevent resource creation without the required tag organization-wide. Budgets and Cost Explorer report on spend but cannot block creation. CloudWatch alarms monitor metrics, not tag enforcement."
+    },
+    {
+      "id": "e3-q20",
+      "domain": 1,
+      "stem": "A microservice on ECS Fargate must retrieve a database password at runtime. The team wants the secret injected without the application code calling any API. Which approach achieves this with least effort?",
+      "options": [
+        "Pass the password as a plaintext environment variable",
+        "Reference a Secrets Manager secret in the ECS task definition secrets field",
+        "Store it in an unencrypted S3 object",
+        "Bake the password into the container image"
+      ],
+      "answer": 1,
+      "explanation": "ECS task definitions can reference Secrets Manager or SSM parameters in the secrets field, injecting the value as an environment variable at task startup without application API calls. Baking secrets into images or using plaintext env vars or unencrypted S3 exposes credentials insecurely."
+    },
+    {
+      "id": "e3-q21",
+      "domain": 2,
+      "stem": "A web tier behind an Application Load Balancer experiences unpredictable traffic spikes. The team wants automatic scaling that maintains average CPU utilization near 50%. Which configuration is MOST appropriate?",
+      "options": [
+        "Scheduled scaling only",
+        "A single large EC2 instance",
+        "Manual scaling adjusted by an operator",
+        "An Auto Scaling group with a target tracking policy on average CPU at 50%"
+      ],
+      "answer": 3,
+      "explanation": "A target tracking scaling policy automatically adjusts capacity to keep a metric like average CPU near the 50% target, ideal for unpredictable spikes. Manual and scheduled scaling cannot react to unpredictable demand, and a single instance offers neither elasticity nor high availability."
+    },
+    {
+      "id": "e3-q22",
+      "domain": 2,
+      "stem": "An application must remain available even if an entire Availability Zone fails. The web servers run in an Auto Scaling group behind an ALB. What is the MOST highly available design?",
+      "options": [
+        "Deploy all instances in one AZ with a standby instance",
+        "Use an Elastic IP failover script",
+        "Configure the ASG and ALB across at least two Availability Zones",
+        "Use a single AZ but enable Multi-AZ RDS only"
+      ],
+      "answer": 2,
+      "explanation": "Spanning the Auto Scaling group and ALB across two or more AZs ensures the application survives an AZ failure by distributing capacity. Concentrating instances in one AZ creates a single point of failure regardless of RDS or EIP failover scripts."
+    },
+    {
+      "id": "e3-q23",
+      "domain": 2,
+      "stem": "A stateless web application stores user session data that must survive instance termination during scale-in events. What is the MOST appropriate place to store sessions?",
+      "options": [
+        "In-memory on each instance",
+        "Amazon ElastiCache for Redis or DynamoDB",
+        "EBS volume on each instance",
+        "Local instance store"
+      ],
+      "answer": 1,
+      "explanation": "Externalizing session state to ElastiCache for Redis or DynamoDB keeps the web tier stateless and resilient to instance termination. Local instance store, per-instance EBS, and in-memory storage all lose data when an instance is terminated during scale-in."
+    },
+    {
+      "id": "e3-q24",
+      "domain": 2,
+      "stem": "A company runs a relational database that must withstand the loss of an Availability Zone with automatic failover and minimal management. Which option provides this?",
+      "options": [
+        "Amazon RDS Multi-AZ deployment",
+        "Self-managed MySQL on a single EC2 instance",
+        "DynamoDB global tables",
+        "Amazon RDS Single-AZ"
+      ],
+      "answer": 0,
+      "explanation": "RDS Multi-AZ maintains a synchronous standby in another AZ and fails over automatically, surviving AZ loss with minimal operational effort. Single-AZ has no failover, self-managed MySQL on one instance is a single point of failure, and DynamoDB is non-relational."
+    },
+    {
+      "id": "e3-q25",
+      "domain": 2,
+      "stem": "A message-driven order system must decouple producers from consumers and ensure that a slow consumer does not lose messages during traffic spikes. Which service is MOST appropriate?",
+      "options": [
+        "Amazon SQS queue between producer and consumer",
+        "Direct synchronous HTTP calls",
+        "Amazon SNS standard topic only",
+        "Amazon Kinesis Data Firehose"
+      ],
+      "answer": 0,
+      "explanation": "An SQS queue buffers messages so slow consumers can process at their own pace without loss, decoupling producers and consumers. SNS alone is pub/sub fan-out without durable buffering for a single consumer, synchronous calls couple components tightly, and Firehose is for streaming delivery to stores, not work queuing."
+    },
+    {
+      "id": "e3-q26",
+      "domain": 2,
+      "stem": "A REST API built on API Gateway and Lambda experiences cold starts that cause latency spikes for a latency-sensitive endpoint. Which feature reduces cold start latency with least effort?",
+      "options": [
+        "Increase the Lambda timeout",
+        "Switch to EC2",
+        "Move the function to a larger memory tier only",
+        "Configure Lambda provisioned concurrency"
+      ],
+      "answer": 3,
+      "explanation": "Provisioned concurrency keeps a set number of execution environments initialized and ready, eliminating cold starts for latency-sensitive endpoints. Increasing timeout does not affect initialization latency, more memory helps execution speed but not consistently cold starts, and moving to EC2 increases operational overhead."
+    },
+    {
+      "id": "e3-q27",
+      "domain": 2,
+      "stem": "A processing workflow must coordinate multiple Lambda functions with branching, retries, and error handling in a maintainable way. Which service is BEST suited?",
+      "options": [
+        "Amazon EventBridge rules only",
+        "AWS Step Functions",
+        "Amazon SQS",
+        "A single large Lambda function"
+      ],
+      "answer": 1,
+      "explanation": "AWS Step Functions orchestrates multi-step workflows with built-in branching, retries, and error handling using state machines, improving maintainability. SQS only queues messages, EventBridge routes events but does not manage stateful workflows, and a monolithic Lambda is hard to maintain and limited by timeout."
+    },
+    {
+      "id": "e3-q28",
+      "domain": 2,
+      "stem": "A read-heavy application using RDS MySQL is hitting CPU limits from repetitive read queries. The team wants to scale reads without changing the write path. Which solution is MOST cost-effective?",
+      "options": [
+        "Vertically scale the primary to the largest instance",
+        "Enable Multi-AZ",
+        "Add RDS read replicas and direct read traffic to them",
+        "Migrate to DynamoDB"
+      ],
+      "answer": 2,
+      "explanation": "RDS read replicas offload read queries from the primary, scaling read capacity without altering writes. Vertically scaling is costlier and has limits. Migrating to DynamoDB is a major rearchitecture, and Multi-AZ provides availability, not read scaling."
+    },
+    {
+      "id": "e3-q29",
+      "domain": 2,
+      "stem": "A globally distributed application needs single-digit-millisecond reads and writes for user profiles in multiple regions with multi-region replication. Which database is the BEST fit?",
+      "options": [
+        "Amazon DynamoDB global tables",
+        "Amazon RDS Multi-AZ",
+        "Amazon ElastiCache in one region",
+        "Amazon Redshift"
+      ],
+      "answer": 0,
+      "explanation": "DynamoDB global tables provide active-active multi-region replication with single-digit-millisecond latency, ideal for global user profiles. RDS Multi-AZ is single-region availability, Redshift is for analytics, and single-region ElastiCache does not provide multi-region writes."
+    },
+    {
+      "id": "e3-q30",
+      "domain": 2,
+      "stem": "An ASG must avoid terminating instances during scale-in that are still processing long-running batch jobs. Which feature should be used?",
+      "options": [
+        "Auto Scaling lifecycle hooks with instance protection or termination delay",
+        "Increase desired capacity",
+        "Detach the load balancer",
+        "Cooldown of zero seconds"
+      ],
+      "answer": 0,
+      "explanation": "Lifecycle hooks (and instance scale-in protection) let instances finish in-flight work before termination, preventing interruption of long-running jobs. Raising desired capacity does not stop terminations of busy instances, a zero cooldown worsens churn, and detaching the load balancer does not control termination of working instances."
+    },
+    {
+      "id": "e3-q31",
+      "domain": 2,
+      "stem": "A company wants to fan out a single event to multiple independent processing systems, each with its own queue, while keeping systems decoupled. Which pattern is BEST?",
+      "options": [
+        "A single Lambda calling each system synchronously",
+        "EventBridge with a single target",
+        "SNS topic with multiple SQS queue subscriptions (fan-out)",
+        "SQS queue polled by all consumers"
+      ],
+      "answer": 2,
+      "explanation": "The SNS fan-out pattern publishes one message to a topic that delivers to multiple subscribed SQS queues, giving each downstream system durable, independent processing. A single shared queue does not duplicate messages per consumer, synchronous calls couple systems, and a single EventBridge target does not fan out to many queues."
+    },
+    {
+      "id": "e3-q32",
+      "domain": 2,
+      "stem": "A containerized microservices platform needs orchestration but the team wants to avoid managing the control plane and prefers serverless compute for tasks. Which combination has the LEAST operational overhead?",
+      "options": [
+        "Running containers via cron on a single VM",
+        "Amazon ECS with the Fargate launch type",
+        "Self-managed Kubernetes on EC2",
+        "EC2 launch type with manually managed instances"
+      ],
+      "answer": 1,
+      "explanation": "ECS with Fargate removes server and cluster management by running containers serverlessly, minimizing operational overhead. Self-managed Kubernetes and EC2 launch type require patching and capacity management, and cron on a single VM lacks orchestration and resilience."
+    },
+    {
+      "id": "e3-q33",
+      "domain": 2,
+      "stem": "A workload ingests millions of clickstream records per second and must be processed by multiple consumers in real time with ordering per key and replay capability. Which service is BEST?",
+      "options": [
+        "Amazon SQS standard queue",
+        "Amazon Kinesis Data Streams",
+        "AWS Batch",
+        "Amazon SNS"
+      ],
+      "answer": 1,
+      "explanation": "Kinesis Data Streams handles high-throughput real-time streaming with per-shard ordering and a retention window enabling replay by multiple consumers. SQS standard does not guarantee ordering or replay, SNS is pub/sub without replay, and Batch is for batch compute jobs."
+    },
+    {
+      "id": "e3-q34",
+      "domain": 2,
+      "stem": "An e-commerce site must absorb sudden flash-sale spikes for its Lambda-backed checkout without throttling, while protecting a downstream RDS database from connection exhaustion. Which two measures help? (Choose two)",
+      "options": [
+        "Disable retries entirely",
+        "Use a single database connection per invocation with no pooling",
+        "Move RDS to Single-AZ",
+        "Set Lambda reserved concurrency appropriately",
+        "Use RDS Proxy to pool and manage database connections"
+      ],
+      "answer": [
+        3,
+        4
+      ],
+      "explanation": "RDS Proxy pools connections to prevent database connection exhaustion from many concurrent Lambdas, and reserved concurrency controls how many functions run to protect downstream limits. Disabling retries loses work, per-invocation connections without pooling worsens exhaustion, and Single-AZ reduces availability."
+    },
+    {
+      "id": "e3-q35",
+      "domain": 2,
+      "stem": "A company needs an in-memory cache that is highly available with automatic failover and persistence options for a leaderboard feature. Which service and mode fit BEST?",
+      "options": [
+        "ElastiCache for Memcached",
+        "RDS with query cache",
+        "ElastiCache for Redis with Multi-AZ and replicas",
+        "DynamoDB DAX only"
+      ],
+      "answer": 2,
+      "explanation": "ElastiCache for Redis supports replication, Multi-AZ automatic failover, and persistence, suiting a highly available leaderboard. Memcached lacks replication and failover. DAX accelerates DynamoDB specifically, and RDS query cache is not an in-memory cache service for this use case."
+    },
+    {
+      "id": "e3-q36",
+      "domain": 2,
+      "stem": "A batch job runs nightly and can tolerate interruptions and restarts. The company wants the lowest compute cost on EC2-based capacity. Which purchasing option is MOST cost-effective?",
+      "options": [
+        "Reserved Instances with 3-year term",
+        "Dedicated Hosts",
+        "Spot Instances",
+        "On-Demand Instances"
+      ],
+      "answer": 2,
+      "explanation": "Spot Instances offer the deepest discount and suit interruption-tolerant, restartable batch jobs. On-Demand is more expensive, 3-year Reserved Instances require steady long-term usage commitment, and Dedicated Hosts are costly and meant for licensing or isolation needs."
+    },
+    {
+      "id": "e3-q37",
+      "domain": 2,
+      "stem": "An application must process incoming files only after they are uploaded to S3, triggering a Lambda function with no polling. Which integration achieves this with least overhead?",
+      "options": [
+        "Configure an S3 event notification to invoke Lambda on object create",
+        "Poll S3 with a scheduled Lambda",
+        "Use a cron job on EC2 to scan the bucket",
+        "Manually invoke Lambda"
+      ],
+      "answer": 0,
+      "explanation": "S3 event notifications invoke Lambda directly on object creation, requiring no polling infrastructure. Scheduled polling and EC2 cron jobs add cost and latency, and manual invocation does not scale or react in real time."
+    },
+    {
+      "id": "e3-q38",
+      "domain": 3,
+      "stem": "A company stores 500 TB of archival data that is rarely accessed, with retrieval acceptable within 12 hours, and wants the lowest storage cost. Which S3 storage class is BEST?",
+      "options": [
+        "S3 Intelligent-Tiering",
+        "S3 Standard-Infrequent Access",
+        "S3 Standard",
+        "S3 Glacier Deep Archive"
+      ],
+      "answer": 3,
+      "explanation": "S3 Glacier Deep Archive offers the lowest storage cost for rarely accessed data with retrieval times measured in hours, fitting a 12-hour SLA. Standard and Standard-IA cost more for archival, and Intelligent-Tiering adds monitoring cost and is best when access patterns are unknown."
+    },
+    {
+      "id": "e3-q39",
+      "domain": 3,
+      "stem": "A high-performance computing application needs a shared file system with sub-millisecond latencies and high throughput for Linux compute nodes processing large datasets. Which service is BEST?",
+      "options": [
+        "Amazon S3",
+        "Amazon FSx for Windows File Server",
+        "Amazon FSx for Lustre",
+        "Amazon EFS Standard"
+      ],
+      "answer": 2,
+      "explanation": "FSx for Lustre is designed for HPC and machine learning with sub-millisecond latency and very high throughput, and can link to S3. EFS targets general-purpose NFS workloads with higher latency, S3 is object storage not a POSIX file system, and FSx for Windows targets SMB/Windows workloads."
+    },
+    {
+      "id": "e3-q40",
+      "domain": 3,
+      "stem": "A company needs a managed data warehouse to run complex analytical queries over petabytes of structured data with columnar storage and parallel processing. Which service fits BEST?",
+      "options": [
+        "Amazon RDS PostgreSQL",
+        "Amazon ElastiCache",
+        "Amazon DynamoDB",
+        "Amazon Redshift"
+      ],
+      "answer": 3,
+      "explanation": "Amazon Redshift is a petabyte-scale columnar data warehouse with massively parallel processing optimized for complex analytics. RDS PostgreSQL is OLTP-oriented, DynamoDB is a key-value/document store, and ElastiCache is an in-memory cache."
+    },
+    {
+      "id": "e3-q41",
+      "domain": 3,
+      "stem": "A team wants to run SQL queries directly against data stored in S3 without provisioning or managing any servers, paying only per query scanned. Which service should they use?",
+      "options": [
+        "Amazon Redshift Spectrum cluster",
+        "Amazon Athena",
+        "Amazon EMR",
+        "AWS Glue ETL jobs"
+      ],
+      "answer": 1,
+      "explanation": "Amazon Athena is serverless and queries data directly in S3 using SQL, charging per data scanned with no infrastructure to manage. Redshift Spectrum requires a Redshift cluster, EMR requires managing clusters, and Glue is for ETL rather than ad hoc querying."
+    },
+    {
+      "id": "e3-q42",
+      "domain": 3,
+      "stem": "A latency-sensitive global website serves static and dynamic content. The team wants to cache content close to users and reduce origin load. Which service should be used?",
+      "options": [
+        "Amazon CloudFront",
+        "An ALB in one region",
+        "Amazon Route 53 latency routing only",
+        "AWS Global Accelerator only"
+      ],
+      "answer": 0,
+      "explanation": "CloudFront is a CDN that caches content at edge locations worldwide, reducing latency and origin load for static and dynamic content. Global Accelerator improves network path but does not cache content, Route 53 routing alone does not cache, and a single-region ALB offers no global edge caching."
+    },
+    {
+      "id": "e3-q43",
+      "domain": 3,
+      "stem": "A company needs to migrate a 200 TB on-premises dataset to S3, but the corporate internet link would take months to transfer it. Which service is MOST appropriate?",
+      "options": [
+        "AWS Snowball Edge",
+        "AWS DataSync over the internet",
+        "Direct Connect 1 Gbps",
+        "S3 Transfer Acceleration"
+      ],
+      "answer": 0,
+      "explanation": "AWS Snowball Edge physically ships data, making it ideal when network transfer of large datasets would take too long. DataSync and Transfer Acceleration still depend on the constrained link, and a 1 Gbps Direct Connect would also take a very long time for 200 TB plus provisioning lead time."
+    },
+    {
+      "id": "e3-q44",
+      "domain": 3,
+      "stem": "An application requires shared POSIX file storage accessible concurrently from many EC2 instances across multiple AZs, scaling automatically. Which service is BEST?",
+      "options": [
+        "Instance store",
+        "Amazon S3",
+        "Amazon EFS",
+        "Amazon EBS Multi-Attach"
+      ],
+      "answer": 2,
+      "explanation": "Amazon EFS is a managed elastic NFS file system accessible concurrently from many instances across AZs, scaling automatically. EBS Multi-Attach is limited to instances in one AZ and specific volume types, instance store is ephemeral and local, and S3 is object storage, not POSIX."
+    },
+    {
+      "id": "e3-q45",
+      "domain": 3,
+      "stem": "A company runs DNS for its domain and wants to route users to the nearest healthy regional endpoint, failing over automatically if a region becomes unhealthy. Which Route 53 configuration achieves this?",
+      "options": [
+        "Simple routing with one record",
+        "Static A record",
+        "Weighted routing only",
+        "Latency-based routing combined with health checks"
+      ],
+      "answer": 3,
+      "explanation": "Latency-based routing directs users to the lowest-latency healthy region, and associated health checks remove unhealthy endpoints to enable failover. Simple and static records cannot route by latency or fail over, and weighted routing distributes by assigned weights, not proximity."
+    },
+    {
+      "id": "e3-q46",
+      "domain": 3,
+      "stem": "A company wants automatic cost optimization for an S3 bucket whose access patterns are unknown and change over time, without managing lifecycle rules. Which storage class is BEST?",
+      "options": [
+        "S3 One Zone-IA",
+        "S3 Intelligent-Tiering",
+        "S3 Standard",
+        "S3 Glacier Flexible Retrieval"
+      ],
+      "answer": 1,
+      "explanation": "S3 Intelligent-Tiering automatically moves objects between access tiers based on usage, optimizing cost without manual lifecycle management. Standard does not optimize automatically, Glacier suits known archival data, and One Zone-IA reduces availability and assumes infrequent access."
+    },
+    {
+      "id": "e3-q47",
+      "domain": 3,
+      "stem": "A media company must serve large video files to users worldwide and prevent direct public access to the S3 origin, allowing access only through the CDN. Which two configurations achieve this? (Choose two)",
+      "options": [
+        "Restrict the bucket policy to allow only the CloudFront distribution",
+        "Enable S3 static website hosting with public access",
+        "Make the S3 bucket fully public",
+        "Disable CloudFront and use presigned URLs only",
+        "Use CloudFront with Origin Access Control (OAC)"
+      ],
+      "answer": [
+        0,
+        4
+      ],
+      "explanation": "CloudFront Origin Access Control lets only the distribution read from S3, and a bucket policy scoped to that distribution blocks direct public access. Making the bucket public or enabling public website hosting exposes the origin, and disabling CloudFront removes the CDN entirely."
+    },
+    {
+      "id": "e3-q48",
+      "domain": 3,
+      "stem": "A company needs to continuously replicate an on-premises Oracle database to Amazon Aurora with minimal downtime during migration. Which service is MOST appropriate?",
+      "options": [
+        "AWS Database Migration Service (DMS) with ongoing replication",
+        "Amazon S3 Transfer Acceleration",
+        "AWS Snowball",
+        "AWS DataSync"
+      ],
+      "answer": 0,
+      "explanation": "AWS DMS supports continuous data replication (CDC) to keep the target in sync, enabling near-zero downtime cutover, and the Schema Conversion Tool assists heterogeneous migrations. DataSync targets file/object transfer, Snowball is for offline bulk data, and Transfer Acceleration speeds S3 uploads, not database replication."
+    },
+    {
+      "id": "e3-q49",
+      "domain": 3,
+      "stem": "A TCP-based gaming application needs static anycast IP addresses and improved global network performance with fast regional failover. Which service is BEST?",
+      "options": [
+        "AWS Global Accelerator",
+        "Amazon Route 53 only",
+        "An internet-facing NLB in a single region",
+        "Amazon CloudFront"
+      ],
+      "answer": 0,
+      "explanation": "AWS Global Accelerator provides static anycast IPs and routes traffic over the AWS global network with fast failover, ideal for TCP/UDP applications like gaming. CloudFront caches HTTP content, Route 53 alone provides DNS routing, and a single-region NLB lacks global acceleration and anycast IPs."
+    },
+    {
+      "id": "e3-q50",
+      "domain": 3,
+      "stem": "A reporting workload reads large datasets from S3 once per quarter and the company wants the lowest storage cost while keeping data in a single AZ acceptable. Which storage class is MOST cost-effective?",
+      "options": [
+        "S3 One Zone-Infrequent Access",
+        "S3 Standard",
+        "S3 Glacier Deep Archive",
+        "S3 Standard-IA"
+      ],
+      "answer": 0,
+      "explanation": "S3 One Zone-IA stores infrequently accessed data in a single AZ at a lower price than Standard-IA, suiting quarterly reads where single-AZ resilience is acceptable. Standard is costlier, Standard-IA stores across AZs at higher price, and Deep Archive imposes long retrieval times unsuited to ad hoc reporting."
+    },
+    {
+      "id": "e3-q51",
+      "domain": 3,
+      "stem": "A company needs durable, automatically expiring storage where objects older than 90 days move to a cheaper tier and are deleted after one year. What is the LEAST operational way to implement this?",
+      "options": [
+        "Write a custom Lambda that scans and deletes objects daily",
+        "Use EC2 cron jobs to move objects",
+        "Configure an S3 Lifecycle policy with transition and expiration rules",
+        "Manually delete objects each year"
+      ],
+      "answer": 2,
+      "explanation": "S3 Lifecycle policies natively transition objects to cheaper storage classes and expire them on a schedule with no custom code. A custom Lambda, EC2 cron jobs, and manual deletion all add unnecessary operational overhead and risk."
+    },
+    {
+      "id": "e3-q52",
+      "domain": 3,
+      "stem": "A company uses Athena to query large datasets in S3 and wants to reduce query cost and improve performance. Which two data optimizations help MOST? (Choose two)",
+      "options": [
+        "Convert data to a columnar format like Parquet",
+        "Partition the data by frequently filtered columns",
+        "Use the S3 Standard-IA class for hot query data",
+        "Store data as uncompressed CSV",
+        "Store all data in a single large file"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Columnar formats like Parquet and partitioning reduce the amount of data Athena scans, lowering cost and improving performance. Uncompressed CSV and single large files increase scanned bytes, and the storage class choice does not reduce Athena's per-scan query cost."
+    },
+    {
+      "id": "e3-q53",
+      "domain": 3,
+      "stem": "A company wants to build a serverless ETL pipeline that crawls data sources, infers schemas into a catalog, and transforms data without managing servers. Which service should be used?",
+      "options": [
+        "AWS Data Pipeline on EC2",
+        "Amazon EMR",
+        "AWS Glue",
+        "Amazon Redshift"
+      ],
+      "answer": 2,
+      "explanation": "AWS Glue is a serverless ETL service with crawlers that infer schemas into the Glue Data Catalog and run Spark-based transformations without managing infrastructure. EMR requires cluster management, Data Pipeline on EC2 adds servers to manage, and Redshift is a data warehouse, not an ETL crawler service."
+    },
+    {
+      "id": "e3-q54",
+      "domain": 4,
+      "stem": "A company wants to minimize EC2 cost for a steady-state production workload running 24/7 for at least three years. Which purchasing option provides the greatest savings?",
+      "options": [
+        "Dedicated Hosts on demand",
+        "3-year Compute Savings Plan or Reserved Instances",
+        "On-Demand Instances",
+        "Spot Instances"
+      ],
+      "answer": 1,
+      "explanation": "For predictable, long-running workloads, a 3-year Savings Plan or Reserved Instance commitment yields the deepest discount versus On-Demand. Spot is unsuitable for steady production due to interruptions, and on-demand Dedicated Hosts are the most expensive option."
+    },
+    {
+      "id": "e3-q55",
+      "domain": 4,
+      "stem": "A company wants to be alerted when monthly AWS spending is forecast to exceed a defined threshold, with minimal setup. Which service should they use?",
+      "options": [
+        "AWS Trusted Advisor",
+        "Amazon CloudWatch billing metric only",
+        "AWS Cost and Usage Report",
+        "AWS Budgets with budget alerts"
+      ],
+      "answer": 3,
+      "explanation": "AWS Budgets lets you set cost and usage thresholds and sends alerts on actual or forecasted overspend with minimal configuration. CloudWatch billing metrics are lower-level, the Cost and Usage Report provides raw data without alerting, and Trusted Advisor gives recommendations, not budget alerts."
+    },
+    {
+      "id": "e3-q56",
+      "domain": 4,
+      "stem": "An operations team needs a single dashboard with custom metrics, logs, and alarms to monitor application health across services and trigger automated responses. Which service provides this?",
+      "options": [
+        "AWS CloudTrail",
+        "AWS Config",
+        "Amazon CloudWatch",
+        "AWS X-Ray only"
+      ],
+      "answer": 2,
+      "explanation": "Amazon CloudWatch aggregates metrics and logs, builds dashboards, and triggers alarms and automated actions, making it the operational monitoring hub. CloudTrail records API activity, Config tracks configuration compliance, and X-Ray focuses on distributed tracing rather than dashboards and alarms."
+    },
+    {
+      "id": "e3-q57",
+      "domain": 4,
+      "stem": "A company must implement a disaster recovery strategy with the lowest cost while accepting an RTO of several hours, restoring infrastructure from backups in another region. Which strategy fits?",
+      "options": [
+        "Pilot light",
+        "Multi-site active-active",
+        "Backup and restore",
+        "Warm standby"
+      ],
+      "answer": 2,
+      "explanation": "Backup and restore is the lowest-cost DR strategy and is acceptable when RTO can be measured in hours, since infrastructure is recreated from backups after a disaster. Pilot light and warm standby cost more by keeping minimal or scaled-down resources running, and active-active is the most expensive."
+    },
+    {
+      "id": "e3-q58",
+      "domain": 4,
+      "stem": "A company needs a DR approach where a minimal version of core services (such as a database) runs continuously in a second region and the rest is scaled up only during failover. Which strategy is this?",
+      "options": [
+        "Pilot light",
+        "Backup and restore",
+        "Multi-site active-active",
+        "Cold standby with no resources"
+      ],
+      "answer": 0,
+      "explanation": "Pilot light keeps critical core components like databases running in the recovery region while other resources remain off until failover, balancing cost and faster recovery than backup-and-restore. Active-active runs full capacity everywhere, and cold standby keeps nothing running."
+    },
+    {
+      "id": "e3-q59",
+      "domain": 4,
+      "stem": "A team wants to automate provisioning of identical multi-tier environments repeatedly with version-controlled, declarative templates. Which service is MOST appropriate?",
+      "options": [
+        "AWS Config",
+        "Amazon CloudWatch",
+        "Manual console setup",
+        "AWS CloudFormation"
+      ],
+      "answer": 3,
+      "explanation": "AWS CloudFormation provisions infrastructure from declarative, version-controlled templates, enabling repeatable, consistent environments. Manual setup is error-prone and not repeatable, Config evaluates configuration compliance, and CloudWatch handles monitoring, not provisioning."
+    },
+    {
+      "id": "e3-q60",
+      "domain": 4,
+      "stem": "A company wants to identify idle and underutilized EC2 instances and receive right-sizing recommendations to lower costs. Which two tools help? (Choose two)",
+      "options": [
+        "AWS WAF",
+        "Amazon Inspector",
+        "AWS Compute Optimizer",
+        "AWS Cost Explorer rightsizing recommendations",
+        "Amazon Macie"
+      ],
+      "answer": [
+        2,
+        3
+      ],
+      "explanation": "Compute Optimizer analyzes utilization and recommends optimal instance types, and Cost Explorer offers rightsizing recommendations to reduce spend. Inspector assesses vulnerabilities, WAF filters web traffic, and Macie discovers sensitive data, none of which provide rightsizing guidance."
+    },
+    {
+      "id": "e3-q61",
+      "domain": 4,
+      "stem": "A company centralizes logs from many accounts and wants to detect operational issues by querying log data interactively and setting metric-based alarms. Which approach is MOST suitable?",
+      "options": [
+        "Store logs only in S3 with no analysis",
+        "Print logs to instance consoles",
+        "Email logs to administrators",
+        "Use CloudWatch Logs with Logs Insights queries and metric filters"
+      ],
+      "answer": 3,
+      "explanation": "CloudWatch Logs centralizes logs, Logs Insights enables interactive queries, and metric filters convert log patterns into metrics that drive alarms. Storing logs in S3 alone lacks interactive query/alerting integration, and emailing or printing logs is not scalable or actionable."
+    },
+    {
+      "id": "e3-q62",
+      "domain": 4,
+      "stem": "A company wants near-zero data loss and very fast recovery for a critical application by running a scaled-down but fully functional copy in a second region that can quickly scale up. Which DR strategy is this?",
+      "options": [
+        "Backup and restore",
+        "Warm standby",
+        "Pilot light",
+        "Single-region deployment"
+      ],
+      "answer": 1,
+      "explanation": "Warm standby keeps a scaled-down but fully functional environment running in the recovery region that scales up quickly during failover, providing low RTO/RPO at moderate cost. Backup-and-restore is slower, pilot light keeps only core services running, and single-region offers no DR."
+    },
+    {
+      "id": "e3-q63",
+      "domain": 4,
+      "stem": "An organization wants automatic remediation when a resource is found non-compliant, such as re-enabling encryption on an S3 bucket. Which combination achieves automated remediation with least custom code?",
+      "options": [
+        "AWS Config rules with automatic remediation actions (SSM Automation)",
+        "CloudTrail with manual review",
+        "CloudWatch dashboards only",
+        "A daily human audit"
+      ],
+      "answer": 0,
+      "explanation": "AWS Config rules can trigger automatic remediation through SSM Automation documents to fix non-compliant resources with minimal custom code. CloudTrail and dashboards only observe, and manual audits are slow and error-prone, not automated remediation."
+    },
+    {
+      "id": "e3-q64",
+      "domain": 4,
+      "stem": "A company wants to apply OS patches to a fleet of EC2 instances on a schedule, track compliance, and avoid logging into each server. Which service should they use?",
+      "options": [
+        "AWS Systems Manager Patch Manager",
+        "AWS Config",
+        "AWS CloudFormation",
+        "Amazon Inspector"
+      ],
+      "answer": 0,
+      "explanation": "Systems Manager Patch Manager automates scheduled OS patching across fleets and reports patch compliance without manual logins. Inspector identifies vulnerabilities but does not apply patches, Config tracks configuration state, and CloudFormation provisions infrastructure."
+    },
+    {
+      "id": "e3-q65",
+      "domain": 4,
+      "stem": "A company runs a fleet of EC2 instances and wants to reduce cost for a baseline of always-on usage while keeping flexibility to change instance families and regions. Which option is BEST?",
+      "options": [
+        "Compute Savings Plan",
+        "Standard Reserved Instances tied to a specific instance type",
+        "Spot Instances for all workloads",
+        "On-Demand only"
+      ],
+      "answer": 0,
+      "explanation": "A Compute Savings Plan provides discounts on a committed hourly spend while allowing flexibility across instance families, sizes, regions, and even Fargate/Lambda. Standard RIs are less flexible, Spot is unsuitable for always-on baseline due to interruptions, and On-Demand offers no savings."
+    }
+  ]
+}
