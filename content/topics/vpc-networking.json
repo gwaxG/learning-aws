@@ -8,7 +8,15 @@
   "essentials": [
     {
       "heading": "VPC, Subnets, CIDR & AZs",
-      "body": "A **VPC** is a logically isolated virtual network scoped to **one Region**, defined by an IPv4 CIDR block (e.g. `10.0.0.0/16`, allowed sizes `/16`–`/28`). Each **subnet** lives in exactly **one Availability Zone** and cannot span AZs, so build at least one subnet per AZ for high availability. A subnet is *public* when its route table sends `0.0.0.0/0` to an **Internet Gateway**; otherwise it is *private*. AWS reserves **5 IP addresses** in every subnet (first four + last), so a `/28` yields only 11 usable hosts."
+      "body": "A **VPC** is a logically isolated virtual network scoped to **one Region**, defined by an IPv4 CIDR block (e.g. `10.0.0.0/16`, allowed sizes `/16`–`/28`). Each **subnet** lives in exactly **one Availability Zone** and cannot span AZs, so build at least one subnet per AZ for high availability. A subnet is *public* when its route table sends `0.0.0.0/0` to an **Internet Gateway**; otherwise it is *private*. AWS reserves **5 IP addresses** in every subnet (first four + last), so a `/28` yields only 11 usable hosts.",
+      "diagram": {
+        "src": "vpc-layout.svg",
+        "caption": "A typical multi-AZ VPC: public subnets (ALB/NAT) and private subnets (app, database) duplicated across two Availability Zones."
+      },
+      "links": [
+        {"label": "What is Amazon VPC?", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html"},
+        {"label": "VPC subnets", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html"}
+      ]
     },
     {
       "heading": "Route Tables, IGW, NAT Gateway vs NAT Instance",

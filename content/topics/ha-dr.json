@@ -15,7 +15,15 @@
     },
     {
       "heading": "The 4 DR Strategies",
-      "body": "From cheapest/slowest to most expensive/fastest:\n- **Backup & Restore** — only back up data; rebuild infra on disaster. Lowest cost, **highest RTO (hours)**, RPO = backup frequency.\n- **Pilot Light** — core data replicated and a minimal always-on core (e.g. DB) in DR Region; app servers off until needed. Lower RTO than B&R (tens of min), moderate cost.\n- **Warm Standby** — a **scaled-down but fully functional** copy always running in DR; scale up on failover. RTO minutes, higher cost.\n- **Multi-Site Active/Active** — full production in 2+ Regions serving traffic simultaneously. **Near-zero RTO/RPO**, highest cost and complexity. Match the stated budget + RTO/RPO to the cheapest strategy that still meets the targets."
+      "body": "From cheapest/slowest to most expensive/fastest:\n- **Backup & Restore** — only back up data; rebuild infra on disaster. Lowest cost, **highest RTO (hours)**, RPO = backup frequency.\n- **Pilot Light** — core data replicated and a minimal always-on core (e.g. DB) in DR Region; app servers off until needed. Lower RTO than B&R (tens of min), moderate cost.\n- **Warm Standby** — a **scaled-down but fully functional** copy always running in DR; scale up on failover. RTO minutes, higher cost.\n- **Multi-Site Active/Active** — full production in 2+ Regions serving traffic simultaneously. **Near-zero RTO/RPO**, highest cost and complexity. Match the stated budget + RTO/RPO to the cheapest strategy that still meets the targets.",
+      "diagram": {
+        "src": "dr-strategies.svg",
+        "caption": "The four DR strategies trade cost against RTO/RPO: Backup & Restore is cheapest but slowest; Multi-Site Active/Active is near-instant but most expensive."
+      },
+      "links": [
+        {"label": "Disaster recovery options in the cloud", "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html"},
+        {"label": "Reliability Pillar: plan for DR", "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/plan-for-disaster-recovery-dr.html"}
+      ]
     },
     {
       "heading": "Decoupling & Statelessness",

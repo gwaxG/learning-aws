@@ -1,0 +1,50 @@
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Replication topologies: single-leader, multi-leader, and leaderless quorum">
+  <style>
+    .ttl { fill: #ff9900; font: 700 13px system-ui, sans-serif; text-anchor: middle; }
+    .node { fill: #1d3150; stroke: #4aa3ff; }
+    .leader { fill: #1d3150; stroke: #ff9900; stroke-width: 2; }
+    .nodet { fill: #e8eef6; font: 600 12px system-ui, sans-serif; text-anchor: middle; }
+    .sub { fill: #8aa0bd; font: 11px system-ui, sans-serif; text-anchor: middle; }
+    .repl { stroke: #4aa3ff; stroke-width: 2; fill: none; marker-end: url(#arr2); }
+  </style>
+  <defs>
+    <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#4aa3ff"/>
+    </marker>
+  </defs>
+
+  <!-- Single-leader -->
+  <text x="130" y="30" class="ttl">Single-leader</text>
+  <text x="130" y="48" class="sub">RDS / Aurora</text>
+  <rect class="leader" x="80" y="70" width="100" height="34" rx="6"/><text class="nodet" x="130" y="92">Writer</text>
+  <rect class="node" x="30" y="150" width="90" height="32" rx="6"/><text class="nodet" x="75" y="171">Replica</text>
+  <rect class="node" x="140" y="150" width="90" height="32" rx="6"/><text class="nodet" x="185" y="171">Replica</text>
+  <path class="repl" d="M120,104 L82,150"/>
+  <path class="repl" d="M150,104 L182,150"/>
+  <text x="130" y="210" class="sub">writes → leader,</text>
+  <text x="130" y="226" class="sub">reads scale on replicas</text>
+
+  <!-- Multi-leader -->
+  <text x="380" y="30" class="ttl">Multi-leader</text>
+  <text x="380" y="48" class="sub">DynamoDB global tables</text>
+  <rect class="leader" x="305" y="80" width="70" height="32" rx="6"/><text class="nodet" x="340" y="101">Region A</text>
+  <rect class="leader" x="385" y="80" width="70" height="32" rx="6"/><text class="nodet" x="420" y="101">Region B</text>
+  <rect class="leader" x="345" y="160" width="70" height="32" rx="6"/><text class="nodet" x="380" y="181">Region C</text>
+  <path class="repl" d="M375,96 L385,96"/>
+  <path class="repl" d="M385,90 L375,90"/>
+  <path class="repl" d="M335,112 L368,160"/>
+  <path class="repl" d="M425,112 L392,160"/>
+  <text x="380" y="222" class="sub">write anywhere; last-writer-wins</text>
+  <text x="380" y="238" class="sub">conflict resolution</text>
+
+  <!-- Leaderless / quorum -->
+  <text x="630" y="30" class="ttl">Leaderless (quorum)</text>
+  <text x="630" y="48" class="sub">e.g. Cassandra-style</text>
+  <rect class="node" x="585" y="80" width="90" height="32" rx="6"/><text class="nodet" x="630" y="101">Node 1</text>
+  <rect class="node" x="540" y="150" width="80" height="32" rx="6"/><text class="nodet" x="580" y="171">Node 2</text>
+  <rect class="node" x="640" y="150" width="80" height="32" rx="6"/><text class="nodet" x="680" y="171">Node 3</text>
+  <path class="repl" d="M610,112 L590,150"/>
+  <path class="repl" d="M650,112 L670,150"/>
+  <text x="630" y="222" class="sub">W + R &gt; N for</text>
+  <text x="630" y="238" class="sub">strong consistency</text>
+</svg>

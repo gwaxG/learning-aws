@@ -7,6 +7,7 @@
     {"id": 4, "name": "Design Cost-Optimized Architectures", "weight": 20}
   ],
   "topics": [
+    {"slug": "architecture", "title": "Architecture & Data-Intensive Design", "domains": [2, 3]},
     {"slug": "iam-security", "title": "IAM & Security", "domains": [1]},
     {"slug": "vpc-networking", "title": "VPC & Networking", "domains": [1, 2]},
     {"slug": "ec2-compute", "title": "EC2 & Compute", "domains": [2, 3]},

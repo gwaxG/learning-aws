@@ -1,0 +1,49 @@
+<svg viewBox="0 0 760 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Layered data-intensive reference architecture on AWS">
+  <style>
+    .lbl { fill: #e8eef6; font: 600 13px system-ui, sans-serif; }
+    .sub { fill: #8aa0bd; font: 11px system-ui, sans-serif; }
+    .layer { fill: #16263d; stroke: #25395a; rx: 8; }
+    .node { fill: #1d3150; stroke: #4aa3ff; }
+    .nodet { fill: #e8eef6; font: 600 12px system-ui, sans-serif; text-anchor: middle; }
+    .tier { fill: #ff9900; font: 700 11px system-ui, sans-serif; letter-spacing: .06em; }
+    .flow { stroke: #4aa3ff; stroke-width: 2; fill: none; marker-end: url(#arr); }
+  </style>
+  <defs>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#4aa3ff"/>
+    </marker>
+  </defs>
+
+  <text x="20" y="34" class="tier">EDGE</text>
+  <rect class="layer" x="20" y="44" width="720" height="58" rx="8"/>
+  <rect class="node" x="40" y="58" width="150" height="30" rx="6"/><text class="nodet" x="115" y="78">Route 53 DNS</text>
+  <rect class="node" x="210" y="58" width="150" height="30" rx="6"/><text class="nodet" x="285" y="78">CloudFront CDN</text>
+  <rect class="node" x="380" y="58" width="150" height="30" rx="6"/><text class="nodet" x="455" y="78">AWS WAF</text>
+  <text x="560" y="78" class="sub">global, low-latency,</text><text x="560" y="92" class="sub">absorbs load &amp; attacks</text>
+
+  <text x="20" y="132" class="tier">COMPUTE (stateless, auto-scaled)</text>
+  <rect class="layer" x="20" y="142" width="720" height="58" rx="8"/>
+  <rect class="node" x="40" y="156" width="170" height="30" rx="6"/><text class="nodet" x="125" y="176">ALB</text>
+  <rect class="node" x="230" y="156" width="200" height="30" rx="6"/><text class="nodet" x="330" y="176">ECS / EKS (Auto Scaling)</text>
+  <rect class="node" x="450" y="156" width="170" height="30" rx="6"/><text class="nodet" x="535" y="176">Lambda</text>
+  <text x="635" y="176" class="sub">scale out,</text><text x="635" y="190" class="sub">multi-AZ</text>
+
+  <text x="20" y="230" class="tier">DATA (stateful)</text>
+  <rect class="layer" x="20" y="240" width="720" height="58" rx="8"/>
+  <rect class="node" x="40" y="254" width="150" height="30" rx="6"/><text class="nodet" x="115" y="274">Aurora (SQL)</text>
+  <rect class="node" x="205" y="254" width="160" height="30" rx="6"/><text class="nodet" x="285" y="274">DynamoDB (NoSQL)</text>
+  <rect class="node" x="380" y="254" width="160" height="30" rx="6"/><text class="nodet" x="460" y="274">ElastiCache</text>
+  <rect class="node" x="555" y="254" width="165" height="30" rx="6"/><text class="nodet" x="637" y="274">S3 (object store)</text>
+
+  <text x="20" y="328" class="tier">ANALYTICS (derived data)</text>
+  <rect class="layer" x="20" y="338" width="720" height="58" rx="8"/>
+  <rect class="node" x="40" y="352" width="150" height="30" rx="6"/><text class="nodet" x="115" y="372">Kinesis / MSK</text>
+  <rect class="node" x="205" y="352" width="160" height="30" rx="6"/><text class="nodet" x="285" y="372">Glue / EMR</text>
+  <rect class="node" x="380" y="352" width="160" height="30" rx="6"/><text class="nodet" x="460" y="372">Redshift</text>
+  <rect class="node" x="555" y="352" width="165" height="30" rx="6"/><text class="nodet" x="637" y="372">Athena / QuickSight</text>
+
+  <path class="flow" d="M380,102 L380,142"/>
+  <path class="flow" d="M380,200 L380,240"/>
+  <path class="flow" d="M380,298 L380,338"/>
+  <text x="412" y="500" class="sub"></text>
+</svg>

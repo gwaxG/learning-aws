@@ -1,0 +1,21 @@
+<svg viewBox="0 0 760 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four disaster-recovery strategies ordered by RTO/RPO and cost">
+  <style>
+    .axis { stroke: #25395a; stroke-width: 1.5; }
+    .axlbl { fill: #8aa0bd; font: 11px system-ui, sans-serif; }
+    .box { fill: #1d3150; stroke: #4aa3ff; }
+    .bt { fill: #e8eef6; font: 600 12px system-ui, sans-serif; text-anchor: middle; }
+    .sub { fill: #8aa0bd; font: 10px system-ui, sans-serif; text-anchor: middle; }
+    .ttl { fill: #ff9900; font: 700 12px system-ui, sans-serif; }
+  </style>
+
+  <text x="40" y="30" class="ttl">Lower cost, higher RTO/RPO  →  Higher cost, near-zero RTO/RPO</text>
+
+  <line class="axis" x1="40" y1="210" x2="720" y2="210"/>
+  <text x="40" y="234" class="axlbl">slow recovery · cheap</text>
+  <text x="560" y="234" class="axlbl">instant failover · costly</text>
+
+  <rect class="box" x="40" y="120" width="150" height="70" rx="8"/><text class="bt" x="115" y="150">Backup &amp; Restore</text><text class="sub" x="115" y="172">hours · S3/AMI snapshots</text>
+  <rect class="box" x="220" y="105" width="150" height="85" rx="8"/><text class="bt" x="295" y="140">Pilot Light</text><text class="sub" x="295" y="162">10s of min · core data live,</text><text class="sub" x="295" y="176">compute off</text>
+  <rect class="box" x="400" y="90" width="150" height="100" rx="8"/><text class="bt" x="475" y="125">Warm Standby</text><text class="sub" x="475" y="147">minutes · scaled-down</text><text class="sub" x="475" y="161">copy always running</text>
+  <rect class="box" x="580" y="75" width="150" height="115" rx="8"/><text class="bt" x="655" y="110">Multi-Site</text><text class="bt" x="655" y="126">Active/Active</text><text class="sub" x="655" y="150">near-zero · full</text><text class="sub" x="655" y="164">capacity both regions</text>
+</svg>

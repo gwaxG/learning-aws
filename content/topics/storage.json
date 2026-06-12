@@ -9,7 +9,15 @@
   "essentials": [
     {
       "heading": "S3 storage classes & retrieval trade-offs",
-      "body": "**S3 Standard**: frequent access, low latency, no retrieval fee. **Intelligent-Tiering**: auto-moves objects between tiers based on access; small monthly monitoring fee, no retrieval charges — best when access patterns are unknown. **Standard-IA**: infrequent access, lower storage cost but per-GB retrieval fee + 30-day min duration, still multi-AZ. **One Zone-IA**: like Standard-IA but single AZ (~20% cheaper) — fine for re-creatable data only. **Glacier Instant Retrieval**: archive with millisecond access, cheaper than IA for rarely-read data. **Glacier Flexible Retrieval**: minutes-to-hours (Expedited 1-5 min, Standard 3-5 h, Bulk 5-12 h). **Glacier Deep Archive**: cheapest, 12-48 h retrieval, 180-day min. Minimum durations: IA/One Zone-IA 30 d, Glacier Flexible/Instant 90 d, Deep Archive 180 d."
+      "body": "**S3 Standard**: frequent access, low latency, no retrieval fee. **Intelligent-Tiering**: auto-moves objects between tiers based on access; small monthly monitoring fee, no retrieval charges — best when access patterns are unknown. **Standard-IA**: infrequent access, lower storage cost but per-GB retrieval fee + 30-day min duration, still multi-AZ. **One Zone-IA**: like Standard-IA but single AZ (~20% cheaper) — fine for re-creatable data only. **Glacier Instant Retrieval**: archive with millisecond access, cheaper than IA for rarely-read data. **Glacier Flexible Retrieval**: minutes-to-hours (Expedited 1-5 min, Standard 3-5 h, Bulk 5-12 h). **Glacier Deep Archive**: cheapest, 12-48 h retrieval, 180-day min. Minimum durations: IA/One Zone-IA 30 d, Glacier Flexible/Instant 90 d, Deep Archive 180 d.",
+      "diagram": {
+        "src": "s3-storage-classes.svg",
+        "caption": "S3 storage classes along the access-frequency spectrum: hotter classes cost more to store with instant access; colder classes are cheaper but charge retrieval fees and take longer."
+      },
+      "links": [
+        {"label": "Using Amazon S3 storage classes", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"},
+        {"label": "Managing your storage lifecycle", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html"}
+      ]
     },
     {
       "heading": "Lifecycle policies & cost optimization",

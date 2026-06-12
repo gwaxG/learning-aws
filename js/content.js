@@ -12,3 +12,13 @@ async function getJSON(path) {
 export const loadManifest = () => getJSON("content/manifest.json");
 export const loadTopic = (slug) => getJSON(`content/topics/${slug}.json`);
 export const loadExam = (id) => getJSON(`content/exams/exam-${id}.json`);
+
+const svgCache = new Map();
+export async function loadDiagram(src) {
+  if (svgCache.has(src)) return svgCache.get(src);
+  const res = await fetch(`content/diagrams/${src}`);
+  if (!res.ok) throw new Error(`Failed to load diagram ${src}: ${res.status}`);
+  const svg = await res.text();
+  svgCache.set(src, svg);
+  return svg;
+}

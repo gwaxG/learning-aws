@@ -1,0 +1,40 @@
+<svg viewBox="0 0 760 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Partitioning by hash of partition key, and the hot-partition anti-pattern">
+  <style>
+    .ttl { fill: #ff9900; font: 700 13px system-ui, sans-serif; text-anchor: middle; }
+    .node { fill: #1d3150; stroke: #4aa3ff; }
+    .nodet { fill: #e8eef6; font: 600 12px system-ui, sans-serif; text-anchor: middle; }
+    .sub { fill: #8aa0bd; font: 11px system-ui, sans-serif; text-anchor: middle; }
+    .key { fill: #16263d; stroke: #25395a; }
+    .hot { fill: #1d3150; stroke: #e74c3c; stroke-width: 2; }
+    .flow { stroke: #4aa3ff; stroke-width: 1.5; fill: none; marker-end: url(#arr3); }
+  </style>
+  <defs>
+    <marker id="arr3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#4aa3ff"/>
+    </marker>
+  </defs>
+
+  <!-- Good: even spread -->
+  <text x="200" y="28" class="ttl">High-cardinality key → even spread</text>
+  <rect class="key" x="150" y="50" width="100" height="30" rx="6"/><text class="nodet" x="200" y="70">hash(user_id)</text>
+  <rect class="node" x="40" y="140" width="100" height="40" rx="6"/><text class="nodet" x="90" y="165">Partition 1</text>
+  <rect class="node" x="150" y="140" width="100" height="40" rx="6"/><text class="nodet" x="200" y="165">Partition 2</text>
+  <rect class="node" x="260" y="140" width="100" height="40" rx="6"/><text class="nodet" x="310" y="165">Partition 3</text>
+  <path class="flow" d="M180,80 L100,140"/>
+  <path class="flow" d="M200,80 L200,140"/>
+  <path class="flow" d="M220,80 L300,140"/>
+  <text x="200" y="210" class="sub">throughput spreads evenly</text>
+  <text x="200" y="226" class="sub">across partitions ✓</text>
+
+  <!-- Bad: hot partition -->
+  <text x="560" y="28" class="ttl">Low-cardinality key → hot partition</text>
+  <rect class="key" x="510" y="50" width="100" height="30" rx="6"/><text class="nodet" x="560" y="70">hash(status)</text>
+  <rect class="hot" x="430" y="140" width="100" height="40" rx="6"/><text class="nodet" x="480" y="165">Partition 1</text>
+  <rect class="node" x="540" y="140" width="100" height="40" rx="6"/><text class="nodet" x="590" y="165">Partition 2</text>
+  <rect class="node" x="650" y="140" width="90" height="40" rx="6"/><text class="nodet" x="695" y="165">Partition 3</text>
+  <path class="flow" d="M540,80 L490,140"/>
+  <path class="flow" d="M555,80 L500,140"/>
+  <path class="flow" d="M570,80 L500,138"/>
+  <text x="560" y="210" class="sub">most traffic hits one partition,</text>
+  <text x="560" y="226" class="sub">throttling despite spare capacity ✗</text>
+</svg>

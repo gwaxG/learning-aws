@@ -1,0 +1,26 @@
+<svg viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="S3 storage classes ordered by access frequency, cost, and retrieval time">
+  <style>
+    .axis { stroke: #25395a; stroke-width: 1.5; }
+    .axlbl { fill: #8aa0bd; font: 11px system-ui, sans-serif; }
+    .cls { fill: #1d3150; stroke: #4aa3ff; }
+    .clst { fill: #e8eef6; font: 600 11px system-ui, sans-serif; text-anchor: middle; }
+    .sub { fill: #8aa0bd; font: 10px system-ui, sans-serif; text-anchor: middle; }
+    .ttl { fill: #ff9900; font: 700 12px system-ui, sans-serif; text-anchor: middle; }
+  </style>
+
+  <text x="380" y="30" class="ttl">Hotter / pricier storage, instant access  →  Colder / cheaper, slower retrieval</text>
+
+  <!-- axis -->
+  <line class="axis" x1="40" y1="220" x2="720" y2="220"/>
+  <text x="40" y="245" class="axlbl">frequent access</text>
+  <text x="640" y="245" class="axlbl">archive</text>
+  <text x="40" y="262" class="axlbl">$$$ storage · $0 retrieval</text>
+  <text x="600" y="262" class="axlbl">$ storage · $$ retrieval</text>
+
+  <rect class="cls" x="40" y="90" width="105" height="110" rx="6"/><text class="clst" x="92" y="130">S3</text><text class="clst" x="92" y="146">Standard</text><text class="sub" x="92" y="170">ms · no fee</text>
+  <rect class="cls" x="155" y="100" width="105" height="100" rx="6"/><text class="clst" x="207" y="138">Intelligent-</text><text class="clst" x="207" y="154">Tiering</text><text class="sub" x="207" y="176">auto · no fee</text>
+  <rect class="cls" x="270" y="115" width="105" height="85" rx="6"/><text class="clst" x="322" y="150">Standard-IA</text><text class="sub" x="322" y="174">ms · 30d min</text>
+  <rect class="cls" x="385" y="130" width="105" height="70" rx="6"/><text class="clst" x="437" y="160">Glacier Instant</text><text class="sub" x="437" y="184">ms · 90d min</text>
+  <rect class="cls" x="500" y="145" width="105" height="55" rx="6"/><text class="clst" x="552" y="170">Glacier Flexible</text><text class="sub" x="552" y="190">min–hrs</text>
+  <rect class="cls" x="615" y="160" width="105" height="40" rx="6"/><text class="clst" x="667" y="178">Deep Archive</text><text class="sub" x="667" y="194">12–48h · 180d</text>
+</svg>

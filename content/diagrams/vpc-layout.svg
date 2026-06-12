@@ -1,0 +1,47 @@
+<svg viewBox="0 0 760 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="VPC with public and private subnets across two Availability Zones">
+  <style>
+    .vpc { fill: none; stroke: #ff9900; stroke-width: 2; stroke-dasharray: 6 4; }
+    .az { fill: #16263d; stroke: #25395a; }
+    .pub { fill: #1d3150; stroke: #2ecc71; }
+    .priv { fill: #1d3150; stroke: #4aa3ff; }
+    .nodet { fill: #e8eef6; font: 600 12px system-ui, sans-serif; text-anchor: middle; }
+    .sub { fill: #8aa0bd; font: 11px system-ui, sans-serif; text-anchor: middle; }
+    .lbl { fill: #ff9900; font: 700 12px system-ui, sans-serif; }
+    .azlbl { fill: #8aa0bd; font: 600 11px system-ui, sans-serif; text-anchor: middle; }
+    .flow { stroke: #4aa3ff; stroke-width: 1.6; fill: none; marker-end: url(#arr5); }
+  </style>
+  <defs>
+    <marker id="arr5" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#4aa3ff"/>
+    </marker>
+  </defs>
+
+  <rect class="pub" x="320" y="20" width="120" height="30" rx="6"/><text class="nodet" x="380" y="40">Internet Gateway</text>
+
+  <rect class="vpc" x="30" y="70" width="700" height="310" rx="10"/>
+  <text x="44" y="92" class="lbl">VPC  10.0.0.0/16</text>
+
+  <text x="200" y="116" class="azlbl">Availability Zone A</text>
+  <text x="560" y="116" class="azlbl">Availability Zone B</text>
+
+  <!-- AZ A -->
+  <rect class="pub" x="60" y="130" width="280" height="60" rx="8"/><text class="nodet" x="200" y="156">Public subnet</text>
+  <text class="sub" x="200" y="176">ALB · NAT Gateway</text>
+  <rect class="priv" x="60" y="220" width="280" height="60" rx="8"/><text class="nodet" x="200" y="246">Private subnet</text>
+  <text class="sub" x="200" y="266">App (ECS / EC2)</text>
+  <rect class="priv" x="60" y="300" width="280" height="50" rx="8"/><text class="nodet" x="200" y="330">DB subnet — Aurora writer</text>
+
+  <!-- AZ B -->
+  <rect class="pub" x="420" y="130" width="280" height="60" rx="8"/><text class="nodet" x="560" y="156">Public subnet</text>
+  <text class="sub" x="560" y="176">ALB · NAT Gateway</text>
+  <rect class="priv" x="420" y="220" width="280" height="60" rx="8"/><text class="nodet" x="560" y="246">Private subnet</text>
+  <text class="sub" x="560" y="266">App (ECS / EC2)</text>
+  <rect class="priv" x="420" y="300" width="280" height="50" rx="8"/><text class="nodet" x="560" y="330">DB subnet — Aurora replica</text>
+
+  <path class="flow" d="M380,50 L200,130"/>
+  <path class="flow" d="M380,50 L560,130"/>
+  <path class="flow" d="M200,190 L200,220"/>
+  <path class="flow" d="M560,190 L560,220"/>
+  <path class="flow" d="M200,280 L200,300"/>
+  <path class="flow" d="M560,280 L560,300"/>
+</svg>

@@ -15,8 +15,9 @@ Then open **http://localhost:8000**.
 
 ## What's inside
 
-- **12 topics** (by service area, tagged with the 4 exam domains): IAM & Security, VPC & Networking, EC2 & Compute, S3 & Storage, Databases, Decoupling & Integration, Serverless & Containers, Monitoring & Auditing, Content Delivery & DNS, HA/DR & Resilience, Cost Optimization, Data/Analytics & Migration.
+- **13 topics** (by service area, tagged with the 4 exam domains): Architecture & Data-Intensive Design, IAM & Security, VPC & Networking, EC2 & Compute, S3 & Storage, Databases, Decoupling & Integration, Serverless & Containers, Monitoring & Auditing, Content Delivery & DNS, HA/DR & Resilience, Cost Optimization, Data/Analytics & Migration.
   - Each topic = **Exam essentials** (bare-minimum-to-pass notes) + **Hands-on labs** (AWS CLI + Pulumi Python snippets) + **practice questions** with full explanations.
+  - Essentials may include inline **architecture diagrams** (offline SVGs in `content/diagrams/`) and **official AWS documentation links**.
 - **5 mock exams**, 65 questions each, timed (130 min), domain-weighted like the real blueprint (≈30/26/24/20%). Score report with per-domain breakdown and a full per-question review.
 - **Dashboard** tracking per-topic progress and exam attempt history.
 
@@ -39,6 +40,7 @@ content/
   manifest.json       lists topics, exams, domains
   topics/<slug>.json  one file per topic
   exams/exam-N.json   five mock exams
+  diagrams/*.svg      offline architecture diagrams referenced by topics
 scripts/
   validate-content.mjs   schema validator (run after editing content)
   debias-answers.mjs     one-shot: evens out correct-answer positions

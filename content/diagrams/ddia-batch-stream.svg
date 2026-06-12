@@ -1,0 +1,36 @@
+<svg viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Batch versus stream processing pipelines on AWS">
+  <style>
+    .ttl { fill: #ff9900; font: 700 13px system-ui, sans-serif; }
+    .node { fill: #1d3150; stroke: #4aa3ff; }
+    .nodet { fill: #e8eef6; font: 600 11.5px system-ui, sans-serif; text-anchor: middle; }
+    .sub { fill: #8aa0bd; font: 11px system-ui, sans-serif; }
+    .flow { stroke: #4aa3ff; stroke-width: 2; fill: none; marker-end: url(#arr4); }
+  </style>
+  <defs>
+    <marker id="arr4" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0,0 L9,4.5 L0,9 z" fill="#4aa3ff"/>
+    </marker>
+  </defs>
+
+  <!-- Batch -->
+  <text x="20" y="40" class="ttl">Batch — bounded data, high throughput, high latency</text>
+  <rect class="node" x="20" y="60" width="120" height="40" rx="6"/><text class="nodet" x="80" y="84">S3 (raw data)</text>
+  <rect class="node" x="200" y="60" width="140" height="40" rx="6"/><text class="nodet" x="270" y="84">Glue / EMR (Spark)</text>
+  <rect class="node" x="400" y="60" width="140" height="40" rx="6"/><text class="nodet" x="470" y="84">Redshift / S3</text>
+  <rect class="node" x="600" y="60" width="140" height="40" rx="6"/><text class="nodet" x="670" y="84">Athena / BI</text>
+  <path class="flow" d="M140,80 L200,80"/>
+  <path class="flow" d="M340,80 L400,80"/>
+  <path class="flow" d="M540,80 L600,80"/>
+  <text x="20" y="124" class="sub">scheduled jobs reprocess whole datasets — analytics, ETL, ML training</text>
+
+  <!-- Stream -->
+  <text x="20" y="190" class="ttl">Stream — unbounded data, low latency, processed on arrival</text>
+  <rect class="node" x="20" y="210" width="120" height="40" rx="6"/><text class="nodet" x="80" y="234">Producers</text>
+  <rect class="node" x="200" y="210" width="140" height="40" rx="6"/><text class="nodet" x="270" y="234">Kinesis / MSK</text>
+  <rect class="node" x="400" y="210" width="140" height="40" rx="6"/><text class="nodet" x="470" y="234">Lambda / Flink</text>
+  <rect class="node" x="600" y="210" width="140" height="40" rx="6"/><text class="nodet" x="670" y="234">DynamoDB / S3</text>
+  <path class="flow" d="M140,230 L200,230"/>
+  <path class="flow" d="M340,230 L400,230"/>
+  <path class="flow" d="M540,230 L600,230"/>
+  <text x="20" y="274" class="sub">events handled continuously — dashboards, alerting, real-time features</text>
+</svg>

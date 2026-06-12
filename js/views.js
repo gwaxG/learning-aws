@@ -1,4 +1,4 @@
-import { loadManifest, loadTopic } from "./content.js";
+import { loadManifest, loadTopic, loadDiagram } from "./content.js";
 import { store } from "./storage.js";
 import { renderQuestion } from "./quiz.js";
 
@@ -63,12 +63,31 @@ export async function renderDashboard(view) {
   };
 }
 
+const docLinks = (links) =>
+  Array.isArray(links) && links.length
+    ? `<ul class="doc-links">${links
+        .map((l) => `<li><a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a></li>`)
+        .join("")}</ul>`
+    : "";
+
 export async function renderTopic(view, slug) {
   const t = await loadTopic(slug);
+  const essentials = t.essentials
+    .map((e, i) => {
+      const fig = e.diagram
+        ? `<figure class="diagram" data-src="${esc(e.diagram.src)}" id="diagram-${i}">
+             <div class="diagram-svg loading">Loading diagram…</div>
+             <figcaption>${esc(e.diagram.caption)}</figcaption>
+           </figure>`
+        : "";
+      return `<h3>${esc(e.heading)}</h3><p>${mdLite(e.body)}</p>${fig}${docLinks(e.links)}`;
+    })
+    .join("");
+  const refs = docLinks(t.references);
   view.innerHTML = `<h1>${esc(t.title)}</h1>
     <section class="card">
       <h2>Exam essentials</h2>
-      ${t.essentials.map((e) => `<h3>${esc(e.heading)}</h3><p>${mdLite(e.body)}</p>`).join("")}
+      ${essentials}
     </section>
     <section class="card">
       <h2>Hands-on labs</h2>
@@ -77,7 +96,23 @@ export async function renderTopic(view, slug) {
     <section class="card">
       <h2>Practice questions</h2>
       <div id="qs"></div>
-    </section>`;
+    </section>
+    ${refs ? `<section class="card refs"><h2>AWS documentation</h2>${refs}</section>` : ""}`;
+
+  // Inline diagram SVGs (themeable, offline).
+  t.essentials.forEach((e, i) => {
+    if (!e.diagram) return;
+    const slot = view.querySelector(`#diagram-${i} .diagram-svg`);
+    loadDiagram(e.diagram.src)
+      .then((svg) => {
+        slot.classList.remove("loading");
+        slot.innerHTML = svg;
+      })
+      .catch(() => {
+        slot.classList.remove("loading");
+        slot.textContent = "Diagram unavailable.";
+      });
+  });
 
   const labs = view.querySelector("#labs");
   t.labs.forEach((lab) => {
