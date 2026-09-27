@@ -1,0 +1,64 @@
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Security Groups vs Network ACLs: stateful instance-level allow vs stateless subnet-level allow-and-deny">
+  <style>
+    .ttl { fill: #ff9900; font: 700 12px system-ui, sans-serif; text-anchor: middle; }
+    .col-sg { fill: #1d3150; stroke: #2ecc71; stroke-width: 2; }
+    .col-nacl { fill: #1d3150; stroke: #e74c3c; stroke-width: 2; }
+    .hdr { fill: #e8eef6; font: 700 13px system-ui, sans-serif; text-anchor: middle; }
+    .row { fill: #16263d; stroke: #25395a; }
+    .key { fill: #ff9900; font: 700 11px system-ui, sans-serif; }
+    .val { fill: #e8eef6; font: 600 12px system-ui, sans-serif; }
+    .sub { fill: #8aa0bd; font: 11px system-ui, sans-serif; text-anchor: middle; }
+    .warn { fill: #ff9900; font: 600 11px system-ui, sans-serif; text-anchor: middle; }
+  </style>
+
+  <text x="380" y="22" class="ttl">Security Group vs Network ACL</text>
+
+  <!-- SG column -->
+  <rect class="col-sg" x="30" y="40" width="340" height="240" rx="10"/>
+  <text x="200" y="62" class="hdr">Security Group</text>
+  <text x="200" y="80" class="sub">instance / ENI level</text>
+
+  <rect class="row" x="46" y="96" width="308" height="34" rx="6"/>
+  <text x="58" y="118" class="key">State</text>
+  <text x="130" y="118" class="val">STATEFUL — return traffic auto-allowed</text>
+
+  <rect class="row" x="46" y="138" width="308" height="34" rx="6"/>
+  <text x="58" y="160" class="key">Rules</text>
+  <text x="130" y="160" class="val">ALLOW only (no deny)</text>
+
+  <rect class="row" x="46" y="180" width="308" height="34" rx="6"/>
+  <text x="58" y="202" class="key">Eval</text>
+  <text x="130" y="202" class="val">all rules evaluated together</text>
+
+  <rect class="row" x="46" y="222" width="308" height="46" rx="6"/>
+  <text x="58" y="244" class="key">Use</text>
+  <text x="130" y="244" class="val">attach to ENI / EC2 / RDS</text>
+  <text x="130" y="260" class="val">cannot block a specific IP</text>
+
+  <!-- NACL column -->
+  <rect class="col-nacl" x="390" y="40" width="340" height="240" rx="10"/>
+  <text x="560" y="62" class="hdr">Network ACL</text>
+  <text x="560" y="80" class="sub">subnet level</text>
+
+  <rect class="row" x="406" y="96" width="308" height="34" rx="6"/>
+  <text x="418" y="118" class="key">State</text>
+  <text x="490" y="118" class="val">STATELESS — both directions</text>
+
+  <rect class="row" x="406" y="138" width="308" height="34" rx="6"/>
+  <text x="418" y="160" class="key">Rules</text>
+  <text x="490" y="160" class="val">ALLOW + DENY</text>
+
+  <rect class="row" x="406" y="180" width="308" height="34" rx="6"/>
+  <text x="418" y="202" class="key">Eval</text>
+  <text x="490" y="202" class="val">rule number, lowest first match</text>
+
+  <rect class="row" x="406" y="222" width="308" height="46" rx="6"/>
+  <text x="418" y="244" class="key">Use</text>
+  <text x="490" y="244" class="val">block bad IP (deny rule)</text>
+  <text x="490" y="260" class="val">guards entire subnet</text>
+
+  <!-- Ephemeral ports footer -->
+  <rect x="30" y="298" width="700" height="46" rx="8" fill="#16263d" stroke="#ff9900" stroke-dasharray="6 4"/>
+  <text x="380" y="318" class="warn">Trap: stateless NACL must allow ephemeral ports 1024–65535 OUTBOUND for return traffic</text>
+  <text x="380" y="334" class="sub">Security Groups handle this automatically; NACLs do not.</text>
+</svg>

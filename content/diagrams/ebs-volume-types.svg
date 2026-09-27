@@ -1,0 +1,59 @@
+<svg viewBox="0 0 760 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="EBS volume types compared on cost versus performance, showing gp3, io2 Block Express, st1, and sc1">
+  <style>
+    .axis { stroke: #25395a; stroke-width: 1.5; }
+    .axarrow { stroke: #4aa3ff; stroke-width: 1.5; fill: none; }
+    .axlbl { fill: #8aa0bd; font: 11px system-ui, sans-serif; }
+    .ssd { fill: #1d3150; stroke: #4aa3ff; }
+    .hdd { fill: #16263d; stroke: #2ecc71; }
+    .hi { fill: #1d3150; stroke: #ff9900; stroke-dasharray: 4 3; }
+    .bt { fill: #e8eef6; font: 600 12px system-ui, sans-serif; text-anchor: middle; }
+    .sub { fill: #8aa0bd; font: 10px system-ui, sans-serif; text-anchor: middle; }
+    .ttl { fill: #ff9900; font: 700 12px system-ui, sans-serif; text-anchor: middle; }
+    .tag { fill: #ff9900; font: 700 10px system-ui, sans-serif; text-anchor: middle; }
+  </style>
+
+  <text x="380" y="26" class="ttl">EBS volume types — cost vs performance (all single-AZ, network-attached)</text>
+
+  <!-- axes -->
+  <line class="axis" x1="60" y1="280" x2="720" y2="280"/>
+  <line class="axis" x1="60" y1="60" x2="60" y2="280"/>
+  <text x="60" y="298" class="axlbl">low cost</text>
+  <text x="660" y="298" class="axlbl">higher cost</text>
+  <text x="14" y="70" class="axlbl">IOPS /</text>
+  <text x="14" y="82" class="axlbl">latency</text>
+
+  <!-- sc1 cold HDD -->
+  <rect class="hdd" x="80" y="210" width="140" height="60" rx="6"/>
+  <text class="bt" x="150" y="232">sc1 (cold HDD)</text>
+  <text class="sub" x="150" y="250">cheapest · infrequent</text>
+  <text class="sub" x="150" y="262">sequential workloads</text>
+
+  <!-- st1 throughput HDD -->
+  <rect class="hdd" x="240" y="170" width="140" height="100" rx="6"/>
+  <text class="bt" x="310" y="194">st1 (throughput HDD)</text>
+  <text class="sub" x="310" y="214">big data · logs</text>
+  <text class="sub" x="310" y="228">sequential MB/s</text>
+  <text class="sub" x="310" y="252">up to 500 MB/s</text>
+
+  <!-- gp3 SSD -->
+  <rect class="ssd" x="400" y="115" width="150" height="155" rx="6"/>
+  <text class="bt" x="475" y="138">gp3 (gp SSD)</text>
+  <text class="sub" x="475" y="158">baseline 3,000 IOPS</text>
+  <text class="sub" x="475" y="172">125 MB/s included</text>
+  <text class="sub" x="475" y="192">provision up to</text>
+  <text class="sub" x="475" y="206">16,000 IOPS · 1,000 MB/s</text>
+  <text class="sub" x="475" y="226">independent of size</text>
+  <text class="tag" x="475" y="252">default SSD pick</text>
+
+  <!-- io2 / Block Express -->
+  <rect class="hi" x="570" y="70" width="150" height="200" rx="6"/>
+  <text class="bt" x="645" y="92">io2 / io2 Block Express</text>
+  <text class="sub" x="645" y="112">highest IOPS &amp; throughput</text>
+  <text class="sub" x="645" y="130">sub-ms · mission-critical DB</text>
+  <text class="sub" x="645" y="150">durability 99.999%</text>
+  <text class="sub" x="645" y="168">Block Express: up to</text>
+  <text class="sub" x="645" y="182">256k IOPS · 4,000 MB/s</text>
+  <text class="sub" x="645" y="206">Multi-Attach supported</text>
+  <text class="sub" x="645" y="224">(io1/io2 only, within AZ)</text>
+  <text class="tag" x="645" y="252">priciest</text>
+</svg>

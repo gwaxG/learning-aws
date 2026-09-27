@@ -1,0 +1,71 @@
+<svg viewBox="0 0 760 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ECS on EC2 versus AWS Fargate versus EKS for managed Kubernetes">
+  <style>
+    .ttl { fill: #ff9900; font: 700 13px system-ui, sans-serif; }
+    .lbl { fill: #ff9900; font: 700 12px system-ui, sans-serif; text-anchor: middle; }
+    .card { fill: #1d3150; stroke: #4aa3ff; }
+    .card-green { fill: #1d3150; stroke: #2ecc71; }
+    .card-orange { fill: #16263d; stroke: #ff9900; stroke-dasharray: 5 3; }
+    .nodet { fill: #e8eef6; font: 600 12px system-ui, sans-serif; text-anchor: middle; }
+    .row { fill: #e8eef6; font: 12px system-ui, sans-serif; }
+    .sub { fill: #8aa0bd; font: 11px system-ui, sans-serif; }
+    .subc { fill: #8aa0bd; font: 11px system-ui, sans-serif; text-anchor: middle; }
+  </style>
+
+  <text x="20" y="24" class="ttl">Choose your container compute model</text>
+
+  <!-- ECS on EC2 -->
+  <rect class="card" x="20" y="40" width="230" height="240" rx="10"/>
+  <text x="135" y="62" class="lbl">ECS on EC2</text>
+  <text x="135" y="80" class="subc">you manage the cluster</text>
+
+  <rect class="card" x="40" y="98" width="190" height="36" rx="6"/>
+  <text class="nodet" x="135" y="121">EC2 instances (you pick)</text>
+
+  <rect class="card" x="40" y="142" width="190" height="36" rx="6"/>
+  <text class="nodet" x="135" y="165">ECS agent · Docker</text>
+
+  <rect class="card" x="40" y="186" width="190" height="36" rx="6"/>
+  <text class="nodet" x="135" y="209">Tasks (containers)</text>
+
+  <text x="40" y="244" class="sub">+ Spot / RIs / SP for cost</text>
+  <text x="40" y="260" class="sub">− patch OS, scale nodes</text>
+  <text x="40" y="276" class="sub">− pay for idle capacity</text>
+
+  <!-- Fargate -->
+  <rect class="card-green" x="265" y="40" width="230" height="240" rx="10"/>
+  <text x="380" y="62" class="lbl">AWS Fargate</text>
+  <text x="380" y="80" class="subc">serverless containers</text>
+
+  <rect class="card-green" x="285" y="98" width="190" height="36" rx="6"/>
+  <text class="nodet" x="380" y="121">AWS-managed compute</text>
+
+  <rect class="card-green" x="285" y="142" width="190" height="36" rx="6"/>
+  <text class="nodet" x="380" y="165">Pick vCPU + memory / task</text>
+
+  <rect class="card-green" x="285" y="186" width="190" height="36" rx="6"/>
+  <text class="nodet" x="380" y="209">Tasks (containers)</text>
+
+  <text x="285" y="244" class="sub">+ no nodes, no patching</text>
+  <text x="285" y="260" class="sub">+ pay per task while running</text>
+  <text x="285" y="276" class="sub">− premium vs optimized EC2</text>
+
+  <!-- EKS -->
+  <rect class="card-orange" x="510" y="40" width="230" height="240" rx="10"/>
+  <text x="625" y="62" class="lbl">Amazon EKS</text>
+  <text x="625" y="80" class="subc">managed Kubernetes</text>
+
+  <rect class="card-orange" x="530" y="98" width="190" height="36" rx="6"/>
+  <text class="nodet" x="625" y="121">K8s control plane (mgd)</text>
+
+  <rect class="card-orange" x="530" y="142" width="190" height="36" rx="6"/>
+  <text class="nodet" x="625" y="165">Data plane: EC2 or Fargate</text>
+
+  <rect class="card-orange" x="530" y="186" width="190" height="36" rx="6"/>
+  <text class="nodet" x="625" y="209">Pods · Helm · operators</text>
+
+  <text x="530" y="244" class="sub">+ K8s portability / ecosystem</text>
+  <text x="530" y="260" class="sub">− control-plane hourly fee</text>
+  <text x="530" y="276" class="sub">− highest ops complexity</text>
+
+  <text x="20" y="310" class="sub">Rule: steady high load &amp; want control → EC2 · spiky / no-ops → Fargate · need Kubernetes → EKS</text>
+</svg>

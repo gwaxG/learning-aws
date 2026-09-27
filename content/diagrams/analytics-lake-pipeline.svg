@@ -1,0 +1,103 @@
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Analytics data-lake pipeline: ingestion via Firehose, DMS, or Glue ETL into an S3 lake with raw and curated zones, cataloged by Glue Data Catalog, and queried by Athena, Redshift Spectrum, EMR, or QuickSight">
+  <style>
+    .hdr { fill: #ff9900; font: 700 14px system-ui, sans-serif; text-anchor: middle; }
+    .lane { fill: #8aa0bd; font: 600 11px system-ui, sans-serif; text-anchor: middle; }
+    .nodet { fill: #e8eef6; font: 600 12px system-ui, sans-serif; text-anchor: middle; }
+    .sub { fill: #8aa0bd; font: 10px system-ui, sans-serif; text-anchor: middle; }
+    .ttl { fill: #ff9900; font: 700 12px system-ui, sans-serif; text-anchor: middle; }
+    .ing { fill: #1d3150; stroke: #4aa3ff; }
+    .lake { fill: #16263d; stroke: #ff9900; stroke-dasharray: 6 4; }
+    .zone { fill: #1d3150; stroke: #2ecc71; }
+    .cat { fill: #1d3150; stroke: #ff9900; }
+    .q { fill: #1d3150; stroke: #4aa3ff; }
+    .qhot { fill: #1d3150; stroke: #2ecc71; stroke-width: 2; }
+    .flow { stroke: #4aa3ff; stroke-width: 1.6; fill: none; marker-end: url(#arrB); }
+    .meta { stroke: #ff9900; stroke-width: 1.4; fill: none; stroke-dasharray: 4 3; marker-end: url(#arrO); }
+  </style>
+  <defs>
+    <marker id="arrB" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#4aa3ff"/>
+    </marker>
+    <marker id="arrO" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#ff9900"/>
+    </marker>
+  </defs>
+
+  <text x="380" y="22" class="hdr">S3 data lake — ingest, catalog, query in place</text>
+
+  <!-- Ingestion column -->
+  <text x="90" y="50" class="lane">Ingestion</text>
+  <rect class="ing" x="20" y="62" width="160" height="40" rx="6"/>
+  <text class="nodet" x="100" y="80">Kinesis Firehose</text>
+  <text class="sub" x="100" y="95">streaming → S3</text>
+
+  <rect class="ing" x="20" y="116" width="160" height="40" rx="6"/>
+  <text class="nodet" x="100" y="134">AWS DMS</text>
+  <text class="sub" x="100" y="149">CDC from RDBMS</text>
+
+  <rect class="ing" x="20" y="170" width="160" height="40" rx="6"/>
+  <text class="nodet" x="100" y="188">Glue ETL (Spark)</text>
+  <text class="sub" x="100" y="203">serverless transform</text>
+
+  <rect class="ing" x="20" y="224" width="160" height="40" rx="6"/>
+  <text class="nodet" x="100" y="242">DataSync / Snowball</text>
+  <text class="sub" x="100" y="257">on-prem bulk</text>
+
+  <!-- S3 lake -->
+  <text x="340" y="50" class="lane">S3 data lake</text>
+  <rect class="lake" x="220" y="62" width="240" height="220" rx="10"/>
+  <text class="ttl" x="340" y="84">Amazon S3</text>
+
+  <rect class="zone" x="240" y="100" width="200" height="60" rx="8"/>
+  <text class="nodet" x="340" y="122">Raw zone</text>
+  <text class="sub" x="340" y="140">JSON · CSV · logs</text>
+  <text class="sub" x="340" y="154">immutable landing</text>
+
+  <rect class="zone" x="240" y="180" width="200" height="80" rx="8"/>
+  <text class="nodet" x="340" y="202">Curated zone</text>
+  <text class="sub" x="340" y="220">Parquet / ORC + Snappy</text>
+  <text class="sub" x="340" y="236">partitioned by date</text>
+  <text class="sub" x="340" y="252">columnar · cheap to scan</text>
+
+  <!-- Catalog -->
+  <rect class="cat" x="220" y="296" width="240" height="42" rx="8"/>
+  <text class="nodet" x="340" y="316">AWS Glue Data Catalog</text>
+  <text class="sub" x="340" y="332">schemas via Crawlers · Hive metastore</text>
+
+  <!-- Query column -->
+  <text x="640" y="50" class="lane">Query &amp; BI</text>
+  <rect class="qhot" x="560" y="62" width="180" height="48" rx="8"/>
+  <text class="nodet" x="650" y="82">Amazon Athena</text>
+  <text class="sub" x="650" y="100">serverless SQL on S3 · $/TB scanned</text>
+
+  <rect class="q" x="560" y="122" width="180" height="40" rx="8"/>
+  <text class="nodet" x="650" y="140">Redshift Spectrum</text>
+  <text class="sub" x="650" y="155">warehouse over S3</text>
+
+  <rect class="q" x="560" y="174" width="180" height="40" rx="8"/>
+  <text class="nodet" x="650" y="192">Amazon EMR</text>
+  <text class="sub" x="650" y="207">Spark / Hadoop / Hive</text>
+
+  <rect class="q" x="560" y="226" width="180" height="40" rx="8"/>
+  <text class="nodet" x="650" y="244">Amazon QuickSight</text>
+  <text class="sub" x="650" y="259">dashboards · SPICE</text>
+
+  <!-- Flows ingest -> S3 -->
+  <path class="flow" d="M180,82 L240,128"/>
+  <path class="flow" d="M180,136 L240,132"/>
+  <path class="flow" d="M180,190 L240,138"/>
+  <path class="flow" d="M180,244 L240,148"/>
+
+  <!-- Catalog metadata to queries -->
+  <path class="meta" d="M460,316 L560,98"/>
+  <path class="meta" d="M460,316 L560,142"/>
+  <path class="meta" d="M460,316 L560,194"/>
+
+  <!-- Curated to queries -->
+  <path class="flow" d="M440,210 L560,86"/>
+  <path class="flow" d="M440,220 L560,142"/>
+  <path class="flow" d="M440,230 L560,194"/>
+  <path class="flow" d="M440,250 L560,246"/>
+
+  <text x="380" y="354" class="sub">orange dashed = metadata lookup · blue solid = data flow</text>
+</svg>

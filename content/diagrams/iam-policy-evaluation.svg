@@ -1,0 +1,81 @@
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="IAM policy evaluation order: SCP, explicit deny, identity and resource policy union, explicit allow, permission boundary, implicit deny">
+  <style>
+    .step { fill: #1d3150; stroke: #4aa3ff; }
+    .filter { fill: #16263d; stroke: #ff9900; stroke-dasharray: 6 4; }
+    .deny { fill: #1d3150; stroke: #e74c3c; }
+    .allow { fill: #1d3150; stroke: #2ecc71; }
+    .bt { fill: #e8eef6; font: 600 12px system-ui, sans-serif; text-anchor: middle; }
+    .sub { fill: #8aa0bd; font: 10px system-ui, sans-serif; text-anchor: middle; }
+    .ttl { fill: #ff9900; font: 700 12px system-ui, sans-serif; }
+    .flow { stroke: #4aa3ff; stroke-width: 1.6; fill: none; marker-end: url(#arr); }
+    .flowDeny { stroke: #e74c3c; stroke-width: 1.6; fill: none; marker-end: url(#arrD); }
+    .flowAllow { stroke: #2ecc71; stroke-width: 1.6; fill: none; marker-end: url(#arrA); }
+    .legend { fill: #8aa0bd; font: 10px system-ui, sans-serif; }
+  </style>
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#4aa3ff"/>
+    </marker>
+    <marker id="arrD" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#e74c3c"/>
+    </marker>
+    <marker id="arrA" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#2ecc71"/>
+    </marker>
+  </defs>
+
+  <text x="20" y="24" class="ttl">IAM policy evaluation — explicit Deny wins; SCPs &amp; boundaries only filter</text>
+
+  <rect class="step" x="20" y="50" width="110" height="50" rx="8"/>
+  <text class="bt" x="75" y="72">Request</text>
+  <text class="sub" x="75" y="88">principal + action</text>
+
+  <rect class="filter" x="155" y="50" width="120" height="50" rx="8"/>
+  <text class="bt" x="215" y="72">SCP guardrail</text>
+  <text class="sub" x="215" y="88">filter only · no grant</text>
+
+  <rect class="deny" x="300" y="50" width="140" height="50" rx="8"/>
+  <text class="bt" x="370" y="72">Explicit Deny?</text>
+  <text class="sub" x="370" y="88">identity / resource / SCP</text>
+
+  <rect class="step" x="465" y="50" width="140" height="50" rx="8"/>
+  <text class="bt" x="535" y="72">Identity &#8746; Resource</text>
+  <text class="sub" x="535" y="88">policies union</text>
+
+  <rect class="allow" x="630" y="50" width="110" height="50" rx="8"/>
+  <text class="bt" x="685" y="72">Explicit Allow?</text>
+
+  <rect class="filter" x="300" y="170" width="160" height="50" rx="8"/>
+  <text class="bt" x="380" y="192">Permission Boundary</text>
+  <text class="sub" x="380" y="208">cap on identity · no grant</text>
+
+  <rect class="allow" x="500" y="170" width="120" height="50" rx="8"/>
+  <text class="bt" x="560" y="198">ALLOW</text>
+
+  <rect class="deny" x="155" y="260" width="160" height="50" rx="8"/>
+  <text class="bt" x="235" y="282">Implicit DENY</text>
+  <text class="sub" x="235" y="298">default if no allow</text>
+
+  <rect class="deny" x="360" y="260" width="160" height="50" rx="8"/>
+  <text class="bt" x="440" y="282">Explicit DENY</text>
+  <text class="sub" x="440" y="298">overrides any allow</text>
+
+  <path class="flow" d="M130,75 L155,75"/>
+  <path class="flow" d="M275,75 L300,75"/>
+  <path class="flow" d="M440,75 L465,75"/>
+  <path class="flow" d="M605,75 L630,75"/>
+
+  <path class="flowDeny" d="M370,100 L370,260" />
+  <text class="legend" x="378" y="180">yes → deny</text>
+
+  <path class="flow" d="M685,100 L685,145 L380,145 L380,170"/>
+  <text class="legend" x="430" y="138">if allowed, cap by boundary</text>
+
+  <path class="flowAllow" d="M460,195 L500,195"/>
+  <text class="legend" x="465" y="186">within cap</text>
+
+  <path class="flowDeny" d="M685,100 L685,235 L235,235 L235,260"/>
+  <text class="legend" x="280" y="232">no allow → implicit deny</text>
+
+  <text x="20" y="340" class="legend">Order: SCP filter → explicit Deny check → policy union → explicit Allow → boundary cap → otherwise implicit Deny.</text>
+</svg>

@@ -1,0 +1,72 @@
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Comparison of Amazon SQS, SNS and EventBridge as decoupling primitives">
+  <style>
+    .col { fill: #16263d; stroke: #25395a; }
+    .sqs { fill: #1d3150; stroke: #4aa3ff; }
+    .sns { fill: #1d3150; stroke: #2ecc71; }
+    .ebr { fill: #1d3150; stroke: #ff9900; stroke-dasharray: 6 4; }
+    .ttl { fill: #ff9900; font: 700 12px system-ui, sans-serif; text-anchor: middle; }
+    .h { fill: #e8eef6; font: 700 14px system-ui, sans-serif; text-anchor: middle; }
+    .t { fill: #e8eef6; font: 600 12px system-ui, sans-serif; text-anchor: middle; }
+    .s { fill: #8aa0bd; font: 10px system-ui, sans-serif; text-anchor: middle; }
+    .arrB { stroke: #4aa3ff; stroke-width: 1.6; fill: none; marker-end: url(#aB); }
+    .arrG { stroke: #2ecc71; stroke-width: 1.6; fill: none; marker-end: url(#aG); }
+    .arrO { stroke: #ff9900; stroke-width: 1.6; fill: none; marker-end: url(#aO); stroke-dasharray: 5 3; }
+  </style>
+  <defs>
+    <marker id="aB" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#4aa3ff"/></marker>
+    <marker id="aG" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#2ecc71"/></marker>
+    <marker id="aO" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#ff9900"/></marker>
+  </defs>
+
+  <text x="380" y="22" class="ttl">SQS  vs  SNS  vs  EventBridge</text>
+
+  <!-- SQS column -->
+  <rect class="col" x="20" y="40" width="230" height="300" rx="10"/>
+  <text x="135" y="62" class="h">SQS</text>
+  <text x="135" y="78" class="s">point-to-point queue · pull</text>
+  <rect class="sqs" x="50" y="92" width="80" height="32" rx="6"/><text class="t" x="90" y="113">Producer</text>
+  <rect class="sqs" x="50" y="170" width="180" height="40" rx="6"/><text class="t" x="140" y="194">Queue (Standard / FIFO)</text>
+  <rect class="sqs" x="50" y="248" width="80" height="32" rx="6"/><text class="t" x="90" y="269">Consumer</text>
+  <path class="arrB" d="M90,124 L90,170"/>
+  <path class="arrB" d="M90,248 L90,210"/>
+  <text x="135" y="300" class="s">at-least-once · DLQ</text>
+  <text x="135" y="316" class="s">visibility timeout</text>
+  <text x="135" y="330" class="s">FIFO: order + dedup</text>
+
+  <!-- SNS column -->
+  <rect class="col" x="265" y="40" width="230" height="300" rx="10"/>
+  <text x="380" y="62" class="h">SNS</text>
+  <text x="380" y="78" class="s">pub/sub fanout · push</text>
+  <rect class="sns" x="335" y="92" width="90" height="32" rx="6"/><text class="t" x="380" y="113">Publisher</text>
+  <rect class="sns" x="305" y="148" width="150" height="32" rx="6"/><text class="t" x="380" y="169">Topic</text>
+  <path class="arrG" d="M380,124 L380,148"/>
+  <rect class="sns" x="275" y="220" width="80" height="28" rx="6"/><text class="t" x="315" y="239">SQS</text>
+  <rect class="sns" x="365" y="220" width="80" height="28" rx="6"/><text class="t" x="405" y="239">Lambda</text>
+  <rect class="sns" x="275" y="260" width="80" height="28" rx="6"/><text class="t" x="315" y="279">HTTPS</text>
+  <rect class="sns" x="365" y="260" width="80" height="28" rx="6"/><text class="t" x="405" y="279">Email/SMS</text>
+  <path class="arrG" d="M340,180 L315,220"/>
+  <path class="arrG" d="M420,180 L405,220"/>
+  <path class="arrG" d="M340,180 L315,260"/>
+  <path class="arrG" d="M420,180 L405,260"/>
+  <text x="380" y="316" class="s">push · filter policies</text>
+  <text x="380" y="330" class="s">FIFO topic → SQS FIFO</text>
+
+  <!-- EventBridge column -->
+  <rect class="col" x="510" y="40" width="230" height="300" rx="10"/>
+  <text x="625" y="62" class="h">EventBridge</text>
+  <text x="625" y="78" class="s">event bus · content routing</text>
+  <rect class="ebr" x="520" y="92" width="100" height="28" rx="6"/><text class="t" x="570" y="111">AWS svc</text>
+  <rect class="ebr" x="630" y="92" width="100" height="28" rx="6"/><text class="t" x="680" y="111">SaaS / app</text>
+  <rect class="ebr" x="540" y="148" width="170" height="36" rx="6"/><text class="t" x="625" y="170">Event Bus + Rules</text>
+  <path class="arrO" d="M570,120 L600,148"/>
+  <path class="arrO" d="M680,120 L650,148"/>
+  <rect class="ebr" x="520" y="208" width="100" height="28" rx="6"/><text class="t" x="570" y="227">Lambda</text>
+  <rect class="ebr" x="630" y="208" width="100" height="28" rx="6"/><text class="t" x="680" y="227">SQS / SNS</text>
+  <rect class="ebr" x="540" y="248" width="170" height="28" rx="6"/><text class="t" x="625" y="267">Step Functions, etc.</text>
+  <path class="arrO" d="M600,184 L570,208"/>
+  <path class="arrO" d="M650,184 L680,208"/>
+  <path class="arrO" d="M625,184 L625,248"/>
+  <text x="625" y="300" class="s">schema registry</text>
+  <text x="625" y="316" class="s">archive &amp; replay</text>
+  <text x="625" y="330" class="s">scheduler (cron/rate)</text>
+</svg>

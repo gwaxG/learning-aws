@@ -1,0 +1,68 @@
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Decoupling with SQS queues, dead-letter queues, and SNS/EventBridge fan-out">
+  <style>
+    .ttl { fill: #ff9900; font: 700 13px system-ui, sans-serif; }
+    .node { fill: #1d3150; stroke: #4aa3ff; }
+    .topic { fill: #1d3150; stroke: #ff9900; stroke-width: 2; }
+    .dlq { fill: #16263d; stroke: #ff9900; stroke-dasharray: 5 3; }
+    .nodet { fill: #e8eef6; font: 600 12px system-ui, sans-serif; text-anchor: middle; }
+    .sub { fill: #8aa0bd; font: 11px system-ui, sans-serif; text-anchor: middle; }
+    .flow { stroke: #4aa3ff; stroke-width: 1.6; fill: none; marker-end: url(#arr); }
+    .fail { stroke: #ff9900; stroke-width: 1.6; stroke-dasharray: 5 3; fill: none; marker-end: url(#arrO); }
+  </style>
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#4aa3ff"/>
+    </marker>
+    <marker id="arrO" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#ff9900"/>
+    </marker>
+  </defs>
+
+  <!-- Queue pattern -->
+  <text x="20" y="30" class="ttl">Queue (SQS) — buffer slow consumers, isolate failures</text>
+
+  <rect class="node" x="20" y="50" width="120" height="44" rx="6"/>
+  <text class="nodet" x="80" y="76">Producer</text>
+
+  <rect class="node" x="200" y="50" width="140" height="44" rx="6"/>
+  <text class="nodet" x="270" y="76">SQS queue</text>
+
+  <rect class="node" x="400" y="50" width="140" height="44" rx="6"/>
+  <text class="nodet" x="470" y="76">Consumer (ASG)</text>
+
+  <rect class="dlq" x="400" y="130" width="140" height="44" rx="6"/>
+  <text class="nodet" x="470" y="156">Dead-letter queue</text>
+
+  <path class="flow" d="M140,72 L200,72"/>
+  <path class="flow" d="M340,72 L400,72"/>
+  <path class="fail" d="M470,94 L470,130"/>
+
+  <text x="20" y="200" class="sub">buffers spikes · at-least-once delivery · poison messages drain to DLQ after maxReceiveCount</text>
+
+  <!-- Fan-out pattern -->
+  <text x="20" y="240" class="ttl">Fan-out (SNS / EventBridge) — one event, many subscribers</text>
+
+  <rect class="node" x="20" y="260" width="120" height="44" rx="6"/>
+  <text class="nodet" x="80" y="286">Producer</text>
+
+  <rect class="topic" x="200" y="260" width="140" height="44" rx="6"/>
+  <text class="nodet" x="270" y="286">SNS / EventBridge</text>
+
+  <rect class="node" x="400" y="240" width="140" height="34" rx="6"/>
+  <text class="nodet" x="470" y="262">SQS queue → Lambda</text>
+
+  <rect class="node" x="400" y="282" width="140" height="34" rx="6"/>
+  <text class="nodet" x="470" y="304">Lambda function</text>
+
+  <rect class="node" x="400" y="324" width="140" height="34" rx="6"/>
+  <text class="nodet" x="470" y="346">Kinesis Firehose</text>
+
+  <path class="flow" d="M140,282 L200,282"/>
+  <path class="flow" d="M340,282 L400,257"/>
+  <path class="flow" d="M340,282 L400,299"/>
+  <path class="flow" d="M340,282 L400,341"/>
+
+  <text x="560" y="262" class="sub">independent retries</text>
+  <text x="560" y="304" class="sub">per-target filtering</text>
+  <text x="560" y="346" class="sub">add subscribers w/o code change</text>
+</svg>

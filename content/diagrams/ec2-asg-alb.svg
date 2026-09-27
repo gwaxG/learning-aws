@@ -1,0 +1,79 @@
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Application Load Balancer with target group fronting an Auto Scaling Group across two Availability Zones, scaling on a CloudWatch metric">
+  <style>
+    .vpc { fill: none; stroke: #ff9900; stroke-width: 2; stroke-dasharray: 6 4; }
+    .alb { fill: #1d3150; stroke: #2ecc71; }
+    .tg { fill: #16263d; stroke: #4aa3ff; }
+    .inst { fill: #1d3150; stroke: #4aa3ff; }
+    .cw { fill: #1d3150; stroke: #ff9900; }
+    .nodet { fill: #e8eef6; font: 600 12px system-ui, sans-serif; text-anchor: middle; }
+    .sub { fill: #8aa0bd; font: 11px system-ui, sans-serif; text-anchor: middle; }
+    .azlbl { fill: #8aa0bd; font: 600 11px system-ui, sans-serif; text-anchor: middle; }
+    .ttl { fill: #ff9900; font: 700 12px system-ui, sans-serif; }
+    .flow { stroke: #4aa3ff; stroke-width: 1.6; fill: none; marker-end: url(#arr); }
+    .hc { stroke: #2ecc71; stroke-width: 1.4; stroke-dasharray: 4 3; fill: none; marker-end: url(#arrG); }
+    .scale { stroke: #ff9900; stroke-width: 1.6; stroke-dasharray: 5 3; fill: none; marker-end: url(#arrO); }
+  </style>
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#4aa3ff"/>
+    </marker>
+    <marker id="arrG" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#2ecc71"/>
+    </marker>
+    <marker id="arrO" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#ff9900"/>
+    </marker>
+  </defs>
+
+  <text x="20" y="24" class="ttl">ALB + Target Group + ASG across two AZs</text>
+
+  <!-- ALB -->
+  <rect class="alb" x="280" y="40" width="200" height="40" rx="8"/>
+  <text class="nodet" x="380" y="64">Application Load Balancer</text>
+
+  <!-- Target group -->
+  <rect class="tg" x="300" y="100" width="160" height="34" rx="6"/>
+  <text class="nodet" x="380" y="122">Target Group (HTTP:80)</text>
+
+  <!-- VPC frame -->
+  <rect class="vpc" x="30" y="150" width="700" height="170" rx="10"/>
+  <text x="44" y="170" class="ttl">VPC · ASG min 2 / max 4 / desired 2</text>
+
+  <text x="180" y="190" class="azlbl">Availability Zone A</text>
+  <text x="560" y="190" class="azlbl">Availability Zone B</text>
+
+  <!-- Instances AZ A -->
+  <rect class="inst" x="60" y="205" width="110" height="44" rx="6"/>
+  <text class="nodet" x="115" y="231">EC2 instance</text>
+  <rect class="inst" x="190" y="205" width="110" height="44" rx="6"/>
+  <text class="nodet" x="245" y="231">EC2 instance</text>
+  <text class="sub" x="180" y="266">launch template (IMDSv2, user data)</text>
+
+  <!-- Instances AZ B -->
+  <rect class="inst" x="450" y="205" width="110" height="44" rx="6"/>
+  <text class="nodet" x="505" y="231">EC2 instance</text>
+  <rect class="inst" x="580" y="205" width="110" height="44" rx="6"/>
+  <text class="nodet" x="635" y="231">EC2 instance</text>
+  <text class="sub" x="570" y="266">launch template (IMDSv2, user data)</text>
+
+  <!-- CloudWatch -->
+  <rect class="cw" x="560" y="40" width="170" height="40" rx="8"/>
+  <text class="nodet" x="645" y="64">CloudWatch alarm</text>
+  <text class="sub" x="645" y="96">CPU &gt; 50% target tracking</text>
+
+  <!-- Flows -->
+  <path class="flow" d="M380,80 L380,100"/>
+  <path class="flow" d="M340,134 L115,205"/>
+  <path class="flow" d="M360,134 L245,205"/>
+  <path class="flow" d="M400,134 L505,205"/>
+  <path class="flow" d="M420,134 L635,205"/>
+
+  <!-- Health checks from ALB to instances -->
+  <path class="hc" d="M300,120 L60,225"/>
+  <path class="hc" d="M460,120 L690,225"/>
+  <text x="50" y="148" class="sub" style="fill:#2ecc71">health checks</text>
+
+  <!-- Scaling policy from CloudWatch to ASG -->
+  <path class="scale" d="M645,110 L645,205"/>
+  <text x="660" y="170" class="sub" style="fill:#ff9900">scale out / in</text>
+</svg>

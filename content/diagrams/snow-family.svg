@@ -1,0 +1,82 @@
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AWS Snow Family decision: Snowcone for ~8 TB edge, Snowball Edge for tens to hundreds of TB, Snowmobile for exabyte-scale truck transfer">
+  <style>
+    .hdr { fill: #ff9900; font: 700 14px system-ui, sans-serif; text-anchor: middle; }
+    .ttl { fill: #ff9900; font: 700 12px system-ui, sans-serif; text-anchor: middle; }
+    .lane { fill: #8aa0bd; font: 600 11px system-ui, sans-serif; }
+    .nodet { fill: #e8eef6; font: 600 12px system-ui, sans-serif; text-anchor: middle; }
+    .sub { fill: #8aa0bd; font: 10px system-ui, sans-serif; text-anchor: middle; }
+    .axlbl { fill: #8aa0bd; font: 11px system-ui, sans-serif; text-anchor: middle; }
+    .small { fill: #1d3150; stroke: #2ecc71; }
+    .med { fill: #1d3150; stroke: #4aa3ff; }
+    .big { fill: #1d3150; stroke: #ff9900; }
+    .wire { fill: #16263d; stroke: #ff9900; stroke-dasharray: 6 4; }
+    .axis { stroke: #25395a; stroke-width: 1.5; }
+    .flow { stroke: #4aa3ff; stroke-width: 1.6; fill: none; marker-end: url(#arrB); }
+    .reject { stroke: #ff9900; stroke-width: 1.6; fill: none; stroke-dasharray: 6 4; marker-end: url(#arrO); }
+  </style>
+  <defs>
+    <marker id="arrB" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#4aa3ff"/>
+    </marker>
+    <marker id="arrO" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#ff9900"/>
+    </marker>
+  </defs>
+
+  <text x="380" y="24" class="hdr">Snow Family — pick the box when the wire is too slow</text>
+
+  <!-- Decision box: wire transfer -->
+  <rect class="wire" x="40" y="50" width="220" height="70" rx="8"/>
+  <text class="nodet" x="150" y="76">Estimate online transfer</text>
+  <text class="sub" x="150" y="94">time = data size / bandwidth</text>
+  <text class="sub" x="150" y="110">days? OK   weeks/months? ship it</text>
+
+  <!-- Reject arrow toward Snow lane -->
+  <path class="reject" d="M260,85 L330,85"/>
+  <text x="295" y="74" class="axlbl">too slow</text>
+
+  <!-- Snow choices header -->
+  <text x="540" y="68" class="ttl">Offline appliance — encrypted, AWS loads to S3</text>
+
+  <!-- Size axis -->
+  <line class="axis" x1="60" y1="290" x2="720" y2="290"/>
+  <text x="60" y="312" class="axlbl">small (TBs)</text>
+  <text x="380" y="312" class="axlbl">tens–hundreds of TB</text>
+  <text x="720" y="312" class="axlbl">PB–EB</text>
+
+  <!-- Snowcone -->
+  <rect class="small" x="60" y="140" width="180" height="120" rx="10"/>
+  <text class="nodet" x="150" y="166">Snowcone</text>
+  <text class="sub" x="150" y="186">~8 TB usable</text>
+  <text class="sub" x="150" y="202">portable · rugged · edge</text>
+  <text class="sub" x="150" y="218">2 CPU · 4 GB RAM</text>
+  <text class="sub" x="150" y="234">ship OR DataSync online</text>
+  <text class="sub" x="150" y="252">battery / lightweight</text>
+
+  <!-- Snowball Edge -->
+  <rect class="med" x="280" y="130" width="200" height="140" rx="10"/>
+  <text class="nodet" x="380" y="156">Snowball Edge</text>
+  <text class="sub" x="380" y="176">Storage Optimized ~80 TB</text>
+  <text class="sub" x="380" y="192">Compute Optimized 42 TB+</text>
+  <text class="sub" x="380" y="208">runs EC2 / Lambda local</text>
+  <text class="sub" x="380" y="224">clusterable</text>
+  <text class="sub" x="380" y="242">tens of TB to PB</text>
+  <text class="sub" x="380" y="258">most common choice</text>
+
+  <!-- Snowmobile -->
+  <rect class="big" x="520" y="120" width="200" height="160" rx="10"/>
+  <text class="nodet" x="620" y="146">Snowmobile</text>
+  <text class="sub" x="620" y="166">45-ft truck container</text>
+  <text class="sub" x="620" y="182">up to 100 PB per unit</text>
+  <text class="sub" x="620" y="198">exabyte-scale DC exit</text>
+  <text class="sub" x="620" y="214">GPS · escort · security</text>
+  <text class="sub" x="620" y="232">months-long projects</text>
+  <text class="sub" x="620" y="252">retired from new orders;</text>
+  <text class="sub" x="620" y="268">still on the exam</text>
+
+  <!-- Flow to AWS -->
+  <path class="flow" d="M150,260 L150,330"/>
+  <path class="flow" d="M380,270 L380,330"/>
+  <path class="flow" d="M620,280 L620,330"/>
+  <text x="380" y="350" class="axlbl">ship device → AWS imports into Amazon S3</text>
+</svg>

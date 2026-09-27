@@ -1,0 +1,72 @@
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="CloudFront request flow from viewer through edge cache to origin with OAC and signed URLs">
+  <style>
+    .box { fill: #1d3150; stroke: #4aa3ff; }
+    .edge { fill: #16263d; stroke: #2ecc71; }
+    .origin { fill: #1d3150; stroke: #ff9900; stroke-dasharray: 6 4; }
+    .nodet { fill: #e8eef6; font: 600 12px system-ui, sans-serif; text-anchor: middle; }
+    .sub { fill: #8aa0bd; font: 10px system-ui, sans-serif; text-anchor: middle; }
+    .ttl { fill: #ff9900; font: 700 12px system-ui, sans-serif; }
+    .lbl { fill: #ff9900; font: 700 12px system-ui, sans-serif; text-anchor: middle; }
+    .hit { stroke: #2ecc71; stroke-width: 1.8; fill: none; marker-end: url(#arrG); }
+    .miss { stroke: #ff9900; stroke-width: 1.8; stroke-dasharray: 6 4; fill: none; marker-end: url(#arrO); }
+    .flow { stroke: #4aa3ff; stroke-width: 1.8; fill: none; marker-end: url(#arrB); }
+    .legendt { fill: #e8eef6; font: 11px system-ui, sans-serif; }
+  </style>
+  <defs>
+    <marker id="arrB" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#4aa3ff"/></marker>
+    <marker id="arrG" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#2ecc71"/></marker>
+    <marker id="arrO" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#ff9900"/></marker>
+  </defs>
+
+  <text x="20" y="24" class="ttl">CloudFront request flow: edge cache hit vs miss to origin</text>
+
+  <!-- Viewer -->
+  <rect class="box" x="20" y="80" width="130" height="70" rx="8"/>
+  <text class="nodet" x="85" y="108">Viewer</text>
+  <text class="sub" x="85" y="126">signed URL /</text>
+  <text class="sub" x="85" y="140">signed cookie</text>
+
+  <!-- Edge -->
+  <rect class="edge" x="220" y="60" width="200" height="110" rx="10"/>
+  <text class="nodet" x="320" y="88">CloudFront edge</text>
+  <text class="sub" x="320" y="106">geo-restriction · WAF · TLS</text>
+  <text class="sub" x="320" y="122">cache policy · TTL</text>
+  <text class="sub" x="320" y="140">Functions / Lambda@Edge</text>
+  <text class="sub" x="320" y="158">400+ POPs</text>
+
+  <!-- Origins -->
+  <rect class="origin" x="500" y="50" width="240" height="50" rx="8"/>
+  <text class="nodet" x="620" y="72">S3 bucket (private)</text>
+  <text class="sub" x="620" y="88">OAC: only this distribution</text>
+
+  <rect class="box" x="500" y="115" width="240" height="40" rx="8"/>
+  <text class="nodet" x="620" y="140">ALB / EC2 / MediaStore</text>
+
+  <rect class="box" x="500" y="170" width="240" height="40" rx="8"/>
+  <text class="nodet" x="620" y="195">Custom HTTP origin</text>
+
+  <!-- Flows -->
+  <path class="flow" d="M150,115 L220,115"/>
+  <text x="185" y="108" class="lbl">request</text>
+
+  <path class="hit" d="M220,135 C190,160 175,165 150,140"/>
+  <text x="175" y="178" class="legendt" fill="#2ecc71">cache hit -> return</text>
+
+  <path class="miss" d="M420,90 L500,75"/>
+  <text x="445" y="68" class="lbl">cache miss</text>
+  <path class="miss" d="M420,115 L500,135"/>
+  <path class="miss" d="M420,140 L500,190"/>
+
+  <!-- Legend -->
+  <rect class="box" x="20" y="230" width="720" height="110" rx="8"/>
+  <text x="36" y="252" class="ttl">Legend</text>
+  <line x1="40" y1="270" x2="80" y2="270" stroke="#2ecc71" stroke-width="2"/>
+  <text x="90" y="274" class="legendt">cache hit (served from edge)</text>
+  <line x1="40" y1="292" x2="80" y2="292" stroke="#ff9900" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="90" y="296" class="legendt">cache miss -> fetch from origin</text>
+  <line x1="40" y1="314" x2="80" y2="314" stroke="#4aa3ff" stroke-width="2"/>
+  <text x="90" y="318" class="legendt">viewer request</text>
+  <text x="320" y="274" class="legendt">OAC signs requests so S3 accepts only this distribution.</text>
+  <text x="320" y="296" class="legendt">Signed URL / cookie gates access to private content at the edge.</text>
+  <text x="320" y="318" class="legendt">Geo-restriction blocks denied countries before origin fetch.</text>
+</svg>

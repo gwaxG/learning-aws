@@ -1,0 +1,57 @@
+<svg viewBox="0 0 760 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Comparison of SQS Standard and FIFO queue semantics, throughput, and ordering">
+  <style>
+    .col { fill: #16263d; stroke: #25395a; }
+    .std { fill: #1d3150; stroke: #4aa3ff; }
+    .fifo { fill: #1d3150; stroke: #2ecc71; }
+    .note { fill: #1d3150; stroke: #ff9900; stroke-dasharray: 6 4; }
+    .ttl { fill: #ff9900; font: 700 12px system-ui, sans-serif; text-anchor: middle; }
+    .h { fill: #e8eef6; font: 700 14px system-ui, sans-serif; text-anchor: middle; }
+    .t { fill: #e8eef6; font: 600 12px system-ui, sans-serif; text-anchor: middle; }
+    .s { fill: #8aa0bd; font: 11px system-ui, sans-serif; text-anchor: middle; }
+    .msg { fill: #e8eef6; font: 700 11px system-ui, sans-serif; text-anchor: middle; }
+    .arr { stroke: #8aa0bd; stroke-width: 1.4; fill: none; marker-end: url(#aS); }
+  </style>
+  <defs>
+    <marker id="aS" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#8aa0bd"/></marker>
+  </defs>
+
+  <text x="380" y="22" class="ttl">SQS Standard  vs  SQS FIFO</text>
+
+  <!-- Standard -->
+  <rect class="col" x="20" y="40" width="350" height="280" rx="10"/>
+  <text x="195" y="62" class="h">Standard</text>
+  <text x="195" y="78" class="s">queue-name</text>
+
+  <text x="195" y="108" class="s">producer order: 1 → 2 → 3 → 4</text>
+  <rect class="std" x="50" y="120" width="40" height="32" rx="6"/><text class="msg" x="70" y="141">1</text>
+  <rect class="std" x="100" y="120" width="40" height="32" rx="6"/><text class="msg" x="120" y="141">3</text>
+  <rect class="std" x="150" y="120" width="40" height="32" rx="6"/><text class="msg" x="170" y="141">2</text>
+  <rect class="std" x="200" y="120" width="40" height="32" rx="6"/><text class="msg" x="220" y="141">4</text>
+  <rect class="std" x="250" y="120" width="40" height="32" rx="6"/><text class="msg" x="270" y="141">2</text>
+  <rect class="std" x="300" y="120" width="40" height="32" rx="6"/><text class="msg" x="320" y="141">5</text>
+  <text x="195" y="172" class="s">consumer sees: best-effort order · duplicate possible</text>
+
+  <rect class="std" x="50" y="200" width="300" height="28" rx="6"/><text class="t" x="195" y="219">At-least-once delivery</text>
+  <rect class="std" x="50" y="234" width="300" height="28" rx="6"/><text class="t" x="195" y="253">Best-effort ordering</text>
+  <rect class="std" x="50" y="268" width="300" height="28" rx="6"/><text class="t" x="195" y="287">Near-unlimited TPS</text>
+  <text x="195" y="312" class="s">consumers must be idempotent</text>
+
+  <!-- FIFO -->
+  <rect class="col" x="390" y="40" width="350" height="280" rx="10"/>
+  <text x="565" y="62" class="h">FIFO</text>
+  <text x="565" y="78" class="s">queue-name<tspan fill="#ff9900">.fifo</tspan></text>
+
+  <text x="565" y="108" class="s">producer order: 1 → 2 → 3 → 4 (group A)</text>
+  <rect class="fifo" x="420" y="120" width="40" height="32" rx="6"/><text class="msg" x="440" y="141">1</text>
+  <rect class="fifo" x="470" y="120" width="40" height="32" rx="6"/><text class="msg" x="490" y="141">2</text>
+  <rect class="fifo" x="520" y="120" width="40" height="32" rx="6"/><text class="msg" x="540" y="141">3</text>
+  <rect class="fifo" x="570" y="120" width="40" height="32" rx="6"/><text class="msg" x="590" y="141">4</text>
+  <rect class="fifo" x="620" y="120" width="40" height="32" rx="6"/><text class="msg" x="640" y="141">5</text>
+  <rect class="fifo" x="670" y="120" width="40" height="32" rx="6"/><text class="msg" x="690" y="141">6</text>
+  <text x="565" y="172" class="s">consumer sees: strict order per MessageGroupId</text>
+
+  <rect class="fifo" x="420" y="200" width="300" height="28" rx="6"/><text class="t" x="565" y="219">Exactly-once · MessageDeduplicationId</text>
+  <rect class="fifo" x="420" y="234" width="300" height="28" rx="6"/><text class="t" x="565" y="253">Strict order per MessageGroupId</text>
+  <rect class="fifo" x="420" y="268" width="300" height="28" rx="6"/><text class="t" x="565" y="287">300 TPS  ·  3000 TPS with batching</text>
+  <text x="565" y="312" class="s">parallelism across distinct groups</text>
+</svg>

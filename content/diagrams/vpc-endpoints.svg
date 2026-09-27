@@ -1,0 +1,77 @@
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Gateway VPC endpoint via route-table prefix list versus Interface endpoint via ENI and PrivateLink">
+  <style>
+    .ttl { fill: #ff9900; font: 700 12px system-ui, sans-serif; text-anchor: middle; }
+    .vpc { fill: none; stroke: #ff9900; stroke-width: 2; stroke-dasharray: 6 4; }
+    .gw  { fill: #1d3150; stroke: #2ecc71; stroke-width: 2; }
+    .iface { fill: #1d3150; stroke: #4aa3ff; stroke-width: 2; }
+    .box { fill: #16263d; stroke: #25395a; }
+    .lbl { fill: #ff9900; font: 700 12px system-ui, sans-serif; }
+    .node { fill: #e8eef6; font: 600 12px system-ui, sans-serif; text-anchor: middle; }
+    .sub { fill: #8aa0bd; font: 11px system-ui, sans-serif; text-anchor: middle; }
+    .key { fill: #e8eef6; font: 600 11px system-ui, sans-serif; }
+    .flow-g { stroke: #2ecc71; stroke-width: 1.8; fill: none; marker-end: url(#arrG); }
+    .flow-b { stroke: #4aa3ff; stroke-width: 1.8; fill: none; marker-end: url(#arrB); }
+  </style>
+  <defs>
+    <marker id="arrG" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#2ecc71"/>
+    </marker>
+    <marker id="arrB" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#4aa3ff"/>
+    </marker>
+  </defs>
+
+  <text x="380" y="22" class="ttl">Gateway endpoint vs Interface endpoint (PrivateLink)</text>
+
+  <!-- Left: Gateway endpoint -->
+  <rect class="vpc" x="20" y="40" width="350" height="300" rx="10"/>
+  <text x="34" y="60" class="lbl">VPC · Gateway endpoint</text>
+
+  <rect class="box" x="40" y="78" width="150" height="50" rx="6"/>
+  <text x="115" y="100" class="node">Private subnet</text>
+  <text x="115" y="118" class="sub">EC2 / Lambda</text>
+
+  <rect class="box" x="210" y="78" width="140" height="50" rx="6"/>
+  <text x="280" y="100" class="node">Route table</text>
+  <text x="280" y="118" class="sub">pl-xxxx → vpce</text>
+
+  <rect class="gw" x="100" y="170" width="200" height="60" rx="8"/>
+  <text x="200" y="194" class="node">Gateway VPC Endpoint</text>
+  <text x="200" y="212" class="sub">no ENI · prefix-list route</text>
+
+  <rect class="box" x="100" y="262" width="200" height="56" rx="8"/>
+  <text x="200" y="284" class="node">S3 · DynamoDB</text>
+  <text x="200" y="302" class="sub">only these two services</text>
+
+  <path class="flow-g" d="M115,128 L195,170"/>
+  <path class="flow-g" d="M280,128 L210,170"/>
+  <path class="flow-g" d="M200,230 L200,262"/>
+
+  <text x="34" y="335" class="key">FREE · no hourly · regional</text>
+
+  <!-- Right: Interface endpoint -->
+  <rect class="vpc" x="390" y="40" width="350" height="300" rx="10"/>
+  <text x="404" y="60" class="lbl">VPC · Interface endpoint</text>
+
+  <rect class="box" x="410" y="78" width="150" height="50" rx="6"/>
+  <text x="485" y="100" class="node">Private subnet</text>
+  <text x="485" y="118" class="sub">EC2 / Lambda</text>
+
+  <rect class="box" x="580" y="78" width="140" height="50" rx="6"/>
+  <text x="650" y="100" class="node">Private DNS</text>
+  <text x="650" y="118" class="sub">resolves to ENI IP</text>
+
+  <rect class="iface" x="470" y="170" width="200" height="60" rx="8"/>
+  <text x="570" y="194" class="node">ENI · private IP</text>
+  <text x="570" y="212" class="sub">PrivateLink endpoint</text>
+
+  <rect class="box" x="470" y="262" width="200" height="56" rx="8"/>
+  <text x="570" y="284" class="node">Most AWS services</text>
+  <text x="570" y="302" class="sub">SQS · KMS · SSM · custom</text>
+
+  <path class="flow-b" d="M485,128 L565,170"/>
+  <path class="flow-b" d="M650,128 L580,170"/>
+  <path class="flow-b" d="M570,230 L570,262"/>
+
+  <text x="404" y="335" class="key">$ hourly per AZ + $ per-GB</text>
+</svg>

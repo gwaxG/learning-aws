@@ -1,0 +1,79 @@
+<svg viewBox="0 0 760 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="S3 encryption options compared: SSE-S3, SSE-KMS, DSSE-KMS, SSE-C, and client-side encryption, highlighting CloudTrail audit and cross-account capability">
+  <style>
+    .box { fill: #1d3150; stroke: #4aa3ff; }
+    .audit { fill: #1d3150; stroke: #ff9900; stroke-dasharray: 4 3; }
+    .client { fill: #16263d; stroke: #2ecc71; }
+    .bt { fill: #e8eef6; font: 600 12px system-ui, sans-serif; text-anchor: middle; }
+    .sub { fill: #8aa0bd; font: 10px system-ui, sans-serif; text-anchor: middle; }
+    .ttl { fill: #ff9900; font: 700 12px system-ui, sans-serif; text-anchor: middle; }
+    .tag { fill: #ff9900; font: 700 10px system-ui, sans-serif; text-anchor: middle; }
+    .legend { fill: #8aa0bd; font: 10px system-ui, sans-serif; }
+    .lk { stroke: #ff9900; stroke-dasharray: 4 3; fill: none; }
+  </style>
+
+  <text x="380" y="26" class="ttl">S3 encryption options — who holds the key, who can audit?</text>
+
+  <!-- SSE-S3 -->
+  <rect class="box" x="30" y="60" width="135" height="170" rx="8"/>
+  <text class="bt" x="97" y="86">SSE-S3</text>
+  <text class="sub" x="97" y="106">AES-256</text>
+  <text class="sub" x="97" y="122">AWS-managed key</text>
+  <text class="sub" x="97" y="142">default · simplest</text>
+  <text class="sub" x="97" y="160">no per-call audit</text>
+  <text class="sub" x="97" y="178">no key-level ACL</text>
+  <text class="sub" x="97" y="208">header:</text>
+  <text class="sub" x="97" y="222">AES256</text>
+
+  <!-- SSE-KMS (audit + cross-account) -->
+  <rect class="audit" x="180" y="60" width="145" height="170" rx="8"/>
+  <text class="bt" x="252" y="86">SSE-KMS</text>
+  <text class="sub" x="252" y="106">KMS CMK</text>
+  <text class="sub" x="252" y="122">key policy + IAM</text>
+  <text class="sub" x="252" y="142">CloudTrail audit</text>
+  <text class="sub" x="252" y="158">cross-account grants</text>
+  <text class="sub" x="252" y="178">Bucket Keys cut cost</text>
+  <text class="sub" x="252" y="196">(KMS req quotas apply)</text>
+  <text class="tag" x="252" y="220">regulated default</text>
+
+  <!-- DSSE-KMS -->
+  <rect class="audit" x="340" y="60" width="135" height="170" rx="8"/>
+  <text class="bt" x="407" y="86">DSSE-KMS</text>
+  <text class="sub" x="407" y="106">dual-layer KMS</text>
+  <text class="sub" x="407" y="122">two encrypts on server</text>
+  <text class="sub" x="407" y="142">CloudTrail audit</text>
+  <text class="sub" x="407" y="160">FIPS / NSA CNSSP</text>
+  <text class="sub" x="407" y="178">highest assurance</text>
+  <text class="tag" x="407" y="208">defense-in-depth</text>
+
+  <!-- SSE-C -->
+  <rect class="box" x="490" y="60" width="125" height="170" rx="8"/>
+  <text class="bt" x="552" y="86">SSE-C</text>
+  <text class="sub" x="552" y="106">customer-supplied key</text>
+  <text class="sub" x="552" y="122">sent every request</text>
+  <text class="sub" x="552" y="142">HTTPS required</text>
+  <text class="sub" x="552" y="160">AWS never stores key</text>
+  <text class="sub" x="552" y="178">no KMS audit</text>
+  <text class="sub" x="552" y="206">you manage rotation</text>
+
+  <!-- Client-side -->
+  <rect class="client" x="630" y="60" width="100" height="170" rx="8"/>
+  <text class="bt" x="680" y="86">Client-side</text>
+  <text class="sub" x="680" y="106">encrypt before</text>
+  <text class="sub" x="680" y="120">upload</text>
+  <text class="sub" x="680" y="142">KMS or local key</text>
+  <text class="sub" x="680" y="160">AWS sees only</text>
+  <text class="sub" x="680" y="174">ciphertext</text>
+  <text class="sub" x="680" y="208">most control</text>
+
+  <!-- audit highlight bracket -->
+  <path class="lk" d="M180 250 Q252 270 252 270 Q407 270 475 250"/>
+  <text class="tag" x="328" y="290">CloudTrail per-key audit + cross-account access</text>
+
+  <!-- legend -->
+  <rect x="30" y="305" width="14" height="10" class="box"/>
+  <text x="50" y="314" class="legend">server-side, AWS holds key</text>
+  <rect x="240" y="305" width="14" height="10" class="audit"/>
+  <text x="260" y="314" class="legend">KMS-based: audit + access control</text>
+  <rect x="520" y="305" width="14" height="10" class="client"/>
+  <text x="540" y="314" class="legend">key never reaches AWS</text>
+</svg>

@@ -1,0 +1,92 @@
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Observability pipeline from sources through CloudWatch and CloudTrail to alarms, actions, and S3 archive">
+  <style>
+    .src { fill: #1d3150; stroke: #4aa3ff; }
+    .cw { fill: #1d3150; stroke: #2ecc71; }
+    .ct { fill: #1d3150; stroke: #ff9900; }
+    .act { fill: #16263d; stroke: #4aa3ff; }
+    .arch { fill: #16263d; stroke: #ff9900; stroke-dasharray: 6 4; }
+    .ttl { fill: #ff9900; font: 700 12px system-ui, sans-serif; text-anchor: middle; }
+    .hdr { fill: #ff9900; font: 700 14px system-ui, sans-serif; text-anchor: middle; }
+    .nodet { fill: #e8eef6; font: 600 12px system-ui, sans-serif; text-anchor: middle; }
+    .sub { fill: #8aa0bd; font: 10px system-ui, sans-serif; text-anchor: middle; }
+    .lane { fill: #8aa0bd; font: 600 11px system-ui, sans-serif; }
+    .flow { stroke: #4aa3ff; stroke-width: 1.6; fill: none; marker-end: url(#arrB); }
+    .auditFlow { stroke: #ff9900; stroke-width: 1.6; fill: none; marker-end: url(#arrO); stroke-dasharray: 6 4; }
+  </style>
+  <defs>
+    <marker id="arrB" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#4aa3ff"/>
+    </marker>
+    <marker id="arrO" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#ff9900"/>
+    </marker>
+  </defs>
+
+  <text x="380" y="22" class="hdr">Observability pipeline — telemetry &amp; audit paths</text>
+
+  <!-- Sources column -->
+  <text x="80" y="50" class="lane">Sources</text>
+  <rect class="src" x="20" y="62" width="160" height="34" rx="6"/><text class="nodet" x="100" y="84">EC2 + CW agent</text>
+  <rect class="src" x="20" y="104" width="160" height="34" rx="6"/><text class="nodet" x="100" y="126">Lambda / ECS</text>
+  <rect class="src" x="20" y="146" width="160" height="34" rx="6"/><text class="nodet" x="100" y="168">VPC Flow Logs</text>
+  <rect class="src" x="20" y="188" width="160" height="34" rx="6"/><text class="nodet" x="100" y="210">ALB access logs</text>
+  <rect class="src" x="20" y="244" width="160" height="34" rx="6"/><text class="nodet" x="100" y="266">AWS API activity</text>
+  <text class="sub" x="100" y="290">(all services)</text>
+
+  <!-- Ops lane: CloudWatch -->
+  <text x="260" y="50" class="lane">Ops telemetry</text>
+  <rect class="cw" x="220" y="62" width="170" height="74" rx="8"/>
+  <text class="nodet" x="305" y="86">CloudWatch Logs</text>
+  <text class="sub" x="305" y="104">log groups · retention</text>
+  <text class="sub" x="305" y="120">Logs Insights</text>
+
+  <rect class="cw" x="220" y="156" width="170" height="60" rx="8"/>
+  <text class="nodet" x="305" y="180">CloudWatch Metrics</text>
+  <text class="sub" x="305" y="198">namespaces · dimensions</text>
+
+  <!-- Alarm -->
+  <rect class="cw" x="430" y="105" width="140" height="60" rx="8"/>
+  <text class="nodet" x="500" y="130">Alarm</text>
+  <text class="sub" x="500" y="148">threshold · N periods</text>
+
+  <!-- Action targets -->
+  <rect class="act" x="610" y="62" width="140" height="40" rx="8"/>
+  <text class="nodet" x="680" y="86">SNS notify</text>
+  <rect class="act" x="610" y="112" width="140" height="40" rx="8"/>
+  <text class="nodet" x="680" y="136">Auto Scaling</text>
+  <rect class="act" x="610" y="162" width="140" height="40" rx="8"/>
+  <text class="nodet" x="680" y="186">Lambda action</text>
+
+  <!-- Audit lane: CloudTrail -->
+  <text x="260" y="240" class="lane">Audit path</text>
+  <rect class="ct" x="220" y="252" width="170" height="50" rx="8"/>
+  <text class="nodet" x="305" y="274">CloudTrail</text>
+  <text class="sub" x="305" y="290">mgmt &amp; data events</text>
+
+  <rect class="arch" x="430" y="244" width="140" height="60" rx="8"/>
+  <text class="nodet" x="500" y="266">S3 archive</text>
+  <text class="sub" x="500" y="282">central log bucket</text>
+  <text class="sub" x="500" y="296">+ KMS · lifecycle</text>
+
+  <rect class="act" x="610" y="244" width="140" height="28" rx="6"/>
+  <text class="nodet" x="680" y="262">Athena query</text>
+  <rect class="act" x="610" y="276" width="140" height="28" rx="6"/>
+  <text class="nodet" x="680" y="294">Logs Insights</text>
+
+  <!-- Flows ops -->
+  <path class="flow" d="M180,79 L220,90"/>
+  <path class="flow" d="M180,121 L220,110"/>
+  <path class="flow" d="M180,163 L220,180"/>
+  <path class="flow" d="M180,205 L220,200"/>
+  <path class="flow" d="M390,100 L430,125"/>
+  <path class="flow" d="M390,180 L430,145"/>
+  <path class="flow" d="M570,125 L610,82"/>
+  <path class="flow" d="M570,135 L610,132"/>
+  <path class="flow" d="M570,145 L610,182"/>
+
+  <!-- Flows audit -->
+  <path class="auditFlow" d="M180,261 L220,275"/>
+  <path class="auditFlow" d="M390,278 L430,274"/>
+  <path class="auditFlow" d="M570,274 L610,258"/>
+  <path class="auditFlow" d="M570,278 L610,290"/>
+</svg>

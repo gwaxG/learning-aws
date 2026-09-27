@@ -1,0 +1,66 @@
+<svg viewBox="0 0 760 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="RPO is data loss before the incident, RTO is downtime after; DR strategies plotted from Backup/Restore to Multi-Site Active/Active">
+  <style>
+    .axis { stroke: #25395a; stroke-width: 1.5; }
+    .tick { stroke: #4aa3ff; stroke-width: 1.2; }
+    .axlbl { fill: #8aa0bd; font: 11px system-ui, sans-serif; }
+    .ttl { fill: #ff9900; font: 700 12px system-ui, sans-serif; }
+    .bt { fill: #e8eef6; font: 600 12px system-ui, sans-serif; text-anchor: middle; }
+    .sub { fill: #8aa0bd; font: 10px system-ui, sans-serif; text-anchor: middle; }
+    .rpo { stroke: #2ecc71; stroke-width: 2.5; fill: none; }
+    .rto { stroke: #ff9900; stroke-width: 2.5; fill: none; stroke-dasharray: 6 4; }
+    .inc { stroke: #ff5d5d; stroke-width: 2; }
+    .box { fill: #1d3150; stroke: #4aa3ff; }
+    .lbl { fill: #e8eef6; font: 600 11px system-ui, sans-serif; }
+  </style>
+
+  <text x="40" y="26" class="ttl">RPO = data loss tolerance (before)  ·  RTO = downtime tolerance (after)</text>
+
+  <!-- timeline -->
+  <line class="axis" x1="40" y1="110" x2="720" y2="110"/>
+  <text x="40" y="126" class="axlbl">time →</text>
+
+  <!-- last backup tick -->
+  <line class="tick" x1="220" y1="100" x2="220" y2="120"/>
+  <text x="220" y="92" class="lbl" text-anchor="middle">last good backup</text>
+
+  <!-- incident tick -->
+  <line class="inc" x1="400" y1="80" x2="400" y2="140"/>
+  <text x="400" y="72" class="ttl" text-anchor="middle">INCIDENT</text>
+
+  <!-- recovery tick -->
+  <line class="tick" x1="560" y1="100" x2="560" y2="120"/>
+  <text x="560" y="92" class="lbl" text-anchor="middle">service restored</text>
+
+  <!-- RPO bracket (green) -->
+  <path class="rpo" d="M220,150 L220,165 L400,165 L400,150"/>
+  <text x="310" y="184" class="bt" fill="#2ecc71">RPO — data loss</text>
+  <text x="310" y="200" class="sub">gap from last backup until the incident</text>
+
+  <!-- RTO bracket (orange dashed) -->
+  <path class="rto" d="M400,150 L400,165 L560,165 L560,150"/>
+  <text x="480" y="184" class="bt" fill="#ff9900">RTO — downtime</text>
+  <text x="480" y="200" class="sub">gap from incident until service is restored</text>
+
+  <!-- Strategy ladder -->
+  <text x="40" y="232" class="ttl">Strategies — cheaper/slower  →  costlier/near-zero</text>
+
+  <rect class="box" x="40" y="246" width="150" height="64" rx="8"/>
+  <text class="bt" x="115" y="270">Backup &amp; Restore</text>
+  <text class="sub" x="115" y="288">RPO: hours</text>
+  <text class="sub" x="115" y="302">RTO: hours</text>
+
+  <rect class="box" x="210" y="246" width="150" height="64" rx="8"/>
+  <text class="bt" x="285" y="270">Pilot Light</text>
+  <text class="sub" x="285" y="288">RPO: minutes</text>
+  <text class="sub" x="285" y="302">RTO: tens of min</text>
+
+  <rect class="box" x="380" y="246" width="150" height="64" rx="8"/>
+  <text class="bt" x="455" y="270">Warm Standby</text>
+  <text class="sub" x="455" y="288">RPO: seconds</text>
+  <text class="sub" x="455" y="302">RTO: minutes</text>
+
+  <rect class="box" x="550" y="246" width="170" height="64" rx="8"/>
+  <text class="bt" x="635" y="270">Multi-Site Active/Active</text>
+  <text class="sub" x="635" y="288">RPO: ~0</text>
+  <text class="sub" x="635" y="302">RTO: ~0</text>
+</svg>
