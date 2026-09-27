@@ -1,0 +1,28 @@
+{
+  "id": "e4-q14",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "Lambda: execution role с least privilege",
+  "tests": "Как дать Lambda права писать только в конкретную таблицу DynamoDB.",
+  "expected": "Execution role с политикой dynamodb:PutItem на ARN конкретной таблицы. Триггеры: «specific table and nothing else», «BEST practice» ⇒ least privilege.",
+  "why_not": "AdministratorAccess — избыточно; access key в env — небезопасно и не нужно; публичная запись — недопустимо.",
+  "keywords": [
+    "execution role",
+    "least privilege",
+    "dynamodb:PutItem",
+    "table ARN",
+    "Lambda"
+  ],
+  "services": [
+    "lambda",
+    "iam",
+    "dynamodb"
+  ],
+  "topics": [
+    "iam-security",
+    "serverless-containers"
+  ],
+  "domain": 1
+}

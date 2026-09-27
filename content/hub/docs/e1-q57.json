@@ -1,0 +1,30 @@
+{
+  "id": "e1-q57",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "Step Functions: оркестрация многошаговых workflow с retries",
+  "tests": "Выбор сервиса для координации многошагового workflow из нескольких Lambda с обработкой ошибок, retries и визуальным отслеживанием.",
+  "expected": "AWS Step Functions — state machine с встроенными retries, catch, ветвлением и визуальным отслеживанием шагов. Триггеры: «multi-step workflow», «several Lambda functions», «error handling, retries», «visual tracking».",
+  "why_not": "SQS и SNS — сообщения и fan-out без stateful-оркестрации; Lambda destinations лишь направляют результат функции, без сложного многошагового процесса.",
+  "keywords": [
+    "Step Functions",
+    "state machine",
+    "workflow",
+    "orchestration",
+    "retries",
+    "error handling"
+  ],
+  "services": [
+    "step-functions",
+    "lambda",
+    "sqs",
+    "sns"
+  ],
+  "topics": [
+    "integration",
+    "serverless-containers"
+  ],
+  "domain": 2
+}

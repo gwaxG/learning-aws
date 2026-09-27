@@ -1,4 +1,4 @@
-<svg viewBox="0 0 760 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="RPO is data loss before the incident, RTO is downtime after; DR strategies plotted from Backup/Restore to Multi-Site Active/Active">
+<svg viewBox="0 0 760 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="RPO — потеря данных до инцидента, RTO — простой после; стратегии DR от Backup/Restore до Multi-Site Active/Active">
   <style>
     .axis { stroke: #25395a; stroke-width: 1.5; }
     .tick { stroke: #4aa3ff; stroke-width: 1.2; }
@@ -13,51 +13,51 @@
     .lbl { fill: #e8eef6; font: 600 11px system-ui, sans-serif; }
   </style>
 
-  <text x="40" y="26" class="ttl">RPO = data loss tolerance (before)  ·  RTO = downtime tolerance (after)</text>
+  <text x="40" y="26" class="ttl">RPO = допустимая потеря данных (до)  ·  RTO = допустимый простой (после)</text>
 
   <!-- timeline -->
   <line class="axis" x1="40" y1="110" x2="720" y2="110"/>
-  <text x="40" y="126" class="axlbl">time →</text>
+  <text x="40" y="126" class="axlbl">время →</text>
 
   <!-- last backup tick -->
   <line class="tick" x1="220" y1="100" x2="220" y2="120"/>
-  <text x="220" y="92" class="lbl" text-anchor="middle">last good backup</text>
+  <text x="220" y="92" class="lbl" text-anchor="middle">последний бэкап</text>
 
   <!-- incident tick -->
   <line class="inc" x1="400" y1="80" x2="400" y2="140"/>
-  <text x="400" y="72" class="ttl" text-anchor="middle">INCIDENT</text>
+  <text x="400" y="72" class="ttl" text-anchor="middle">ИНЦИДЕНТ</text>
 
   <!-- recovery tick -->
   <line class="tick" x1="560" y1="100" x2="560" y2="120"/>
-  <text x="560" y="92" class="lbl" text-anchor="middle">service restored</text>
+  <text x="560" y="92" class="lbl" text-anchor="middle">сервис восстановлен</text>
 
   <!-- RPO bracket (green) -->
   <path class="rpo" d="M220,150 L220,165 L400,165 L400,150"/>
-  <text x="310" y="184" class="bt" fill="#2ecc71">RPO — data loss</text>
-  <text x="310" y="200" class="sub">gap from last backup until the incident</text>
+  <text x="310" y="184" class="bt" fill="#2ecc71">RPO — потеря данных</text>
+  <text x="310" y="200" class="sub">от бэкапа до инцидента</text>
 
   <!-- RTO bracket (orange dashed) -->
   <path class="rto" d="M400,150 L400,165 L560,165 L560,150"/>
-  <text x="480" y="184" class="bt" fill="#ff9900">RTO — downtime</text>
-  <text x="480" y="200" class="sub">gap from incident until service is restored</text>
+  <text x="480" y="184" class="bt" fill="#ff9900">RTO — простой</text>
+  <text x="480" y="200" class="sub">от инцидента до восстановления</text>
 
   <!-- Strategy ladder -->
-  <text x="40" y="232" class="ttl">Strategies — cheaper/slower  →  costlier/near-zero</text>
+  <text x="40" y="232" class="ttl">Стратегии — дешевле/медленнее  →  дороже/около нуля</text>
 
   <rect class="box" x="40" y="246" width="150" height="64" rx="8"/>
   <text class="bt" x="115" y="270">Backup &amp; Restore</text>
-  <text class="sub" x="115" y="288">RPO: hours</text>
-  <text class="sub" x="115" y="302">RTO: hours</text>
+  <text class="sub" x="115" y="288">RPO: часы</text>
+  <text class="sub" x="115" y="302">RTO: часы</text>
 
   <rect class="box" x="210" y="246" width="150" height="64" rx="8"/>
   <text class="bt" x="285" y="270">Pilot Light</text>
-  <text class="sub" x="285" y="288">RPO: minutes</text>
-  <text class="sub" x="285" y="302">RTO: tens of min</text>
+  <text class="sub" x="285" y="288">RPO: минуты</text>
+  <text class="sub" x="285" y="302">RTO: десятки мин</text>
 
   <rect class="box" x="380" y="246" width="150" height="64" rx="8"/>
   <text class="bt" x="455" y="270">Warm Standby</text>
-  <text class="sub" x="455" y="288">RPO: seconds</text>
-  <text class="sub" x="455" y="302">RTO: minutes</text>
+  <text class="sub" x="455" y="288">RPO: секунды</text>
+  <text class="sub" x="455" y="302">RTO: минуты</text>
 
   <rect class="box" x="550" y="246" width="170" height="64" rx="8"/>
   <text class="bt" x="635" y="270">Multi-Site Active/Active</text>

@@ -1,0 +1,27 @@
+{
+  "id": "e3-q50",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "S3 One Zone-IA: дешёвое хранение редких данных в одной AZ",
+  "tests": "Выбор класса хранения для данных, читаемых раз в квартал, когда допустимо хранение в одной AZ.",
+  "expected": "S3 One Zone-IA дешевле Standard-IA, данные в одной AZ, мгновенный доступ. Триггеры: «once per quarter», «single AZ acceptable», «lowest storage cost».",
+  "why_not": "Standard дороже; Standard-IA хранит в нескольких AZ и дороже; Deep Archive — часы на извлечение, не для ad hoc отчётов.",
+  "keywords": [
+    "One Zone-IA",
+    "infrequent access",
+    "single AZ",
+    "quarterly",
+    "lowest cost",
+    "одна AZ допустима"
+  ],
+  "services": [
+    "s3-storage-classes"
+  ],
+  "topics": [
+    "storage",
+    "cost"
+  ],
+  "domain": 3
+}

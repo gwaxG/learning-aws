@@ -1,0 +1,28 @@
+{
+  "id": "e2-q34",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "IAM Identity Center: SSO через корпоративный IdP (SAML)",
+  "tests": "Как дать сотрудникам вход в AWS с корпоративными учётками AD и временным ролевым доступом.",
+  "expected": "IAM Identity Center, федерированный с корпоративным IdP/AD по SAML 2.0 (или через AD Connector); пользователи получают permission sets → временные креды ролей. Триггеры: «existing corporate Active Directory credentials», «temporary access mapped to roles», «single sign-on».",
+  "why_not": "IAM users на каждого — дублирование identity и нагрузка; рассылка access keys и общий root — грубые анти-паттерны.",
+  "keywords": [
+    "IAM Identity Center",
+    "SAML",
+    "federation",
+    "Active Directory",
+    "permission sets",
+    "SSO"
+  ],
+  "services": [
+    "identity-center",
+    "directory-service",
+    "iam"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1
+}

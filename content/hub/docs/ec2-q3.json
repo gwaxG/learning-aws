@@ -1,0 +1,28 @@
+{
+  "id": "ec2-q3",
+  "source": {
+    "type": "topic",
+    "ref": "ec2-compute"
+  },
+  "concept": "ELB: NLB для static IP и L4 с ultra-low latency",
+  "tests": "Выбор типа балансировщика по требованиям static IP, TCP и миллионов соединений в секунду.",
+  "expected": "Network Load Balancer — Layer 4, миллионы req/s, ultra-low latency, static IP / Elastic IP на AZ. Триггеры: «static IP», «TCP/UDP», «millions of connections per second», «ultra-low latency».",
+  "why_not": "ALB — Layer 7 без static IP; Gateway Load Balancer — вставка сторонних appliance; Classic LB — legacy.",
+  "keywords": [
+    "Network Load Balancer",
+    "NLB",
+    "Layer 4",
+    "static IP",
+    "Elastic IP",
+    "ultra-low latency",
+    "TCP"
+  ],
+  "services": [
+    "elb"
+  ],
+  "topics": [
+    "ec2-compute",
+    "vpc-networking"
+  ],
+  "domain": 3
+}

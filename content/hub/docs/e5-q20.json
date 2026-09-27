@@ -1,0 +1,29 @@
+{
+  "id": "e5-q20",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "IAM conditions: aws:SourceIp и aws:SecureTransport",
+  "tests": "Какие condition keys ограничивают запросы корпоративным диапазоном IP и HTTPS.",
+  "expected": "aws:SourceIp = корпоративный CIDR + aws:SecureTransport = true. Триггеры: «originates from corporate IP range», «over TLS».",
+  "why_not": "s3:x-amz-acl public-read открывает данные; aws:PrincipalOrgID со случайным значением бессмысленен; ec2:InstanceType не относится к задаче.",
+  "keywords": [
+    "aws:SourceIp",
+    "aws:SecureTransport",
+    "condition keys",
+    "CIDR",
+    "TLS",
+    "HTTPS",
+    "bucket policy"
+  ],
+  "services": [
+    "iam",
+    "s3-security",
+    "encryption"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1
+}

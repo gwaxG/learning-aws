@@ -1,0 +1,29 @@
+{
+  "id": "e4-q18",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "WAF: защита L7 от SQL injection и XSS",
+  "tests": "Что добавить к ALB для защиты от веб-эксплойтов вроде SQL injection.",
+  "expected": "Ассоциировать AWS WAF с ALB — managed/custom rules инспектируют HTTP(S). Триггеры: «SQL injection», «common web exploits», ALB.",
+  "why_not": "Shield Standard — DDoS, не эксплойты; NLB — L4, не инспектирует HTTP; Flow Logs — только метаданные.",
+  "keywords": [
+    "AWS WAF",
+    "SQL injection",
+    "layer 7",
+    "ALB",
+    "managed rules",
+    "веб-эксплойты"
+  ],
+  "services": [
+    "waf",
+    "elb",
+    "shield"
+  ],
+  "topics": [
+    "iam-security",
+    "edge-dns"
+  ],
+  "domain": 1
+}

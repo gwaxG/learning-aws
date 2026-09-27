@@ -1,0 +1,25 @@
+{
+  "id": "e1-q46",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "IAM: условие aws:MultiFactorAuthPresent для чувствительных действий",
+  "tests": "Как принудительно требовать MFA от всех IAM principals перед чувствительными API-действиями.",
+  "expected": "IAM policy с condition aws:MultiFactorAuthPresent = true для чувствительных действий (например, ec2:TerminateInstances). Триггеры: «enforce MFA», «before sensitive actions», «all IAM principals».",
+  "why_not": "MFA только на root не покрывает остальных principals; password policy не требует MFA; security group управляет сетевым трафиком, а не API-правами.",
+  "keywords": [
+    "MFA",
+    "aws:MultiFactorAuthPresent",
+    "IAM policy condition",
+    "sensitive actions",
+    "принудительная MFA"
+  ],
+  "services": [
+    "iam"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1
+}

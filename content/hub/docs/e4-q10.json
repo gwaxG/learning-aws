@@ -1,0 +1,28 @@
+{
+  "id": "e4-q10",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "IAM cross-account: read-only роль для внешнего аудитора",
+  "tests": "Наименее затратный способ дать аудитору read-only доступ ко всем аккаунтам Organization.",
+  "expected": "Стандартная cross-account роль с managed policy ReadOnlyAccess в каждом аккаунте, которую аудитор assume из одной identity. Триггеры: «read-only visibility», «many accounts», «single point of management», «LEAST overhead».",
+  "why_not": "IAM users в каждом аккаунте — множество credentials; root credentials — небезопасно; отключать аккаунты бессмысленно.",
+  "keywords": [
+    "cross-account role",
+    "ReadOnlyAccess",
+    "auditor",
+    "AssumeRole",
+    "multi-account",
+    "read-only"
+  ],
+  "services": [
+    "iam",
+    "sts",
+    "organizations"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1
+}

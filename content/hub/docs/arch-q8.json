@@ -1,0 +1,29 @@
+{
+  "id": "arch-q8",
+  "source": {
+    "type": "topic",
+    "ref": "architecture"
+  },
+  "concept": "ElastiCache: кэш для горячих чтений перед БД",
+  "tests": "Выбор отдельного масштабируемого слоя чтения для часто запрашиваемых, редко меняющихся данных.",
+  "expected": "ElastiCache (in-memory cache) перед реляционной БД. Триггеры: «sub-millisecond reads», «часто запрашиваемые, редко меняющиеся данные», «reference data», «высокая нагрузка на чтение».",
+  "why_not": "Доп. индексы ускоряют отдельные запросы, но не дают масштабируемого слоя и замедляют запись; strong consistency добавляет стоимость/latency без роста throughput; scale up БД упирается в потолок.",
+  "keywords": [
+    "ElastiCache",
+    "in-memory cache",
+    "sub-millisecond",
+    "reference data",
+    "hot reads",
+    "редко меняющиеся данные"
+  ],
+  "services": [
+    "elasticache",
+    "caching",
+    "rds"
+  ],
+  "topics": [
+    "architecture",
+    "databases"
+  ],
+  "domain": 3
+}

@@ -1,0 +1,30 @@
+{
+  "id": "cost-q7",
+  "source": {
+    "type": "topic",
+    "ref": "cost"
+  },
+  "concept": "Organizations consolidated billing: общий счёт и шаринг RI/SP",
+  "tests": "Знание возможностей consolidated billing: единый счёт, агрегация объёма и совместное использование скидок RI/Savings Plans (выбрать два).",
+  "expected": "AWS Organizations с consolidated billing + оставить включённым RI/Savings Plan discount sharing. Триггеры: «много аккаунтов», «единый счёт», «volume discounts быстрее», «неиспользованный commitment помогает другим аккаунтам».",
+  "why_not": "Отдельные Savings Plans с отключённым sharing — противоположно цели; Budgets только алерты, счёта не объединяют.",
+  "keywords": [
+    "consolidated billing",
+    "AWS Organizations",
+    "RI sharing",
+    "Savings Plans",
+    "volume discounts",
+    "единый счёт",
+    "несколько аккаунтов"
+  ],
+  "services": [
+    "organizations",
+    "ec2-purchasing",
+    "budgets"
+  ],
+  "topics": [
+    "cost",
+    "iam-security"
+  ],
+  "domain": 4
+}

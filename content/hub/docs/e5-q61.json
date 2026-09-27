@@ -1,0 +1,29 @@
+{
+  "id": "e5-q61",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "Systems Manager Patch Manager: патчинг флота по расписанию",
+  "tests": "Какой сервис автоматизирует установку патчей на EC2 по расписанию с отчётом о соответствии.",
+  "expected": "AWS Systems Manager Patch Manager — patch baselines, maintenance windows, compliance reporting. Триггеры: «apply patches on a schedule», «track compliance», «avoid custom tooling».",
+  "why_not": "CodeDeploy — деплой кода приложений; EC2 Image Builder — golden AMI, не патчинг работающего флота; Lambda — самописный инструментарий.",
+  "keywords": [
+    "Patch Manager",
+    "Systems Manager",
+    "maintenance windows",
+    "patch baseline",
+    "compliance",
+    "патчи"
+  ],
+  "services": [
+    "systems-manager",
+    "ec2",
+    "ami"
+  ],
+  "topics": [
+    "monitoring",
+    "ec2-compute"
+  ],
+  "domain": 4
+}

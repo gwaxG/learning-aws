@@ -1,0 +1,29 @@
+{
+  "id": "e3-q53",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "Glue: serverless ETL с crawlers и Data Catalog",
+  "tests": "Выбор сервиса для serverless ETL, который обходит источники, выводит схемы в каталог и трансформирует данные.",
+  "expected": "AWS Glue: crawlers → Glue Data Catalog, Spark ETL jobs без серверов. Триггеры: «serverless ETL», «crawls data sources», «infers schemas into a catalog».",
+  "why_not": "EMR требует управления кластерами; Data Pipeline на EC2 — серверы; Redshift — хранилище, не ETL-краулер.",
+  "keywords": [
+    "Glue",
+    "ETL",
+    "crawler",
+    "Data Catalog",
+    "schema inference",
+    "serverless"
+  ],
+  "services": [
+    "glue",
+    "emr",
+    "redshift"
+  ],
+  "topics": [
+    "databases",
+    "data-migration"
+  ],
+  "domain": 3
+}

@@ -1,0 +1,31 @@
+{
+  "id": "e5-q36",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "Aurora Global Database: cross-Region DR с быстрым promotion",
+  "tests": "Какая функция Aurora обеспечивает межрегиональный DR с минимальным RTO через постоянно обновляемую реплику.",
+  "expected": "Aurora Global Database (или cross-Region read replica) — репликация в другой регион с лагом ~1 с, быстрый promotion. Триггеры: «another Region», «minimal RTO», «continuously updated read replica», «fast promotion».",
+  "why_not": "Automated snapshots — долгое восстановление; Multi-AZ не защищает от отказа региона; ручной экспорт в S3 — высокий RPO и медленное восстановление.",
+  "keywords": [
+    "Aurora Global Database",
+    "cross-Region read replica",
+    "promotion",
+    "RTO",
+    "DR",
+    "другой регион"
+  ],
+  "services": [
+    "aurora-global",
+    "aurora",
+    "read-replicas",
+    "dr-strategies",
+    "rto-rpo"
+  ],
+  "topics": [
+    "databases",
+    "ha-dr"
+  ],
+  "domain": 2
+}

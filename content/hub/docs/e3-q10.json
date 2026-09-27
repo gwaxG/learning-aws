@@ -1,0 +1,31 @@
+{
+  "id": "e3-q10",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "AWS WAF: защита от SQLi/XSS на CloudFront или ALB",
+  "tests": "Выбор защиты от атак прикладного уровня (SQL injection, XSS) на периметре.",
+  "expected": "AWS WAF с managed rule groups, подключённый к CloudFront или ALB (также API Gateway). Триггеры: «application-layer attacks», «SQL injection», «cross-site scripting», «at the edge».",
+  "why_not": "NACL и security groups работают на L3/L4 и не видят содержимое HTTP; Inspector сканирует уязвимости, но не фильтрует трафик.",
+  "keywords": [
+    "AWS WAF",
+    "managed rule groups",
+    "SQL injection",
+    "XSS",
+    "CloudFront",
+    "ALB",
+    "layer 7"
+  ],
+  "services": [
+    "waf",
+    "cloudfront",
+    "elb",
+    "inspector"
+  ],
+  "topics": [
+    "iam-security",
+    "edge-dns"
+  ],
+  "domain": 1
+}

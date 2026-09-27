@@ -1,0 +1,32 @@
+{
+  "id": "arch-q7",
+  "source": {
+    "type": "topic",
+    "ref": "architecture"
+  },
+  "concept": "Multi-AZ: ASG за ALB + RDS Multi-AZ против отказа AZ",
+  "tests": "Устранение единой точки отказа всех уровней в одной AZ (выбрать два).",
+  "expected": "(1) App tier в Auto Scaling group на нескольких AZ за ALB; (2) RDS Multi-AZ со standby в другой AZ. Триггеры: «всё в одной Availability Zone», «надёжность при отказе AZ».",
+  "why_not": "Vertical scaling БД оставляет всё в одной AZ — тот же failure domain; instance store эфемерен, состояние теряется при stop/отказе.",
+  "keywords": [
+    "Multi-AZ",
+    "Auto Scaling group",
+    "ALB",
+    "RDS Multi-AZ",
+    "single point of failure",
+    "отказ AZ",
+    "одна Availability Zone"
+  ],
+  "services": [
+    "ha",
+    "auto-scaling",
+    "elb",
+    "rds-multi-az",
+    "instance-store"
+  ],
+  "topics": [
+    "architecture",
+    "ha-dr"
+  ],
+  "domain": 2
+}

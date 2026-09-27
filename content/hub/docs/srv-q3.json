@@ -1,0 +1,29 @@
+{
+  "id": "srv-q3",
+  "source": {
+    "type": "topic",
+    "ref": "serverless-containers"
+  },
+  "concept": "Fargate: serverless-контейнеры без управления инстансами",
+  "tests": "Выбор launch type ECS, исключающего патчинг ОС и планирование ёмкости кластера.",
+  "expected": "ECS on AWS Fargate — задаёшь только vCPU/память на task, нет EC2-узлов для патчинга и масштабирования. Триггеры: «eliminate server patching», «cluster capacity planning», «staying on ECS», «least operational effort».",
+  "why_not": "EC2 launch type (On-Demand или Spot) требует управлять парком инстансов; self-managed Kubernetes на EC2 — максимальная операционная нагрузка.",
+  "keywords": [
+    "Fargate",
+    "ECS",
+    "launch type",
+    "serverless containers",
+    "no patching",
+    "capacity planning",
+    "без управления серверами"
+  ],
+  "services": [
+    "fargate",
+    "ecs",
+    "ec2"
+  ],
+  "topics": [
+    "serverless-containers"
+  ],
+  "domain": 4
+}

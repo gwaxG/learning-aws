@@ -1,0 +1,28 @@
+{
+  "id": "mon-q5",
+  "source": {
+    "type": "topic",
+    "ref": "monitoring"
+  },
+  "concept": "CloudTrail: multi-region trail и log file integrity validation",
+  "tests": "Знание настроек CloudTrail для полного покрытия регионов и доказуемой неизменности логов.",
+  "expected": "Multi-region trail (все регионы) + log file integrity validation (подписанные digest-файлы). Триггеры: «tamper-evident», «every AWS Region», «audit logs of all API activity».",
+  "why_not": "EC2 detailed monitoring — частота метрик, к аудиту не относится; retention CloudWatch Logs — срок хранения, не покрытие регионов и не защита от подделки.",
+  "keywords": [
+    "CloudTrail",
+    "multi-region trail",
+    "log file integrity validation",
+    "digest",
+    "tamper-evident",
+    "все регионы",
+    "защита от подделки"
+  ],
+  "services": [
+    "cloudtrail"
+  ],
+  "topics": [
+    "monitoring",
+    "iam-security"
+  ],
+  "domain": 2
+}

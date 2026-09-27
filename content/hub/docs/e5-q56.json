@@ -1,0 +1,30 @@
+{
+  "id": "e5-q56",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "Control Tower: landing zone с guardrails и централизованным логированием",
+  "tests": "Какой сервис автоматически разворачивает и управляет multi-account средой по best practices.",
+  "expected": "AWS Control Tower — landing zone, guardrails (SCP/Config), централизованный logging, Account Factory. Триггеры: «multi-account environments», «guardrails», «centralized logging», «landing zone».",
+  "why_not": "CloudFormation StackSets разворачивают шаблоны, но не дают управляемую landing zone; Systems Manager — операции внутри аккаунтов; OpsWorks — configuration management приложений.",
+  "keywords": [
+    "Control Tower",
+    "landing zone",
+    "guardrails",
+    "multi-account",
+    "centralized logging",
+    "Account Factory"
+  ],
+  "services": [
+    "control-tower",
+    "organizations",
+    "cloudformation",
+    "systems-manager"
+  ],
+  "topics": [
+    "iam-security",
+    "architecture"
+  ],
+  "domain": 4
+}

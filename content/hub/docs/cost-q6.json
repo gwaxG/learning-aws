@@ -1,0 +1,30 @@
+{
+  "id": "cost-q6",
+  "source": {
+    "type": "topic",
+    "ref": "cost"
+  },
+  "concept": "S3 Intelligent-Tiering: непредсказуемый паттерн доступа",
+  "tests": "Выбор storage class, минимизирующего стоимость при неизвестном и меняющемся паттерне доступа без lifecycle-правил.",
+  "expected": "S3 Intelligent-Tiering — автоматическое перемещение между tier-ами за небольшую monitoring fee, без retrieval fees. Триггеры: «unpredictable/changing access patterns», «без настройки lifecycle», «без платы за извлечение».",
+  "why_not": "Standard не оптимизирует холодные данные; Standard-IA с lifecycle предполагает известный паттерн, добавляет retrieval fees и минимальный срок хранения; Glacier Deep Archive — извлечение часами.",
+  "keywords": [
+    "Intelligent-Tiering",
+    "access patterns",
+    "monitoring fee",
+    "no retrieval fees",
+    "Standard-IA",
+    "непредсказуемый доступ",
+    "без lifecycle-политик"
+  ],
+  "services": [
+    "s3-storage-classes",
+    "s3-lifecycle",
+    "glacier"
+  ],
+  "topics": [
+    "cost",
+    "storage"
+  ],
+  "domain": 4
+}

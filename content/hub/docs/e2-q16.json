@@ -1,0 +1,29 @@
+{
+  "id": "e2-q16",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "ECS на Fargate: запуск контейнера по расписанию через EventBridge",
+  "tests": "Выбор наименее трудоёмкого способа запускать короткую контейнерную задачу по расписанию без серверов и кластеров.",
+  "expected": "ECS task на Fargate + EventBridge scheduled rule (cron) — никаких инстансов. Триггеры: «containerized», «nightly», «~20 minutes», «do not want to manage servers or clusters».",
+  "why_not": "ECS on EC2, AWS Batch на managed EC2 compute environment, EKS с self-managed node group — всё требует управлять инстансами/узлами.",
+  "keywords": [
+    "Fargate",
+    "ECS",
+    "EventBridge scheduled rule",
+    "cron",
+    "containerized batch",
+    "serverless"
+  ],
+  "services": [
+    "fargate",
+    "ecs",
+    "eventbridge",
+    "batch"
+  ],
+  "topics": [
+    "serverless-containers"
+  ],
+  "domain": 4
+}

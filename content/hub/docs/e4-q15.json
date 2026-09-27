@@ -1,0 +1,27 @@
+{
+  "id": "e4-q15",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "CloudHSM: single-tenant HSM FIPS 140-2 Level 3 под контролем клиента",
+  "tests": "Выбор сервиса, когда ключи не должны покидать single-tenant HSM и контроль только у компании.",
+  "expected": "AWS CloudHSM — dedicated single-tenant HSM, FIPS 140-2 Level 3, ключи под исключительным контролем клиента. Триггеры: «FIPS 140-2 Level 3», «exclusive control», «dedicated hardware».",
+  "why_not": "KMS AWS managed keys — multi-tenant, не эксклюзивны; SSE-S3 и Secrets Manager не дают контроля HSM.",
+  "keywords": [
+    "CloudHSM",
+    "FIPS 140-2 Level 3",
+    "single-tenant",
+    "exclusive control",
+    "HSM",
+    "эксклюзивный контроль ключей"
+  ],
+  "services": [
+    "cloudhsm",
+    "kms"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1
+}

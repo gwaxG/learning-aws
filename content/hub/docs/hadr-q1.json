@@ -1,0 +1,30 @@
+{
+  "id": "hadr-q1",
+  "source": {
+    "type": "topic",
+    "ref": "ha-dr"
+  },
+  "concept": "DR-стратегии: Backup & Restore при мягких RTO/RPO",
+  "tests": "Выбор самой дешёвой DR-стратегии, удовлетворяющей RTO 4 ч и RPO 1 ч.",
+  "expected": "Backup & Restore через AWS Backup: ежечасные бэкапы (RPO 1 ч) с cross-Region copy, инфраструктура поднимается в пределах 4 ч. Триггеры: «часы downtime допустимы», «lowest possible cost».",
+  "why_not": "Pilot Light и Warm Standby тоже подходят, но дороже из-за постоянно работающих ресурсов; Multi-Site Active/Active — самый дорогой, избыточен.",
+  "keywords": [
+    "Backup & Restore",
+    "AWS Backup",
+    "RTO",
+    "RPO",
+    "cross-Region copy",
+    "Pilot Light",
+    "самая низкая стоимость"
+  ],
+  "services": [
+    "dr-strategies",
+    "backup",
+    "rto-rpo"
+  ],
+  "topics": [
+    "ha-dr",
+    "cost"
+  ],
+  "domain": 2
+}

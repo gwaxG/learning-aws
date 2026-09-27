@@ -1,0 +1,28 @@
+{
+  "id": "mon-q4",
+  "source": {
+    "type": "topic",
+    "ref": "monitoring"
+  },
+  "concept": "CloudWatch alarm → Auto Scaling policy по CPUUtilization",
+  "tests": "Знание стандартного паттерна масштабирования по метрике.",
+  "expected": "CloudWatch metric alarm на CPUUtilization с evaluation period, запускающий scaling policy Auto Scaling. Триггеры: «average CPU above 70% for several minutes», «add instances».",
+  "why_not": "CloudTrail/subscription filters — логи API, не триггер масштабирования; Config — compliance конфигурации, не real-time CPU; X-Ray трассирует запросы и не масштабирует.",
+  "keywords": [
+    "CloudWatch alarm",
+    "CPUUtilization",
+    "scaling policy",
+    "Auto Scaling",
+    "evaluation period",
+    "масштабирование по CPU"
+  ],
+  "services": [
+    "cloudwatch",
+    "auto-scaling"
+  ],
+  "topics": [
+    "monitoring",
+    "ec2-compute"
+  ],
+  "domain": 1
+}

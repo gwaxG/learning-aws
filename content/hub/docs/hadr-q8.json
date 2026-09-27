@@ -1,0 +1,29 @@
+{
+  "id": "hadr-q8",
+  "source": {
+    "type": "topic",
+    "ref": "ha-dr"
+  },
+  "concept": "Route 53 failover routing: active/passive с health check",
+  "tests": "Настройка автоматического DNS-переключения на DR-endpoint с быстрым cutover.",
+  "expected": "Failover routing + health check на primary + низкий TTL записи. Триггеры: «active/passive», «автоматически только при unhealthy primary», «fast cutover».",
+  "why_not": "Weighted 50/50 отправляет половину трафика в DR при здоровом primary; Simple без health awareness; Geolocation — по местоположению, не по здоровью.",
+  "keywords": [
+    "failover routing",
+    "health check",
+    "low TTL",
+    "active/passive",
+    "DR endpoint",
+    "автоматическое переключение",
+    "быстрый cutover"
+  ],
+  "services": [
+    "route53",
+    "dr-strategies"
+  ],
+  "topics": [
+    "ha-dr",
+    "edge-dns"
+  ],
+  "domain": 2
+}

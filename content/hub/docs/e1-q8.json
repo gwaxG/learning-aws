@@ -1,0 +1,30 @@
+{
+  "id": "e1-q8",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "CloudFront: кэширование S3-контента на edge",
+  "tests": "Как снизить задержку глобальной раздачи больших файлов из S3 пользователям по всему миру.",
+  "expected": "Amazon CloudFront с S3 bucket как origin — кэш на edge locations рядом с пользователями. Триггеры: «users worldwide», «high latency», «serve/download».",
+  "why_not": "S3 Transfer Acceleration ускоряет загрузку (upload) в S3, а не раздачу; перенос bucket лишь сдвигает задержку; CRR во все Region дорого и требует маршрутизации.",
+  "keywords": [
+    "CloudFront",
+    "edge locations",
+    "origin",
+    "Transfer Acceleration",
+    "глобальная раздача",
+    "снизить задержку"
+  ],
+  "services": [
+    "cloudfront",
+    "s3",
+    "s3-performance",
+    "s3-replication"
+  ],
+  "topics": [
+    "edge-dns",
+    "storage"
+  ],
+  "domain": 3
+}

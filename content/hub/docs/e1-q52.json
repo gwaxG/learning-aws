@@ -1,0 +1,28 @@
+{
+  "id": "e1-q52",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "EBS: Provisioned IOPS SSD (io1/io2) для транзакционных БД",
+  "tests": "Выбор типа EBS volume для высоконагруженной транзакционной БД со стабильно высоким IOPS.",
+  "expected": "Provisioned IOPS SSD (io1/io2) — гарантированные высокие IOPS и низкая задержка. Триггеры: «high-transaction database», «consistent high IOPS», «low-latency block storage».",
+  "why_not": "gp2 — baseline IOPS зависит от размера и не гарантирует нужную производительность; st1 — throughput HDD; sc1 — холодное хранение.",
+  "keywords": [
+    "Provisioned IOPS",
+    "io2",
+    "io1",
+    "gp2",
+    "st1",
+    "sc1",
+    "IOPS",
+    "транзакционная БД"
+  ],
+  "services": [
+    "ebs"
+  ],
+  "topics": [
+    "storage"
+  ],
+  "domain": 3
+}

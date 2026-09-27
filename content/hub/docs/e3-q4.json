@@ -1,0 +1,28 @@
+{
+  "id": "e3-q4",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "SCP: запрет отключения CloudTrail во всей организации",
+  "tests": "Какой контроль не даст даже админу member-аккаунта остановить CloudTrail или удалить логи во всей Organization.",
+  "expected": "SCP с явным Deny на cloudtrail:StopLogging, DeleteTrail и т.п. — SCP задаёт максимум прав и перекрывает любые Allow в аккаунте, включая админов. Триггеры: «across the entire Organization», «even if granted admin in a member account».",
+  "why_not": "Permissions boundary ставится на каждого principal и снимается админом аккаунта; bucket policy и MFA не мешают остановить сам trail.",
+  "keywords": [
+    "SCP",
+    "explicit deny",
+    "cloudtrail:StopLogging",
+    "AWS Organizations",
+    "member account",
+    "даже админ"
+  ],
+  "services": [
+    "scp",
+    "organizations",
+    "cloudtrail"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1
+}

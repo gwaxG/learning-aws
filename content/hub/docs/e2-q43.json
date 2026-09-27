@@ -1,0 +1,31 @@
+{
+  "id": "e2-q43",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "Step Functions: оркестрация Lambda с ветвлением, retry и human approval",
+  "tests": "Выбор сервиса для оркестрации нескольких Lambda с логикой ветвления, повторами и ручным подтверждением вне кода функций.",
+  "expected": "AWS Step Functions — state machine: Choice, Retry/Catch, wait-for-callback (task token) для human approval. Триггеры: «coordinates multiple Lambda functions», «branching», «retries», «human approval», «orchestration out of function code».",
+  "why_not": "SQS/SNS — примитивы обмена сообщениями без workflow; Lambda destinations только маршрутизируют результат, сложный многошаговый процесс не описать.",
+  "keywords": [
+    "Step Functions",
+    "state machine",
+    "orchestration",
+    "retries",
+    "human approval",
+    "task token",
+    "branching"
+  ],
+  "services": [
+    "step-functions",
+    "lambda",
+    "sqs",
+    "sns"
+  ],
+  "topics": [
+    "integration",
+    "serverless-containers"
+  ],
+  "domain": 2
+}

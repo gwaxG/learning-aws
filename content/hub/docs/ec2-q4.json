@@ -1,0 +1,27 @@
+{
+  "id": "ec2-q4",
+  "source": {
+    "type": "topic",
+    "ref": "ec2-compute"
+  },
+  "concept": "ELB: ALB path-based routing на разные target groups",
+  "tests": "Знание функции Layer 7, маршрутизирующей запросы по URL-пути.",
+  "expected": "ALB с listener rules path-based routing (/api, /images → разные target groups). Триггеры: «по URL path», «разные target groups», «одно приложение».",
+  "why_not": "NLB — Layer 4, URL не видит; GWLB для appliance (GENEVE); Route 53 weighted делит DNS-трафик по процентам, не по пути.",
+  "keywords": [
+    "ALB",
+    "path-based routing",
+    "listener rules",
+    "target groups",
+    "Layer 7",
+    "по URL-пути"
+  ],
+  "services": [
+    "elb",
+    "route53"
+  ],
+  "topics": [
+    "ec2-compute"
+  ],
+  "domain": 2
+}

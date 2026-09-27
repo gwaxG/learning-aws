@@ -1,0 +1,31 @@
+{
+  "id": "mon-q8",
+  "source": {
+    "type": "topic",
+    "ref": "monitoring"
+  },
+  "concept": "X-Ray: distributed tracing для поиска задержки в микросервисах",
+  "tests": "Выбор инструмента для поиска медленного downstream-вызова в запросе через несколько сервисов.",
+  "expected": "AWS X-Ray — distributed tracing и service map показывают задержки и ошибки по сегментам запроса. Триггеры: «which downstream call is adding latency», «microservices», «request flowing through several services».",
+  "why_not": "CloudWatch dashboards — агрегированные метрики без end-to-end трассы; CloudTrail — аудит API; Logs Insights — запросы по тексту логов без карты сервисов.",
+  "keywords": [
+    "X-Ray",
+    "distributed tracing",
+    "service map",
+    "latency",
+    "microservices",
+    "трассировка",
+    "задержка"
+  ],
+  "services": [
+    "xray",
+    "cloudwatch",
+    "lambda",
+    "ecs"
+  ],
+  "topics": [
+    "monitoring",
+    "serverless-containers"
+  ],
+  "domain": 1
+}

@@ -1,0 +1,28 @@
+{
+  "id": "e1-q23",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "Auto Scaling: self-healing по health checks и desired capacity",
+  "tests": "Как автоматически заменять EC2-инстансы, не прошедшие health checks, и поддерживать нужное число здоровых инстансов.",
+  "expected": "EC2 Auto Scaling group с health checks (EC2/ELB) и desired capacity — заменяет нездоровые инстансы автоматически. Триггеры: «automatically replace instances that fail health checks», «maintain desired number».",
+  "why_not": "Load balancer лишь маршрутизирует трафик и не заменяет инстансы; termination protection мешает замене; один большой инстанс — нет избыточности.",
+  "keywords": [
+    "Auto Scaling group",
+    "health checks",
+    "desired capacity",
+    "self-healing",
+    "замена инстансов"
+  ],
+  "services": [
+    "auto-scaling",
+    "elb",
+    "ha"
+  ],
+  "topics": [
+    "ha-dr",
+    "ec2-compute"
+  ],
+  "domain": 2
+}

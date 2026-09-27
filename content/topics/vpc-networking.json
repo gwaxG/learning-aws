@@ -1,181 +1,187 @@
 {
   "slug": "vpc-networking",
-  "title": "VPC & Networking",
+  "title": "VPC и сети",
   "domains": [
     1,
     2
   ],
   "essentials": [
     {
-      "heading": "VPC, Subnets, CIDR & AZs",
-      "body": "**What.** A **VPC** is a logically isolated virtual network scoped to **one Region**, defined by an IPv4 CIDR block (`/16`–`/28`). Each **subnet** lives in exactly **one Availability Zone** and never spans AZs.\n\n**Why.** It gives you private, segmented address space inside AWS so you can place tiers (public ALB, private app, isolated DB) and enforce blast-radius and HA boundaries.\n\n**How.** Pick a non-overlapping CIDR like `10.0.0.0/16`, carve subnets per AZ, and decide *public* vs *private* by route table: a `0.0.0.0/0` route to an **Internet Gateway** makes the subnet public. Use multiple AZs for HA and tag subnets by tier.\n\n**Exam.** A VPC is **single-Region**, a subnet is **single-AZ**. AWS reserves **5 IPs per subnet** (first four + last), so a `/28` yields only **11 usable** hosts. Plan CIDRs to avoid overlap with peers, TGW spokes, and on-prem ranges.",
+      "heading": "VPC, subnets, CIDR и AZ",
+      "body": "**Что.** **VPC** — логически изолированная виртуальная сеть в пределах **одного Region**, задаваемая IPv4 CIDR-блоком (`/16`–`/28`). Каждая **subnet** находится ровно в **одной Availability Zone** и никогда не охватывает несколько AZ.\n\n**Зачем.** Даёт приватное сегментированное адресное пространство внутри AWS: можно разнести уровни (публичный ALB, приватное приложение, изолированная БД) и задать границы blast radius и HA.\n\n**Как.** Выберите непересекающийся CIDR, например `10.0.0.0/16`, нарежьте subnets по AZ и определите *public* или *private* через route table: маршрут `0.0.0.0/0` на **Internet Gateway** делает subnet публичной. Для HA используйте несколько AZ и помечайте subnets тегами по уровням.\n\n**Экзамен.** VPC — **в одном Region**, subnet — **в одной AZ**. AWS резервирует **5 IP в каждой subnet** (первые четыре + последний), поэтому `/28` даёт лишь **11 доступных** адресов. Планируйте CIDR так, чтобы не пересекаться с peer-сетями, spoke-сетями TGW и диапазонами on-prem.",
       "diagram": {
         "src": "vpc-layout.svg",
-        "caption": "A typical multi-AZ VPC: public subnets (ALB/NAT) and private subnets (app, database) duplicated across two Availability Zones."
+        "caption": "Типичная multi-AZ VPC: публичные subnets (ALB/NAT) и приватные subnets (приложение, база данных), продублированные в двух Availability Zones."
       },
       "links": [
-        {"label": "What is Amazon VPC?", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html"},
-        {"label": "VPC subnets", "url": "https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html"}
+        {
+          "label": "Что такое Amazon VPC?",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html"
+        },
+        {
+          "label": "Subnets в VPC",
+          "url": "https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html"
+        }
       ]
     },
     {
-      "heading": "Route Tables, IGW, NAT Gateway vs NAT Instance",
-      "body": "**What.** **Route tables** steer per-subnet traffic to gateways. An **Internet Gateway (IGW)** provides bidirectional internet for public subnets; a **NAT Gateway** lets private subnets make outbound-only IPv4 calls.\n\n**Why.** Private workloads still need OS patches, package mirrors and external APIs — but should never accept unsolicited inbound connections.\n\n**How.** Associate a subnet with a route table; the *main* table applies if none is explicit. Add `0.0.0.0/0 → igw-...` for public subnets, `0.0.0.0/0 → nat-...` for private. **NAT Gateway** is AWS-managed and auto-scales; a **NAT instance** is a self-managed EC2 (cheaper, but you patch it and must disable *source/destination check*). For IPv6 use an **egress-only IGW**.\n\n**Exam.** NAT Gateway is **AZ-scoped** — deploy **one per AZ** with same-AZ routing for HA and to avoid cross-AZ data charges. A single NAT GW is a single point of failure if its AZ fails."
+      "heading": "Route tables, IGW, NAT Gateway или NAT instance",
+      "body": "**Что.** **Route tables** направляют трафик каждой subnet к шлюзам. **Internet Gateway (IGW)** обеспечивает двусторонний доступ в интернет для публичных subnets; **NAT Gateway** позволяет приватным subnets делать только исходящие IPv4-запросы.\n\n**Зачем.** Приватным нагрузкам всё равно нужны патчи ОС, зеркала пакетов и внешние API — но они никогда не должны принимать незапрошенные входящие соединения.\n\n**Как.** Привяжите subnet к route table; если явной привязки нет, действует *main* table. Добавьте `0.0.0.0/0 → igw-...` для публичных subnets и `0.0.0.0/0 → nat-...` для приватных. **NAT Gateway** управляется AWS и масштабируется автоматически; **NAT instance** — самоуправляемый EC2 (дешевле, но патчить его вам, и нужно отключить *source/destination check*). Для IPv6 используйте **egress-only IGW**.\n\n**Экзамен.** NAT Gateway **привязан к AZ** — для HA и чтобы не платить за межзональный трафик, разворачивайте **по одному на AZ** с маршрутизацией в пределах своей AZ. Единственный NAT GW — single point of failure при отказе его AZ."
     },
     {
-      "heading": "Security Groups (stateful) vs Network ACLs (stateless)",
-      "body": "**What.** Two firewall layers: **Security Groups** at the **ENI/instance** level and **Network ACLs** at the **subnet** level. Both filter IP traffic but with very different semantics.\n\n**Why.** Defence in depth — SGs guard each workload, NACLs guard whole subnets, including coarse deny rules SGs cannot express.\n\n**How.** SGs are **stateful** (return traffic auto-allowed), support **allow rules only**, and evaluate all rules together. NACLs are **stateless** (allow inbound *and* outbound separately), support **allow and deny**, and are evaluated by **rule number**, lowest first, first match wins. To block a single bad IP for a whole subnet, use a low-numbered NACL `deny`.\n\n**Exam.** Classic trap: a stateless NACL must explicitly allow **ephemeral ports 1024–65535 outbound** for replies to inbound traffic; missing this silently drops responses. SGs cannot deny — only NACLs can.",
+      "heading": "Security Groups (stateful) или Network ACLs (stateless)",
+      "body": "**Что.** Два уровня файрвола: **Security Groups** на уровне **ENI/instance** и **Network ACLs** на уровне **subnet**. Оба фильтруют IP-трафик, но с очень разной семантикой.\n\n**Зачем.** Эшелонированная защита — SG охраняют каждую нагрузку, NACL охраняют subnets целиком, включая грубые deny-правила, которые SG выразить не могут.\n\n**Как.** SG **stateful** (ответный трафик разрешается автоматически), поддерживают **только allow-правила** и оценивают все правила вместе. NACL **stateless** (входящий *и* исходящий трафик разрешаются отдельно), поддерживают **allow и deny** и оцениваются по **номеру правила**, от меньшего к большему, срабатывает первое совпадение. Чтобы заблокировать один вредный IP для всей subnet, используйте `deny` в NACL с малым номером.\n\n**Экзамен.** Классическая ловушка: stateless NACL должен явно разрешать **исходящие ephemeral ports 1024–65535** для ответов на входящий трафик; без этого ответы молча отбрасываются. SG не умеют deny — это могут только NACL.",
       "diagram": {
         "src": "vpc-sg-vs-nacl.svg",
-        "caption": "Security Groups (stateful, instance-level, allow-only) vs Network ACLs (stateless, subnet-level, allow+deny by rule number) — and the ephemeral-port trap."
+        "caption": "Security Groups (stateful, уровень instance, только allow) vs Network ACLs (stateless, уровень subnet, allow+deny по номеру правила) — и ловушка с ephemeral ports."
       }
     },
     {
-      "heading": "VPC Endpoints: Gateway vs Interface (PrivateLink)",
-      "body": "**What.** **VPC Endpoints** let private resources reach AWS service APIs without traversing an IGW or NAT. Two flavours: **Gateway** and **Interface (PrivateLink)**.\n\n**Why.** Keep sensitive traffic on the AWS backbone, remove the public internet hop, and avoid paying NAT data-processing charges for high-volume S3 or DynamoDB workloads.\n\n**How.** A **Gateway endpoint** adds an S3/DynamoDB **prefix-list** route to your route table — no ENI, no DNS change, **free**. An **Interface endpoint** provisions an **ENI with a private IP** in each chosen subnet and resolves the service DNS to it via PrivateLink; it is billed **per ENI-hour + per GB** and works for most other AWS services and your own.\n\n**Exam.** **Gateway endpoints support only S3 and DynamoDB** and are the cheapest way to keep S3 traffic off a NAT Gateway. Interface endpoints incur hourly + data charges — don't pick them for bulk S3 unless cross-Region / on-prem access is required.",
+      "heading": "VPC Endpoints: Gateway или Interface (PrivateLink)",
+      "body": "**Что.** **VPC Endpoints** позволяют приватным ресурсам обращаться к API сервисов AWS без прохода через IGW или NAT. Два вида: **Gateway** и **Interface (PrivateLink)**.\n\n**Зачем.** Держать чувствительный трафик внутри backbone AWS, убрать хоп через публичный интернет и не платить NAT за обработку данных при больших объёмах в S3 или DynamoDB.\n\n**Как.** **Gateway endpoint** добавляет в route table маршрут на **prefix-list** S3/DynamoDB — без ENI, без изменений DNS, **бесплатно**. **Interface endpoint** создаёт **ENI с приватным IP** в каждой выбранной subnet и резолвит DNS сервиса на него через PrivateLink; тарифицируется **за ENI-час + за GB** и работает с большинством других сервисов AWS и вашими собственными.\n\n**Экзамен.** **Gateway endpoints поддерживают только S3 и DynamoDB** и являются самым дешёвым способом увести трафик S3 с NAT Gateway. Interface endpoints стоят денег за час + данные — не выбирайте их для массового S3, если не требуется доступ cross-Region / из on-prem.",
       "diagram": {
         "src": "vpc-endpoints.svg",
-        "caption": "Gateway endpoint (free, S3/DynamoDB only, route-table prefix-list) vs Interface endpoint (PrivateLink ENI with private IP, hourly + per-GB)."
+        "caption": "Gateway endpoint (бесплатный, только S3/DynamoDB, prefix-list в route table) vs Interface endpoint (ENI PrivateLink с приватным IP, почасовая оплата + за GB)."
       }
     },
     {
-      "heading": "VPC Peering vs Transit Gateway",
-      "body": "**What.** **VPC Peering** is a 1-to-1 link between two VPCs; **Transit Gateway (TGW)** is a regional hub that interconnects many VPCs and on-prem networks.\n\n**Why.** Peering is cheap and simple for a handful of VPCs; TGW removes the management nightmare of a full mesh when you have many spokes.\n\n**How.** Peering works cross-account and cross-Region but is **non-transitive**: if A peers B and B peers C, A cannot reach C. CIDRs must not overlap, and *n* VPCs need *n(n-1)/2* peerings. TGW gives **transitive routing** through TGW route tables, one attachment per VPC/VPN/DX, scaling to thousands of attachments.\n\n**Exam.** Pick **TGW** for many-VPC + on-prem hub-and-spoke; pick **peering** for a couple of VPCs. Remember: peering is non-transitive and overlapping CIDRs are forbidden — TGW does not magically fix overlap either."
+      "heading": "VPC Peering или Transit Gateway",
+      "body": "**Что.** **VPC Peering** — связь 1-к-1 между двумя VPC; **Transit Gateway (TGW)** — региональный хаб, соединяющий множество VPC и сетей on-prem.\n\n**Зачем.** Peering дёшев и прост для нескольких VPC; TGW избавляет от кошмара управления полной сеткой (full mesh), когда spoke-сетей много.\n\n**Как.** Peering работает cross-account и cross-Region, но **нетранзитивен**: если A связан с B, а B — с C, то A не достучится до C. CIDR не должны пересекаться, а *n* VPC требуют *n(n-1)/2* peering-соединений. TGW даёт **транзитивную маршрутизацию** через route tables TGW, по одному attachment на VPC/VPN/DX, и масштабируется до тысяч attachments.\n\n**Экзамен.** Выбирайте **TGW** для hub-and-spoke с множеством VPC + on-prem; **peering** — для пары VPC. Помните: peering нетранзитивен, пересекающиеся CIDR запрещены — и TGW тоже волшебным образом пересечения не лечит."
     },
     {
-      "heading": "Hybrid Connectivity: Site-to-Site VPN vs Direct Connect",
-      "body": "**What.** Two ways to connect on-prem to a VPC: **Site-to-Site VPN** (IPsec over the internet) and **Direct Connect (DX)** (dedicated private fibre into an AWS DX location).\n\n**Why.** VPN is fast to stand up and cheap; DX delivers **consistent low latency** and high, predictable throughput for production-grade hybrid workloads.\n\n**How.** VPN uses **IPsec encrypted** tunnels over the public internet — set up in minutes, but latency is variable. DX takes **weeks** to provision and uses a **private VIF** to reach VPCs (via VGW or TGW) or a **public VIF** to reach public AWS endpoints privately. Combine both for resilience.\n\n**Exam.** **Direct Connect is NOT encrypted by itself**. To get consistent latency *and* encryption in transit, run a **VPN over Direct Connect**. VPN-only fails the dedicated-latency requirement; DX-only fails the encryption requirement."
+      "heading": "Гибридная связность: Site-to-Site VPN или Direct Connect",
+      "body": "**Что.** Два способа подключить on-prem к VPC: **Site-to-Site VPN** (IPsec поверх интернета) и **Direct Connect (DX)** (выделенное приватное оптоволокно до локации AWS DX).\n\n**Зачем.** VPN быстро поднимается и дёшев; DX даёт **стабильно низкую задержку** и высокий предсказуемый throughput для продакшн-гибридных нагрузок.\n\n**Как.** VPN использует **зашифрованные IPsec**-туннели поверх публичного интернета — настраивается за минуты, но задержка плавает. DX подключается **неделями** и использует **private VIF** для доступа к VPC (через VGW или TGW) или **public VIF** для приватного доступа к публичным endpoints AWS. Для отказоустойчивости комбинируйте оба.\n\n**Экзамен.** **Direct Connect сам по себе НЕ шифруется**. Чтобы получить стабильную задержку *и* шифрование in transit, запустите **VPN поверх Direct Connect**. Один VPN не удовлетворяет требованию выделенного канала со стабильной задержкой; один DX не удовлетворяет требованию шифрования."
     },
     {
       "heading": "VPC Flow Logs",
-      "body": "**What.** **VPC Flow Logs** capture IP traffic *metadata* — source/dest IP, ports, protocol, bytes, and **ACCEPT/REJECT** — at the **VPC, subnet, or ENI** scope.\n\n**Why.** They are the primary tool for troubleshooting connectivity (did a SG or NACL drop the packet?) and for security/compliance auditing of network flows.\n\n**How.** Enable Flow Logs and publish to **CloudWatch Logs**, **S3**, or **Kinesis Data Firehose**. Query S3-delivered logs directly with **Athena** for cheap, ad-hoc analysis. Filter by `ACCEPT`, `REJECT`, or `ALL`.\n\n**Exam.** Flow Logs are **metadata only — no packet payload**. For payload capture use **Traffic Mirroring**. Flow Logs also do **not** record traffic to Amazon DNS, DHCP, instance metadata (`169.254.169.254`), or Windows license activation. CloudTrail is for API calls, not packet flows — don't confuse them."
+      "body": "**Что.** **VPC Flow Logs** фиксируют *метаданные* IP-трафика — IP источника/назначения, порты, протокол, байты и **ACCEPT/REJECT** — на уровне **VPC, subnet или ENI**.\n\n**Зачем.** Это основной инструмент для диагностики связности (отбросил ли пакет SG или NACL?) и для аудита сетевых потоков в целях безопасности/compliance.\n\n**Как.** Включите Flow Logs и публикуйте их в **CloudWatch Logs**, **S3** или **Kinesis Data Firehose**. Логи в S3 можно напрямую запрашивать через **Athena** — дёшево и для разового анализа. Фильтр: `ACCEPT`, `REJECT` или `ALL`.\n\n**Экзамен.** Flow Logs — **только метаданные, без payload пакетов**. Для захвата payload используйте **Traffic Mirroring**. Flow Logs также **не** записывают трафик к Amazon DNS, DHCP, instance metadata (`169.254.169.254`) и активации лицензий Windows. CloudTrail — для API-вызовов, а не для сетевых потоков, не путайте."
     }
   ],
   "labs": [
     {
       "id": "vpc-public-subnet",
-      "title": "Create a VPC with a public subnet + IGW + route",
-      "intro": "Build a `10.0.0.0/16` VPC, a public subnet in one AZ, attach an **Internet Gateway**, and add a default route so instances with public IPs can reach the internet.",
+      "title": "Создать VPC с публичной subnet + IGW + маршрутом",
+      "intro": "Создайте VPC `10.0.0.0/16`, публичную subnet в одной AZ, подключите **Internet Gateway** и добавьте маршрут по умолчанию, чтобы instances с публичными IP могли выходить в интернет.",
       "cli": "VPC_ID=$(aws ec2 create-vpc --cidr-block 10.0.0.0/16 --query Vpc.VpcId --output text)\naws ec2 create-tags --resources $VPC_ID --tags Key=Name,Value=lab-vpc\n\nSUBNET_ID=$(aws ec2 create-subnet --vpc-id $VPC_ID --cidr-block 10.0.1.0/24 --availability-zone eu-west-1a --query Subnet.SubnetId --output text)\naws ec2 modify-subnet-attribute --subnet-id $SUBNET_ID --map-public-ip-on-launch\n\nIGW_ID=$(aws ec2 create-internet-gateway --query InternetGateway.InternetGatewayId --output text)\naws ec2 attach-internet-gateway --internet-gateway-id $IGW_ID --vpc-id $VPC_ID\n\nRT_ID=$(aws ec2 create-route-table --vpc-id $VPC_ID --query RouteTable.RouteTableId --output text)\naws ec2 create-route --route-table-id $RT_ID --destination-cidr-block 0.0.0.0/0 --gateway-id $IGW_ID\naws ec2 associate-route-table --route-table-id $RT_ID --subnet-id $SUBNET_ID",
       "pulumi": "import pulumi_aws as aws\n\nvpc = aws.ec2.Vpc(\"lab-vpc\", cidr_block=\"10.0.0.0/16\", tags={\"Name\": \"lab-vpc\"})\n\nigw = aws.ec2.InternetGateway(\"lab-igw\", vpc_id=vpc.id)\n\nsubnet = aws.ec2.Subnet(\n    \"public-subnet\",\n    vpc_id=vpc.id,\n    cidr_block=\"10.0.1.0/24\",\n    availability_zone=\"eu-west-1a\",\n    map_public_ip_on_launch=True,\n)\n\nrt = aws.ec2.RouteTable(\n    \"public-rt\",\n    vpc_id=vpc.id,\n    routes=[aws.ec2.RouteTableRouteArgs(cidr_block=\"0.0.0.0/0\", gateway_id=igw.id)],\n)\n\naws.ec2.RouteTableAssociation(\"public-rta\", subnet_id=subnet.id, route_table_id=rt.id)",
-      "note": "Cleanup (reverse order): disassociate + delete the route table, detach + delete the IGW (`aws ec2 detach-internet-gateway` then `delete-internet-gateway`), delete the subnet, then delete the VPC. With Pulumi just run `pulumi destroy`. A VPC will refuse to delete while any dependent ENI, IGW, subnet, or route table still references it."
+      "note": "Очистка (в обратном порядке): отвяжите и удалите route table, отключите и удалите IGW (`aws ec2 detach-internet-gateway`, затем `delete-internet-gateway`), удалите subnet, затем удалите VPC. В Pulumi просто выполните `pulumi destroy`. VPC не удалится, пока на неё ссылается хоть один зависимый ENI, IGW, subnet или route table."
     },
     {
       "id": "vpc-s3-gateway-endpoint",
-      "title": "Create a Gateway VPC Endpoint for S3",
-      "intro": "Add a **Gateway endpoint** for S3 so private-subnet traffic to S3 stays on the AWS network and avoids the NAT Gateway (free + cheaper). The endpoint injects an S3 *prefix-list* route into the chosen route tables.",
+      "title": "Создать Gateway VPC Endpoint для S3",
+      "intro": "Добавьте **Gateway endpoint** для S3, чтобы трафик из приватной subnet в S3 оставался в сети AWS и не шёл через NAT Gateway (бесплатно + дешевле). Endpoint добавляет маршрут на *prefix-list* S3 в выбранные route tables.",
       "cli": "REGION=eu-west-1\naws ec2 create-vpc-endpoint \\\n  --vpc-id $VPC_ID \\\n  --vpc-endpoint-type Gateway \\\n  --service-name com.amazonaws.$REGION.s3 \\\n  --route-table-ids $RT_ID \\\n  --query VpcEndpoint.VpcEndpointId --output text",
       "pulumi": "import pulumi_aws as aws\n\nregion = aws.get_region().name\n\ns3_endpoint = aws.ec2.VpcEndpoint(\n    \"s3-gateway-endpoint\",\n    vpc_id=vpc.id,\n    service_name=f\"com.amazonaws.{region}.s3\",\n    vpc_endpoint_type=\"Gateway\",\n    route_table_ids=[rt.id],\n)",
-      "note": "Cleanup: `aws ec2 delete-vpc-endpoint --vpc-endpoint-ids <id>` (or `pulumi destroy`). Gateway endpoints incur no hourly charge, so leaving one briefly is harmless, but deleting it removes the auto-added route. Verify the route appears as a `pl-xxxx` prefix list target in the route table after creation."
+      "note": "Очистка: `aws ec2 delete-vpc-endpoint --vpc-endpoint-ids <id>` (или `pulumi destroy`). За Gateway endpoints нет почасовой платы, так что ненадолго оставить его безвредно, но удаление убирает автоматически добавленный маршрут. После создания проверьте, что в route table появился маршрут с target в виде prefix list `pl-xxxx`."
     }
   ],
   "questions": [
     {
       "id": "vpc-q1",
       "domain": 1,
-      "stem": "A security team must block a single abusive public IP address from reaching all instances in a subnet, while keeping all other traffic flowing. What should they configure?",
+      "stem": "Команде безопасности нужно заблокировать один вредоносный публичный IP-адрес для всех instances в subnet, не мешая остальному трафику. Что настроить?",
       "options": [
-        "An IGW filter rule for the IP",
-        "A Security Group inbound rule that denies the IP",
-        "A route table entry blackholing the IP",
-        "A Network ACL inbound deny rule for that IP with a lower rule number than the allow rule"
+        "Правило фильтрации IGW для этого IP",
+        "Входящее правило Security Group, запрещающее этот IP",
+        "Запись в route table, отправляющая этот IP в blackhole",
+        "Входящее deny-правило Network ACL для этого IP с номером меньше, чем у allow-правила"
       ],
       "answer": 3,
-      "explanation": "Correct: NACLs are stateless and support **deny** rules evaluated lowest-number-first, so a low-numbered deny for the IP blocks it before a broader allow. Security Groups support **allow rules only** — they cannot deny, so that option is impossible. Route tables route by destination CIDR and cannot selectively block a source IP for filtering purposes. There is no such thing as an 'IGW filter rule'."
+      "explanation": "Верно: NACL stateless и поддерживают **deny**-правила, которые оцениваются от меньшего номера к большему, поэтому deny с малым номером блокирует IP раньше более широкого allow. Security Groups поддерживают **только allow-правила** — запрещать они не умеют, так что этот вариант невозможен. Route tables маршрутизируют по CIDR назначения и не могут выборочно блокировать IP источника для фильтрации. «Правила фильтрации IGW» не существует."
     },
     {
       "id": "vpc-q2",
       "domain": 2,
-      "stem": "Instances in private subnets across three Availability Zones need outbound internet access for OS updates. The architect wants a managed, highly available solution. What is the best approach?",
+      "stem": "Instances в приватных subnets в трёх Availability Zones нуждаются в исходящем доступе в интернет для обновлений ОС. Архитектор хочет управляемое, высокодоступное решение. Какой подход лучший?",
       "options": [
-        "Deploy one NAT Gateway per AZ and point each subnet's route table to the NAT Gateway in its own AZ",
-        "Deploy a single NAT Gateway and route all three subnets to it",
-        "Attach an Internet Gateway and give each instance a public IP",
-        "Deploy a single NAT instance with source/destination check enabled"
+        "Развернуть по одному NAT Gateway в каждой AZ и направить route table каждой subnet на NAT Gateway в её собственной AZ",
+        "Развернуть один NAT Gateway и направить на него все три subnets",
+        "Подключить Internet Gateway и выдать каждому instance публичный IP",
+        "Развернуть один NAT instance с включённым source/destination check"
       ],
       "answer": 0,
-      "explanation": "Correct: NAT Gateways are AZ-scoped, so one per AZ with same-AZ routing avoids a cross-AZ single point of failure and data charges. A single NAT Gateway works but loses access if its AZ fails (not highly available). An IGW with public IPs would make the subnets public and expose instances to inbound traffic. A NAT instance with source/dest check *enabled* would actually drop the forwarded traffic, and a single one isn't HA."
+      "explanation": "Верно: NAT Gateways привязаны к AZ, поэтому по одному на AZ с маршрутизацией в пределах своей AZ исключает межзональную single point of failure и плату за межзональный трафик. Один NAT Gateway работает, но при отказе его AZ доступ пропадает (не highly available). IGW с публичными IP сделал бы subnets публичными и открыл instances для входящего трафика. NAT instance с *включённым* source/dest check на самом деле будет отбрасывать пересылаемый трафик, а один instance — это не HA."
     },
     {
       "id": "vpc-q3",
       "domain": 2,
-      "stem": "An application in a private subnet performs heavy data transfers to Amazon S3. The team wants to minimize cost and avoid sending this traffic through the NAT Gateway. What should they implement?",
+      "stem": "Приложение в приватной subnet передаёт в Amazon S3 большие объёмы данных. Команда хочет минимизировать затраты и не пускать этот трафик через NAT Gateway. Что внедрить?",
       "options": [
-        "A second NAT Gateway dedicated to S3 traffic",
-        "An Interface VPC endpoint (PrivateLink) for S3",
-        "A Gateway VPC endpoint for S3",
-        "VPC peering to an AWS-managed S3 VPC"
+        "Второй NAT Gateway, выделенный под трафик S3",
+        "Interface VPC endpoint (PrivateLink) для S3",
+        "Gateway VPC endpoint для S3",
+        "VPC peering с VPC под управлением AWS для S3"
       ],
       "answer": 2,
-      "explanation": "Correct: A **Gateway endpoint** for S3 is free, adds a prefix-list route, and keeps traffic off the NAT Gateway, cutting data-processing charges. An Interface endpoint for S3 exists but is billed hourly + per GB, so it's not the cheapest for high volume. Adding a NAT Gateway increases cost. You cannot peer to an AWS-managed service VPC for S3 access."
+      "explanation": "Верно: **Gateway endpoint** для S3 бесплатен, добавляет маршрут на prefix-list и уводит трафик с NAT Gateway, снижая плату за обработку данных. Interface endpoint для S3 существует, но тарифицируется почасово + за GB, поэтому при больших объёмах он не самый дешёвый. Дополнительный NAT Gateway увеличивает затраты. Установить peering с VPC сервиса AWS для доступа к S3 нельзя."
     },
     {
       "id": "vpc-q4",
       "domain": 2,
-      "stem": "A company has 12 VPCs that all must communicate with each other and with an on-premises data center. They want to avoid managing a full mesh of connections. Which service best fits?",
+      "stem": "У компании 12 VPC, которые должны связываться друг с другом и с дата-центром on-premises. Управлять полной сеткой соединений не хочется. Какой сервис подходит лучше всего?",
       "options": [
-        "VPC Peering between every pair of VPCs",
-        "An Internet Gateway shared across VPCs",
-        "A separate Site-to-Site VPN between each VPC",
-        "AWS Transit Gateway as a central hub"
+        "VPC Peering между каждой парой VPC",
+        "Internet Gateway, общий для нескольких VPC",
+        "Отдельный Site-to-Site VPN для каждой VPC",
+        "AWS Transit Gateway как центральный хаб"
       ],
       "answer": 3,
-      "explanation": "Correct: Transit Gateway provides transitive, hub-and-spoke routing for many VPCs plus on-prem (via VPN/DX) from a single attachment per VPC. Full-mesh VPC peering would need 66 connections and peering is non-transitive, so it scales poorly. An IGW cannot interconnect VPCs. Per-VPC VPNs don't solve VPC-to-VPC connectivity and multiply management overhead."
+      "explanation": "Верно: Transit Gateway даёт транзитивную маршрутизацию hub-and-spoke для множества VPC плюс on-prem (через VPN/DX) с одним attachment на VPC. Полная сетка VPC peering потребовала бы 66 соединений, а peering нетранзитивен, так что масштабируется плохо. IGW не может соединять VPC между собой. VPN на каждую VPC не решает связность VPC-to-VPC и умножает управленческие затраты."
     },
     {
       "id": "vpc-q5",
       "domain": 2,
-      "stem": "A business needs a dedicated, consistent-latency connection from its data center to AWS, but the data crossing the link must also be encrypted in transit. Which combination meets both requirements? (Choose two)",
+      "stem": "Бизнесу нужно выделенное соединение со стабильной задержкой от дата-центра до AWS, но данные, идущие по каналу, также должны шифроваться in transit. Какая комбинация удовлетворяет обоим требованиям? (Выберите два)",
       "options": [
-        "Use a Site-to-Site VPN over the public internet only",
-        "Rely on Direct Connect alone, which encrypts traffic by default",
-        "Provision AWS Direct Connect for the private dedicated link",
-        "Run a Site-to-Site IPsec VPN over the Direct Connect connection"
+        "Использовать только Site-to-Site VPN поверх публичного интернета",
+        "Полагаться только на Direct Connect, который шифрует трафик по умолчанию",
+        "Подключить AWS Direct Connect для приватного выделенного канала",
+        "Запустить Site-to-Site IPsec VPN поверх соединения Direct Connect"
       ],
       "answer": [
         2,
         3
       ],
-      "explanation": "Correct: Direct Connect supplies the dedicated low-latency private link, and layering an IPsec **VPN over DX** adds the required encryption. Direct Connect by itself is **not encrypted**, so relying on it alone fails the encryption requirement. A VPN over the public internet alone provides encryption but not the dedicated consistent-latency link the business needs."
+      "explanation": "Верно: Direct Connect даёт выделенный приватный канал с низкой задержкой, а IPsec **VPN поверх DX** добавляет требуемое шифрование. Direct Connect сам по себе **не шифруется**, поэтому одного его недостаточно для требования шифрования. VPN только поверх публичного интернета даёт шифрование, но не выделенный канал со стабильной задержкой, который нужен бизнесу."
     },
     {
       "id": "vpc-q6",
       "domain": 1,
-      "stem": "After deploying an instance, an engineer can SSH out but a web service running on it is unreachable from the internet even though the Security Group allows port 443 inbound. The subnet uses a custom Network ACL. What is the most likely cause?",
+      "stem": "После развёртывания instance инженер может подключаться по SSH наружу, но веб-сервис на нём недоступен из интернета, хотя Security Group разрешает входящий порт 443. Subnet использует кастомный Network ACL. Какова наиболее вероятная причина?",
       "options": [
-        "The Internet Gateway only supports stateful traffic",
-        "The route table is missing a route to the Security Group",
-        "The Security Group is blocking the return traffic",
-        "The Network ACL is missing an outbound allow rule for ephemeral ports (1024-65535)"
+        "Internet Gateway поддерживает только stateful-трафик",
+        "В route table нет маршрута к Security Group",
+        "Security Group блокирует ответный трафик",
+        "В Network ACL нет исходящего allow-правила для ephemeral ports (1024-65535)"
       ],
       "answer": 3,
-      "explanation": "Correct: NACLs are **stateless**, so the response from port 443 leaves via an **ephemeral port** that the outbound NACL must explicitly allow; missing that rule drops the reply. The Security Group is **stateful**, so it automatically allows return traffic and isn't the issue. IGWs don't have a stateful/stateless distinction. Route tables route to gateways/CIDRs, not to Security Groups, so that option is nonsensical."
+      "explanation": "Верно: NACL **stateless**, поэтому ответ с порта 443 уходит через **ephemeral port**, который исходящее правило NACL должно явно разрешать; без этого правила ответ отбрасывается. Security Group **stateful**, она автоматически разрешает ответный трафик и проблемой не является. У IGW нет разделения на stateful/stateless. Route tables маршрутизируют к шлюзам/CIDR, а не к Security Groups, так что этот вариант бессмыслен."
     },
     {
       "id": "vpc-q7",
       "domain": 1,
-      "stem": "A security audit requires capturing metadata about all accepted and rejected IP traffic for a specific subnet, to be analyzed later in Athena. Which solution should be used?",
+      "stem": "Аудит безопасности требует собирать метаданные обо всём принятом и отклонённом IP-трафике для конкретной subnet, чтобы потом анализировать их в Athena. Какое решение использовать?",
       "options": [
-        "Enable Security Group logging on each instance",
-        "Enable VPC Flow Logs on the subnet, delivering to an S3 bucket",
-        "Enable AWS CloudTrail data events for the VPC",
-        "Mirror full packet payloads to a third-party appliance"
+        "Включить логирование Security Group на каждом instance",
+        "Включить VPC Flow Logs на subnet с доставкой в S3 bucket",
+        "Включить data events AWS CloudTrail для VPC",
+        "Зеркалировать полные payload пакетов на сторонний appliance"
       ],
       "answer": 1,
-      "explanation": "Correct: VPC Flow Logs capture ACCEPT/REJECT traffic metadata at the subnet level and can deliver to S3, which Athena can query directly. CloudTrail logs API/management activity, not packet-level traffic. Full packet mirroring (Traffic Mirroring) captures payloads but is overkill when only metadata is needed and isn't S3/Athena native. There is no 'Security Group logging' feature."
+      "explanation": "Верно: VPC Flow Logs фиксируют метаданные трафика ACCEPT/REJECT на уровне subnet и могут доставлять их в S3, где Athena запрашивает их напрямую. CloudTrail логирует API/управляющие действия, а не трафик на уровне пакетов. Полное зеркалирование пакетов (Traffic Mirroring) захватывает payload, но избыточно, когда нужны только метаданные, и не интегрировано нативно с S3/Athena. Функции «логирование Security Group» не существует."
     },
     {
       "id": "vpc-q8",
       "domain": 2,
-      "stem": "Instances in a private subnet need outbound-only access to the internet over IPv6 (e.g., to fetch updates) without allowing any inbound connections. Which component provides this?",
+      "stem": "Instances в приватной subnet нуждаются только в исходящем доступе в интернет по IPv6 (например, для получения обновлений) без разрешения каких-либо входящих соединений. Какой компонент это обеспечивает?",
       "options": [
-        "An egress-only Internet Gateway",
-        "A NAT instance with an Elastic IP",
-        "A NAT Gateway",
-        "An Internet Gateway with a public IPv6 route"
+        "Egress-only Internet Gateway",
+        "NAT instance с Elastic IP",
+        "NAT Gateway",
+        "Internet Gateway с публичным IPv6-маршрутом"
       ],
       "answer": 0,
-      "explanation": "Correct: An **egress-only Internet Gateway** is the IPv6 equivalent of NAT, allowing stateful outbound IPv6 connections while blocking unsolicited inbound. NAT Gateways and NAT instances operate on **IPv4** only and do not handle IPv6. A plain IGW with an IPv6 route provides full bidirectional access, which would expose the instances to inbound traffic."
+      "explanation": "Верно: **egress-only Internet Gateway** — IPv6-аналог NAT: разрешает stateful исходящие IPv6-соединения и блокирует незапрошенные входящие. NAT Gateways и NAT instances работают только с **IPv4** и IPv6 не обрабатывают. Обычный IGW с IPv6-маршрутом даёт полный двусторонний доступ, что открыло бы instances для входящего трафика."
     }
   ]
 }

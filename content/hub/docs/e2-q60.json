@@ -1,0 +1,29 @@
+{
+  "id": "e2-q60",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "Route 53: latency/geoproximity routing + health checks с failover",
+  "tests": "Комбинация Route 53 для направления пользователей в ближайший здоровый регион и авто-переключения при отказе.",
+  "expected": "Latency-based или geoproximity routing records (ближайший регион) + Route 53 health checks с failover routing (переключение на вторичный регион). Триггеры: «nearest healthy regional endpoint», «automatically fail over to another region».",
+  "why_not": "Weighted со статическими весами не учитывает латентность/здоровье; private hosted zone — внутренний DNS; simple routing без health-based failover.",
+  "keywords": [
+    "Route 53",
+    "latency-based routing",
+    "geoproximity",
+    "health checks",
+    "failover routing",
+    "multi-region"
+  ],
+  "services": [
+    "route53",
+    "dr-strategies",
+    "ha"
+  ],
+  "topics": [
+    "edge-dns",
+    "ha-dr"
+  ],
+  "domain": 2
+}

@@ -1,0 +1,29 @@
+{
+  "id": "e3-q40",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "Redshift: колоночное хранилище данных для аналитики",
+  "tests": "Выбор managed data warehouse для сложных аналитических запросов над петабайтами.",
+  "expected": "Amazon Redshift — columnar storage, MPP, петабайтный масштаб. Триггеры: «data warehouse», «complex analytical queries», «petabytes», «columnar», «parallel processing».",
+  "why_not": "RDS PostgreSQL — OLTP; DynamoDB — key-value; ElastiCache — кэш.",
+  "keywords": [
+    "Redshift",
+    "data warehouse",
+    "columnar",
+    "MPP",
+    "petabytes",
+    "OLAP",
+    "аналитика"
+  ],
+  "services": [
+    "redshift",
+    "rds",
+    "dynamodb"
+  ],
+  "topics": [
+    "databases"
+  ],
+  "domain": 3
+}

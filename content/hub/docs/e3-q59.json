@@ -1,0 +1,27 @@
+{
+  "id": "e3-q59",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "CloudFormation: инфраструктура как код",
+  "tests": "Выбор сервиса для многократного развёртывания одинаковых сред из декларативных шаблонов под версионным контролем.",
+  "expected": "AWS CloudFormation — декларативные templates, stacks, повторяемость. Триггеры: «identical environments repeatedly», «version-controlled, declarative templates».",
+  "why_not": "Ручная настройка — ошибки и неповторяемость; Config оценивает compliance; CloudWatch — мониторинг.",
+  "keywords": [
+    "CloudFormation",
+    "infrastructure as code",
+    "templates",
+    "declarative",
+    "repeatable",
+    "одинаковые окружения"
+  ],
+  "services": [
+    "cloudformation",
+    "config"
+  ],
+  "topics": [
+    "architecture"
+  ],
+  "domain": 4
+}

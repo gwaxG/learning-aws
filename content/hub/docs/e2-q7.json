@@ -1,0 +1,31 @@
+{
+  "id": "e2-q7",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "CloudTrail: аудит API-вызовов + S3 Object Lock для неизменяемости логов",
+  "tests": "Комбинация для записи всех API-вызовов (management events) и их неизменяемого хранения для аудита.",
+  "expected": "CloudTrail trail → S3 bucket + S3 Object Lock в compliance mode (WORM на срок хранения). Триггеры: «record all API calls», «management events», «immutably», «compliance auditing».",
+  "why_not": "VPC Flow Logs — сетевой трафик, не API; GuardDuty — обнаружение угроз; CloudWatch Logs subscription filters — алертинг, не неизменяемое хранение.",
+  "keywords": [
+    "CloudTrail",
+    "management events",
+    "S3 Object Lock",
+    "compliance mode",
+    "immutable",
+    "WORM",
+    "audit"
+  ],
+  "services": [
+    "cloudtrail",
+    "s3-security",
+    "flow-logs",
+    "guardduty"
+  ],
+  "topics": [
+    "iam-security",
+    "monitoring"
+  ],
+  "domain": 1
+}

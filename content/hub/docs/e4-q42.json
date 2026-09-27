@@ -1,0 +1,30 @@
+{
+  "id": "e4-q42",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "Athena: serverless SQL по данным в S3",
+  "tests": "Выбор сервиса для ad hoc SQL-запросов по data lake в S3 без серверов с оплатой за запрос.",
+  "expected": "Amazon Athena — serverless, SQL прямо по S3, оплата за объём просканированных данных. Триггеры: «ad hoc SQL», «directly on S3», «without provisioning servers», «pay per query».",
+  "why_not": "Redshift provisioned и EMR — нужно управлять и платить за работающие кластеры; RDS — OLTP, не запросы по файлам S3.",
+  "keywords": [
+    "Athena",
+    "serverless",
+    "ad hoc SQL",
+    "data lake",
+    "pay per query",
+    "data scanned"
+  ],
+  "services": [
+    "athena",
+    "redshift",
+    "emr",
+    "s3"
+  ],
+  "topics": [
+    "storage",
+    "cost"
+  ],
+  "domain": 3
+}

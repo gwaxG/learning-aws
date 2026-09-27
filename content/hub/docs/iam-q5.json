@@ -1,0 +1,30 @@
+{
+  "id": "iam-q5",
+  "source": {
+    "type": "topic",
+    "ref": "iam-security"
+  },
+  "concept": "Secrets Manager: автоматическая ротация credentials БД",
+  "tests": "Выбор сервиса для хранения credentials БД со встроенной автоматической ротацией.",
+  "expected": "AWS Secrets Manager — нативная ротация (встроенные Lambda-ротаторы для RDS и др.). Триггеры: «rotate automatically every N days», «minimal custom code», «database credentials».",
+  "why_not": "Parameter Store standard без встроенной ротации; зашифрованный S3-объект и захардкоженные KMS-зашифрованные credentials требуют писать ротацию самому.",
+  "keywords": [
+    "Secrets Manager",
+    "automatic rotation",
+    "database credentials",
+    "RDS",
+    "Parameter Store",
+    "ротация каждые 30 дней",
+    "минимум кода"
+  ],
+  "services": [
+    "secrets-manager",
+    "systems-manager",
+    "rds"
+  ],
+  "topics": [
+    "iam-security",
+    "databases"
+  ],
+  "domain": 1
+}

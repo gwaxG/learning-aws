@@ -1,0 +1,28 @@
+{
+  "id": "e5-q63",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "Organizations: consolidated billing и общие скидки RI/Savings Plans",
+  "tests": "Какая функция объединяет счета аккаунтов и распределяет volume discounts и выгоды RI.",
+  "expected": "AWS Organizations consolidated billing — один payer account, агрегированные volume tiers, общие RI/Savings Plans. Триггеры: «consolidated bill», «share volume discounts and Reserved Instance benefits».",
+  "why_not": "Раздельные счета — нет агрегации; tagging — только аллокация затрат; Budgets в каждом аккаунте — алерты, не объединение счетов.",
+  "keywords": [
+    "consolidated billing",
+    "AWS Organizations",
+    "payer account",
+    "volume discounts",
+    "Reserved Instances",
+    "единый счёт"
+  ],
+  "services": [
+    "organizations",
+    "ec2-purchasing",
+    "budgets"
+  ],
+  "topics": [
+    "cost"
+  ],
+  "domain": 4
+}

@@ -1,0 +1,27 @@
+{
+  "id": "e2-q64",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "EBS: Provisioned IOPS SSD (io2) для БД с высокими стабильными IOPS",
+  "tests": "Выбор типа EBS для БД, требующей стабильно высоких IOPS, субмиллисекундной латентности и IOPS независимо от объёма.",
+  "expected": "Provisioned IOPS SSD io2 / io2 Block Express — IOPS задаются отдельно от размера, стабильная низкая латентность. Триггеры: «consistent high IOPS», «sub-millisecond», «provision IOPS independently of capacity», «database».",
+  "why_not": "gp2 — IOPS привязаны к размеру (3 IOPS/ГБ, burst); st1/sc1 — HDD для последовательного throughput и холодных данных.",
+  "keywords": [
+    "io2",
+    "io2 Block Express",
+    "Provisioned IOPS",
+    "gp2",
+    "st1",
+    "sc1",
+    "database"
+  ],
+  "services": [
+    "ebs"
+  ],
+  "topics": [
+    "storage"
+  ],
+  "domain": 3
+}

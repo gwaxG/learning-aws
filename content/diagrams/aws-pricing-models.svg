@@ -1,4 +1,4 @@
-<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AWS compute pricing models compared: On-Demand, Savings Plans, Reserved Instances, and Spot, with usage hints">
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Сравнение моделей оплаты вычислений AWS: On-Demand, Savings Plans, Reserved Instances и Spot, с подсказками по применению">
   <style>
     .axis { stroke: #25395a; stroke-width: 1.5; }
     .axlbl { fill: #8aa0bd; font: 11px system-ui, sans-serif; }
@@ -11,58 +11,58 @@
     .hintlbl { fill: #ff9900; font: 700 11px system-ui, sans-serif; text-anchor: middle; }
   </style>
 
-  <text x="380" y="24" class="ttl">AWS compute pricing: no commitment  →  deepest discount with commit or interruption</text>
+  <text x="380" y="24" class="ttl">Оплата вычислений AWS: без обязательств  →  макс. скидка за обязательства или прерывания</text>
 
   <line class="axis" x1="40" y1="248" x2="720" y2="248"/>
-  <text x="40" y="270" class="axlbl">pay-as-you-go · max flexibility</text>
-  <text x="560" y="270" class="axlbl">cheapest · trade-offs apply</text>
+  <text x="40" y="270" class="axlbl">pay-as-you-go · макс. гибкость</text>
+  <text x="560" y="270" class="axlbl">дешевле · с оговорками</text>
 
   <!-- On-Demand -->
   <rect class="box" x="40" y="60" width="150" height="170" rx="8"/>
   <text class="bt" x="115" y="86">On-Demand</text>
-  <text class="sub" x="115" y="106">no commitment</text>
-  <text class="sub" x="115" y="122">per-second billing</text>
-  <text class="sub" x="115" y="142">baseline price</text>
-  <text class="sub" x="115" y="172">use for spiky,</text>
-  <text class="sub" x="115" y="186">short, unpredictable</text>
-  <text class="sub" x="115" y="200">or first-time apps</text>
+  <text class="sub" x="115" y="106">без обязательств</text>
+  <text class="sub" x="115" y="122">посекундная оплата</text>
+  <text class="sub" x="115" y="142">базовая цена</text>
+  <text class="sub" x="115" y="172">для пиковых, коротких,</text>
+  <text class="sub" x="115" y="186">непредсказуемых</text>
+  <text class="sub" x="115" y="200">или новых приложений</text>
 
   <!-- Savings Plans -->
   <rect class="box" x="210" y="50" width="170" height="180" rx="8"/>
   <text class="bt" x="295" y="76">Savings Plans</text>
-  <text class="sub" x="295" y="96">commit $/hr 1y or 3y</text>
-  <text class="sub" x="295" y="112">up to ~72% off</text>
-  <text class="sub" x="295" y="134">Compute SP: any region/</text>
-  <text class="sub" x="295" y="148">family/OS · Fargate · Lambda</text>
-  <text class="sub" x="295" y="168">EC2 Instance SP: family+region</text>
-  <text class="sub" x="295" y="184">SageMaker SP: SM workloads</text>
-  <text class="sub" x="295" y="208">use for steady baseline</text>
+  <text class="sub" x="295" y="96">обязат. $/ч на 1 или 3 г.</text>
+  <text class="sub" x="295" y="112">скидка до ~72%</text>
+  <text class="sub" x="295" y="134">Compute SP: любой регион/</text>
+  <text class="sub" x="295" y="148">сем./ОС · Fargate · Lambda</text>
+  <text class="sub" x="295" y="168">EC2 Instance SP: сем.+регион</text>
+  <text class="sub" x="295" y="184">SageMaker SP: нагрузки SM</text>
+  <text class="sub" x="295" y="208">для стабильной базы</text>
 
   <!-- Reserved Instances -->
   <rect class="box" x="400" y="60" width="160" height="170" rx="8"/>
   <text class="bt" x="480" y="86">Reserved Instances</text>
-  <text class="sub" x="480" y="106">1y or 3y · per-family</text>
-  <text class="sub" x="480" y="122">Standard: max discount,</text>
-  <text class="sub" x="480" y="136">resellable on Marketplace</text>
-  <text class="sub" x="480" y="156">Convertible: swap family</text>
-  <text class="sub" x="480" y="170">/ OS / tenancy</text>
+  <text class="sub" x="480" y="106">1 или 3 г. · на семейство</text>
+  <text class="sub" x="480" y="122">Standard: макс. скидка,</text>
+  <text class="sub" x="480" y="136">перепродажа на Marketplace</text>
+  <text class="sub" x="480" y="156">Convertible: меняет</text>
+  <text class="sub" x="480" y="170">семейство / ОС / tenancy</text>
   <text class="sub" x="480" y="194">RDS/ElastiCache/OpenSearch</text>
-  <text class="sub" x="480" y="208">have their own RIs</text>
+  <text class="sub" x="480" y="208">имеют свои RI</text>
 
   <!-- Spot -->
   <rect class="spot" x="580" y="50" width="150" height="180" rx="8"/>
   <text class="bt" x="655" y="76">Spot</text>
-  <text class="sub" x="655" y="96">spare capacity</text>
-  <text class="sub" x="655" y="112">up to ~90% off</text>
-  <text class="sub" x="655" y="134">2-min interruption</text>
-  <text class="sub" x="655" y="148">warning</text>
-  <text class="sub" x="655" y="170">no SLA / can be</text>
-  <text class="sub" x="655" y="184">reclaimed any time</text>
+  <text class="sub" x="655" y="96">свободные мощности</text>
+  <text class="sub" x="655" y="112">скидка до ~90%</text>
+  <text class="sub" x="655" y="134">прерывание с</text>
+  <text class="sub" x="655" y="148">предупр. за 2 мин</text>
+  <text class="sub" x="655" y="170">нет SLA / могут</text>
+  <text class="sub" x="655" y="184">отобрать в любой момент</text>
   <text class="sub" x="655" y="208">batch · CI · stateless</text>
 
   <!-- Where-to-use hint band -->
   <rect class="hint" x="40" y="290" width="680" height="56" rx="8"/>
-  <text x="380" y="310" class="hintlbl">Where to use which</text>
-  <text x="380" y="328" class="sub">cover the steady 24/7 baseline with Compute Savings Plans · burst with On-Demand · run</text>
-  <text x="380" y="342" class="sub">fault-tolerant batch on Spot · use RIs for RDS/ElastiCache/OpenSearch or to resell unused commitment</text>
+  <text x="380" y="310" class="hintlbl">Что где использовать</text>
+  <text x="380" y="328" class="sub">стабильную базу 24/7 — Compute Savings Plans · всплески — On-Demand · отказоустойчивый</text>
+  <text x="380" y="342" class="sub">batch — на Spot · RI — для RDS/ElastiCache/OpenSearch или для перепродажи неиспользованного</text>
 </svg>

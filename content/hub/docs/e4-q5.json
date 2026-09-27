@@ -1,0 +1,30 @@
+{
+  "id": "e4-q5",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "IAM cross-account: AssumeRole или presigned URL для временного доступа партнёра",
+  "tests": "Временный доступ партнёра из другого аккаунта на загрузку в S3 без постоянных credentials.",
+  "expected": "(1) Cross-account IAM role, которую партнёр assume через sts:AssumeRole; (2) короткоживущие pre-signed URL для upload. Триггеры: «another AWS account», «temporary», «without standing IAM credentials».",
+  "why_not": "IAM user с access key — долгоживущий секрет; публичная запись в bucket — небезопасно.",
+  "keywords": [
+    "cross-account role",
+    "sts:AssumeRole",
+    "pre-signed URL",
+    "temporary access",
+    "partner",
+    "без постоянных credentials"
+  ],
+  "services": [
+    "sts",
+    "iam",
+    "s3-performance",
+    "s3-security"
+  ],
+  "topics": [
+    "iam-security",
+    "storage"
+  ],
+  "domain": 1
+}

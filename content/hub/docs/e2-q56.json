@@ -1,0 +1,29 @@
+{
+  "id": "e2-q56",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "RDS automated backups: point-in-time recovery до 35 дней",
+  "tests": "Какая возможность RDS даёт ежедневные автобэкапы до 35 дней и восстановление на любой момент.",
+  "expected": "RDS automated backups — ежедневный snapshot + transaction logs, PITR на любую секунду в пределах retention (до 35 дней). Триггеры: «daily automated backups», «35 days», «any point in time».",
+  "why_not": "Еженедельные ручные snapshots не дают произвольной точки; копирование файлов в S3 не поддерживается; read replicas — масштабирование/failover, не PITR.",
+  "keywords": [
+    "automated backups",
+    "point-in-time recovery",
+    "PITR",
+    "35 days",
+    "retention",
+    "transaction logs"
+  ],
+  "services": [
+    "rds",
+    "backup",
+    "read-replicas"
+  ],
+  "topics": [
+    "databases",
+    "ha-dr"
+  ],
+  "domain": 3
+}

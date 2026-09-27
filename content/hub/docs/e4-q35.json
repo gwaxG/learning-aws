@@ -1,0 +1,29 @@
+{
+  "id": "e4-q35",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "Global Accelerator: static anycast IP и быстрый regional failover",
+  "tests": "Выбор сервиса для глобального TCP-приложения со статическими anycast IP и мгновенным failover.",
+  "expected": "AWS Global Accelerator — static anycast IPs, трафик по backbone AWS к ближайшему здоровому regional endpoint, быстрый failover без зависимости от DNS TTL. Триггеры: «TCP», «static anycast IP», «instant failover», «nearest healthy Regional endpoint».",
+  "why_not": "CloudFront оптимизирует HTTP-контент; Route 53 failover зависит от DNS TTL; один ALB — региональный.",
+  "keywords": [
+    "Global Accelerator",
+    "static anycast IP",
+    "TCP/UDP",
+    "failover",
+    "AWS backbone",
+    "non-HTTP"
+  ],
+  "services": [
+    "global-accelerator",
+    "cloudfront",
+    "route53"
+  ],
+  "topics": [
+    "edge-dns",
+    "ha-dr"
+  ],
+  "domain": 2
+}

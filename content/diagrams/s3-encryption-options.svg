@@ -1,4 +1,4 @@
-<svg viewBox="0 0 760 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="S3 encryption options compared: SSE-S3, SSE-KMS, DSSE-KMS, SSE-C, and client-side encryption, highlighting CloudTrail audit and cross-account capability">
+<svg viewBox="0 0 760 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Сравнение вариантов шифрования S3: SSE-S3, SSE-KMS, DSSE-KMS, SSE-C и client-side, с акцентом на аудит в CloudTrail и cross-account доступ">
   <style>
     .box { fill: #1d3150; stroke: #4aa3ff; }
     .audit { fill: #1d3150; stroke: #ff9900; stroke-dasharray: 4 3; }
@@ -11,17 +11,17 @@
     .lk { stroke: #ff9900; stroke-dasharray: 4 3; fill: none; }
   </style>
 
-  <text x="380" y="26" class="ttl">S3 encryption options — who holds the key, who can audit?</text>
+  <text x="380" y="26" class="ttl">Шифрование S3 — у кого ключ, кто может аудировать?</text>
 
   <!-- SSE-S3 -->
   <rect class="box" x="30" y="60" width="135" height="170" rx="8"/>
   <text class="bt" x="97" y="86">SSE-S3</text>
   <text class="sub" x="97" y="106">AES-256</text>
-  <text class="sub" x="97" y="122">AWS-managed key</text>
-  <text class="sub" x="97" y="142">default · simplest</text>
-  <text class="sub" x="97" y="160">no per-call audit</text>
-  <text class="sub" x="97" y="178">no key-level ACL</text>
-  <text class="sub" x="97" y="208">header:</text>
+  <text class="sub" x="97" y="122">ключ управляет AWS</text>
+  <text class="sub" x="97" y="142">по умолч. · проще всего</text>
+  <text class="sub" x="97" y="160">нет аудита вызовов</text>
+  <text class="sub" x="97" y="178">нет ACL на ключ</text>
+  <text class="sub" x="97" y="208">заголовок:</text>
   <text class="sub" x="97" y="222">AES256</text>
 
   <!-- SSE-KMS (audit + cross-account) -->
@@ -29,51 +29,51 @@
   <text class="bt" x="252" y="86">SSE-KMS</text>
   <text class="sub" x="252" y="106">KMS CMK</text>
   <text class="sub" x="252" y="122">key policy + IAM</text>
-  <text class="sub" x="252" y="142">CloudTrail audit</text>
+  <text class="sub" x="252" y="142">аудит в CloudTrail</text>
   <text class="sub" x="252" y="158">cross-account grants</text>
-  <text class="sub" x="252" y="178">Bucket Keys cut cost</text>
-  <text class="sub" x="252" y="196">(KMS req quotas apply)</text>
-  <text class="tag" x="252" y="220">regulated default</text>
+  <text class="sub" x="252" y="178">Bucket Keys — дешевле</text>
+  <text class="sub" x="252" y="196">(действуют квоты KMS)</text>
+  <text class="tag" x="252" y="220">для регуляторики</text>
 
   <!-- DSSE-KMS -->
   <rect class="audit" x="340" y="60" width="135" height="170" rx="8"/>
   <text class="bt" x="407" y="86">DSSE-KMS</text>
-  <text class="sub" x="407" y="106">dual-layer KMS</text>
-  <text class="sub" x="407" y="122">two encrypts on server</text>
-  <text class="sub" x="407" y="142">CloudTrail audit</text>
+  <text class="sub" x="407" y="106">двухслойный KMS</text>
+  <text class="sub" x="407" y="122">2 шифрования на серв.</text>
+  <text class="sub" x="407" y="142">аудит в CloudTrail</text>
   <text class="sub" x="407" y="160">FIPS / NSA CNSSP</text>
-  <text class="sub" x="407" y="178">highest assurance</text>
+  <text class="sub" x="407" y="178">макс. гарантии</text>
   <text class="tag" x="407" y="208">defense-in-depth</text>
 
   <!-- SSE-C -->
   <rect class="box" x="490" y="60" width="125" height="170" rx="8"/>
   <text class="bt" x="552" y="86">SSE-C</text>
-  <text class="sub" x="552" y="106">customer-supplied key</text>
-  <text class="sub" x="552" y="122">sent every request</text>
-  <text class="sub" x="552" y="142">HTTPS required</text>
-  <text class="sub" x="552" y="160">AWS never stores key</text>
-  <text class="sub" x="552" y="178">no KMS audit</text>
-  <text class="sub" x="552" y="206">you manage rotation</text>
+  <text class="sub" x="552" y="106">ключ клиента</text>
+  <text class="sub" x="552" y="122">в каждом запросе</text>
+  <text class="sub" x="552" y="142">только HTTPS</text>
+  <text class="sub" x="552" y="160">AWS не хранит ключ</text>
+  <text class="sub" x="552" y="178">нет аудита KMS</text>
+  <text class="sub" x="552" y="206">ротация на вас</text>
 
   <!-- Client-side -->
   <rect class="client" x="630" y="60" width="100" height="170" rx="8"/>
   <text class="bt" x="680" y="86">Client-side</text>
-  <text class="sub" x="680" y="106">encrypt before</text>
-  <text class="sub" x="680" y="120">upload</text>
-  <text class="sub" x="680" y="142">KMS or local key</text>
-  <text class="sub" x="680" y="160">AWS sees only</text>
-  <text class="sub" x="680" y="174">ciphertext</text>
-  <text class="sub" x="680" y="208">most control</text>
+  <text class="sub" x="680" y="106">шифрование до</text>
+  <text class="sub" x="680" y="120">загрузки</text>
+  <text class="sub" x="680" y="142">KMS / лок. ключ</text>
+  <text class="sub" x="680" y="160">AWS видит лишь</text>
+  <text class="sub" x="680" y="174">шифротекст</text>
+  <text class="sub" x="680" y="208">макс. контроль</text>
 
   <!-- audit highlight bracket -->
   <path class="lk" d="M180 250 Q252 270 252 270 Q407 270 475 250"/>
-  <text class="tag" x="328" y="290">CloudTrail per-key audit + cross-account access</text>
+  <text class="tag" x="328" y="290">Аудит по ключу в CloudTrail + cross-account доступ</text>
 
   <!-- legend -->
   <rect x="30" y="305" width="14" height="10" class="box"/>
-  <text x="50" y="314" class="legend">server-side, AWS holds key</text>
+  <text x="50" y="314" class="legend">server-side, ключ у AWS</text>
   <rect x="240" y="305" width="14" height="10" class="audit"/>
-  <text x="260" y="314" class="legend">KMS-based: audit + access control</text>
+  <text x="260" y="314" class="legend">на базе KMS: аудит + контроль доступа</text>
   <rect x="520" y="305" width="14" height="10" class="client"/>
-  <text x="540" y="314" class="legend">key never reaches AWS</text>
+  <text x="540" y="314" class="legend">ключ не попадает в AWS</text>
 </svg>

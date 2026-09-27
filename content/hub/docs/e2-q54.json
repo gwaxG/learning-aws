@@ -1,0 +1,29 @@
+{
+  "id": "e2-q54",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "IAM: least privilege для execution role Lambda",
+  "tests": "Лучшая практика выдачи Lambda минимальных прав на логи и чтение одной таблицы DynamoDB.",
+  "expected": "Execution role с политикой, ограниченной logs:CreateLogStream/PutLogEvents на log group и dynamodb:GetItem/Query на ARN конкретной таблицы. Триггеры: «minimum permissions», «specific table», «best practice».",
+  "why_not": "AdministratorAccess и AmazonDynamoDBFullAccess — избыточно, нарушает least privilege; root-креды в коде — критический риск.",
+  "keywords": [
+    "least privilege",
+    "execution role",
+    "Lambda",
+    "resource ARN",
+    "CloudWatch Logs",
+    "DynamoDB"
+  ],
+  "services": [
+    "iam",
+    "lambda",
+    "dynamodb"
+  ],
+  "topics": [
+    "iam-security",
+    "serverless-containers"
+  ],
+  "domain": 1
+}

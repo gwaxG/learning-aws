@@ -1,0 +1,28 @@
+{
+  "id": "db-q2",
+  "source": {
+    "type": "topic",
+    "ref": "databases"
+  },
+  "concept": "RDS Read Replicas: разгрузка чтения с primary",
+  "tests": "Умение разгрузить CPU primary от отчётных SELECT-запросов.",
+  "expected": "Создать одну или несколько Read Replicas и направить отчёты на их endpoint. Триггеры: «CPU-bound из-за reporting SELECT», «offload read load».",
+  "why_not": "Multi-AZ standby не обслуживает чтение; backup retention и PITR — защита данных, не масштабирование чтения.",
+  "keywords": [
+    "Read Replicas",
+    "offload reads",
+    "reporting queries",
+    "replica endpoint",
+    "Multi-AZ standby",
+    "разгрузить чтение"
+  ],
+  "services": [
+    "read-replicas",
+    "rds",
+    "rds-multi-az"
+  ],
+  "topics": [
+    "databases"
+  ],
+  "domain": 3
+}

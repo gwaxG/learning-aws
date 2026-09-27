@@ -1,0 +1,30 @@
+{
+  "id": "e5-q26",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "ElastiCache: кэш частых запросов перед RDS (read-heavy)",
+  "tests": "Самый экономичный способ снизить задержку чтения RDS, когда данные часто перечитываются и допускается небольшая устарелость.",
+  "expected": "Добавить ElastiCache перед RDS для кэширования результатов частых запросов. Триггеры: «read-heavy», «frequently re-read», «tolerates slight staleness», «cost-effective».",
+  "why_not": "Самый крупный instance class — дорого; переход на DynamoDB — перепроектирование; Multi-AZ повышает доступность, а не производительность чтения.",
+  "keywords": [
+    "ElastiCache",
+    "caching",
+    "read-heavy",
+    "query results",
+    "допустима устарелость",
+    "read latency"
+  ],
+  "services": [
+    "elasticache",
+    "caching",
+    "rds",
+    "rds-multi-az"
+  ],
+  "topics": [
+    "databases",
+    "architecture"
+  ],
+  "domain": 2
+}

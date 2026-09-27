@@ -1,0 +1,29 @@
+{
+  "id": "e2-q10",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "S3 Lifecycle: каскад storage classes под паттерн доступа",
+  "tests": "Подбор цепочки lifecycle transitions под убывающую частоту доступа, требование мгновенного извлечения и долгий срок хранения.",
+  "expected": "Standard 30 дней → Standard-IA на год (мгновенный доступ) → Glacier Deep Archive до 7 лет. Триггеры: «immediately retrievable» ⇒ IA/Instant, «almost never accessed», «kept for 7 years» ⇒ Deep Archive.",
+  "why_not": "Glacier Flexible Retrieval через 30 дней ломает мгновенный доступ; удаление через год нарушает 7-летнее хранение; Intelligent-Tiering на 7 лет дороже Deep Archive для холодных данных.",
+  "keywords": [
+    "lifecycle",
+    "Standard-IA",
+    "Glacier Deep Archive",
+    "immediately retrievable",
+    "7 years",
+    "legal retention"
+  ],
+  "services": [
+    "s3-lifecycle",
+    "s3-storage-classes",
+    "glacier"
+  ],
+  "topics": [
+    "storage",
+    "cost"
+  ],
+  "domain": 3
+}

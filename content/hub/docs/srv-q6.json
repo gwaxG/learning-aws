@@ -1,0 +1,28 @@
+{
+  "id": "srv-q6",
+  "source": {
+    "type": "topic",
+    "ref": "serverless-containers"
+  },
+  "concept": "Lambda: reserved concurrency как ограничитель параллелизма",
+  "tests": "Различение reserved и provisioned concurrency: какой параметр ограничивает максимум одновременных выполнений.",
+  "expected": "Reserved concurrency — жёсткий потолок одновременных выполнений функции, защищает downstream RDS. Триггеры: «too many invocations at once», «limits how many concurrent executions», «downstream overwhelmed».",
+  "why_not": "Provisioned concurrency прогревает окружения, но не ограничивает максимум; memory size влияет на CPU и стоимость; visibility timeout SQS управляет повторной доставкой, а не параллелизмом.",
+  "keywords": [
+    "reserved concurrency",
+    "provisioned concurrency",
+    "concurrent executions",
+    "SQS event source mapping",
+    "throttling",
+    "ограничить параллелизм"
+  ],
+  "services": [
+    "lambda",
+    "sqs",
+    "rds"
+  ],
+  "topics": [
+    "serverless-containers"
+  ],
+  "domain": 3
+}

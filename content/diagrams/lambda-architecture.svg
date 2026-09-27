@@ -1,4 +1,4 @@
-<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lambda function architecture with event sources, concurrency controls, VPC ENI attachment, and downstream targets">
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Архитектура Lambda function: источники событий, управление concurrency, подключение к VPC через ENI и downstream-цели">
   <style>
     .ttl { fill: #ff9900; font: 700 13px system-ui, sans-serif; }
     .src { fill: #1d3150; stroke: #2ecc71; }
@@ -21,12 +21,12 @@
     </marker>
   </defs>
 
-  <text x="20" y="24" class="ttl">Event source  →  Lambda function  →  downstream target</text>
+  <text x="20" y="24" class="ttl">Источник событий  →  Lambda function  →  downstream-цель</text>
 
   <!-- Event sources column -->
-  <text x="90" y="50" class="lbl">Event sources</text>
+  <text x="90" y="50" class="lbl">Источники событий</text>
   <rect class="src" x="20" y="60" width="140" height="30" rx="6"/><text class="nodet" x="90" y="80">API Gateway</text>
-  <rect class="src" x="20" y="98" width="140" height="30" rx="6"/><text class="nodet" x="90" y="118">S3 (object created)</text>
+  <rect class="src" x="20" y="98" width="140" height="30" rx="6"/><text class="nodet" x="90" y="118">S3 (объект создан)</text>
   <rect class="src" x="20" y="136" width="140" height="30" rx="6"/><text class="nodet" x="90" y="156">EventBridge</text>
   <rect class="src" x="20" y="174" width="140" height="30" rx="6"/><text class="nodet" x="90" y="194">SQS (event source map)</text>
   <rect class="src" x="20" y="212" width="140" height="30" rx="6"/><text class="nodet" x="90" y="232">Kinesis / DDB Streams</text>
@@ -35,21 +35,21 @@
   <rect class="fn" x="280" y="100" width="200" height="100" rx="10"/>
   <text class="nodet" x="380" y="128">AWS Lambda</text>
   <text class="sub" x="380" y="146">handler(event, context)</text>
-  <text class="sub" x="380" y="164">max 15-min timeout</text>
-  <text class="sub" x="380" y="180">/tmp up to 10 GB ephemeral</text>
-  <text class="sub" x="380" y="195">128 MB – 10 GB memory</text>
+  <text class="sub" x="380" y="164">таймаут макс. 15 мин</text>
+  <text class="sub" x="380" y="180">/tmp до 10 ГБ, эфемерный</text>
+  <text class="sub" x="380" y="195">память 128 МБ – 10 ГБ</text>
 
   <!-- Concurrency callout -->
   <rect class="src" x="280" y="220" width="200" height="44" rx="6"/>
-  <text class="nodet" x="380" y="240">Concurrency controls</text>
-  <text class="sub" x="380" y="256">Reserved cap · Provisioned warm</text>
+  <text class="nodet" x="380" y="240">Управление concurrency</text>
+  <text class="sub" x="380" y="256">Reserved лимит · Provisioned тёплые</text>
 
   <!-- Downstream column -->
   <text x="630" y="50" class="lbl">Downstream</text>
   <rect class="dst" x="580" y="60" width="160" height="30" rx="6"/><text class="nodet" x="660" y="80">DynamoDB</text>
   <rect class="dst" x="580" y="98" width="160" height="30" rx="6"/><text class="nodet" x="660" y="118">S3</text>
   <rect class="dst" x="580" y="136" width="160" height="30" rx="6"/><text class="nodet" x="660" y="156">SNS / SQS</text>
-  <rect class="dst" x="580" y="174" width="160" height="30" rx="6"/><text class="nodet" x="660" y="194">RDS / external API</text>
+  <rect class="dst" x="580" y="174" width="160" height="30" rx="6"/><text class="nodet" x="660" y="194">RDS / внешний API</text>
 
   <!-- Arrows: sources -> lambda -->
   <path class="flow" d="M160,75 L280,130"/>
@@ -66,8 +66,8 @@
 
   <!-- VPC attachment box -->
   <rect class="vpc" x="280" y="285" width="320" height="60" rx="8"/>
-  <text x="294" y="302" class="lbl">VPC attachment</text>
-  <text x="294" y="320" class="note">Hyperplane ENI in private subnets → reach RDS / ElastiCache</text>
-  <text x="294" y="336" class="note">no public internet without NAT Gateway or VPC endpoints</text>
+  <text x="294" y="302" class="lbl">Подключение к VPC</text>
+  <text x="294" y="320" class="note">Hyperplane ENI в private subnet → RDS/ElastiCache</text>
+  <text x="294" y="336" class="note">без NAT Gateway или VPC endpoint нет интернета</text>
   <path class="vflow" d="M380,200 L380,285"/>
 </svg>

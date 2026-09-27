@@ -1,0 +1,30 @@
+{
+  "id": "sto-q3",
+  "source": {
+    "type": "topic",
+    "ref": "storage"
+  },
+  "concept": "EFS: общая POSIX-файловая система для многих Linux-инстансов в разных AZ",
+  "tests": "Выбор хранилища для одновременного доступа сотен Linux-инстансов из нескольких AZ к общим файлам.",
+  "expected": "Amazon EFS — managed multi-AZ NFS, монтируется многими Linux-инстансами одновременно, POSIX-семантика. Триггеры: «hundreds of Linux instances», «multiple AZs», «same files concurrently», «POSIX».",
+  "why_not": "EBS привязан к одной AZ и (кроме Multi-Attach io1/io2 в одной AZ) к одному инстансу; FSx for Windows — SMB для Windows; instance store эфемерный и локальный.",
+  "keywords": [
+    "EFS",
+    "NFS",
+    "POSIX",
+    "shared file system",
+    "multi-AZ",
+    "Linux",
+    "общий доступ к файлам"
+  ],
+  "services": [
+    "efs",
+    "ebs",
+    "fsx",
+    "instance-store"
+  ],
+  "topics": [
+    "storage"
+  ],
+  "domain": 3
+}

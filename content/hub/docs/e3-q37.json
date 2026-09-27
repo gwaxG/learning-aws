@@ -1,0 +1,28 @@
+{
+  "id": "e3-q37",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "S3 Event Notifications: запуск Lambda при загрузке объекта",
+  "tests": "Как запускать обработку файла сразу после загрузки в S3 без polling.",
+  "expected": "S3 event notification (s3:ObjectCreated:*) напрямую вызывает Lambda. Триггеры: «only after uploaded to S3», «no polling», «least overhead».",
+  "why_not": "Scheduled Lambda или cron на EC2 — polling, задержка и затраты; ручной вызов не масштабируется.",
+  "keywords": [
+    "S3 event notification",
+    "ObjectCreated",
+    "Lambda trigger",
+    "event-driven",
+    "no polling",
+    "без опроса"
+  ],
+  "services": [
+    "s3",
+    "lambda"
+  ],
+  "topics": [
+    "serverless-containers",
+    "storage"
+  ],
+  "domain": 2
+}

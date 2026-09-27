@@ -1,0 +1,28 @@
+{
+  "id": "e5-q57",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "CloudFormation: нативный infrastructure as code",
+  "tests": "Выбор нативного сервиса AWS для IaC с повторяемыми шаблонами под контролем версий.",
+  "expected": "AWS CloudFormation — декларативные шаблоны (stacks). Триггеры: «infrastructure as code», «repeatable, version-controlled templates», «native to AWS».",
+  "why_not": "Systems Manager Run Command — выполнение команд на инстансах; Trusted Advisor — рекомендации; CloudWatch — мониторинг.",
+  "keywords": [
+    "CloudFormation",
+    "infrastructure as code",
+    "IaC",
+    "templates",
+    "stacks",
+    "version control"
+  ],
+  "services": [
+    "cloudformation",
+    "systems-manager"
+  ],
+  "topics": [
+    "architecture",
+    "monitoring"
+  ],
+  "domain": 4
+}

@@ -12,6 +12,8 @@ async function getJSON(path) {
 export const loadManifest = () => getJSON("content/manifest.json");
 export const loadTopic = (slug) => getJSON(`content/topics/${slug}.json`);
 export const loadExam = (id) => getJSON(`content/exams/exam-${id}.json`);
+export const loadServices = () => getJSON("content/maps/services.json");
+export const loadHub = () => getJSON("content/hub/index.json");
 
 const svgCache = new Map();
 export async function loadDiagram(src) {

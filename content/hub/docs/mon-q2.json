@@ -1,0 +1,28 @@
+{
+  "id": "mon-q2",
+  "source": {
+    "type": "topic",
+    "ref": "monitoring"
+  },
+  "concept": "AWS Config: история конфигурации ресурса и compliance",
+  "tests": "Различение CloudTrail и Config: вопрос о состоянии ресурса во времени.",
+  "expected": "AWS Config — configuration timeline и оценка правил compliance; отвечает на «был ли bucket когда-либо публичным». Триггеры: «ever publicly accessible», «timeline of configuration changes».",
+  "why_not": "CloudTrail показывает API-вызовы, а не чистую хронологию состояния; Logs Insights запрашивает содержимое логов; EventBridge маршрутизирует события, не хранит историю.",
+  "keywords": [
+    "AWS Config",
+    "configuration timeline",
+    "compliance",
+    "configuration history",
+    "S3 public",
+    "история конфигурации"
+  ],
+  "services": [
+    "config",
+    "cloudtrail",
+    "s3-security"
+  ],
+  "topics": [
+    "monitoring"
+  ],
+  "domain": 2
+}

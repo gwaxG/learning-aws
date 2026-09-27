@@ -1,0 +1,29 @@
+{
+  "id": "arch-q2",
+  "source": {
+    "type": "topic",
+    "ref": "architecture"
+  },
+  "concept": "DynamoDB: hot partition из-за низкой кардинальности ключа",
+  "tests": "Диагностика throttling при достаточной суммарной ёмкости: перекос трафика на несколько партиций из-за неудачного partition key.",
+  "expected": "Причина — hot partition (ключ country_code с низкой кардинальностью); решение — ключ с высокой кардинальностью (user_id), при необходимости write sharding суффиксом. Триггеры: «throttling, хотя ёмкости хватает», «большая часть трафика из двух значений ключа».",
+  "why_not": "Увеличение RCU не помогает — узкое место одна партиция; GSI на том же перекошенном атрибуте сохраняет перекос; consistency чтения не связана с распределением по партициям.",
+  "keywords": [
+    "hot partition",
+    "partition key",
+    "cardinality",
+    "write sharding",
+    "throttling",
+    "ёмкости достаточно",
+    "перекос трафика"
+  ],
+  "services": [
+    "dynamodb",
+    "partitioning"
+  ],
+  "topics": [
+    "architecture",
+    "databases"
+  ],
+  "domain": 3
+}

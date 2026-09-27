@@ -1,0 +1,28 @@
+{
+  "id": "e5-q27",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "CloudFront: глобальная раздача статики из S3 origin",
+  "tests": "Как обеспечить низкую задержку и высокую доступность статического сайта для глобальных пользователей и защитить origin от перегрузки.",
+  "expected": "CloudFront с S3 origin — кэширование на edge locations, разгрузка origin. Триггеры: «globally distributed users», «static website», «low latency», «protection against origin overload».",
+  "why_not": "Раздача прямо из S3 — нет edge-кэша; один EC2 — не глобально и не HA; Route 53 latency routing на один сервер не сокращает задержку.",
+  "keywords": [
+    "CloudFront",
+    "S3 origin",
+    "edge locations",
+    "static website",
+    "кэширование",
+    "глобальные пользователи"
+  ],
+  "services": [
+    "cloudfront",
+    "s3",
+    "route53"
+  ],
+  "topics": [
+    "edge-dns"
+  ],
+  "domain": 2
+}

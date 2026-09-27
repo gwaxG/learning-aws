@@ -1,0 +1,29 @@
+{
+  "id": "e3-q33",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "Kinesis Data Streams: real-time поток с порядком и replay",
+  "tests": "Выбор сервиса для миллионов событий/сек с несколькими consumers, порядком по ключу и повторным чтением.",
+  "expected": "Kinesis Data Streams: shards, порядок по partition key, retention → replay, несколько consumers. Триггеры: «clickstream», «real time», «multiple consumers», «ordering per key», «replay».",
+  "why_not": "SQS standard — нет порядка и replay; SNS — pub/sub без хранения; Batch — пакетные вычисления.",
+  "keywords": [
+    "Kinesis Data Streams",
+    "shard",
+    "partition key",
+    "ordering",
+    "replay",
+    "clickstream",
+    "real-time"
+  ],
+  "services": [
+    "kinesis-data-streams",
+    "sqs",
+    "sns"
+  ],
+  "topics": [
+    "integration"
+  ],
+  "domain": 2
+}

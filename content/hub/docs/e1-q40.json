@@ -1,0 +1,28 @@
+{
+  "id": "e1-q40",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "Cognito identity pools: временные credentials для мобильных пользователей",
+  "tests": "Как выдать временные ограниченные AWS credentials пользователям мобильного приложения, вошедшим через social IdP, без встраивания ключей.",
+  "expected": "Amazon Cognito identity pools обменивают токены IdP на временные credentials через STS. Триггеры: «mobile app», «social identity provider», «temporary, limited-privilege credentials».",
+  "why_not": "IAM users с access keys — долгоживущие секреты в приложении; KMS grants — доступ к ключам; Directory Service — управляемые каталоги.",
+  "keywords": [
+    "Cognito",
+    "identity pools",
+    "STS",
+    "social identity provider",
+    "mobile",
+    "temporary credentials"
+  ],
+  "services": [
+    "cognito",
+    "sts",
+    "iam"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1
+}

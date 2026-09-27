@@ -1,0 +1,30 @@
+{
+  "id": "e2-q52",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "NAT Gateway: выход в интернет для Lambda в VPC",
+  "tests": "Как дать Lambda, подключённой к VPC, доступ к внешнему API в интернете.",
+  "expected": "Lambda в private subnets + маршрут 0.0.0.0/0 на NAT gateway в public subnet. ENI Lambda не получает public IP. Триггеры: «Lambda in a VPC», «call third-party API on the internet», «no internet access».",
+  "why_not": "Lambda в public subnet не получит public IP; IGW не прикрепить к функции; gateway endpoint — только для S3/DynamoDB.",
+  "keywords": [
+    "Lambda",
+    "VPC",
+    "NAT gateway",
+    "private subnet",
+    "third-party API",
+    "outbound internet"
+  ],
+  "services": [
+    "nat-gateway",
+    "lambda",
+    "subnets",
+    "vpc-endpoints"
+  ],
+  "topics": [
+    "vpc-networking",
+    "serverless-containers"
+  ],
+  "domain": 2
+}

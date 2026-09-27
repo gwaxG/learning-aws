@@ -1,0 +1,26 @@
+{
+  "id": "iam-q8",
+  "source": {
+    "type": "topic",
+    "ref": "iam-security"
+  },
+  "concept": "IAM: защита root user (MFA, без access keys)",
+  "tests": "Знание best practice обращения с root user аккаунта.",
+  "expected": "Включить MFA на root, удалить root access keys, повседневную работу вести через IAM roles/users с least privilege; root — только для редких задач. Триггеры: «root user», «least privilege», «after setting up the account».",
+  "why_not": "Root для ежедневной работы нарушает least privilege; root access keys (даже в Secrets Manager) — опасные долгоживущие credentials; root user удалить невозможно.",
+  "keywords": [
+    "root user",
+    "MFA",
+    "access keys",
+    "least privilege",
+    "IAM users",
+    "корневой пользователь"
+  ],
+  "services": [
+    "iam"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1
+}

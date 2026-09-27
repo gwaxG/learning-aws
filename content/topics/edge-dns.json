@@ -1,96 +1,96 @@
 {
   "slug": "edge-dns",
-  "title": "Content Delivery & DNS",
+  "title": "Доставка контента и DNS",
   "domains": [
     3
   ],
   "essentials": [
     {
-      "heading": "CloudFront fundamentals",
-      "body": "**What.** **CloudFront** is AWS's global **CDN** that caches HTTP/HTTPS content at 400+ **edge locations**. A *distribution* fronts one or more **origins**: **S3**, **ALB/EC2**, **MediaStore**, or any **custom HTTP origin**.\n\n**Why.** It cuts viewer latency, offloads requests from origins, and adds a security layer (TLS, WAF, geo-restriction) close to users.\n\n**How.** **Cache behaviors** map URL path patterns (e.g. `/images/*`) to an origin and policy. **Cache policies** and **origin request policies** control which headers/cookies/query strings become part of the cache key. **TTLs** (min/default/max) bound freshness; origins override with `Cache-Control`/`Expires`. **Origin groups** add origin failover.\n\n**Exam.** CloudFront is HTTP/HTTPS only and *caches* — contrast with **Global Accelerator** (TCP/UDP, anycast IPs, no caching). For HTTPS at the edge, the ACM certificate must live in **us-east-1**. Use **CloudFront Functions** for ultra-light viewer-request/response logic; **Lambda@Edge** for richer code and origin-side hooks.",
+      "heading": "Основы CloudFront",
+      "body": "**Что.** **CloudFront** — глобальная **CDN** от AWS, которая кэширует HTTP/HTTPS-контент в 400+ **edge locations**. *Distribution* стоит перед одним или несколькими **origins**: **S3**, **ALB/EC2**, **MediaStore** или любым **custom HTTP origin**.\n\n**Зачем.** Сокращает задержку для зрителей, снимает нагрузку с origins и добавляет слой безопасности (TLS, WAF, geo-restriction) рядом с пользователями.\n\n**Как.** **Cache behaviors** сопоставляют шаблоны URL-путей (например, `/images/*`) с origin и политикой. **Cache policies** и **origin request policies** определяют, какие заголовки/cookies/query strings входят в cache key. **TTL** (min/default/max) ограничивают свежесть; origins переопределяют их через `Cache-Control`/`Expires`. **Origin groups** добавляют origin failover.\n\n**Экзамен.** CloudFront работает только с HTTP/HTTPS и *кэширует* — в отличие от **Global Accelerator** (TCP/UDP, anycast IP, без кэширования). Для HTTPS на edge сертификат ACM должен находиться в **us-east-1**. Используйте **CloudFront Functions** для сверхлёгкой логики viewer-request/response, а **Lambda@Edge** — для более сложного кода и хуков на стороне origin.",
       "diagram": {
         "src": "cloudfront-flow.svg",
-        "caption": "Viewer request hits a CloudFront edge: cache hit returns immediately; cache miss fetches from S3 (locked down with OAC), ALB/EC2, or a custom HTTP origin."
+        "caption": "Запрос зрителя попадает на edge CloudFront: при cache hit ответ возвращается сразу; при cache miss контент забирается из S3 (закрытого через OAC), ALB/EC2 или custom HTTP origin."
       }
     },
     {
-      "heading": "CloudFront security",
-      "body": "**What.** A bundle of edge controls that protect content and origins: private origins, viewer authentication, country filtering, and DDoS/L7 protection.\n\n**Why.** It lets you serve private S3 content without making the bucket public and stops abuse at the edge before it reaches your origin.\n\n**How.** **Origin Access Control (OAC)** — the modern replacement for **OAI** — keeps S3 private and grants `s3:GetObject` only to the distribution via `AWS:SourceArn`. Serve over **HTTPS** with a cert from **ACM in us-east-1**. Gate private content with **signed URLs** (single file) or **signed cookies** (many files). **Geo-restriction** allow/deny by country. Attach **AWS WAF** for L7 rules; **Shield Standard** is always-on, **Shield Advanced** adds DDoS cost protection and a response team.\n\n**Exam.** OAC > OAI for new builds (supports SigV4, KMS-encrypted S3, all Regions). Signed URLs = one object; signed cookies = many objects/streams. Geo-restriction filters viewers, not Route 53 routes."
+      "heading": "Безопасность CloudFront",
+      "body": "**Что.** Набор средств на edge для защиты контента и origins: приватные origins, аутентификация зрителей, фильтрация по странам и защита от DDoS/L7-атак.\n\n**Зачем.** Позволяет отдавать приватный контент из S3, не делая bucket публичным, и останавливать злоупотребления на edge, до того как они дойдут до origin.\n\n**Как.** **Origin Access Control (OAC)** — современная замена **OAI** — держит S3 приватным и выдаёт `s3:GetObject` только distribution через `AWS:SourceArn`. Отдавайте контент по **HTTPS** с сертификатом из **ACM в us-east-1**. Закрывайте приватный контент через **signed URLs** (один файл) или **signed cookies** (много файлов). **Geo-restriction** разрешает/запрещает доступ по странам. Подключите **AWS WAF** для L7-правил; **Shield Standard** включён всегда, **Shield Advanced** добавляет защиту от расходов при DDoS и команду реагирования.\n\n**Экзамен.** Для новых решений OAC > OAI (поддерживает SigV4, S3 с шифрованием KMS, все Regions). Signed URLs — один объект; signed cookies — много объектов/потоков. Geo-restriction фильтрует зрителей, а не маршруты Route 53."
     },
     {
-      "heading": "Caching strategy & invalidation",
-      "body": "**What.** Techniques to maximize CloudFront **cache hit ratio** and to refresh stale objects when content changes.\n\n**Why.** Higher hit ratios cut origin load and latency; but stale cached content after a deploy hurts users.\n\n**How.** Tune the **cache key**: forward only the headers/cookies/query strings you must vary on via **cache policies** and **origin request policies**. Raise **TTLs** (`min`/`default`/`max`) for static assets; let origins override with `Cache-Control`. To purge before TTL expires, create an **invalidation** (e.g. `/*` or `/css/app.css`) — first 1,000 paths/month are free, then billed per path. Prefer **versioned filenames** (`app.v2.js`) so a new URL = a new cache key, no invalidation needed.\n\n**Exam.** Invalidations are the answer when you need *immediate* refresh of an existing path. Versioned objects are the durable best practice. Lower TTL helps freshness but costs origin hits and money."
+      "heading": "Стратегия кэширования и invalidation",
+      "body": "**Что.** Приёмы, позволяющие максимизировать **cache hit ratio** CloudFront и обновлять устаревшие объекты при изменении контента.\n\n**Зачем.** Высокий hit ratio снижает нагрузку на origin и задержку; но устаревший кэш после деплоя вредит пользователям.\n\n**Как.** Настройте **cache key**: через **cache policies** и **origin request policies** передавайте только те заголовки/cookies/query strings, по которым действительно нужно различать ответы. Увеличьте **TTL** (`min`/`default`/`max`) для статических ресурсов; пусть origins переопределяют их через `Cache-Control`. Чтобы очистить кэш до истечения TTL, создайте **invalidation** (например, `/*` или `/css/app.css`) — первые 1 000 путей в месяц бесплатны, дальше оплата за каждый путь. Лучше использовать **версионированные имена файлов** (`app.v2.js`): новый URL = новый cache key, invalidation не нужна.\n\n**Экзамен.** Invalidation — правильный ответ, когда нужно *немедленно* обновить существующий путь. Версионированные объекты — долгосрочная best practice. Меньший TTL улучшает свежесть, но стоит обращений к origin и денег."
     },
     {
-      "heading": "Route 53 hosted zones & record types",
-      "body": "**What.** A **hosted zone** is a container for DNS records of a domain. **Public** zones answer internet queries; **private** zones answer inside associated VPCs only.\n\n**Why.** Hosted zones are how Route 53 publishes your DNS; choosing the right record type is what lets domains apex-point at AWS resources.\n\n**How.** Key types: **A** (name -> IPv4), **AAAA** (name -> IPv6), **CNAME** (name -> another name, **not allowed at the zone apex/root**), and **Alias** (Route 53-specific, points at CloudFront, ALB, S3 website, API Gateway, another Route 53 record, etc.). Alias records work at the apex, are **free to query**, and auto-track the target's IPs.\n\n**Exam.** Classic trap: pointing `example.com` (the apex) at CloudFront/ALB with a **CNAME** — illegal; you must use an **Alias A** record. Alias queries are free; CNAME queries are billed. Private zones need DNS hostnames/resolution enabled on the VPC."
+      "heading": "Hosted zones и типы записей Route 53",
+      "body": "**Что.** **Hosted zone** — контейнер DNS-записей домена. **Public** зоны отвечают на запросы из интернета; **private** зоны — только внутри связанных VPC.\n\n**Зачем.** Через hosted zones Route 53 публикует ваш DNS; правильный тип записи позволяет направить apex домена на ресурсы AWS.\n\n**Как.** Основные типы: **A** (имя -> IPv4), **AAAA** (имя -> IPv6), **CNAME** (имя -> другое имя, **нельзя использовать на apex/корне зоны**) и **Alias** (специфичен для Route 53, указывает на CloudFront, ALB, S3 website, API Gateway, другую запись Route 53 и т.д.). Alias-записи работают на apex, **запросы к ним бесплатны**, и они автоматически отслеживают IP цели.\n\n**Экзамен.** Классическая ловушка: направить `example.com` (apex) на CloudFront/ALB через **CNAME** — так нельзя; нужна запись **Alias A**. Запросы к Alias бесплатны, к CNAME — платные. Для private зон в VPC должны быть включены DNS hostnames/resolution."
     },
     {
-      "heading": "Route 53 routing policies",
-      "body": "**What.** Route 53 picks which record(s) to return based on a **routing policy** attached to records sharing a name and type.\n\n**Why.** Different traffic-steering goals — performance, splits, regional HA, localization — need different selection logic.\n\n**How.** **Simple** — one record, no health checks. **Weighted** — split by weights (canary, A/B). **Latency-based** — route to the Region with lowest measured latency. **Failover** — active/passive using a health check (`PRIMARY` -> `SECONDARY`). **Geolocation** — route by user's continent/country (localization, licensing). **Geoproximity** — by geographic distance with adjustable *bias* (Traffic Flow only). **Multivalue answer** — up to 8 healthy records for simple client-side load balancing.\n\n**Exam.** Watch the stem: \"lowest latency\" -> Latency; \"canary/percentages\" -> Weighted; \"country/compliance\" -> Geolocation; \"active/passive HA\" -> Failover + health check; Multivalue is **not** a substitute for an **ELB**.",
+      "heading": "Routing policies в Route 53",
+      "body": "**Что.** Route 53 выбирает, какие записи вернуть, на основе **routing policy**, привязанной к записям с одинаковыми именем и типом.\n\n**Зачем.** Разные цели управления трафиком — производительность, разделение, региональная HA, локализация — требуют разной логики выбора.\n\n**Как.** **Simple** — одна запись, без health checks. **Weighted** — разделение по весам (canary, A/B). **Latency-based** — маршрут в Region с наименьшей измеренной задержкой. **Failover** — active/passive с health check (`PRIMARY` -> `SECONDARY`). **Geolocation** — маршрут по континенту/стране пользователя (локализация, лицензирование). **Geoproximity** — по географическому расстоянию с настраиваемым *bias* (только Traffic Flow). **Multivalue answer** — до 8 здоровых записей для простой балансировки на стороне клиента.\n\n**Экзамен.** Смотрите на условие: «lowest latency» -> Latency; «canary/проценты» -> Weighted; «страна/compliance» -> Geolocation; «active/passive HA» -> Failover + health check; Multivalue — **не** замена **ELB**.",
       "diagram": {
         "src": "route53-routing-policies.svg",
-        "caption": "Route 53's six routing policies at a glance — pick by use case: performance (Latency), splits (Weighted), HA (Failover), localization (Geolocation), or simple client-side LB (Multivalue)."
+        "caption": "Шесть routing policies Route 53 с первого взгляда — выбирайте по сценарию: производительность (Latency), разделение трафика (Weighted), HA (Failover), локализация (Geolocation) или простая балансировка на клиенте (Multivalue)."
       }
     },
     {
-      "heading": "Route 53 health checks & DNS failover",
-      "body": "**What.** **Health checks** monitor endpoints or alarms and tell Route 53 which records are healthy enough to return in DNS answers.\n\n**Why.** They turn DNS into a high-availability mechanism: unhealthy targets simply disappear from answers, and failover policies promote a standby.\n\n**How.** Three flavors: **endpoint** checks (HTTP/HTTPS/TCP), **calculated** (combine other health checks with AND/OR/NOT), and **CloudWatch alarm** checks. Associate a check with a record; pair with **Failover** policy for `PRIMARY` -> `SECONDARY`. Use a **low TTL** (e.g. `60s`) on failover records so resolvers pick up the change quickly. Health checks are global and outside any single Region.\n\n**Exam.** \"Automatic DNS failover\" -> failover routing **plus** a health check on the primary. CloudFront origin failover is a different feature (origin group, not DNS). HTTPS checks need a fully qualified domain; private endpoints need CloudWatch-alarm checks."
+      "heading": "Health checks и DNS failover в Route 53",
+      "body": "**Что.** **Health checks** отслеживают endpoints или alarms и сообщают Route 53, какие записи достаточно здоровы, чтобы возвращать их в DNS-ответах.\n\n**Зачем.** Они превращают DNS в механизм высокой доступности: нездоровые цели просто исчезают из ответов, а failover policies переключают на резерв.\n\n**Как.** Три вида: проверки **endpoint** (HTTP/HTTPS/TCP), **calculated** (комбинируют другие health checks через AND/OR/NOT) и проверки по **CloudWatch alarm**. Привяжите проверку к записи; в паре с политикой **Failover** получаете `PRIMARY` -> `SECONDARY`. Ставьте на failover-записи **низкий TTL** (например, `60s`), чтобы резолверы быстро подхватывали изменения. Health checks глобальны и не привязаны к конкретному Region.\n\n**Экзамен.** «Автоматический DNS failover» -> failover routing **плюс** health check на primary. Origin failover в CloudFront — другая функция (origin group, а не DNS). HTTPS-проверкам нужно полное доменное имя; для приватных endpoints нужны проверки по CloudWatch alarm."
     },
     {
-      "heading": "Global Accelerator vs CloudFront",
-      "body": "**What.** Two edge services with different jobs. **CloudFront** is an HTTP/HTTPS **CDN with caching**. **AWS Global Accelerator** is a network accelerator with **2 static anycast IPs** that route any TCP/UDP traffic over the AWS backbone to the nearest healthy endpoint.\n\n**Why.** Cacheable web content benefits from CDN edge caching; non-HTTP workloads and apps that need fixed IPs or sub-second regional failover need Global Accelerator.\n\n**How.** Global Accelerator targets **ALB/NLB/EC2/EIP**, gives **instant regional failover** (no DNS/TTL delay), and doesn't cache. CloudFront caches at 400+ POPs, supports **Functions** and **Lambda@Edge**, and integrates with WAF/Shield.\n\n**Exam.** Triggers: UDP/gaming/VoIP/IoT, \"static IPs to allow-list\", \"fastest failover between Regions\" -> **Global Accelerator**. \"Cache static/dynamic web content at the edge\", signed URLs, geo-restriction -> **CloudFront**. They can be combined, but rarely appear together in answer choices."
+      "heading": "Global Accelerator и CloudFront",
+      "body": "**Что.** Два edge-сервиса с разными задачами. **CloudFront** — HTTP/HTTPS **CDN с кэшированием**. **AWS Global Accelerator** — сетевой ускоритель с **2 статическими anycast IP**, который направляет любой TCP/UDP-трафик по магистрали AWS к ближайшему здоровому endpoint.\n\n**Зачем.** Кэшируемому веб-контенту помогает кэширование на edge CDN; не-HTTP нагрузкам и приложениям, которым нужны фиксированные IP или региональный failover менее чем за секунду, нужен Global Accelerator.\n\n**Как.** Global Accelerator работает с **ALB/NLB/EC2/EIP**, даёт **мгновенный региональный failover** (без задержек DNS/TTL) и ничего не кэширует. CloudFront кэширует в 400+ POP, поддерживает **Functions** и **Lambda@Edge** и интегрируется с WAF/Shield.\n\n**Экзамен.** Триггеры: UDP/игры/VoIP/IoT, «статические IP для allow-list», «самый быстрый failover между Regions» -> **Global Accelerator**. «Кэшировать статический/динамический веб-контент на edge», signed URLs, geo-restriction -> **CloudFront**. Их можно комбинировать, но вместе в вариантах ответа они встречаются редко."
     }
   ],
   "labs": [
     {
       "id": "edge-s3-oac",
-      "title": "Private S3 origin behind CloudFront with OAC",
-      "intro": "Create a CloudFront distribution that serves a **private** S3 bucket via **Origin Access Control**, so objects are reachable only through CloudFront over HTTPS.",
+      "title": "Приватный S3 origin за CloudFront с OAC",
+      "intro": "Создайте CloudFront distribution, которая отдаёт **приватный** S3 bucket через **Origin Access Control**, чтобы объекты были доступны только через CloudFront по HTTPS.",
       "cli": "# Create an Origin Access Control\naws cloudfront create-origin-access-control \\\n  --origin-access-control-config Name=oac-mysite,SigningProtocol=sigv4,SigningBehavior=always,OriginAccessControlOriginType=s3\n\n# Create the distribution (config JSON references the S3 origin + OAC id)\naws cloudfront create-distribution --distribution-config file://dist-config.json\n\n# Allow the distribution to read the bucket (replace IDs)\naws s3api put-bucket-policy --bucket my-site-bucket --policy '{\n  \"Version\":\"2012-10-17\",\n  \"Statement\":[{\n    \"Sid\":\"AllowCloudFrontOAC\",\n    \"Effect\":\"Allow\",\n    \"Principal\":{\"Service\":\"cloudfront.amazonaws.com\"},\n    \"Action\":\"s3:GetObject\",\n    \"Resource\":\"arn:aws:s3:::my-site-bucket/*\",\n    \"Condition\":{\"StringEquals\":{\"AWS:SourceArn\":\"arn:aws:cloudfront::111122223333:distribution/EXXXXXXXXXXXX\"}}\n  }]\n}'",
       "pulumi": "import pulumi\nimport pulumi_aws as aws\n\nbucket = aws.s3.BucketV2(\"site\")\n\noac = aws.cloudfront.OriginAccessControl(\n    \"oac\",\n    origin_access_control_origin_type=\"s3\",\n    signing_behavior=\"always\",\n    signing_protocol=\"sigv4\",\n)\n\ncdn = aws.cloudfront.Distribution(\n    \"cdn\",\n    enabled=True,\n    default_root_object=\"index.html\",\n    origins=[aws.cloudfront.DistributionOriginArgs(\n        origin_id=\"s3-origin\",\n        domain_name=bucket.bucket_regional_domain_name,\n        origin_access_control_id=oac.id,\n    )],\n    default_cache_behavior=aws.cloudfront.DistributionDefaultCacheBehaviorArgs(\n        target_origin_id=\"s3-origin\",\n        viewer_protocol_policy=\"redirect-to-https\",\n        allowed_methods=[\"GET\", \"HEAD\"],\n        cached_methods=[\"GET\", \"HEAD\"],\n        # AWS managed CachingOptimized policy\n        cache_policy_id=\"658327ea-f89d-4fab-a63d-7e88639e58f6\",\n    ),\n    restrictions=aws.cloudfront.DistributionRestrictionsArgs(\n        geo_restriction=aws.cloudfront.DistributionRestrictionsGeoRestrictionArgs(\n            restriction_type=\"none\",\n        ),\n    ),\n    viewer_certificate=aws.cloudfront.DistributionViewerCertificateArgs(\n        cloudfront_default_certificate=True,\n    ),\n)\n\naws.s3.BucketPolicy(\n    \"site-policy\",\n    bucket=bucket.id,\n    policy=pulumi.Output.all(bucket.arn, cdn.arn).apply(lambda a: f'''{{\n      \"Version\":\"2012-10-17\",\n      \"Statement\":[{{\n        \"Effect\":\"Allow\",\n        \"Principal\":{{\"Service\":\"cloudfront.amazonaws.com\"}},\n        \"Action\":\"s3:GetObject\",\n        \"Resource\":\"{a[0]}/*\",\n        \"Condition\":{{\"StringEquals\":{{\"AWS:SourceArn\":\"{a[1]}\"}}}}\n      }}]\n    }}'''),\n)\n\npulumi.export(\"cdn_domain\", cdn.domain_name)",
-      "note": "**Cleanup:** `pulumi destroy`, or with the CLI disable then delete the distribution (`update-distribution` with Enabled=false, wait for Deployed, then `delete-distribution`), delete the OAC, and empty/delete the bucket. Distribution disable/delete can take ~15 min to propagate."
+      "note": "**Очистка:** `pulumi destroy` или через CLI: отключите, затем удалите distribution (`update-distribution` с Enabled=false, дождитесь статуса Deployed, затем `delete-distribution`), удалите OAC и очистите/удалите bucket. Отключение/удаление distribution может распространяться ~15 минут."
     },
     {
       "id": "edge-r53-failover",
-      "title": "Route 53 failover with health checks",
-      "intro": "Build **active/passive DNS failover**: a health-checked **primary** record and a **secondary** that takes over when the primary is unhealthy.",
+      "title": "Failover в Route 53 с health checks",
+      "intro": "Настройте **active/passive DNS failover**: запись **primary** с health check и запись **secondary**, которая берёт трафик на себя, когда primary нездоров.",
       "cli": "# Health check on the primary endpoint\naws route53 create-health-check \\\n  --caller-reference hc-primary-$(date +%s) \\\n  --health-check-config Type=HTTPS,FullyQualifiedDomainName=primary.example.com,Port=443,ResourcePath=/health,RequestInterval=30,FailureThreshold=3\n\n# Primary A/Alias record (PRIMARY, references the health check)\naws route53 change-resource-record-sets --hosted-zone-id Z123456ABCDEFG --change-batch '{\n  \"Changes\":[{\"Action\":\"UPSERT\",\"ResourceRecordSet\":{\n    \"Name\":\"app.example.com\",\"Type\":\"A\",\"TTL\":60,\n    \"SetIdentifier\":\"primary\",\"Failover\":\"PRIMARY\",\n    \"HealthCheckId\":\"abcd-1234\",\n    \"ResourceRecords\":[{\"Value\":\"203.0.113.10\"}]\n  }}]}'\n\n# Secondary record (SECONDARY)\naws route53 change-resource-record-sets --hosted-zone-id Z123456ABCDEFG --change-batch '{\n  \"Changes\":[{\"Action\":\"UPSERT\",\"ResourceRecordSet\":{\n    \"Name\":\"app.example.com\",\"Type\":\"A\",\"TTL\":60,\n    \"SetIdentifier\":\"secondary\",\"Failover\":\"SECONDARY\",\n    \"ResourceRecords\":[{\"Value\":\"198.51.100.20\"}]\n  }}]}'",
       "pulumi": "import pulumi_aws as aws\n\nzone = aws.route53.Zone(\"zone\", name=\"example.com\")\n\nhc = aws.route53.HealthCheck(\n    \"primary-hc\",\n    type=\"HTTPS\",\n    fqdn=\"primary.example.com\",\n    port=443,\n    resource_path=\"/health\",\n    request_interval=30,\n    failure_threshold=3,\n)\n\nprimary = aws.route53.Record(\n    \"primary\",\n    zone_id=zone.zone_id,\n    name=\"app.example.com\",\n    type=\"A\",\n    ttl=60,\n    set_identifier=\"primary\",\n    records=[\"203.0.113.10\"],\n    health_check_id=hc.id,\n    failover_routing_policies=[\n        aws.route53.RecordFailoverRoutingPolicyArgs(type=\"PRIMARY\"),\n    ],\n)\n\nsecondary = aws.route53.Record(\n    \"secondary\",\n    zone_id=zone.zone_id,\n    name=\"app.example.com\",\n    type=\"A\",\n    ttl=60,\n    set_identifier=\"secondary\",\n    records=[\"198.51.100.20\"],\n    failover_routing_policies=[\n        aws.route53.RecordFailoverRoutingPolicyArgs(type=\"SECONDARY\"),\n    ],\n)",
-      "note": "**Cleanup:** `pulumi destroy`, or with the CLI delete both record sets (`change-resource-record-sets` with Action=DELETE — values must match exactly) before deleting the health check (`delete-health-check`) and the hosted zone. Hosted zones cannot be deleted until all non-default records are gone."
+      "note": "**Очистка:** `pulumi destroy` или через CLI удалите обе записи (`change-resource-record-sets` с Action=DELETE — значения должны совпадать точно), затем health check (`delete-health-check`) и hosted zone. Hosted zone нельзя удалить, пока в ней остаются записи, кроме созданных по умолчанию."
     }
   ],
   "questions": [
     {
       "id": "edge-q1",
       "domain": 3,
-      "stem": "A company hosts a static website in an S3 bucket and serves it through CloudFront. Security requires that the bucket is not publicly accessible and that objects can be reached only through CloudFront. What should the architect configure?",
+      "stem": "Компания размещает статический сайт в S3 bucket и отдаёт его через CloudFront. Требование безопасности: bucket не должен быть публично доступен, а объекты должны быть доступны только через CloudFront. Что должен настроить архитектор?",
       "options": [
-        "Make the bucket public and rely on CloudFront geo-restriction",
-        "Use Origin Access Control (OAC) and a bucket policy that allows only the distribution",
-        "Place an internet-facing ALB in front of the bucket",
-        "Enable S3 Transfer Acceleration on the bucket"
+        "Сделать bucket публичным и полагаться на geo-restriction CloudFront",
+        "Использовать Origin Access Control (OAC) и bucket policy, разрешающую доступ только distribution",
+        "Поставить перед bucket internet-facing ALB",
+        "Включить S3 Transfer Acceleration для bucket"
       ],
       "answer": 1,
-      "explanation": "**Correct: OAC + restrictive bucket policy.** OAC (the modern successor to OAI) lets CloudFront sign requests to a private bucket, and the bucket policy grants `s3:GetObject` only to that distribution via `AWS:SourceArn`. A public bucket (option 1) defeats the requirement; geo-restriction only filters by country. Transfer Acceleration speeds uploads/downloads but does not enforce private access. An ALB cannot front an S3 bucket as an origin for static hosting in this way."
+      "explanation": "**Верно: OAC + строгая bucket policy.** OAC (современный преемник OAI) позволяет CloudFront подписывать запросы к приватному bucket, а bucket policy выдаёт `s3:GetObject` только этой distribution через `AWS:SourceArn`. Публичный bucket (вариант 1) противоречит требованию; geo-restriction лишь фильтрует по странам. Transfer Acceleration ускоряет загрузку/скачивание, но не обеспечивает приватный доступ. ALB не может таким образом выступать перед S3 bucket как origin для статического хостинга."
     },
     {
       "id": "edge-q2",
       "domain": 3,
-      "stem": "A global multiplayer game uses UDP and needs the lowest possible latency plus near-instant regional failover with a fixed set of IP addresses that players' firewalls can allow-list. Which service best fits?",
+      "stem": "Глобальная многопользовательская игра использует UDP, и ей нужна минимально возможная задержка плюс почти мгновенный региональный failover с фиксированным набором IP-адресов, которые игроки могут внести в allow-list своих firewall. Какой сервис подходит лучше всего?",
       "options": [
         "Amazon API Gateway",
         "AWS Global Accelerator",
         "Amazon CloudFront",
-        "Amazon Route 53 latency-based routing"
+        "Latency-based routing в Amazon Route 53"
       ],
       "answer": 1,
-      "explanation": "**Correct: Global Accelerator.** It provides 2 static anycast IPs, supports TCP/UDP (non-HTTP), routes over the AWS backbone, and fails over between Regions without DNS TTL caching delays. CloudFront is HTTP/HTTPS caching only and does not give fixed allow-listable IPs for UDP. Route 53 latency routing relies on DNS and suffers TTL-based failover lag. API Gateway is for HTTP/REST/WebSocket APIs, not raw UDP."
+      "explanation": "**Верно: Global Accelerator.** Он даёт 2 статических anycast IP, поддерживает TCP/UDP (не только HTTP), направляет трафик по магистрали AWS и переключается между Regions без задержек из-за кэширования DNS по TTL. CloudFront — только HTTP/HTTPS с кэшированием и не даёт фиксированных IP для allow-list под UDP. Latency routing в Route 53 опирается на DNS и страдает от задержки failover из-за TTL. API Gateway — для HTTP/REST/WebSocket API, а не для чистого UDP."
     },
     {
       "id": "edge-q3",
       "domain": 3,
-      "stem": "An application runs in us-east-1 and eu-west-1. The team wants users to be served from whichever Region gives them the fastest response. Which Route 53 routing policy should they use?",
+      "stem": "Приложение работает в us-east-1 и eu-west-1. Команда хочет, чтобы пользователей обслуживал тот Region, который отвечает им быстрее всего. Какую routing policy Route 53 использовать?",
       "options": [
         "Geolocation routing",
         "Weighted routing",
@@ -98,67 +98,67 @@
         "Latency-based routing"
       ],
       "answer": 3,
-      "explanation": "**Correct: Latency-based routing** sends each user to the Region with the lowest measured latency to them. Weighted routing splits traffic by fixed percentages, unrelated to performance. Geolocation routes by the user's physical location (good for localization/compliance) but not necessarily the lowest-latency endpoint. Multivalue returns several healthy records for basic client-side load balancing, not latency optimization."
+      "explanation": "**Верно: Latency-based routing** отправляет каждого пользователя в Region с наименьшей измеренной для него задержкой. Weighted routing делит трафик по фиксированным процентам, без связи с производительностью. Geolocation маршрутизирует по физическому местоположению пользователя (хорошо для локализации/compliance), но это не обязательно endpoint с минимальной задержкой. Multivalue возвращает несколько здоровых записей для простой балансировки на клиенте, а не для оптимизации задержки."
     },
     {
       "id": "edge-q4",
       "domain": 3,
-      "stem": "A team needs to point the root of their domain (example.com) at a CloudFront distribution. They tried a CNAME and it was rejected. What should they create instead?",
+      "stem": "Команде нужно направить корень домена (example.com) на CloudFront distribution. Они попробовали CNAME, и он был отклонён. Что нужно создать вместо него?",
       "options": [
-        "An A record with an Alias target pointing to the CloudFront distribution",
-        "An MX record pointing to the distribution",
-        "A second CNAME record with a lower TTL",
-        "A TXT record containing the distribution domain name"
+        "Запись A с Alias target, указывающим на CloudFront distribution",
+        "Запись MX, указывающую на distribution",
+        "Вторую запись CNAME с меньшим TTL",
+        "Запись TXT с доменным именем distribution"
       ],
       "answer": 0,
-      "explanation": "**Correct: Alias A record.** CNAMEs are not permitted at the zone apex/root, but Route 53 **Alias** records are, and they can target CloudFront, ALB, S3 website endpoints, etc., for free. A second CNAME still fails at the apex. MX records are for mail routing; TXT records hold text/verification data and do not resolve traffic."
+      "explanation": "**Верно: запись Alias A.** CNAME запрещены на apex/корне зоны, а **Alias**-записи Route 53 разрешены и могут бесплатно указывать на CloudFront, ALB, S3 website endpoints и т.д. Второй CNAME на apex всё равно не сработает. MX-записи нужны для маршрутизации почты; TXT-записи хранят текст/данные верификации и не направляют трафик."
     },
     {
       "id": "edge-q5",
       "domain": 3,
-      "stem": "A company wants automatic DNS failover: traffic should go to a primary Region normally and to a standby Region only if the primary becomes unhealthy. Which combination achieves this? (Choose two.)",
+      "stem": "Компании нужен автоматический DNS failover: в обычном режиме трафик идёт в основной Region, а в резервный — только если основной станет нездоровым. Какая комбинация это обеспечит? (Выберите два.)",
       "options": [
-        "Route 53 failover routing policy with PRIMARY and SECONDARY records",
-        "A Route 53 health check associated with the primary record",
-        "CloudFront origin failover with two cache behaviors",
-        "An S3 lifecycle policy on both Regions"
+        "Failover routing policy Route 53 с записями PRIMARY и SECONDARY",
+        "Health check Route 53, привязанный к записи primary",
+        "Origin failover CloudFront с двумя cache behaviors",
+        "S3 lifecycle policy в обоих Regions"
       ],
       "answer": [
         0,
         1
       ],
-      "explanation": "**Correct: failover routing policy + a health check on the primary.** The PRIMARY/SECONDARY failover policy serves the secondary only when the primary's associated health check reports unhealthy. CloudFront origin failover is for origin (not DNS-level Region) failover and is configured via an origin group, not cache behaviors. S3 lifecycle policies manage object expiration/transition and have nothing to do with DNS failover."
+      "explanation": "**Верно: failover routing policy + health check на primary.** Политика failover PRIMARY/SECONDARY отдаёт secondary только тогда, когда привязанный к primary health check сообщает о нездоровом состоянии. Origin failover в CloudFront предназначен для переключения origin (а не Region на уровне DNS) и настраивается через origin group, а не cache behaviors. S3 lifecycle policies управляют истечением/переходом объектов и не имеют отношения к DNS failover."
     },
     {
       "id": "edge-q6",
       "domain": 3,
-      "stem": "After deploying a fix, a team replaces /css/app.css in the S3 origin but users keep getting the old file from CloudFront because the TTL is 24 hours. They need the new file served immediately. What is the most appropriate action?",
+      "stem": "После деплоя исправления команда заменила /css/app.css в S3 origin, но пользователи продолжают получать старый файл из CloudFront, потому что TTL — 24 часа. Новый файл нужно отдавать немедленно. Какое действие наиболее уместно?",
       "options": [
-        "Switch the distribution to an ALB origin",
-        "Disable and re-enable the distribution",
-        "Lower the bucket's storage class to reduce caching",
-        "Create a CloudFront invalidation for /css/app.css"
+        "Переключить distribution на ALB origin",
+        "Отключить и снова включить distribution",
+        "Понизить storage class bucket, чтобы уменьшить кэширование",
+        "Создать CloudFront invalidation для /css/app.css"
       ],
       "answer": 3,
-      "explanation": "**Correct: invalidate the path.** A CloudFront invalidation for `/css/app.css` purges that object from edge caches so the next request fetches the updated file (the first 1,000 paths/month are free). Storage class affects S3 retrieval cost/latency, not CDN caching. Disabling the distribution causes an outage and is unnecessary. Changing the origin to an ALB is irrelevant. A durable best practice is versioned filenames (e.g. `app.v2.css`) to avoid invalidations entirely."
+      "explanation": "**Верно: сделать invalidation пути.** CloudFront invalidation для `/css/app.css` удаляет объект из edge-кэшей, и следующий запрос заберёт обновлённый файл (первые 1 000 путей в месяц бесплатны). Storage class влияет на стоимость/задержку извлечения из S3, а не на кэширование CDN. Отключение distribution вызывает простой и не нужно. Смена origin на ALB ни при чём. Долгосрочная best practice — версионированные имена файлов (например, `app.v2.css`), чтобы вообще обходиться без invalidation."
     },
     {
       "id": "edge-q7",
       "domain": 3,
-      "stem": "A streaming service must serve videos only to viewers in countries where it holds distribution rights, while blocking all others. The content is delivered via CloudFront. What is the simplest way to enforce this?",
+      "stem": "Стриминговый сервис должен показывать видео только зрителям из стран, где у него есть права на распространение, и блокировать всех остальных. Контент доставляется через CloudFront. Как проще всего это обеспечить?",
       "options": [
-        "Attach an IAM policy to each viewer",
-        "Use signed cookies for every request",
-        "Enable CloudFront geo-restriction to allow only the licensed countries",
-        "Use Route 53 geoproximity routing with a bias"
+        "Привязать IAM policy к каждому зрителю",
+        "Использовать signed cookies для каждого запроса",
+        "Включить geo-restriction в CloudFront и разрешить только лицензированные страны",
+        "Использовать geoproximity routing в Route 53 с bias"
       ],
       "answer": 2,
-      "explanation": "**Correct: CloudFront geo-restriction** lets you allow- or deny-list viewer countries directly on the distribution. Geoproximity is a Route 53 routing feature for shifting traffic between endpoints by distance/bias, not for blocking countries at the CDN. IAM policies govern AWS principals, not anonymous web viewers. Signed cookies control who has been granted access (authentication of requests), not which countries are permitted."
+      "explanation": "**Верно: geo-restriction в CloudFront** позволяет задать allow- или deny-list стран зрителей прямо на distribution. Geoproximity — функция маршрутизации Route 53 для перераспределения трафика между endpoints по расстоянию/bias, а не для блокировки стран на CDN. IAM policies управляют principals AWS, а не анонимными веб-зрителями. Signed cookies определяют, кому выдан доступ (аутентификация запросов), а не какие страны разрешены."
     },
     {
       "id": "edge-q8",
       "domain": 3,
-      "stem": "A web team is rolling out a new version and wants to send 10% of users to the new stack and 90% to the old one, adjusting the split over time. Which Route 53 routing policy fits best?",
+      "stem": "Веб-команда выкатывает новую версию и хочет отправлять 10% пользователей на новый стек и 90% — на старый, со временем меняя пропорцию. Какая routing policy Route 53 подходит лучше всего?",
       "options": [
         "Simple routing",
         "Failover routing",
@@ -166,7 +166,7 @@
         "Weighted routing"
       ],
       "answer": 3,
-      "explanation": "**Correct: weighted routing** assigns relative weights (e.g. 10 and 90) to records sharing a name, enabling canary/blue-green percentage splits you can tune over time. Failover is active/passive HA, not gradual traffic splitting. Geolocation routes by user location. Simple routing returns a single record set with no weighting capability."
+      "explanation": "**Верно: weighted routing** назначает относительные веса (например, 10 и 90) записям с одинаковым именем, что позволяет делить трафик в процентах для canary/blue-green и менять пропорцию со временем. Failover — это active/passive HA, а не постепенное разделение трафика. Geolocation маршрутизирует по местоположению пользователя. Simple routing возвращает один набор записей без возможности задавать веса."
     }
   ]
 }

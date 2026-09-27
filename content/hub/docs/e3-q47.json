@@ -1,0 +1,28 @@
+{
+  "id": "e3-q47",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "CloudFront OAC: доступ к S3 origin только через CDN",
+  "tests": "Как раздавать контент из S3 через CloudFront, запретив прямой публичный доступ к бакету.",
+  "expected": "CloudFront Origin Access Control + bucket policy, разрешающая s3:GetObject только этому distribution (AWS:SourceArn). Триггеры: «prevent direct public access to the S3 origin», «only through the CDN».",
+  "why_not": "Публичный бакет или static website hosting открывает origin; отказ от CloudFront убирает CDN.",
+  "keywords": [
+    "Origin Access Control",
+    "OAC",
+    "CloudFront",
+    "bucket policy",
+    "S3 origin",
+    "только через CDN"
+  ],
+  "services": [
+    "cloudfront",
+    "s3-security"
+  ],
+  "topics": [
+    "edge-dns",
+    "storage"
+  ],
+  "domain": 3
+}

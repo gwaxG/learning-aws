@@ -1,0 +1,30 @@
+{
+  "id": "e3-q31",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "SNS + SQS fan-out: одно событие во многие очереди",
+  "tests": "Как разослать одно событие нескольким независимым системам, у каждой своя очередь.",
+  "expected": "SNS topic с несколькими подписанными SQS queues (fan-out). Триггеры: «fan out a single event», «multiple independent systems», «each with its own queue».",
+  "why_not": "Одна общая очередь — сообщение получает только один consumer; Lambda с синхронными вызовами — сильная связанность; EventBridge с одним target не fan-out.",
+  "keywords": [
+    "fan-out",
+    "SNS topic",
+    "SQS subscriptions",
+    "decoupled",
+    "pub/sub",
+    "каждой системе своя очередь"
+  ],
+  "services": [
+    "sns",
+    "sqs",
+    "decoupling",
+    "eventbridge"
+  ],
+  "topics": [
+    "integration",
+    "architecture"
+  ],
+  "domain": 2
+}

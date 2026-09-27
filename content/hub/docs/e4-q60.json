@@ -1,0 +1,28 @@
+{
+  "id": "e4-q60",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "Auto Scaling: self-healing по health checks и desired capacity",
+  "tests": "Какая конфигурация автоматически заменяет EC2, не прошедший health check.",
+  "expected": "Auto Scaling group с health checks (EC2/ELB) — сам terminate и launch замену нездорового инстанса. Триггеры: «failing its health check», «replacing it without human intervention», «self-healing».",
+  "why_not": "Dashboard только визуализирует; ручной мониторинг не автоматичен; termination protection мешает замене.",
+  "keywords": [
+    "Auto Scaling group",
+    "health checks",
+    "self-healing",
+    "replace unhealthy",
+    "без вмешательства человека"
+  ],
+  "services": [
+    "auto-scaling",
+    "elb",
+    "ha"
+  ],
+  "topics": [
+    "ec2-compute",
+    "ha-dr"
+  ],
+  "domain": 4
+}

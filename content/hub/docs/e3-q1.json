@@ -1,0 +1,30 @@
+{
+  "id": "e3-q1",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "S3 шифрование: SSE-KMS с customer managed key для аудита",
+  "tests": "Выбор типа серверного шифрования S3, при котором компания контролирует ротацию ключа, а каждый decrypt попадает в CloudTrail.",
+  "expected": "SSE-KMS с customer managed key: своя key policy, ротация, каждый Encrypt/Decrypt логируется в CloudTrail. Триггеры: «rotation and usage auditable», «controlled by the company», «decrypt calls in CloudTrail».",
+  "why_not": "SSE-S3 — ключи управляет AWS, decrypt не аудируется поштучно; ключи в коде приложения — небезопасно; отключить шифрование и полагаться на bucket policy — не шифрование вообще.",
+  "keywords": [
+    "SSE-KMS",
+    "customer managed key",
+    "CloudTrail",
+    "key rotation",
+    "PII",
+    "аудит расшифровки"
+  ],
+  "services": [
+    "kms",
+    "s3-security",
+    "cloudtrail",
+    "encryption"
+  ],
+  "topics": [
+    "iam-security",
+    "storage"
+  ],
+  "domain": 1
+}

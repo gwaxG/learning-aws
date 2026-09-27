@@ -1,0 +1,30 @@
+{
+  "id": "hadr-q4",
+  "source": {
+    "type": "topic",
+    "ref": "ha-dr"
+  },
+  "concept": "RDS Multi-AZ: автоматический failover без потери данных",
+  "tests": "Выбор HA-решения для реляционной БД в одном регионе с устойчивостью к отказу AZ.",
+  "expected": "RDS Multi-AZ — синхронный standby, автоматический failover через DNS без потери данных. Триггеры: «отказ одной AZ», «automatic failover», «no data loss», «один регион».",
+  "why_not": "Cross-Region read replica асинхронна и промоутится вручную; dual writes сложны и ненадёжны; Single-AZ с бэкапами — ручное восстановление и потеря данных.",
+  "keywords": [
+    "Multi-AZ",
+    "synchronous standby",
+    "automatic failover",
+    "no data loss",
+    "cross-Region read replica",
+    "отказ AZ",
+    "один регион"
+  ],
+  "services": [
+    "rds-multi-az",
+    "read-replicas",
+    "rds"
+  ],
+  "topics": [
+    "ha-dr",
+    "databases"
+  ],
+  "domain": 2
+}

@@ -1,0 +1,29 @@
+{
+  "id": "e5-q33",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "SQS FIFO: строгий порядок и exactly-once processing",
+  "tests": "Какая очередь гарантирует порядок сообщений и exactly-once обработку для финансовых транзакций.",
+  "expected": "SQS FIFO queue — порядок в пределах message group и exactly-once processing (дедупликация). Триггеры: «strict ordering», «exactly-once», «financial transactions».",
+  "why_not": "SQS standard — at-least-once и best-effort ordering; SNS standard — без гарантии порядка; Firehose — доставка в хранилища, не транзакционные сообщения.",
+  "keywords": [
+    "SQS FIFO",
+    "exactly-once",
+    "ordering",
+    "message group",
+    "deduplication",
+    "строгий порядок"
+  ],
+  "services": [
+    "sqs-fifo",
+    "sqs",
+    "sns",
+    "firehose"
+  ],
+  "topics": [
+    "integration"
+  ],
+  "domain": 2
+}

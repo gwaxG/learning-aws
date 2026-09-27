@@ -1,0 +1,30 @@
+{
+  "id": "data-q1",
+  "source": {
+    "type": "topic",
+    "ref": "data-migration"
+  },
+  "concept": "Kinesis Data Firehose: serverless доставка потока в S3",
+  "tests": "Выбор полностью управляемого сервиса для near-real-time загрузки стриминговых данных в S3 с конвертацией формата.",
+  "expected": "Kinesis Data Firehose — буферизует и доставляет поток в S3 (Redshift/OpenSearch), встроенная конвертация JSON → Parquet/ORC, без шардов. Триггеры: «near-real-time в S3», «без серверов и шардов», «конвертировать в Parquet».",
+  "why_not": "Kinesis Data Streams требует свой consumer и управление шардами; SQS — очередь для decoupling, не доставка в S3; EMR/Spark Streaming — управляемый вручную кластер.",
+  "keywords": [
+    "Kinesis Data Firehose",
+    "near-real-time",
+    "Parquet",
+    "format conversion",
+    "no shards",
+    "доставка в S3",
+    "без управления шардами"
+  ],
+  "services": [
+    "firehose",
+    "kinesis-data-streams",
+    "s3",
+    "emr"
+  ],
+  "topics": [
+    "data-migration"
+  ],
+  "domain": 3
+}

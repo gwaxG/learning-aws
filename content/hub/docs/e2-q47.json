@@ -1,0 +1,29 @@
+{
+  "id": "e2-q47",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "Macie: обнаружение PII и чувствительных данных в S3",
+  "tests": "Выбор сервиса для автоматического непрерывного поиска PII/номеров карт в S3 с оповещениями.",
+  "expected": "Amazon Macie — ML-классификация содержимого S3 (PII, финансовые данные), findings → EventBridge/Security Hub. Триггеры: «discover sensitive data», «PII», «credit card numbers», «across many S3 buckets».",
+  "why_not": "Config — соответствие конфигурации; GuardDuty — угрозы по логам; CloudTrail — журнал API; никто не анализирует содержимое объектов.",
+  "keywords": [
+    "Macie",
+    "PII",
+    "sensitive data discovery",
+    "credit card numbers",
+    "S3",
+    "findings"
+  ],
+  "services": [
+    "macie",
+    "guardduty",
+    "config",
+    "cloudtrail"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1
+}

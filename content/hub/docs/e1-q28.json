@@ -1,0 +1,29 @@
+{
+  "id": "e1-q28",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "Route 53: failover routing с health checks",
+  "tests": "Как настроить DNS-failover статического сайта на S3 на вторичный bucket в другом Region.",
+  "expected": "Route 53 failover routing policy + health checks: при отказе primary трафик идёт на secondary. Триггеры: «automatic failover», «secondary in another Region», «using DNS».",
+  "why_not": "Simple — без failover; weighted — делит трафик по весам; latency-based — оптимизирует задержку, но не переключает по health check.",
+  "keywords": [
+    "Route 53",
+    "failover routing",
+    "health checks",
+    "active-passive",
+    "DNS failover",
+    "другой Region"
+  ],
+  "services": [
+    "route53",
+    "s3",
+    "dr-strategies"
+  ],
+  "topics": [
+    "edge-dns",
+    "ha-dr"
+  ],
+  "domain": 2
+}

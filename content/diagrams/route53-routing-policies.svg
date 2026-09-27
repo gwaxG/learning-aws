@@ -1,4 +1,4 @@
-<svg viewBox="0 0 760 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Six Route 53 routing policies summarized in a grid">
+<svg viewBox="0 0 760 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Шесть routing policy Route 53 в виде сетки">
   <style>
     .box { fill: #1d3150; stroke: #4aa3ff; }
     .nodet { fill: #e8eef6; font: 600 12px system-ui, sans-serif; text-anchor: middle; }
@@ -8,29 +8,29 @@
     .hb { fill: #1d3150; stroke: #ff9900; stroke-dasharray: 6 4; }
   </style>
 
-  <text x="20" y="26" class="ttl">Route 53 routing policies — pick by use case</text>
+  <text x="20" y="26" class="ttl">Routing policy Route 53 — выбор по сценарию</text>
 
   <!-- Row 1 -->
   <rect class="box" x="20" y="50" width="230" height="120" rx="8"/>
   <text class="nodet" x="135" y="74">Simple</text>
-  <text class="sub" x="135" y="98">one record, no health checks</text>
-  <text class="sub" x="135" y="118">single resource</text>
-  <text class="sub" x="135" y="138">use: basic A/AAAA mapping</text>
-  <text class="sub" x="135" y="158">no traffic shaping</text>
+  <text class="sub" x="135" y="98">одна запись, без health checks</text>
+  <text class="sub" x="135" y="118">один ресурс</text>
+  <text class="sub" x="135" y="138">для: простого A/AAAA</text>
+  <text class="sub" x="135" y="158">без управления трафиком</text>
 
   <rect class="box" x="265" y="50" width="230" height="120" rx="8"/>
   <text class="nodet" x="380" y="74">Weighted</text>
-  <text class="sub" x="380" y="98">split traffic by weights</text>
+  <text class="sub" x="380" y="98">деление трафика по весам</text>
   <text class="sub" x="380" y="118">10/90, 50/50, ...</text>
-  <text class="sub" x="380" y="138">use: canary, blue/green,</text>
-  <text class="sub" x="380" y="158">A/B testing</text>
+  <text class="sub" x="380" y="138">для: canary, blue/green,</text>
+  <text class="sub" x="380" y="158">A/B-тестов</text>
 
   <rect class="box" x="510" y="50" width="230" height="120" rx="8"/>
   <text class="nodet" x="625" y="74">Latency-based</text>
-  <text class="sub" x="625" y="98">route to lowest-latency Region</text>
-  <text class="sub" x="625" y="118">measured per viewer</text>
-  <text class="sub" x="625" y="138">use: global apps in</text>
-  <text class="sub" x="625" y="158">multiple Regions</text>
+  <text class="sub" x="625" y="98">в Region с мин. задержкой</text>
+  <text class="sub" x="625" y="118">замер для каждого клиента</text>
+  <text class="sub" x="625" y="138">для: глобальных прил. в</text>
+  <text class="sub" x="625" y="158">нескольких Region</text>
 
   <!-- Row 2 -->
   <rect class="hb" x="20" y="190" width="230" height="130" rx="8"/>
@@ -40,22 +40,22 @@
   <text class="nodet" x="90" y="266">primary</text>
   <rect class="hc" x="145" y="248" width="70" height="28" rx="6"/>
   <text class="nodet" x="180" y="266">secondary</text>
-  <text class="sub" x="135" y="294">health check on primary</text>
-  <text class="sub" x="135" y="312">use: active/passive DR</text>
+  <text class="sub" x="135" y="294">health check на primary</text>
+  <text class="sub" x="135" y="312">для: active/passive DR</text>
 
   <rect class="box" x="265" y="190" width="230" height="130" rx="8"/>
   <text class="nodet" x="380" y="214">Geolocation</text>
-  <text class="sub" x="380" y="238">route by viewer country /</text>
-  <text class="sub" x="380" y="256">continent / default</text>
-  <text class="sub" x="380" y="280">use: localization,</text>
-  <text class="sub" x="380" y="298">licensing, compliance</text>
-  <text class="sub" x="380" y="316">vs geoproximity: by distance + bias</text>
+  <text class="sub" x="380" y="238">по стране клиента /</text>
+  <text class="sub" x="380" y="256">континенту / default</text>
+  <text class="sub" x="380" y="280">для: локализации,</text>
+  <text class="sub" x="380" y="298">лицензий, compliance</text>
+  <text class="sub" x="380" y="316">vs geoproximity: дист. + bias</text>
 
   <rect class="box" x="510" y="190" width="230" height="130" rx="8"/>
   <text class="nodet" x="625" y="214">Multivalue Answer</text>
-  <text class="sub" x="625" y="238">up to 8 healthy records</text>
-  <text class="sub" x="625" y="256">returned per query</text>
-  <text class="sub" x="625" y="280">use: simple client-side</text>
-  <text class="sub" x="625" y="298">load balancing</text>
-  <text class="sub" x="625" y="316">not a replacement for ELB</text>
+  <text class="sub" x="625" y="238">до 8 здоровых записей</text>
+  <text class="sub" x="625" y="256">на один запрос</text>
+  <text class="sub" x="625" y="280">для: простой клиентской</text>
+  <text class="sub" x="625" y="298">балансировки</text>
+  <text class="sub" x="625" y="316">не замена ELB</text>
 </svg>

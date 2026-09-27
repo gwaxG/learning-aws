@@ -1,0 +1,28 @@
+{
+  "id": "iam-q3",
+  "source": {
+    "type": "topic",
+    "ref": "iam-security"
+  },
+  "concept": "IAM: cross-account role с ExternalId против confused deputy",
+  "tests": "Знание паттерна доступа третьей стороны (SaaS) к аккаунту: cross-account role + условие ExternalId.",
+  "expected": "Cross-account IAM role с trust policy на аккаунт провайдера и обязательным условием sts:ExternalId в trust policy. Триггеры: «third party / SaaS», «on your behalf», «confused deputy».",
+  "why_not": "IAM user с переданными access keys — долгоживущие утекаемые credentials; публичные ресурсы полностью снимают контроль доступа.",
+  "keywords": [
+    "cross-account role",
+    "ExternalId",
+    "confused deputy",
+    "trust policy",
+    "AssumeRole",
+    "третья сторона",
+    "SaaS"
+  ],
+  "services": [
+    "iam",
+    "sts"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1
+}

@@ -1,0 +1,28 @@
+{
+  "id": "e4-q16",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "Cognito identity pools: временные credentials для мобильных пользователей",
+  "tests": "Какой сервис даёт пользователям мобильного приложения вход через Google и временный доступ к AWS.",
+  "expected": "Amazon Cognito Identity Pools — федерация внешних IdP (Google, Facebook) и выдача временных credentials через IAM roles. Триггеры: «mobile app users», «authenticate with Google», «temporary limited credentials».",
+  "why_not": "Directory Service — managed AD; IAM users не масштабируются на пользователей приложения; IAM Identity Center — workforce SSO, не consumer.",
+  "keywords": [
+    "Cognito Identity Pools",
+    "federation",
+    "Google",
+    "mobile app",
+    "temporary credentials",
+    "IAM role"
+  ],
+  "services": [
+    "cognito",
+    "identity-center",
+    "sts"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1
+}

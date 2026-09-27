@@ -1,4 +1,4 @@
-<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Comparison of Amazon SQS, SNS and EventBridge as decoupling primitives">
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Сравнение Amazon SQS, SNS и EventBridge как примитивов развязки (decoupling)">
   <style>
     .col { fill: #16263d; stroke: #25395a; }
     .sqs { fill: #1d3150; stroke: #4aa3ff; }
@@ -23,15 +23,15 @@
   <!-- SQS column -->
   <rect class="col" x="20" y="40" width="230" height="300" rx="10"/>
   <text x="135" y="62" class="h">SQS</text>
-  <text x="135" y="78" class="s">point-to-point queue · pull</text>
+  <text x="135" y="78" class="s">очередь точка-точка · pull</text>
   <rect class="sqs" x="50" y="92" width="80" height="32" rx="6"/><text class="t" x="90" y="113">Producer</text>
-  <rect class="sqs" x="50" y="170" width="180" height="40" rx="6"/><text class="t" x="140" y="194">Queue (Standard / FIFO)</text>
+  <rect class="sqs" x="50" y="170" width="180" height="40" rx="6"/><text class="t" x="140" y="194">Очередь Standard/FIFO</text>
   <rect class="sqs" x="50" y="248" width="80" height="32" rx="6"/><text class="t" x="90" y="269">Consumer</text>
   <path class="arrB" d="M90,124 L90,170"/>
   <path class="arrB" d="M90,248 L90,210"/>
   <text x="135" y="300" class="s">at-least-once · DLQ</text>
   <text x="135" y="316" class="s">visibility timeout</text>
-  <text x="135" y="330" class="s">FIFO: order + dedup</text>
+  <text x="135" y="330" class="s">FIFO: порядок + дедупликация</text>
 
   <!-- SNS column -->
   <rect class="col" x="265" y="40" width="230" height="300" rx="10"/>
@@ -54,19 +54,19 @@
   <!-- EventBridge column -->
   <rect class="col" x="510" y="40" width="230" height="300" rx="10"/>
   <text x="625" y="62" class="h">EventBridge</text>
-  <text x="625" y="78" class="s">event bus · content routing</text>
-  <rect class="ebr" x="520" y="92" width="100" height="28" rx="6"/><text class="t" x="570" y="111">AWS svc</text>
+  <text x="625" y="78" class="s">event bus · роутинг по контенту</text>
+  <rect class="ebr" x="520" y="92" width="100" height="28" rx="6"/><text class="t" x="570" y="111">Сервис AWS</text>
   <rect class="ebr" x="630" y="92" width="100" height="28" rx="6"/><text class="t" x="680" y="111">SaaS / app</text>
   <rect class="ebr" x="540" y="148" width="170" height="36" rx="6"/><text class="t" x="625" y="170">Event Bus + Rules</text>
   <path class="arrO" d="M570,120 L600,148"/>
   <path class="arrO" d="M680,120 L650,148"/>
   <rect class="ebr" x="520" y="208" width="100" height="28" rx="6"/><text class="t" x="570" y="227">Lambda</text>
   <rect class="ebr" x="630" y="208" width="100" height="28" rx="6"/><text class="t" x="680" y="227">SQS / SNS</text>
-  <rect class="ebr" x="540" y="248" width="170" height="28" rx="6"/><text class="t" x="625" y="267">Step Functions, etc.</text>
+  <rect class="ebr" x="540" y="248" width="170" height="28" rx="6"/><text class="t" x="625" y="267">Step Functions и др.</text>
   <path class="arrO" d="M600,184 L570,208"/>
   <path class="arrO" d="M650,184 L680,208"/>
   <path class="arrO" d="M625,184 L625,248"/>
   <text x="625" y="300" class="s">schema registry</text>
-  <text x="625" y="316" class="s">archive &amp; replay</text>
+  <text x="625" y="316" class="s">archive и replay</text>
   <text x="625" y="330" class="s">scheduler (cron/rate)</text>
 </svg>

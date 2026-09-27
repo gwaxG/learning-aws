@@ -1,0 +1,30 @@
+{
+  "id": "e1-q54",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "EventBridge: маршрутизация событий по правилам в несколько targets",
+  "tests": "Выбор сервиса для event-driven архитектуры: фильтрация событий S3 и маршрутизация в разные targets (Lambda, SQS) по правилам.",
+  "expected": "Amazon EventBridge — event bus, rules фильтруют события (включая S3) и направляют их в несколько targets. Триггеры: «event-driven», «filter events», «route to different targets based on rules».",
+  "why_not": "SQS standard — один буфер; Step Functions оркестрируют workflow, но не являются event bus; Firehose доставляет потоки в хранилища.",
+  "keywords": [
+    "EventBridge",
+    "event bus",
+    "rules",
+    "event filtering",
+    "event-driven",
+    "S3 events",
+    "fan-out"
+  ],
+  "services": [
+    "eventbridge",
+    "sqs",
+    "step-functions",
+    "lambda"
+  ],
+  "topics": [
+    "integration"
+  ],
+  "domain": 2
+}

@@ -1,4 +1,4 @@
-<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="CloudWatch versus CloudTrail side-by-side comparison of operations versus audit">
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Сравнение CloudWatch и CloudTrail: эксплуатация против аудита">
   <style>
     .col { fill: #16263d; stroke: #25395a; }
     .cw { fill: #1d3150; stroke: #4aa3ff; }
@@ -11,20 +11,20 @@
     .tag { fill: #8aa0bd; font: 600 11px system-ui, sans-serif; text-anchor: middle; }
   </style>
 
-  <text x="380" y="24" class="hdr">CloudWatch vs CloudTrail — Ops telemetry vs API audit</text>
+  <text x="380" y="24" class="hdr">CloudWatch vs CloudTrail — телеметрия vs аудит API</text>
 
   <!-- CloudWatch column -->
   <rect class="col" x="30" y="44" width="340" height="296" rx="10"/>
-  <text x="200" y="68" class="ttl">CloudWatch — "what is happening?"</text>
-  <text x="200" y="84" class="tag">operations · performance · alerting</text>
+  <text x="200" y="68" class="ttl">CloudWatch — «что происходит?»</text>
+  <text x="200" y="84" class="tag">эксплуатация · производительность · алерты</text>
 
   <rect class="cw" x="60" y="100" width="280" height="38" rx="6"/>
-  <text class="nodet" x="200" y="118">Metrics</text>
-  <text class="sub" x="200" y="132">CPU, latency, custom · per dimension</text>
+  <text class="nodet" x="200" y="118">Метрики</text>
+  <text class="sub" x="200" y="132">CPU, задержка, custom · по dimension</text>
 
   <rect class="cw" x="60" y="148" width="280" height="38" rx="6"/>
-  <text class="nodet" x="200" y="166">Logs</text>
-  <text class="sub" x="200" y="180">log groups · Insights queries · agent</text>
+  <text class="nodet" x="200" y="166">Логи</text>
+  <text class="sub" x="200" y="180">log groups · запросы Insights · агент</text>
 
   <rect class="cw" x="60" y="196" width="280" height="38" rx="6"/>
   <text class="nodet" x="200" y="214">Alarms</text>
@@ -32,34 +32,34 @@
 
   <rect class="cw" x="60" y="244" width="280" height="38" rx="6"/>
   <text class="nodet" x="200" y="262">EventBridge (Events)</text>
-  <text class="sub" x="200" y="276">service events · cron · route to Lambda</text>
+  <text class="sub" x="200" y="276">события сервисов · cron · маршрут в Lambda</text>
 
   <rect class="cw" x="60" y="292" width="280" height="38" rx="6"/>
-  <text class="nodet" x="200" y="310">Synthetics &amp; RUM</text>
-  <text class="sub" x="200" y="324">canaries · real-user monitoring</text>
+  <text class="nodet" x="200" y="310">Synthetics и RUM</text>
+  <text class="sub" x="200" y="324">canary · реальные пользователи (RUM)</text>
 
   <!-- CloudTrail column -->
   <rect class="col" x="390" y="44" width="340" height="296" rx="10"/>
-  <text x="560" y="68" class="ttl">CloudTrail — "who did what?"</text>
-  <text x="560" y="84" class="tag">audit · security · governance</text>
+  <text x="560" y="68" class="ttl">CloudTrail — «кто что сделал?»</text>
+  <text x="560" y="84" class="tag">аудит · безопасность · governance</text>
 
   <rect class="ct" x="420" y="100" width="280" height="38" rx="6"/>
   <text class="nodet" x="560" y="118">Management events</text>
-  <text class="sub" x="560" y="132">control-plane API calls · free by default</text>
+  <text class="sub" x="560" y="132">API control plane · бесплатно по умолчанию</text>
 
   <rect class="audit" x="420" y="148" width="280" height="38" rx="6"/>
-  <text class="nodet" x="560" y="166">Data events (opt-in, paid)</text>
+  <text class="nodet" x="560" y="166">Data events (включаются, платно)</text>
   <text class="sub" x="560" y="180">S3 GetObject · Lambda Invoke</text>
 
   <rect class="ct" x="420" y="196" width="280" height="38" rx="6"/>
-  <text class="nodet" x="560" y="214">Multi-region &amp; Org trail</text>
-  <text class="sub" x="560" y="228">all regions · all accounts → S3</text>
+  <text class="nodet" x="560" y="214">Multi-region и Org trail</text>
+  <text class="sub" x="560" y="228">все регионы · все аккаунты → S3</text>
 
   <rect class="ct" x="420" y="244" width="280" height="38" rx="6"/>
-  <text class="nodet" x="560" y="262">Log file integrity validation</text>
-  <text class="sub" x="560" y="276">signed digests · tamper-evident</text>
+  <text class="nodet" x="560" y="262">Проверка целостности логов</text>
+  <text class="sub" x="560" y="276">подписанные дайджесты · защита от подмены</text>
 
   <rect class="ct" x="420" y="292" width="280" height="38" rx="6"/>
-  <text class="nodet" x="560" y="310">Event history (90 days)</text>
-  <text class="sub" x="560" y="324">recent API calls · no trail required</text>
+  <text class="nodet" x="560" y="310">Event history (90 дней)</text>
+  <text class="sub" x="560" y="324">недавние вызовы API · trail не нужен</text>
 </svg>

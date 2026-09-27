@@ -1,0 +1,29 @@
+{
+  "id": "e1-q18",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "ALB: HTTPS listener с сертификатом ACM (TLS termination)",
+  "tests": "Что нужно на ALB для шифрования трафика клиента в транзите и снятия TLS на балансировщике.",
+  "expected": "HTTPS listener на ALB с сертификатом из AWS Certificate Manager — TLS terminates на ALB. Триггеры: «encrypt in transit», «offload TLS termination at the load balancer».",
+  "why_not": "NLB с TCP listener не терминирует TLS на L7; блокировка 443 ломает HTTPS; bucket policy относится к S3.",
+  "keywords": [
+    "HTTPS listener",
+    "ACM",
+    "TLS termination",
+    "in transit",
+    "ALB",
+    "сертификат"
+  ],
+  "services": [
+    "acm",
+    "elb",
+    "encryption"
+  ],
+  "topics": [
+    "iam-security",
+    "vpc-networking"
+  ],
+  "domain": 1
+}

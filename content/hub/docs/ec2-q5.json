@@ -1,0 +1,26 @@
+{
+  "id": "ec2-q5",
+  "source": {
+    "type": "topic",
+    "ref": "ec2-compute"
+  },
+  "concept": "EC2 instance families: memory optimized для in-memory нагрузок",
+  "tests": "Выбор семейства инстансов по профилю ресурсов (RAM/vCPU).",
+  "expected": "Memory optimized (R/X). Триггеры: «in-memory analytics/БД», «highest RAM-to-vCPU ratio».",
+  "why_not": "C — упор на CPU; I — локальные NVMe IOPS; T — burstable с низким baseline CPU и скромной памятью.",
+  "keywords": [
+    "memory optimized",
+    "R family",
+    "X family",
+    "RAM-to-vCPU",
+    "in-memory",
+    "instance family"
+  ],
+  "services": [
+    "ec2"
+  ],
+  "topics": [
+    "ec2-compute"
+  ],
+  "domain": 3
+}

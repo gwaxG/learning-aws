@@ -1,0 +1,29 @@
+{
+  "id": "e2-q39",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "S3 bucket policy: условие aws:PrincipalOrgID для ограничения доступа организацией",
+  "tests": "Как гарантировать, что доступ к бакету возможен только принципалам внутри AWS Organization.",
+  "expected": "Bucket policy с условием aws:PrincipalOrgID (Deny, если не наша org) + SCP guardrails на уровне организации. Триггеры: «outside their AWS Organization», «regardless of other policies», «organization-wide».",
+  "why_not": "Block Public Access блокирует публичный доступ, но не конкретные внешние аккаунты; ACL — legacy и грубые; Object Lock — про retention, не про принципалов.",
+  "keywords": [
+    "aws:PrincipalOrgID",
+    "bucket policy",
+    "SCP",
+    "AWS Organizations",
+    "Block Public Access",
+    "condition key"
+  ],
+  "services": [
+    "s3-security",
+    "scp",
+    "organizations"
+  ],
+  "topics": [
+    "iam-security",
+    "storage"
+  ],
+  "domain": 1
+}

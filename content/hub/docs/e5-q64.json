@@ -1,0 +1,28 @@
+{
+  "id": "e5-q64",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "Compute Optimizer: right-sizing и поиск простаивающих EC2",
+  "tests": "Какой сервис даёт рекомендации по right-sizing и выявляет простаивающие инстансы.",
+  "expected": "AWS Compute Optimizer — анализ метрик утилизации (ML), рекомендации по размеру, idle instances. Триггеры: «idle and underutilized», «right-sizing recommendations».",
+  "why_not": "CloudWatch alarms — алерты по порогам без рекомендаций; CloudTrail — API-активность; Shield — защита от DDoS.",
+  "keywords": [
+    "Compute Optimizer",
+    "right-sizing",
+    "idle instances",
+    "underutilized",
+    "рекомендации",
+    "снижение затрат"
+  ],
+  "services": [
+    "compute-optimizer",
+    "cloudwatch",
+    "ec2"
+  ],
+  "topics": [
+    "cost"
+  ],
+  "domain": 4
+}

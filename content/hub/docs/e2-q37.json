@@ -1,0 +1,29 @@
+{
+  "id": "e2-q37",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "CloudFront + WAF: низкая латентность и защита от DDoS/веб-эксплойтов",
+  "tests": "Комбинация для доставки контента с минимальной латентностью и защиты origin от DDoS и атак L7.",
+  "expected": "CloudFront перед origin (edge-кэш, встроенный Shield Standard) + AWS WAF на distribution (SQLi, XSS, rate-based rules). Триггеры: «lowest latency», «protect origin from DDoS», «common web exploits».",
+  "why_not": "Один большой EC2 origin не даёт ни латентности, ни защиты; Cognito — аутентификация; Direct Connect — приватная связность, не доставка контента.",
+  "keywords": [
+    "CloudFront",
+    "AWS WAF",
+    "Shield",
+    "DDoS",
+    "web exploits",
+    "edge locations"
+  ],
+  "services": [
+    "cloudfront",
+    "waf",
+    "shield"
+  ],
+  "topics": [
+    "edge-dns",
+    "iam-security"
+  ],
+  "domain": 2
+}

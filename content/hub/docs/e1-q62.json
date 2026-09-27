@@ -1,0 +1,29 @@
+{
+  "id": "e1-q62",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "DR для S3: Cross-Region Replication + Route 53 failover",
+  "tests": "Как сохранить доступность статического контента S3 при отказе целого Region (выбрать два).",
+  "expected": "S3 Cross-Region Replication в bucket во втором Region + Route 53 failover routing между primary и репликой. Триггеры: «entire Region unavailable», «static website content remains accessible».",
+  "why_not": "Versioning и смена storage class работают в пределах одного Region; Transfer Acceleration лишь ускоряет загрузку.",
+  "keywords": [
+    "Cross-Region Replication",
+    "CRR",
+    "Route 53 failover",
+    "отказ Region",
+    "static website",
+    "DR"
+  ],
+  "services": [
+    "s3-replication",
+    "route53",
+    "dr-strategies"
+  ],
+  "topics": [
+    "ha-dr",
+    "storage"
+  ],
+  "domain": 2
+}

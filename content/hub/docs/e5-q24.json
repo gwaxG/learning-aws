@@ -1,0 +1,29 @@
+{
+  "id": "e5-q24",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "DynamoDB global tables: multi-Region active-active репликация",
+  "tests": "Как обеспечить чтение/запись в DynamoDB при отказе целого региона и низкую задержку для пользователей в разных регионах.",
+  "expected": "DynamoDB global tables — multi-Region active-active репликация, локальные чтения и записи. Триггеры: «entire Region becomes unavailable», «reads and writes», «low-latency from multiple Regions».",
+  "why_not": "DAX — кэш внутри одного региона; on-demand capacity — масштаб throughput, но один регион; Streams + Lambda backup — не active-active.",
+  "keywords": [
+    "global tables",
+    "multi-Region",
+    "active-active",
+    "DynamoDB",
+    "отказ региона",
+    "низкая задержка"
+  ],
+  "services": [
+    "dynamodb-global",
+    "dynamodb",
+    "dax"
+  ],
+  "topics": [
+    "databases",
+    "ha-dr"
+  ],
+  "domain": 2
+}

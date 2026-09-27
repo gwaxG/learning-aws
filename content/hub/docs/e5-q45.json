@@ -1,0 +1,29 @@
+{
+  "id": "e5-q45",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "EMR: Spot Instances для task nodes прерываемых Spark-задач",
+  "tests": "Как минимизировать стоимость compute для bursty Spark-задач, допускающих прерывания.",
+  "expected": "EMR с Spot Instances для task nodes (core/master — On-Demand). Триггеры: «bursty», «tolerant of interruption», «Spark», «minimize compute cost».",
+  "why_not": "On-Demand only — дороже; кластер 24/7 на Reserved Instances простаивает при всплесковой нагрузке; один большой EC2 не масштабируется горизонтально.",
+  "keywords": [
+    "EMR",
+    "Spot Instances",
+    "task nodes",
+    "Spark",
+    "interruption tolerant",
+    "прерываемые задачи",
+    "bursty"
+  ],
+  "services": [
+    "emr",
+    "ec2-purchasing"
+  ],
+  "topics": [
+    "cost",
+    "ec2-compute"
+  ],
+  "domain": 3
+}

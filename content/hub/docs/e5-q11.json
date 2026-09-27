@@ -1,0 +1,27 @@
+{
+  "id": "e5-q11",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "IAM: least privilege — Resource = ARN конкретного секрета",
+  "tests": "Как в IAM policy ограничить доступ приложению только одним секретом.",
+  "expected": "Action secretsmanager:GetSecretValue + Resource = ARN конкретного секрета. Триггеры: «specific secret but nothing else», «least privilege».",
+  "why_not": "Resource \"*\" — доступ ко всем секретам; secretsmanager:* и AdministratorAccess — сильно избыточные права.",
+  "keywords": [
+    "least privilege",
+    "Resource ARN",
+    "GetSecretValue",
+    "IAM policy",
+    "минимальные права",
+    "wildcard"
+  ],
+  "services": [
+    "iam",
+    "secrets-manager"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1
+}

@@ -1,0 +1,29 @@
+{
+  "id": "e5-q21",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "HA: Auto Scaling group в нескольких AZ за ALB",
+  "tests": "Как спроектировать stateless веб-уровень, переживающий отказ целой AZ.",
+  "expected": "Auto Scaling group минимум в 2 AZ + ALB в тех же AZ. Триггеры: «entire Availability Zone fails», «stateless web tier», «MOST highly available».",
+  "why_not": "Один инстанс (даже большой или с Elastic IP) или два в одной AZ падают вместе с AZ.",
+  "keywords": [
+    "Auto Scaling group",
+    "multi-AZ",
+    "ALB",
+    "stateless",
+    "отказ AZ",
+    "high availability"
+  ],
+  "services": [
+    "auto-scaling",
+    "elb",
+    "ha"
+  ],
+  "topics": [
+    "ha-dr",
+    "ec2-compute"
+  ],
+  "domain": 2
+}

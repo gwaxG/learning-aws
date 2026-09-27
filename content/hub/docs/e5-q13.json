@@ -1,0 +1,30 @@
+{
+  "id": "e5-q13",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "IAM Identity Center: централизованный workforce SSO на много аккаунтов",
+  "tests": "Выбор сервиса для централизованного управления доступом сотрудников к нескольким аккаунтам с внешним IdP.",
+  "expected": "AWS IAM Identity Center — SSO, интеграция с внешним IdP, permission sets на аккаунты. Триггеры: «human users», «multiple AWS accounts», «single sign-on», «external identity provider».",
+  "why_not": "Cognito identity pools — для конечных пользователей приложений; STS только выдаёт credentials; IAM groups в каждом аккаунте — не централизовано.",
+  "keywords": [
+    "IAM Identity Center",
+    "SSO",
+    "permission sets",
+    "workforce",
+    "external IdP",
+    "multi-account",
+    "единый вход"
+  ],
+  "services": [
+    "identity-center",
+    "organizations",
+    "cognito",
+    "sts"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1
+}

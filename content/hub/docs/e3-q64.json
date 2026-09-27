@@ -1,0 +1,29 @@
+{
+  "id": "e3-q64",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "Systems Manager Patch Manager: патчинг парка EC2",
+  "tests": "Выбор сервиса для планового патчинга ОС на множестве EC2 с отчётом о compliance без входа на серверы.",
+  "expected": "SSM Patch Manager: patch baselines, maintenance windows, отчёты о patch compliance. Триггеры: «apply OS patches on a schedule», «track compliance», «avoid logging into each server».",
+  "why_not": "Inspector находит уязвимости, но не патчит; Config отслеживает состояние; CloudFormation провижинит.",
+  "keywords": [
+    "Patch Manager",
+    "Systems Manager",
+    "OS patching",
+    "maintenance window",
+    "patch compliance",
+    "без входа на серверы"
+  ],
+  "services": [
+    "systems-manager",
+    "inspector",
+    "config"
+  ],
+  "topics": [
+    "monitoring",
+    "ec2-compute"
+  ],
+  "domain": 4
+}

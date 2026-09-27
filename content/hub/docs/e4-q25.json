@@ -1,0 +1,28 @@
+{
+  "id": "e4-q25",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "SQS: буферизация и развязка producer/consumer",
+  "tests": "Паттерн, при котором сервис остаётся доступным, пока downstream временно недоступен.",
+  "expected": "SQS-очередь между сервисами: producer продолжает работать, сообщения обрабатываются после восстановления consumer. Триггеры: «downstream temporarily down», «buffer requests», «process when recovers».",
+  "why_not": "Синхронные HTTP-вызовы связывают доступность; больший timeout или инстанс не дают буферизации и изоляции отказов.",
+  "keywords": [
+    "SQS",
+    "decoupling",
+    "buffer",
+    "loose coupling",
+    "resilience",
+    "развязка сервисов"
+  ],
+  "services": [
+    "sqs",
+    "decoupling"
+  ],
+  "topics": [
+    "integration",
+    "architecture"
+  ],
+  "domain": 2
+}

@@ -1,0 +1,29 @@
+{
+  "id": "e3-q52",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "Athena: Parquet и партиционирование для снижения стоимости",
+  "tests": "Какие оптимизации данных уменьшают стоимость и ускоряют запросы Athena.",
+  "expected": "Колоночный формат (Parquet/ORC) + партиционирование по часто фильтруемым колонкам — меньше просканированных байт. Триггеры: «reduce query cost», «improve performance», «Athena».",
+  "why_not": "Несжатый CSV и один большой файл увеличивают объём сканирования; класс хранения не меняет стоимость за скан.",
+  "keywords": [
+    "Athena",
+    "Parquet",
+    "columnar format",
+    "partitioning",
+    "data scanned",
+    "снижение стоимости запросов"
+  ],
+  "services": [
+    "athena",
+    "s3",
+    "glue"
+  ],
+  "topics": [
+    "databases",
+    "cost"
+  ],
+  "domain": 3
+}

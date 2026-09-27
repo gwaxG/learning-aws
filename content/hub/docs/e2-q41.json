@@ -1,0 +1,27 @@
+{
+  "id": "e2-q41",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "S3 Versioning + MFA Delete: защита от случайного удаления/перезаписи",
+  "tests": "Какие функции S3 защищают объекты от случайного удаления и перезаписи.",
+  "expected": "S3 Versioning (восстановление прошлых версий) + MFA Delete (MFA для безвозвратного удаления версий и отключения versioning). Триггеры: «accidental deletion and overwrite», «protect objects».",
+  "why_not": "CRR помогает в DR, но удаление в бакете сам по себе не предотвращает; Transfer Acceleration ускоряет загрузки; Requester Pays меняет оплату.",
+  "keywords": [
+    "S3 Versioning",
+    "MFA Delete",
+    "accidental deletion",
+    "overwrite",
+    "11 nines durability"
+  ],
+  "services": [
+    "s3-security",
+    "s3",
+    "s3-replication"
+  ],
+  "topics": [
+    "storage"
+  ],
+  "domain": 1
+}

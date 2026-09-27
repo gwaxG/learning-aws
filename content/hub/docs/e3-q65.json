@@ -1,0 +1,30 @@
+{
+  "id": "e3-q65",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "EC2 Savings Plans: Compute Savings Plan для гибкой базовой нагрузки",
+  "tests": "Выбор модели скидки для постоянной базовой нагрузки с возможностью менять семейства инстансов и регионы.",
+  "expected": "Compute Savings Plan — обязательство на $/час, скидка применяется к любым семействам, размерам, регионам, а также Fargate/Lambda. Триггеры: «baseline always-on», «flexibility to change instance families and regions».",
+  "why_not": "Standard RI привязаны к типу инстанса; Spot прерывается; On-Demand без скидки.",
+  "keywords": [
+    "Compute Savings Plan",
+    "flexibility",
+    "instance family",
+    "region",
+    "baseline",
+    "Reserved Instances",
+    "гибкость"
+  ],
+  "services": [
+    "ec2-purchasing",
+    "fargate",
+    "lambda"
+  ],
+  "topics": [
+    "cost",
+    "ec2-compute"
+  ],
+  "domain": 4
+}

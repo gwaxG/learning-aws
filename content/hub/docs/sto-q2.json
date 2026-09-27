@@ -1,0 +1,29 @@
+{
+  "id": "sto-q2",
+  "source": {
+    "type": "topic",
+    "ref": "storage"
+  },
+  "concept": "S3: presigned URL для временного доступа к приватным объектам",
+  "tests": "Знание способа дать временный доступ к приватным объектам S3 без публичного bucket и без раздачи credentials.",
+  "expected": "Presigned URL с коротким сроком действия — доступ по правам подписавшего, bucket остаётся приватным. Триггеры: «limited time», «private objects», «without exposing the bucket», «without distributing credentials».",
+  "why_not": "Отключение Block Public Access + public-read открывает все объекты; передача access keys IAM user — грубое нарушение least privilege; static website hosting требует публичного доступа и не ограничивает по времени.",
+  "keywords": [
+    "presigned URL",
+    "expiration",
+    "private bucket",
+    "Block Public Access",
+    "temporary access",
+    "временный доступ"
+  ],
+  "services": [
+    "s3-performance",
+    "s3-security",
+    "s3"
+  ],
+  "topics": [
+    "storage",
+    "iam-security"
+  ],
+  "domain": 1
+}

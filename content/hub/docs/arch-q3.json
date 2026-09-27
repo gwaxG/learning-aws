@@ -1,0 +1,30 @@
+{
+  "id": "arch-q3",
+  "source": {
+    "type": "topic",
+    "ref": "architecture"
+  },
+  "concept": "DynamoDB: strongly consistent чтение для read-after-write",
+  "tests": "Понимание, когда нужно strongly-consistent чтение, чтобы сразу увидеть только что выполненную запись.",
+  "expected": "ConsistentRead=true (strongly-consistent read). Триггеры: «сразу после записи прочитать», «баланс всегда должен отражать последнюю запись», «stale недопустим».",
+  "why_not": "Eventually-consistent может вернуть значение до списания; реплика global table в другом регионе обновляется асинхронно; DAX без write-through может отдать устаревший баланс.",
+  "keywords": [
+    "ConsistentRead",
+    "strongly consistent",
+    "eventually consistent",
+    "read-after-write",
+    "DAX",
+    "всегда актуальный баланс"
+  ],
+  "services": [
+    "dynamodb",
+    "consistency",
+    "dax",
+    "dynamodb-global"
+  ],
+  "topics": [
+    "architecture",
+    "databases"
+  ],
+  "domain": 3
+}

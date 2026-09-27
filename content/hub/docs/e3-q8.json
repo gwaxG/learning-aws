@@ -1,0 +1,30 @@
+{
+  "id": "e3-q8",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "AWS Config: история конфигураций и непрерывный compliance",
+  "tests": "Различение Config и CloudTrail/CloudWatch/Trusted Advisor для записи изменений конфигурации и постоянной проверки правил.",
+  "expected": "AWS Config: configuration history + managed/custom Config rules для непрерывной оценки соответствия. Триггеры: «record of every configuration change», «evaluate against compliance rules continuously».",
+  "why_not": "CloudTrail — кто вызвал API, а не состояние ресурса во времени; CloudWatch — метрики и логи; Trusted Advisor — разовые best-practice проверки.",
+  "keywords": [
+    "AWS Config",
+    "Config rules",
+    "configuration history",
+    "compliance",
+    "continuous evaluation",
+    "аудит изменений"
+  ],
+  "services": [
+    "config",
+    "cloudtrail",
+    "trusted-advisor",
+    "cloudwatch"
+  ],
+  "topics": [
+    "monitoring",
+    "iam-security"
+  ],
+  "domain": 1
+}

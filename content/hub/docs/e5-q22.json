@@ -1,0 +1,29 @@
+{
+  "id": "e5-q22",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "RDS Multi-AZ: синхронный standby и автоматический failover",
+  "tests": "Различие Multi-AZ и read replicas для обеспечения HA реляционной БД.",
+  "expected": "RDS Multi-AZ — синхронная репликация на standby в другой AZ, автоматический failover. Триггеры: «automatic failover», «standby in another AZ», «synchronous replication».",
+  "why_not": "Read replica — асинхронная, для масштабирования чтения; Single-AZ — без standby; MySQL на одном EC2 — нет встроенного HA.",
+  "keywords": [
+    "RDS Multi-AZ",
+    "synchronous replication",
+    "standby",
+    "automatic failover",
+    "read replica",
+    "синхронная репликация"
+  ],
+  "services": [
+    "rds-multi-az",
+    "read-replicas",
+    "rds"
+  ],
+  "topics": [
+    "databases",
+    "ha-dr"
+  ],
+  "domain": 2
+}

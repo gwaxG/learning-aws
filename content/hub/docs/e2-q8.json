@@ -1,0 +1,29 @@
+{
+  "id": "e2-q8",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "DynamoDB DAX: in-memory кэш для повторных чтений",
+  "tests": "Как снизить латентность до микросекунд и стоимость повторных чтений одних и тех же элементов DynamoDB.",
+  "expected": "Добавить DAX-кластер — write-through кэш перед DynamoDB, микросекундная латентность, разгружает RCU. Триггеры: «sub-millisecond / microsecond», «repeated reads of the same items», «read costs high».",
+  "why_not": "Global tables — мультирегиональная репликация, не кэш; on-demand меняет модель оплаты, не латентность; GSI — новый паттерн доступа, не кэширование.",
+  "keywords": [
+    "DAX",
+    "DynamoDB",
+    "microsecond",
+    "кэш",
+    "repeated reads",
+    "read costs"
+  ],
+  "services": [
+    "dax",
+    "dynamodb",
+    "caching"
+  ],
+  "topics": [
+    "databases",
+    "cost"
+  ],
+  "domain": 3
+}

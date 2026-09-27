@@ -1,0 +1,28 @@
+{
+  "id": "e3-q60",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "Rightsizing EC2: Compute Optimizer и Cost Explorer",
+  "tests": "Какие инструменты выявляют простаивающие/недогруженные EC2 и дают рекомендации по размеру.",
+  "expected": "AWS Compute Optimizer (анализ утилизации, рекомендации типа инстанса) + Cost Explorer rightsizing recommendations. Триггеры: «idle and underutilized», «right-sizing recommendations».",
+  "why_not": "Inspector — уязвимости; WAF — веб-трафик; Macie — чувствительные данные.",
+  "keywords": [
+    "Compute Optimizer",
+    "Cost Explorer",
+    "rightsizing",
+    "underutilized",
+    "idle instances",
+    "оптимизация размера"
+  ],
+  "services": [
+    "compute-optimizer",
+    "cost-explorer",
+    "ec2"
+  ],
+  "topics": [
+    "cost"
+  ],
+  "domain": 4
+}

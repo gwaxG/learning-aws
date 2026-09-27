@@ -1,0 +1,28 @@
+{
+  "id": "e1-q29",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "Global Accelerator: static anycast IP и быстрый regional failover",
+  "tests": "Выбор сервиса для снижения задержки динамического (некэшируемого) трафика со статическими anycast IP и быстрым переключением между Region.",
+  "expected": "AWS Global Accelerator — 2 статических anycast IP, трафик по глобальной сети AWS до оптимального endpoint, быстрый failover. Триггеры: «static anycast IP», «dynamic API», «fast regional failover».",
+  "why_not": "CloudFront оптимизирован для кэширования контента; Route 53 latency routing — через DNS, без static anycast IP; Elastic IP — адрес в одном Region.",
+  "keywords": [
+    "Global Accelerator",
+    "anycast IP",
+    "static IP",
+    "dynamic content",
+    "regional failover",
+    "TCP/UDP"
+  ],
+  "services": [
+    "global-accelerator",
+    "cloudfront",
+    "route53"
+  ],
+  "topics": [
+    "edge-dns"
+  ],
+  "domain": 3
+}

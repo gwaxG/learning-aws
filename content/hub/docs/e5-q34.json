@@ -1,0 +1,29 @@
+{
+  "id": "e5-q34",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "Fargate: serverless контейнеры без управления серверами",
+  "tests": "Выбор compute для контейнеров, масштабирующихся до нуля и без управления инстансами.",
+  "expected": "AWS Fargate — serverless запуск контейнеров (ECS/EKS), количество задач меняется вплоть до нуля. Триггеры: «containers», «scale to zero when idle», «without managing servers».",
+  "why_not": "ECS on EC2 и self-managed Kubernetes требуют управления серверами; фиксированная ASG не масштабируется до нуля.",
+  "keywords": [
+    "Fargate",
+    "serverless containers",
+    "scale to zero",
+    "ECS",
+    "без серверов",
+    "tasks"
+  ],
+  "services": [
+    "fargate",
+    "ecs",
+    "eks",
+    "auto-scaling"
+  ],
+  "topics": [
+    "serverless-containers"
+  ],
+  "domain": 2
+}

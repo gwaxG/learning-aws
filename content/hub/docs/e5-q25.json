@@ -1,0 +1,30 @@
+{
+  "id": "e5-q25",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "SQS: буфер между web tier и обработчиками + Auto Scaling по глубине очереди",
+  "tests": "Как поглощать непредсказуемые пики нагрузки и развязать обработку заказов от веб-уровня.",
+  "expected": "SQS queue между web tier и order processors + EC2 Auto Scaling по глубине очереди (ApproximateNumberOfMessages / backlog per instance). Триггеры: «unpredictable spikes», «flash sales», «decouple order processing».",
+  "why_not": "Фиксированный флот и синхронная обработка в одном RDS не выдерживают всплесков; хранение заказов в памяти инстанса — потеря данных.",
+  "keywords": [
+    "SQS",
+    "queue depth",
+    "ApproximateNumberOfMessages",
+    "Auto Scaling",
+    "decouple",
+    "пики трафика",
+    "flash sale"
+  ],
+  "services": [
+    "sqs",
+    "auto-scaling",
+    "decoupling"
+  ],
+  "topics": [
+    "integration",
+    "architecture"
+  ],
+  "domain": 2
+}

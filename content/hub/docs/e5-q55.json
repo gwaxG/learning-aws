@@ -1,0 +1,27 @@
+{
+  "id": "e5-q55",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "CloudWatch alarm на метрике + SNS-уведомление",
+  "tests": "Как с минимальными усилиями получать уведомление, когда CPU выше порога заданное время.",
+  "expected": "CloudWatch alarm на CPUUtilization (порог 80%, период/evaluation periods на 10 минут) с действием SNS notification. Триггеры: «notified automatically», «CPU above 80% for 10 minutes», «LEAST overhead».",
+  "why_not": "Lambda с поллингом — изобретает то, что есть в CloudWatch; ручная проверка консоли — не автоматизация; CloudTrail data events — API-активность, не метрики.",
+  "keywords": [
+    "CloudWatch alarm",
+    "CPUUtilization",
+    "SNS",
+    "threshold",
+    "evaluation periods",
+    "уведомление"
+  ],
+  "services": [
+    "cloudwatch",
+    "sns"
+  ],
+  "topics": [
+    "monitoring"
+  ],
+  "domain": 4
+}

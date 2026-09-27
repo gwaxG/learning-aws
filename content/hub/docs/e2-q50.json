@@ -1,0 +1,31 @@
+{
+  "id": "e2-q50",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "AWS Config: обнаружение + auto-remediation через SSM Automation",
+  "tests": "Комбинация для обнаружения открытого SSH 0.0.0.0/0 в security group и автоматического исправления.",
+  "expected": "AWS Config managed rule (restricted-ssh) + remediation action на SSM Automation document, удаляющий правило. Триггеры: «automatically remediate», «detection and automatic remediation», «0.0.0.0/0 SSH».",
+  "why_not": "CloudTrail только записывает изменение; ручной аудит медленный; Inspector network reachability оценивает экспозицию без исправления.",
+  "keywords": [
+    "AWS Config",
+    "remediation",
+    "SSM Automation",
+    "security group",
+    "0.0.0.0/0",
+    "SSH",
+    "restricted-ssh"
+  ],
+  "services": [
+    "config",
+    "systems-manager",
+    "security-groups",
+    "inspector"
+  ],
+  "topics": [
+    "iam-security",
+    "monitoring"
+  ],
+  "domain": 1
+}

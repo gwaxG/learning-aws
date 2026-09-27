@@ -1,0 +1,30 @@
+{
+  "id": "edge-q1",
+  "source": {
+    "type": "topic",
+    "ref": "edge-dns"
+  },
+  "concept": "CloudFront OAC: приватный S3 origin только через CloudFront",
+  "tests": "Ограничение доступа к S3-бакету так, чтобы объекты были доступны только через CloudFront.",
+  "expected": "Origin Access Control (OAC) + bucket policy с s3:GetObject только для distribution (AWS:SourceArn). Триггеры: «бакет не публичный», «доступ только через CloudFront».",
+  "why_not": "Публичный бакет нарушает требование (geo-restriction фильтрует лишь страны); Transfer Acceleration не ограничивает доступ; ALB не фронтит S3 так.",
+  "keywords": [
+    "Origin Access Control",
+    "OAC",
+    "OAI",
+    "bucket policy",
+    "AWS:SourceArn",
+    "только через CloudFront",
+    "приватный бакет"
+  ],
+  "services": [
+    "cloudfront",
+    "s3-security",
+    "s3"
+  ],
+  "topics": [
+    "edge-dns",
+    "iam-security"
+  ],
+  "domain": 3
+}

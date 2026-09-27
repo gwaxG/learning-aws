@@ -1,0 +1,28 @@
+{
+  "id": "e5-q4",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "Secrets Manager: автоматическая ротация credentials БД",
+  "tests": "Выбор сервиса для хранения credentials БД с автоматической ротацией и безопасным получением в runtime.",
+  "expected": "AWS Secrets Manager с включённой ротацией (Lambda-ротация, встроенная для RDS). Триггеры: «automatic rotation», «database credentials», «minimal operational overhead».",
+  "why_not": "Parameter Store standard parameters — нет встроенной ротации; зашифрованный S3-объект и KMS data keys — никакой ротации, нужен свой код.",
+  "keywords": [
+    "Secrets Manager",
+    "automatic rotation",
+    "database credentials",
+    "Parameter Store",
+    "ротация",
+    "hardcoded credentials"
+  ],
+  "services": [
+    "secrets-manager",
+    "systems-manager",
+    "kms"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1
+}

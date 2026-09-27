@@ -1,0 +1,29 @@
+{
+  "id": "e4-q17",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "EBS: encryption by default на уровне аккаунта/региона",
+  "tests": "Простейший способ гарантировать шифрование всех новых EBS volumes.",
+  "expected": "Включить EBS encryption by default в регионе — все новые volumes и их snapshots шифруются автоматически. Триггеры: «always encrypted», «without relying on developers», «simplest».",
+  "why_not": "Ручной аудит реактивен; SCP deny RunInstances блокирует все запуски; шифрование только snapshots не защищает новые volumes.",
+  "keywords": [
+    "EBS encryption by default",
+    "account level",
+    "Region",
+    "volumes",
+    "snapshots",
+    "шифрование по умолчанию"
+  ],
+  "services": [
+    "ebs",
+    "encryption",
+    "kms"
+  ],
+  "topics": [
+    "storage",
+    "iam-security"
+  ],
+  "domain": 1
+}

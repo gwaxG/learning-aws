@@ -1,0 +1,30 @@
+{
+  "id": "vpc-q2",
+  "source": {
+    "type": "topic",
+    "ref": "vpc-networking"
+  },
+  "concept": "NAT Gateway: по одному на AZ для высокой доступности",
+  "tests": "Знание, что NAT Gateway привязан к AZ, и как построить HA-выход в интернет для private subnets.",
+  "expected": "По NAT Gateway в каждой AZ, route table каждой private subnet указывает на NAT в своей AZ. Триггеры: «private subnets across three AZs», «outbound internet», «managed, highly available».",
+  "why_not": "Один NAT Gateway — точка отказа при падении его AZ плюс cross-AZ трафик; IGW с public IP делает инстансы публичными; NAT instance с включённым source/dest check отбрасывает трафик и не HA.",
+  "keywords": [
+    "NAT Gateway",
+    "per AZ",
+    "high availability",
+    "private subnet",
+    "route table",
+    "outbound internet",
+    "в каждой AZ"
+  ],
+  "services": [
+    "nat-gateway",
+    "subnets",
+    "ha"
+  ],
+  "topics": [
+    "vpc-networking",
+    "ha-dr"
+  ],
+  "domain": 2
+}

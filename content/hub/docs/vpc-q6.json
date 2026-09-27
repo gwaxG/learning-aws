@@ -1,0 +1,28 @@
+{
+  "id": "vpc-q6",
+  "source": {
+    "type": "topic",
+    "ref": "vpc-networking"
+  },
+  "concept": "NACL: stateless — outbound правило для ephemeral ports",
+  "tests": "Понимание stateless-природы NACL: ответный трафик требует явного outbound-правила для ephemeral ports.",
+  "expected": "В custom NACL нет outbound allow для ephemeral ports 1024–65535 — ответы на 443 отбрасываются. Триггеры: «SG allows 443», «custom Network ACL», «unreachable from the internet».",
+  "why_not": "Security Group stateful и сам пропускает ответный трафик; у IGW нет stateful/stateless поведения; route table не маршрутизирует «к security group».",
+  "keywords": [
+    "Network ACL",
+    "stateless",
+    "ephemeral ports",
+    "outbound rule",
+    "Security Group",
+    "stateful",
+    "ответный трафик"
+  ],
+  "services": [
+    "nacl",
+    "security-groups"
+  ],
+  "topics": [
+    "vpc-networking"
+  ],
+  "domain": 1
+}

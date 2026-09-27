@@ -1,0 +1,30 @@
+{
+  "id": "e3-q23",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "Stateless веб-слой: вынос сессий в ElastiCache/DynamoDB",
+  "tests": "Куда хранить сессии, чтобы они переживали terminate инстансов при scale-in.",
+  "expected": "Внешнее хранилище сессий — ElastiCache for Redis или DynamoDB; веб-слой остаётся stateless. Триггеры: «session data must survive instance termination», «scale-in».",
+  "why_not": "In-memory, instance store и EBS конкретного инстанса теряются (или недоступны) при его terminate.",
+  "keywords": [
+    "session state",
+    "stateless",
+    "ElastiCache for Redis",
+    "DynamoDB",
+    "scale-in",
+    "хранение сессий"
+  ],
+  "services": [
+    "elasticache",
+    "dynamodb",
+    "auto-scaling",
+    "decoupling"
+  ],
+  "topics": [
+    "architecture",
+    "databases"
+  ],
+  "domain": 2
+}

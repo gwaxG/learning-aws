@@ -1,0 +1,29 @@
+{
+  "id": "e4-q28",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "EFS: общая POSIX-файловая система для многих Linux-инстансов в разных AZ",
+  "tests": "Выбор общей файловой системы для сотен Linux EC2 в нескольких AZ с автоматическим масштабированием.",
+  "expected": "Amazon EFS — эластичная managed NFS, одновременный mount из многих EC2 в разных AZ. Триггеры: «shared file system», «hundreds of Linux instances», «multiple AZs concurrently», «scaling automatically».",
+  "why_not": "EBS — single-AZ и ограниченное число инстансов; S3 — объектное хранилище, не POSIX; instance store — эфемерный и локальный.",
+  "keywords": [
+    "EFS",
+    "NFS",
+    "shared file system",
+    "POSIX",
+    "multi-AZ",
+    "Linux"
+  ],
+  "services": [
+    "efs",
+    "ebs",
+    "instance-store",
+    "s3"
+  ],
+  "topics": [
+    "storage"
+  ],
+  "domain": 2
+}

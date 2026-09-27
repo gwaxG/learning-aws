@@ -1,0 +1,28 @@
+{
+  "id": "e4-q59",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "Systems Manager Patch Manager: патчинг флота по расписанию без SSH",
+  "tests": "Как патчить ОС сотен EC2 по расписанию и получать отчёт о compliance без SSH.",
+  "expected": "AWS Systems Manager Patch Manager — патчинг по расписанию (maintenance windows, patch baselines) через SSM agent и отчёт о patch compliance. Триггеры: «patch operating systems», «hundreds of instances», «on a schedule», «report compliance», «without SSH».",
+  "why_not": "Inspector находит уязвимости, но не ставит патчи; CloudFormation — provisioning; ручные SSH-скрипты — overhead и ошибки.",
+  "keywords": [
+    "Systems Manager",
+    "Patch Manager",
+    "patch compliance",
+    "SSM agent",
+    "maintenance window",
+    "без SSH"
+  ],
+  "services": [
+    "systems-manager",
+    "inspector"
+  ],
+  "topics": [
+    "monitoring",
+    "ec2-compute"
+  ],
+  "domain": 4
+}

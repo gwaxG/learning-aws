@@ -1,0 +1,28 @@
+{
+  "id": "mon-q3",
+  "source": {
+    "type": "topic",
+    "ref": "monitoring"
+  },
+  "concept": "CloudWatch agent: метрики памяти и диска EC2",
+  "tests": "Знание, что память и диск — in-guest метрики, недоступные гипервизору.",
+  "expected": "Установить и настроить CloudWatch agent, который публикует memory и disk как custom metrics. Триггеры: «memory utilization», «disk space», «в CloudWatch».",
+  "why_not": "Detailed monitoring только меняет частоту (5 → 1 мин), память/диск не добавляет; CloudTrail — API-вызовы; Config — состояние конфигурации.",
+  "keywords": [
+    "CloudWatch agent",
+    "memory utilization",
+    "disk space",
+    "custom metrics",
+    "detailed monitoring",
+    "метрики памяти"
+  ],
+  "services": [
+    "cloudwatch",
+    "ec2"
+  ],
+  "topics": [
+    "monitoring",
+    "ec2-compute"
+  ],
+  "domain": 1
+}

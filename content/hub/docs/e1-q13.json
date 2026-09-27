@@ -1,0 +1,29 @@
+{
+  "id": "e1-q13",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "Lambda: serverless для коротких спайковых нагрузок",
+  "tests": "Выбор вычислений без управления серверами с оплатой за запрос для непредсказуемого трафика и коротких выполнений.",
+  "expected": "AWS Lambda — автомасштабирование по числу запросов, оплата за вызов и время выполнения. Триггеры: «unpredictable, spiky», «avoid managing servers», «pay per request», «few seconds».",
+  "why_not": "EC2 с Auto Scaling и ECS on EC2 требуют управлять инстансами и платить за них; EMR — для кластеров big data.",
+  "keywords": [
+    "Lambda",
+    "serverless",
+    "pay per request",
+    "spiky traffic",
+    "без управления серверами"
+  ],
+  "services": [
+    "lambda",
+    "ec2",
+    "ecs",
+    "emr"
+  ],
+  "topics": [
+    "serverless-containers",
+    "cost"
+  ],
+  "domain": 4
+}

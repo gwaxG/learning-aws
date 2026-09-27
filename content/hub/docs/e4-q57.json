@@ -1,0 +1,28 @@
+{
+  "id": "e4-q57",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "CloudFormation: infrastructure as code для повторяемых окружений",
+  "tests": "Выбор нативного сервиса для воспроизводимого provisioning инфраструктуры из версионируемых шаблонов.",
+  "expected": "AWS CloudFormation — IaC-шаблоны под version control, повторяемое развёртывание в разных окружениях. Триггеры: «identical, repeatable infrastructure», «multiple environments», «version-controlled templates», «AWS natively».",
+  "why_not": "Консоль и ad hoc CLI не повторяемы и не отслеживаются; SSM Run Command выполняет команды на инстансах, но не управляет стеками.",
+  "keywords": [
+    "CloudFormation",
+    "infrastructure as code",
+    "templates",
+    "version control",
+    "repeatable",
+    "окружения"
+  ],
+  "services": [
+    "cloudformation",
+    "systems-manager"
+  ],
+  "topics": [
+    "monitoring",
+    "architecture"
+  ],
+  "domain": 4
+}

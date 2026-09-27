@@ -1,0 +1,31 @@
+{
+  "id": "e1-q59",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "GuardDuty: ML-обнаружение угроз по CloudTrail, Flow Logs, DNS",
+  "tests": "Какой сервис обнаруживает аномальную и вредоносную активность в аккаунте с помощью machine learning.",
+  "expected": "Amazon GuardDuty — непрерывный анализ CloudTrail, VPC Flow Logs и DNS logs с ML и threat intelligence. Триггеры: «anomalous activity», «unusual API calls», «known malicious IP», «machine learning».",
+  "why_not": "AWS Config — конфигурации; WAF — фильтрация веб-запросов; Macie — поиск чувствительных данных в S3.",
+  "keywords": [
+    "GuardDuty",
+    "threat detection",
+    "machine learning",
+    "malicious IP",
+    "CloudTrail",
+    "VPC Flow Logs",
+    "аномальная активность"
+  ],
+  "services": [
+    "guardduty",
+    "macie",
+    "waf",
+    "config"
+  ],
+  "topics": [
+    "iam-security",
+    "monitoring"
+  ],
+  "domain": 1
+}

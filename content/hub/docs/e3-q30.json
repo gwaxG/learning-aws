@@ -1,0 +1,27 @@
+{
+  "id": "e3-q30",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "Auto Scaling: lifecycle hooks и scale-in protection",
+  "tests": "Как не прервать долгие batch-задачи на инстансах при scale-in.",
+  "expected": "Lifecycle hooks (Terminating:Wait) и/или instance scale-in protection — инстанс завершает работу до terminate. Триггеры: «avoid terminating instances still processing», «long-running jobs», «scale-in».",
+  "why_not": "Desired capacity не выбирает, кого убивать; cooldown 0 усиливает churn; отключение LB не управляет terminate.",
+  "keywords": [
+    "lifecycle hooks",
+    "scale-in protection",
+    "Terminating:Wait",
+    "long-running jobs",
+    "Auto Scaling group",
+    "не прерывать задачи"
+  ],
+  "services": [
+    "auto-scaling",
+    "ec2"
+  ],
+  "topics": [
+    "ec2-compute"
+  ],
+  "domain": 2
+}

@@ -1,0 +1,28 @@
+{
+  "id": "e4-q51",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "Compute Optimizer: rightsizing по фактической утилизации",
+  "tests": "Какой сервис даёт рекомендации по rightsizing недозагруженных EC2.",
+  "expected": "AWS Compute Optimizer — анализирует метрики утилизации и рекомендует оптимальные типы/размеры инстансов. Триггеры: «idle and underutilized», «recommendations to right-size», «reduce cost».",
+  "why_not": "Inspector — уязвимости; Config — состояние конфигурации; CloudWatch alarms алертят, но не рекомендуют размеры.",
+  "keywords": [
+    "Compute Optimizer",
+    "rightsizing",
+    "underutilized",
+    "idle instances",
+    "recommendations",
+    "снижение затрат"
+  ],
+  "services": [
+    "compute-optimizer",
+    "cloudwatch"
+  ],
+  "topics": [
+    "cost",
+    "ec2-compute"
+  ],
+  "domain": 3
+}

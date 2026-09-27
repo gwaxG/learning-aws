@@ -1,0 +1,29 @@
+{
+  "id": "e2-q11",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "SQS FIFO: порядок и exactly-once обработка",
+  "tests": "Выбор сервиса для буферизации всплесков с гарантией строгого порядка и однократной обработки.",
+  "expected": "SQS FIFO queue — упорядочивание (в рамках message group) и exactly-once через дедупликацию (окно 5 мин), буферизует пики. Триггеры: «exactly once», «in order», «decouple», «surge».",
+  "why_not": "SQS standard и SNS standard — at-least-once, возможны дубли, без порядка; Kinesis — порядок только в шарде, для streaming-аналитики.",
+  "keywords": [
+    "SQS FIFO",
+    "exactly-once",
+    "ordering",
+    "deduplication",
+    "decouple",
+    "surge"
+  ],
+  "services": [
+    "sqs-fifo",
+    "sqs",
+    "sns",
+    "kinesis-data-streams"
+  ],
+  "topics": [
+    "integration"
+  ],
+  "domain": 2
+}

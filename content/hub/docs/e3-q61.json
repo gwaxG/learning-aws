@@ -1,0 +1,27 @@
+{
+  "id": "e3-q61",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "CloudWatch Logs: Logs Insights и metric filters",
+  "tests": "Как централизованно анализировать логи интерактивно и строить alarms по паттернам логов.",
+  "expected": "CloudWatch Logs + Logs Insights (интерактивные запросы) + metric filters → метрики → alarms. Триггеры: «query log data interactively», «metric-based alarms», «centralizes logs».",
+  "why_not": "Логи только в S3 без анализа — нет алертинга; печать в консоль и рассылка по email не масштабируются.",
+  "keywords": [
+    "CloudWatch Logs",
+    "Logs Insights",
+    "metric filters",
+    "alarms",
+    "centralized logging",
+    "интерактивные запросы"
+  ],
+  "services": [
+    "cloudwatch-logs",
+    "cloudwatch"
+  ],
+  "topics": [
+    "monitoring"
+  ],
+  "domain": 4
+}

@@ -1,0 +1,28 @@
+{
+  "id": "hadr-q2",
+  "source": {
+    "type": "topic",
+    "ref": "ha-dr"
+  },
+  "concept": "DR-стратегии: Warm Standby для RTO в минуты",
+  "tests": "Сопоставление требований RTO минуты / RPO секунды и бюджета с DR-стратегией.",
+  "expected": "Warm Standby — уменьшенная, но полностью рабочая копия в DR-регионе, масштабируется при failover. Триггеры: «RTO несколько минут», «RPO секунды», «always-on standby, но не полная копия production».",
+  "why_not": "Backup & Restore — RTO часы; Pilot Light держит app-серверы выключенными — дольше подъём; Single-AZ — нет DR; Active/Active превышает бюджет.",
+  "keywords": [
+    "Warm Standby",
+    "RTO minutes",
+    "RPO seconds",
+    "scaled-down",
+    "Pilot Light",
+    "always-on standby",
+    "не полная копия"
+  ],
+  "services": [
+    "dr-strategies",
+    "rto-rpo"
+  ],
+  "topics": [
+    "ha-dr"
+  ],
+  "domain": 2
+}

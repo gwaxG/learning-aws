@@ -1,0 +1,28 @@
+{
+  "id": "edge-q6",
+  "source": {
+    "type": "topic",
+    "ref": "edge-dns"
+  },
+  "concept": "CloudFront invalidation: немедленное обновление закэшированного объекта",
+  "tests": "Сброс устаревшего объекта из edge-кэшей при длинном TTL.",
+  "expected": "CloudFront invalidation для /css/app.css (первые 1000 путей в месяц бесплатно). Триггеры: «заменили файл в origin», «TTL 24 часа», «нужно сразу». Долгосрочно — версионированные имена файлов.",
+  "why_not": "Storage class влияет на S3, не на CDN-кэш; отключение distribution — простой; смена origin на ALB не относится к делу.",
+  "keywords": [
+    "invalidation",
+    "CloudFront",
+    "TTL",
+    "edge cache",
+    "versioned filenames",
+    "старый файл",
+    "обновить немедленно"
+  ],
+  "services": [
+    "cloudfront",
+    "caching"
+  ],
+  "topics": [
+    "edge-dns"
+  ],
+  "domain": 3
+}

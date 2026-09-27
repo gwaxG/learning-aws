@@ -1,0 +1,31 @@
+{
+  "id": "e2-q25",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "SQS: буферизация всплесков между API Gateway и Lambda",
+  "tests": "Как сгладить всплески запросов и защитить downstream БД, когда Lambda упирается в concurrency limit.",
+  "expected": "Поставить SQS очередь между API Gateway и Lambda — развязка скорости приёма и обработки, очередь буферизует пики, БД не перегружается. Триггеры: «throttling», «smooth bursts», «avoid overwhelming downstream database».",
+  "why_not": "Повышение burst limit API Gateway пропускает больше нагрузки, а не сглаживает; provisioned concurrency убирает cold start, но не буферизует; NLB не даёт очереди.",
+  "keywords": [
+    "SQS",
+    "buffer",
+    "decouple",
+    "throttling",
+    "Lambda concurrency",
+    "API Gateway",
+    "burst"
+  ],
+  "services": [
+    "sqs",
+    "api-gateway",
+    "lambda",
+    "decoupling"
+  ],
+  "topics": [
+    "integration",
+    "serverless-containers"
+  ],
+  "domain": 4
+}

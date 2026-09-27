@@ -1,0 +1,30 @@
+{
+  "id": "sto-q8",
+  "source": {
+    "type": "topic",
+    "ref": "storage"
+  },
+  "concept": "S3 Cross-Region Replication: versioning и IAM role",
+  "tests": "Знание обязательных условий для автоматического копирования объектов S3 в другой регион.",
+  "expected": "Cross-Region Replication с IAM role для репликации + versioning на source и destination bucket. Существующие объекты — только через S3 Batch Replication. Триггеры: «automatically copied», «bucket in another region», «disaster recovery».",
+  "why_not": "SRR реплицирует в пределах одного региона; Transfer Acceleration лишь ускоряет клиентские загрузки через edge locations и не копирует между bucket.",
+  "keywords": [
+    "Cross-Region Replication",
+    "CRR",
+    "versioning",
+    "IAM role",
+    "SRR",
+    "disaster recovery",
+    "репликация в другой регион"
+  ],
+  "services": [
+    "s3-replication",
+    "s3",
+    "dr-strategies"
+  ],
+  "topics": [
+    "storage",
+    "ha-dr"
+  ],
+  "domain": 1
+}

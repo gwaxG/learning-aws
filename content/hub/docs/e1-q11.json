@@ -1,0 +1,29 @@
+{
+  "id": "e1-q11",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "S3 storage classes: Glacier Deep Archive для долгого архива",
+  "tests": "Выбор самого дешёвого storage class для редко извлекаемых архивов с многолетним хранением и допустимым извлечением до 12 часов.",
+  "expected": "S3 Glacier Deep Archive — минимальная стоимость хранения; Standard retrieval до 12 ч. Триггеры: «retain 7 years», «almost never retrieved», «retrieval within 12 hours».",
+  "why_not": "Standard и Standard-IA намного дороже за GB; Intelligent-Tiering добавляет плату за мониторинг и не нужен при известном паттерне доступа.",
+  "keywords": [
+    "Glacier Deep Archive",
+    "compliance",
+    "7 лет",
+    "12 часов",
+    "archive",
+    "Intelligent-Tiering",
+    "минимальная стоимость"
+  ],
+  "services": [
+    "s3-storage-classes",
+    "glacier"
+  ],
+  "topics": [
+    "storage",
+    "cost"
+  ],
+  "domain": 4
+}

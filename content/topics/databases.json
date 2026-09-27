@@ -1,173 +1,173 @@
 {
   "slug": "databases",
-  "title": "Databases",
+  "title": "Базы данных",
   "domains": [
     2,
     3
   ],
   "essentials": [
     {
-      "heading": "RDS engines, Multi-AZ vs Read Replicas",
-      "body": "**What.** **Amazon RDS** is a managed relational database service for MySQL, PostgreSQL, MariaDB, Oracle, SQL Server and Aurora. **Multi-AZ** keeps a hot **synchronous** standby in another AZ; **Read Replicas** are extra read-only copies fed by **asynchronous** replication.\n\n**Why.** Multi-AZ solves *availability* (auto failover, no data loss); Read Replicas solve *read scaling* (offload reporting/heavy SELECTs from the primary).\n\n**How.** Multi-AZ exposes one endpoint; failover swaps the **DNS `CNAME`** in 60–120s and the standby is **not readable**. Read Replicas have their own endpoints, up to **15 per source**, can be **cross-region**, can be **promoted** to standalone DBs, and lag is eventual. You can combine both.\n\n**Exam.** Mnemonic: Multi-AZ for **availability**, Read Replicas for **performance**. Traps: a standby never serves reads; cross-region replicas are for DR/low-latency reads, not synchronous HA; replica promotion is manual.",
+      "heading": "Движки RDS, Multi-AZ vs Read Replicas",
+      "body": "**Что.** **Amazon RDS** — управляемый сервис реляционных баз данных для MySQL, PostgreSQL, MariaDB, Oracle, SQL Server и Aurora. **Multi-AZ** держит горячий **синхронный** standby в другой AZ; **Read Replicas** — дополнительные read-only копии, которые получают данные через **асинхронную** репликацию.\n\n**Зачем.** Multi-AZ решает задачу *доступности* (автоматический failover, без потери данных); Read Replicas — задачу *масштабирования чтения* (снимают отчёты/тяжёлые SELECT с primary).\n\n**Как.** Multi-AZ предоставляет один endpoint; при failover подменяется **DNS `CNAME`** за 60–120 с, а standby **недоступен для чтения**. У Read Replicas свои endpoints, их до **15 на источник**, они могут быть **cross-region**, их можно **promote** в самостоятельные базы, а отставание у них eventual. Оба механизма можно комбинировать.\n\n**Экзамен.** Мнемоника: Multi-AZ — для **доступности**, Read Replicas — для **производительности**. Ловушки: standby никогда не обслуживает чтение; cross-region реплики — для DR и чтения с низкой задержкой, а не для синхронного HA; promote реплики выполняется вручную.",
       "diagram": {
         "src": "rds-multiaz-vs-readreplica.svg",
-        "caption": "Multi-AZ keeps a synchronous, non-readable standby for failover; Read Replicas are asynchronous, multiple, optionally cross-region, and serve reads."
+        "caption": "Multi-AZ держит синхронный, недоступный для чтения standby для failover; Read Replicas асинхронные, их может быть несколько, в том числе в других регионах, и они обслуживают чтение."
       }
     },
     {
       "heading": "Aurora",
-      "body": "**What.** **Amazon Aurora** is AWS's MySQL/PostgreSQL-compatible engine built on a distributed, log-structured storage layer. Storage **auto-scales** to **128 TB** and data is kept as **6 copies across 3 AZs** with **4/6 quorum for writes** and **3/6 for reads**.\n\n**Why.** Delivers higher throughput, durability and faster failover than vanilla RDS, while remaining wire-compatible with MySQL/PostgreSQL.\n\n**How.** **1 writer** plus up to **15 Aurora Replicas** share the same storage volume, giving low-lag reads and sub-30s failover via **reader/writer endpoints**. **Aurora Global Database** adds up to **5 secondary regions** with sub-second replication for global reads and cross-region DR. **Aurora Serverless v2** scales capacity in **ACUs** for spiky or unpredictable workloads.\n\n**Exam.** Remember 6 copies / 3 AZs, 1 writer + 15 readers, and pick **Global Database** for relational multi-region; pick **Serverless v2** when load is variable; storage bills only for what you use."
+      "body": "**Что.** **Amazon Aurora** — совместимый с MySQL/PostgreSQL движок AWS на распределённом log-structured слое хранения. Хранилище **автоматически растёт** до **128 TB**, данные хранятся в **6 копиях в 3 AZ** с **кворумом 4/6 на запись** и **3/6 на чтение**.\n\n**Зачем.** Даёт больший throughput, durability и более быстрый failover, чем обычный RDS, оставаясь совместимым с MySQL/PostgreSQL по протоколу.\n\n**Как.** **1 writer** и до **15 Aurora Replicas** используют один общий том хранения, что даёт чтение с малым отставанием и failover менее чем за 30 с через **reader/writer endpoints**. **Aurora Global Database** добавляет до **5 вторичных регионов** с репликацией быстрее секунды для глобального чтения и межрегионального DR. **Aurora Serverless v2** масштабирует ёмкость в **ACU** для пиковых или непредсказуемых нагрузок.\n\n**Экзамен.** Запомните: 6 копий / 3 AZ, 1 writer + 15 readers; выбирайте **Global Database** для реляционной мульти-региональности и **Serverless v2** при переменной нагрузке; хранилище оплачивается только по факту использования."
     },
     {
       "heading": "DynamoDB",
-      "body": "**What.** **DynamoDB** is a fully managed, serverless **NoSQL** key-value/document database giving single-digit-ms latency at any scale. Items are located by **partition key** (hash) and optional **sort key**.\n\n**Why.** Removes capacity planning, sharding and patching for high-throughput web/mobile/IoT workloads where access is by key.\n\n**How.** Capacity: **on-demand** (pay-per-request, spiky/unpredictable) vs **provisioned** with **auto scaling** (cheaper for steady load). **GSI** = different partition/sort key, eventually consistent, can be added anytime; **LSI** = alternate sort key under the same partition key, must be defined at table creation. **DAX** is an in-memory write-through cache giving microsecond reads. **Streams** emit an ordered 24h change log that can trigger **Lambda**. **Global Tables** are multi-region, multi-leader active-active. **TTL** auto-expires items.\n\n**Exam.** Pick on-demand for spiky/unknown traffic; GSI is addable, LSI is not; DAX caches DynamoDB only (not arbitrary DBs); Streams→Lambda is the canonical CDC pattern; Global Tables use last-writer-wins."
+      "body": "**Что.** **DynamoDB** — полностью управляемая serverless **NoSQL** база key-value/document с задержкой в единицы миллисекунд на любом масштабе. Элементы находятся по **partition key** (хэш) и необязательному **sort key**.\n\n**Зачем.** Избавляет от планирования ёмкости, шардирования и патчинга для высоконагруженных web/mobile/IoT систем с доступом по ключу.\n\n**Как.** Ёмкость: **on-demand** (оплата за запрос, для пиковой/непредсказуемой нагрузки) vs **provisioned** с **auto scaling** (дешевле при стабильной нагрузке). **GSI** = другой partition/sort key, eventually consistent, можно добавить в любой момент; **LSI** = альтернативный sort key при том же partition key, задаётся только при создании таблицы. **DAX** — in-memory write-through кэш с чтением за микросекунды. **Streams** выдают упорядоченный лог изменений за 24 ч, который может запускать **Lambda**. **Global Tables** — мульти-региональная multi-leader active-active схема. **TTL** автоматически удаляет устаревшие элементы.\n\n**Экзамен.** On-demand — для пикового/неизвестного трафика; GSI можно добавить, LSI — нет; DAX кэширует только DynamoDB (не произвольные базы); Streams→Lambda — канонический CDC-паттерн; Global Tables используют last-writer-wins."
     },
     {
-      "heading": "ElastiCache: Redis vs Memcached + strategies",
-      "body": "**What.** **ElastiCache** is a managed in-memory cache offering two engines: **Redis** (rich data structures, replication, persistence) and **Memcached** (pure multi-threaded key/value, sharded).\n\n**Why.** Push microsecond reads in front of slower databases to cut latency and DB load for read-heavy workloads, sessions, leaderboards and rate limiting.\n\n**How.** **Redis** supports **Multi-AZ with automatic failover**, read replicas, snapshots, pub/sub, sorted sets and transactions — choose for HA and complex data types. **Memcached** has no persistence and no replication — choose only for a simple, horizontally sharded, ephemeral cache. Patterns: **lazy loading / cache-aside** (read DB on miss, write to cache; risk of stale data) and **write-through** (cache on every DB write; fresh but extra writes). Bound staleness with **TTL**.\n\n**Exam.** HA cache = Redis Multi-AZ (Memcached can't). **DAX** caches DynamoDB only; **ElastiCache** fronts RDS/Aurora/anything. Lazy loading caches only what's requested; write-through prewarms the cache."
+      "heading": "ElastiCache: Redis vs Memcached + стратегии",
+      "body": "**Что.** **ElastiCache** — управляемый in-memory кэш с двумя движками: **Redis** (богатые структуры данных, репликация, персистентность) и **Memcached** (чистый многопоточный key/value, шардированный).\n\n**Зачем.** Чтение за микросекунды перед медленными базами снижает задержку и нагрузку на БД для read-heavy сценариев, сессий, лидербордов и rate limiting.\n\n**Как.** **Redis** поддерживает **Multi-AZ с автоматическим failover**, read replicas, snapshots, pub/sub, sorted sets и транзакции — выбирайте его для HA и сложных типов данных. У **Memcached** нет ни персистентности, ни репликации — выбирайте его только для простого горизонтально шардированного эфемерного кэша. Паттерны: **lazy loading / cache-aside** (при промахе читаем БД и пишем в кэш; риск устаревших данных) и **write-through** (пишем в кэш при каждой записи в БД; данные свежие, но лишние записи). Ограничивайте устаревание через **TTL**.\n\n**Экзамен.** HA-кэш = Redis Multi-AZ (Memcached так не умеет). **DAX** кэширует только DynamoDB; **ElastiCache** ставится перед RDS/Aurora/чем угодно. Lazy loading кэширует только запрошенное; write-through заранее прогревает кэш."
     },
     {
       "heading": "Redshift (OLAP) vs RDS (OLTP)",
-      "body": "**What.** **Amazon Redshift** is a **columnar, MPP data warehouse** for **OLAP**. **RDS/Aurora** is a **row-based** relational DB for **OLTP**. They target opposite ends of the workload spectrum.\n\n**Why.** Big analytical scans and aggregations need columnar layout and parallel execution; high-volume transactional writes need row storage and indexes.\n\n**How.** Redshift scales to **petabytes**, loads from **S3** (`COPY`), integrates with QuickSight, supports concurrency scaling and RA3 managed storage. **Redshift Spectrum** queries S3 directly; **Athena** is the serverless, pay-per-query alternative against S3 via Glue. RDS/Aurora handle low-latency single-row transactions for application backends.\n\n**Exam.** Rule of thumb: \"report/analyze huge datasets\" → **Redshift**; \"app transactions\" → RDS/Aurora; \"occasional ad-hoc SQL on S3, no cluster\" → **Athena**. Redshift is *not* for high-throughput OLTP writes, and DynamoDB is *not* for complex analytical joins."
+      "body": "**Что.** **Amazon Redshift** — **колоночное MPP-хранилище данных** для **OLAP**. **RDS/Aurora** — **строковая** реляционная БД для **OLTP**. Они нацелены на противоположные концы спектра нагрузок.\n\n**Зачем.** Большим аналитическим сканам и агрегациям нужны колоночное хранение и параллельное выполнение; интенсивной транзакционной записи — строковое хранение и индексы.\n\n**Как.** Redshift масштабируется до **петабайтов**, загружает данные из **S3** (`COPY`), интегрируется с QuickSight, поддерживает concurrency scaling и управляемое хранилище RA3. **Redshift Spectrum** запрашивает S3 напрямую; **Athena** — serverless-альтернатива с оплатой за запрос к S3 через Glue. RDS/Aurora обслуживают транзакции над отдельными строками с низкой задержкой для бэкендов приложений.\n\n**Экзамен.** Практическое правило: «отчёты/анализ огромных наборов данных» → **Redshift**; «транзакции приложения» → RDS/Aurora; «эпизодический ad-hoc SQL по S3 без кластера» → **Athena**. Redshift *не* для высоконагруженной OLTP-записи, а DynamoDB *не* для сложных аналитических join-ов."
     },
     {
-      "heading": "Choosing the right database",
-      "body": "**What.** AWS offers a *purpose-built* portfolio: pick the engine whose data model and access pattern fit the workload, not the one you know best.\n\n**Why.** A wrong fit (e.g. analytics on DynamoDB, cache on RDS) wastes money and breaks scale or latency targets.\n\n**How.** Map workload → service: **Relational + ACID + joins** → `RDS` / `Aurora`; **key-value/document at any scale** → `DynamoDB`; **in-memory cache** → `ElastiCache` (Redis for HA, Memcached for simple sharding); **graph** (social, fraud) → `Neptune`; **time-series** (IoT, metrics) → `Timestream`; **immutable ledger** → `QLDB`; **warehouse/OLAP** → `Redshift`; **ad-hoc SQL on S3** → `Athena`; **MongoDB API** → `DocumentDB`; **Cassandra API** → `Keyspaces`.\n\n**Exam.** Read the question for keywords: \"graph/relationship\" = Neptune, \"ledger/immutable\" = QLDB, \"BI/petabyte analytics\" = Redshift, \"global multi-master NoSQL\" = DynamoDB Global Tables, \"cache with HA\" = ElastiCache Redis Multi-AZ.",
+      "heading": "Выбор подходящей базы данных",
+      "body": "**Что.** AWS предлагает портфель *purpose-built* баз: выбирайте движок, чья модель данных и паттерн доступа подходят нагрузке, а не тот, который знаете лучше всего.\n\n**Зачем.** Неподходящий выбор (например, аналитика на DynamoDB или кэш на RDS) тратит деньги и срывает цели по масштабу или задержке.\n\n**Как.** Сопоставьте нагрузку и сервис: **реляционная модель + ACID + join-ы** → `RDS` / `Aurora`; **key-value/document на любом масштабе** → `DynamoDB`; **in-memory кэш** → `ElastiCache` (Redis для HA, Memcached для простого шардирования); **графы** (соцсети, фрод) → `Neptune`; **временные ряды** (IoT, метрики) → `Timestream`; **неизменяемый журнал (ledger)** → `QLDB`; **хранилище/OLAP** → `Redshift`; **ad-hoc SQL по S3** → `Athena`; **MongoDB API** → `DocumentDB`; **Cassandra API** → `Keyspaces`.\n\n**Экзамен.** Ищите в вопросе ключевые слова: «graph/relationship» = Neptune, «ledger/immutable» = QLDB, «BI/petabyte analytics» = Redshift, «global multi-master NoSQL» = DynamoDB Global Tables, «cache with HA» = ElastiCache Redis Multi-AZ.",
       "diagram": {
         "src": "aws-database-decision.svg",
-        "caption": "Decision tree: map workload shape (relational, key-value, cache, graph, time-series, ledger, OLAP) to the matching AWS database service."
+        "caption": "Дерево решений: сопоставьте форму нагрузки (реляционная, key-value, кэш, граф, временные ряды, ledger, OLAP) с подходящим сервисом баз данных AWS."
       }
     },
     {
-      "heading": "Backup, restore, snapshots, PITR",
-      "body": "**What.** RDS, Aurora and DynamoDB all support managed backups: **automated backups** with **point-in-time recovery (PITR)** plus user-triggered **snapshots**.\n\n**Why.** Protect against accidental deletes, corruption and ransomware while meeting RPO/RTO and compliance retention requirements.\n\n**How.** **RDS automated backups** = daily snapshot + transaction logs enabling **PITR** within a **1–35 day** retention window; they are deleted with the instance unless you take a final snapshot. **Manual snapshots** are kept until you delete them and are **shareable/copyable cross-region** (encrypted via KMS). Restoring a snapshot creates a **new** instance with a **new endpoint**. **Aurora** does continuous backup to S3 with PITR and fast database **clones**. **DynamoDB** offers **PITR (35 days)** plus **on-demand backups**; **Global Tables** add multi-region durability. Use **RDS Proxy** to pool connections (key for Lambda).\n\n**Exam.** Recent accidental delete → **PITR**, not snapshots. Final snapshot is the only way to keep data after instance deletion. RDS Proxy = Lambda + RDS scaling and failover hiding."
+      "heading": "Бэкапы, восстановление, snapshots, PITR",
+      "body": "**Что.** RDS, Aurora и DynamoDB поддерживают управляемые бэкапы: **automated backups** с **point-in-time recovery (PITR)** плюс создаваемые вручную **snapshots**.\n\n**Зачем.** Защита от случайных удалений, повреждения данных и ransomware с соблюдением RPO/RTO и требований к сроку хранения.\n\n**Как.** **Automated backups в RDS** = ежедневный snapshot + логи транзакций, что даёт **PITR** в окне хранения **1–35 дней**; они удаляются вместе с инстансом, если не сделать final snapshot. **Ручные snapshots** хранятся, пока вы их не удалите, и их можно **шарить/копировать в другие регионы** (с шифрованием через KMS). Восстановление из snapshot создаёт **новый** инстанс с **новым endpoint**. **Aurora** непрерывно бэкапится в S3 с PITR и поддерживает быстрые **клоны** базы. **DynamoDB** предлагает **PITR (35 дней)** и **on-demand backups**; **Global Tables** добавляют мульти-региональную durability. Используйте **RDS Proxy** для пула соединений (ключевое для Lambda).\n\n**Экзамен.** Недавнее случайное удаление → **PITR**, а не snapshots. Final snapshot — единственный способ сохранить данные после удаления инстанса. RDS Proxy = масштабирование Lambda + RDS и сокрытие failover."
     }
   ],
   "labs": [
     {
       "id": "db-multiaz-rds",
-      "title": "Create a Multi-AZ RDS PostgreSQL instance",
-      "intro": "Provision a small **Multi-AZ** PostgreSQL instance to see the synchronous standby and automatic failover HA setup. Multi-AZ is a single endpoint; the standby is hidden and not readable.",
+      "title": "Создать инстанс RDS PostgreSQL с Multi-AZ",
+      "intro": "Разверните небольшой инстанс PostgreSQL с **Multi-AZ**, чтобы увидеть HA-схему с синхронным standby и автоматическим failover. У Multi-AZ один endpoint; standby скрыт и недоступен для чтения.",
       "cli": "aws rds create-db-instance \\\n  --db-instance-identifier saa-lab-pg \\\n  --db-instance-class db.t3.micro \\\n  --engine postgres \\\n  --allocated-storage 20 \\\n  --master-username saaadmin \\\n  --master-user-password 'ChangeMe123!' \\\n  --multi-az \\\n  --backup-retention-period 7 \\\n  --no-publicly-accessible\n\n# Watch it come up\naws rds describe-db-instances \\\n  --db-instance-identifier saa-lab-pg \\\n  --query 'DBInstances[0].{Status:DBInstanceStatus,MultiAZ:MultiAZ,Endpoint:Endpoint.Address}'",
       "pulumi": "import pulumi_aws as aws\n\ndb = aws.rds.Instance(\n    \"saa-lab-pg\",\n    identifier=\"saa-lab-pg\",\n    engine=\"postgres\",\n    instance_class=\"db.t3.micro\",\n    allocated_storage=20,\n    username=\"saaadmin\",\n    password=\"ChangeMe123!\",  # use pulumi.Config secret in real code\n    multi_az=True,\n    backup_retention_period=7,\n    publicly_accessible=False,\n    skip_final_snapshot=True,\n)\n\nexport_endpoint = db.endpoint",
-      "note": "Cleanup: `aws rds delete-db-instance --db-instance-identifier saa-lab-pg --skip-final-snapshot --delete-automated-backups`. Multi-AZ roughly doubles cost (standby runs continuously). Trigger a test failover with `aws rds reboot-db-instance --db-instance-identifier saa-lab-pg --force-failover`."
+      "note": "Очистка: `aws rds delete-db-instance --db-instance-identifier saa-lab-pg --skip-final-snapshot --delete-automated-backups`. Multi-AZ примерно удваивает стоимость (standby работает постоянно). Тестовый failover можно запустить командой `aws rds reboot-db-instance --db-instance-identifier saa-lab-pg --force-failover`."
     },
     {
       "id": "db-dynamo-gsi",
-      "title": "Create a DynamoDB table (on-demand) with a GSI",
-      "intro": "Create a serverless table using **on-demand** (PAY_PER_REQUEST) capacity and add a **Global Secondary Index** to query by a non-key attribute. On-demand removes capacity planning; the GSI enables a second access pattern.",
+      "title": "Создать таблицу DynamoDB (on-demand) с GSI",
+      "intro": "Создайте serverless-таблицу с ёмкостью **on-demand** (PAY_PER_REQUEST) и добавьте **Global Secondary Index** для запросов по атрибуту вне ключа. On-demand избавляет от планирования ёмкости; GSI даёт второй паттерн доступа.",
       "cli": "aws dynamodb create-table \\\n  --table-name saa-lab-orders \\\n  --attribute-definitions \\\n      AttributeName=orderId,AttributeType=S \\\n      AttributeName=customerId,AttributeType=S \\\n  --key-schema AttributeName=orderId,KeyType=HASH \\\n  --billing-mode PAY_PER_REQUEST \\\n  --global-secondary-indexes '[{\n      \"IndexName\": \"by-customer\",\n      \"KeySchema\": [{\"AttributeName\":\"customerId\",\"KeyType\":\"HASH\"}],\n      \"Projection\": {\"ProjectionType\":\"ALL\"}\n  }]'\n\n# Query the GSI\naws dynamodb query --table-name saa-lab-orders \\\n  --index-name by-customer \\\n  --key-condition-expression 'customerId = :c' \\\n  --expression-attribute-values '{\":c\":{\"S\":\"cust-1\"}}'",
       "pulumi": "import pulumi_aws as aws\n\norders = aws.dynamodb.Table(\n    \"saa-lab-orders\",\n    name=\"saa-lab-orders\",\n    billing_mode=\"PAY_PER_REQUEST\",\n    hash_key=\"orderId\",\n    attributes=[\n        aws.dynamodb.TableAttributeArgs(name=\"orderId\", type=\"S\"),\n        aws.dynamodb.TableAttributeArgs(name=\"customerId\", type=\"S\"),\n    ],\n    global_secondary_indexes=[\n        aws.dynamodb.TableGlobalSecondaryIndexArgs(\n            name=\"by-customer\",\n            hash_key=\"customerId\",\n            projection_type=\"ALL\",\n        )\n    ],\n    ttl=aws.dynamodb.TableTtlArgs(attribute_name=\"expiresAt\", enabled=True),\n)",
-      "note": "Cleanup: `aws dynamodb delete-table --table-name saa-lab-orders`. With PAY_PER_REQUEST a GSI inherits on-demand billing (no separate RCU/WCU to set). Remember: GSIs can be added anytime; **LSIs must be defined at table creation**."
+      "note": "Очистка: `aws dynamodb delete-table --table-name saa-lab-orders`. При PAY_PER_REQUEST GSI наследует оплату on-demand (отдельно задавать RCU/WCU не нужно). Помните: GSI можно добавить в любой момент; **LSI задаются только при создании таблицы**."
     }
   ],
   "questions": [
     {
       "id": "db-q1",
       "domain": 2,
-      "stem": "A company runs a production RDS MySQL database. They need automatic failover to another Availability Zone if the primary fails, with no data loss. Which configuration meets this?",
+      "stem": "Компания использует production-базу RDS MySQL. Нужен автоматический failover в другую Availability Zone при отказе primary без потери данных. Какая конфигурация это обеспечит?",
       "options": [
-        "Create five Read Replicas in the same region",
-        "Enable Multi-AZ deployment",
-        "Add a cross-region Read Replica and promote it on failure",
-        "Enable on-demand snapshots every hour"
+        "Создать пять Read Replicas в том же регионе",
+        "Включить развёртывание Multi-AZ",
+        "Добавить cross-region Read Replica и делать ей promote при отказе",
+        "Включить on-demand snapshots каждый час"
       ],
       "answer": 1,
-      "explanation": "Multi-AZ keeps a synchronous standby in another AZ and fails over automatically with no data loss — exactly the HA requirement. Read Replicas are asynchronous (potential data loss) and require manual promotion, so the cross-region replica and five replicas options are about read scaling/DR, not automatic same-failover HA. Hourly snapshots provide backups, not automatic failover."
+      "explanation": "Multi-AZ держит синхронный standby в другой AZ и автоматически выполняет failover без потери данных — ровно то, что требуется для HA. Read Replicas асинхронные (возможна потеря данных) и требуют ручного promote, так что варианты с cross-region репликой и пятью репликами — про масштабирование чтения/DR, а не про автоматический HA. Ежечасные snapshots дают бэкапы, но не автоматический failover."
     },
     {
       "id": "db-q2",
       "domain": 3,
-      "stem": "An application's RDS PostgreSQL primary is CPU-bound by heavy reporting SELECT queries that slow down user transactions. The team wants to offload the read load. What should they do?",
+      "stem": "Primary RDS PostgreSQL приложения упирается в CPU из-за тяжёлых SELECT-запросов отчётности, которые замедляют пользовательские транзакции. Команда хочет снять нагрузку чтения. Что сделать?",
       "options": [
-        "Convert the instance to Multi-AZ so the standby serves reads",
-        "Increase the backup retention period",
-        "Enable point-in-time recovery",
-        "Create one or more Read Replicas and point reporting queries at them"
+        "Перевести инстанс в Multi-AZ, чтобы standby обслуживал чтение",
+        "Увеличить срок хранения бэкапов",
+        "Включить point-in-time recovery",
+        "Создать одну или несколько Read Replicas и направить на них запросы отчётности"
       ],
       "answer": 3,
-      "explanation": "Read Replicas have their own endpoints and are made to offload read traffic — reporting queries hit the replica, freeing the primary. A Multi-AZ standby cannot serve reads (it exists only for failover). Backup retention and PITR are data-protection features and do nothing for read scaling."
+      "explanation": "У Read Replicas свои endpoints, и они созданы, чтобы снимать читающий трафик: запросы отчётов идут на реплику и разгружают primary. Standby в Multi-AZ не обслуживает чтение (он существует только для failover). Срок хранения бэкапов и PITR — функции защиты данных и никак не помогают масштабировать чтение."
     },
     {
       "id": "db-q3",
       "domain": 3,
-      "stem": "A gaming app has highly unpredictable, spiky traffic and needs single-digit-millisecond key-value access at any scale with no capacity planning. Which database and capacity mode fit best?",
+      "stem": "У игрового приложения крайне непредсказуемый пиковый трафик, и ему нужен key-value доступ за единицы миллисекунд на любом масштабе без планирования ёмкости. Какая база и режим ёмкости подходят лучше всего?",
       "options": [
-        "DynamoDB with on-demand capacity",
-        "Redshift with concurrency scaling",
-        "DynamoDB with provisioned capacity and no auto scaling",
-        "RDS MySQL with provisioned IOPS"
+        "DynamoDB с ёмкостью on-demand",
+        "Redshift с concurrency scaling",
+        "DynamoDB с provisioned ёмкостью без auto scaling",
+        "RDS MySQL с provisioned IOPS"
       ],
       "answer": 0,
-      "explanation": "DynamoDB on-demand handles spiky, unpredictable traffic with no capacity planning and gives single-digit-ms key-value access — the ideal match. Provisioned capacity without auto scaling risks throttling on spikes. RDS is relational/OLTP and not a no-planning key-value store at this scale. Redshift is an OLAP warehouse, wrong workload entirely."
+      "explanation": "DynamoDB on-demand справляется с пиковым непредсказуемым трафиком без планирования ёмкости и даёт key-value доступ за единицы миллисекунд — идеальное совпадение. Provisioned ёмкость без auto scaling рискует получить throttling на пиках. RDS — реляционная OLTP-база, а не key-value хранилище без планирования на таком масштабе. Redshift — OLAP-хранилище, совсем не та нагрузка."
     },
     {
       "id": "db-q4",
       "domain": 3,
-      "stem": "A read-heavy web app repeatedly queries the same product data from RDS, causing high DB load and latency. The team wants microsecond reads and high availability with automatic failover for the cache. Which solution? (Choose two)",
+      "stem": "Read-heavy веб-приложение многократно запрашивает из RDS одни и те же данные о товарах, что создаёт высокую нагрузку на БД и задержку. Команде нужно чтение за микросекунды и высокая доступность кэша с автоматическим failover. Какое решение? (Выберите два)",
       "options": [
-        "Apply a lazy-loading (cache-aside) strategy",
-        "Move the database to Redshift",
+        "Применить стратегию lazy loading (cache-aside)",
+        "Перенести базу в Redshift",
         "ElastiCache for Memcached",
-        "ElastiCache for Redis with Multi-AZ enabled"
+        "ElastiCache for Redis с включённым Multi-AZ"
       ],
       "answer": [
         0,
         3
       ],
-      "explanation": "Redis supports replication and Multi-AZ with automatic failover, giving a highly available cache; pairing it with a lazy-loading (cache-aside) strategy caches data on first miss to cut repeated DB reads. Memcached has no replication or failover, so it fails the HA requirement. Moving to Redshift is wrong — Redshift is for OLAP analytics, not a transactional app cache."
+      "explanation": "Redis поддерживает репликацию и Multi-AZ с автоматическим failover, что даёт высокодоступный кэш; в паре со стратегией lazy loading (cache-aside) данные кэшируются при первом промахе, и повторные чтения из БД сокращаются. У Memcached нет репликации и failover, поэтому он не проходит по требованию HA. Перенос в Redshift — неверно: Redshift для OLAP-аналитики, а не кэш транзакционного приложения."
     },
     {
       "id": "db-q5",
       "domain": 3,
-      "stem": "A retailer needs to run complex analytical queries and aggregations over years of historical sales data for BI dashboards. Which AWS database is purpose-built for this?",
+      "stem": "Ритейлеру нужно выполнять сложные аналитические запросы и агрегации по многолетним историческим данным продаж для BI-дашбордов. Какая база данных AWS создана именно для этого?",
       "options": [
         "RDS for SQL Server (Single-AZ)",
         "ElastiCache for Redis",
         "Amazon Redshift",
-        "DynamoDB with a GSI"
+        "DynamoDB с GSI"
       ],
       "answer": 2,
-      "explanation": "Redshift is a columnar MPP data warehouse built for OLAP — large-scale aggregations and BI analytics over historical data. DynamoDB is key-value (no complex analytical joins/scans at warehouse scale). RDS is OLTP/row-based and not optimized for petabyte analytical scans. ElastiCache is an in-memory cache, not an analytics store."
+      "explanation": "Redshift — колоночное MPP-хранилище данных для OLAP: крупномасштабные агрегации и BI-аналитика по историческим данным. DynamoDB — key-value (без сложных аналитических join-ов/сканов масштаба хранилища). RDS — OLTP со строковым хранением, не оптимизирован для петабайтных аналитических сканов. ElastiCache — in-memory кэш, а не аналитическое хранилище."
     },
     {
       "id": "db-q6",
       "domain": 2,
-      "stem": "A company wants a relational database that auto-scales storage, keeps six copies of data across three AZs for durability, and can serve low-latency reads from multiple regions for a global user base. Which option?",
+      "stem": "Компании нужна реляционная база, которая автоматически наращивает хранилище, хранит шесть копий данных в трёх AZ ради durability и может обслуживать чтение с низкой задержкой из нескольких регионов для глобальной аудитории. Какой вариант?",
       "options": [
-        "RDS MySQL Multi-AZ in a single region",
-        "Redshift with cross-region snapshots",
-        "Aurora with a Global Database",
+        "RDS MySQL Multi-AZ в одном регионе",
+        "Redshift с cross-region snapshots",
+        "Aurora с Global Database",
         "DynamoDB Global Tables"
       ],
       "answer": 2,
-      "explanation": "Aurora stores 6 copies across 3 AZs with auto-scaling storage, and Aurora Global Database adds up to 5 read-only secondary regions for low-latency global reads and DR. RDS Multi-AZ is single-region and the standby isn't readable. DynamoDB Global Tables fit the requirement but DynamoDB is NoSQL, not relational. Redshift is an analytics warehouse, not an OLTP relational DB."
+      "explanation": "Aurora хранит 6 копий в 3 AZ с автоматически растущим хранилищем, а Aurora Global Database добавляет до 5 read-only вторичных регионов для глобального чтения с низкой задержкой и DR. RDS Multi-AZ работает в одном регионе, и standby недоступен для чтения. DynamoDB Global Tables подходят по требованиям, но DynamoDB — NoSQL, а не реляционная база. Redshift — аналитическое хранилище, а не реляционная OLTP-база."
     },
     {
       "id": "db-q7",
       "domain": 3,
-      "stem": "A DynamoDB table is queried mostly by partition key, but a new feature must efficiently query items by an attribute that is not part of the table's key. The table is already in production. What should be added?",
+      "stem": "Таблицу DynamoDB запрашивают в основном по partition key, но новой функции нужно эффективно искать элементы по атрибуту, который не входит в ключ таблицы. Таблица уже в production. Что нужно добавить?",
       "options": [
-        "A Global Secondary Index (GSI)",
-        "A Local Secondary Index (LSI)",
-        "DAX cluster",
-        "A DynamoDB Stream"
+        "Global Secondary Index (GSI)",
+        "Local Secondary Index (LSI)",
+        "Кластер DAX",
+        "DynamoDB Stream"
       ],
       "answer": 0,
-      "explanation": "A GSI defines a different partition (and optional sort) key and can be added to an existing table at any time, enabling queries on the new attribute. An LSI must be created at table creation and only provides an alternate sort key under the same partition key, so it cannot be added now nor change the partition key. Streams capture changes (not a query index); DAX is a read cache that doesn't add a new access pattern."
+      "explanation": "GSI задаёт другой partition (и необязательный sort) key и может быть добавлен к существующей таблице в любой момент, позволяя запрашивать по новому атрибуту. LSI создаётся только вместе с таблицей и даёт лишь альтернативный sort key при том же partition key, поэтому его нельзя добавить сейчас, и он не меняет partition key. Streams фиксируют изменения (это не индекс для запросов); DAX — кэш чтения, который не добавляет нового паттерна доступа."
     },
     {
       "id": "db-q8",
       "domain": 2,
-      "stem": "An administrator accidentally deleted critical rows in an RDS database 20 minutes ago. Automated backups are enabled with a 7-day retention. What is the best recovery method?",
+      "stem": "Администратор 20 минут назад случайно удалил критичные строки в базе RDS. Automated backups включены со сроком хранения 7 дней. Какой способ восстановления лучший?",
       "options": [
-        "Restore the oldest manual snapshot available",
-        "Promote a Read Replica",
-        "Reboot the instance with failover",
-        "Restore using point-in-time recovery to just before the deletion"
+        "Восстановиться из самого старого доступного ручного snapshot",
+        "Сделать promote Read Replica",
+        "Перезагрузить инстанс с failover",
+        "Восстановиться через point-in-time recovery на момент непосредственно перед удалением"
       ],
       "answer": 3,
-      "explanation": "With automated backups, point-in-time recovery can restore to any second within the retention window (here just before the deletion), minimizing data loss. Promoting a Read Replica copies the same deletion (async replicated). A failover reboot doesn't undo the data change. The oldest manual snapshot would lose far more recent data than PITR."
+      "explanation": "При включённых automated backups point-in-time recovery позволяет восстановиться на любую секунду в пределах окна хранения (здесь — прямо перед удалением), минимизируя потерю данных. Promote Read Replica скопирует то же удаление (оно реплицируется асинхронно). Перезагрузка с failover не отменяет изменение данных. Самый старый ручной snapshot потеряет гораздо больше свежих данных, чем PITR."
     }
   ]
 }

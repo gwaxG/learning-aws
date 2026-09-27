@@ -1,0 +1,29 @@
+{
+  "id": "e3-q43",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "Snowball Edge: офлайн-перенос больших объёмов данных",
+  "tests": "Выбор способа миграции 200 ТБ, когда передача по сети заняла бы месяцы.",
+  "expected": "AWS Snowball Edge — физическая доставка устройства. Триггеры: «200 TB», «internet link would take months».",
+  "why_not": "DataSync и Transfer Acceleration упираются в тот же медленный канал; Direct Connect 1 Gbps — недели на подключение и долгая передача.",
+  "keywords": [
+    "Snowball Edge",
+    "offline transfer",
+    "200 TB",
+    "limited bandwidth",
+    "data migration",
+    "месяцы по сети"
+  ],
+  "services": [
+    "snow-family",
+    "datasync",
+    "direct-connect",
+    "s3-performance"
+  ],
+  "topics": [
+    "data-migration"
+  ],
+  "domain": 3
+}

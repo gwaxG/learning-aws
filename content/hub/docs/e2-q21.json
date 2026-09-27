@@ -1,0 +1,30 @@
+{
+  "id": "e2-q21",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "Aurora Global Database: межрегиональный DR с RPO < 1 с и RTO ~1 мин",
+  "tests": "Выбор механизма межрегионального DR для Aurora с очень низкими RPO/RTO.",
+  "expected": "Aurora Global Database — storage-based репликация с лагом обычно <1 с, promote вторичного региона примерно за минуту. Триггеры: «another AWS region», «RPO under a second», «RTO about a minute».",
+  "why_not": "Ручные cross-region read replicas — больший лаг и управление; копии снапшотов — RPO в часах; Multi-AZ — только внутри одного региона.",
+  "keywords": [
+    "Aurora Global Database",
+    "cross-region",
+    "RPO",
+    "RTO",
+    "disaster recovery",
+    "failover"
+  ],
+  "services": [
+    "aurora-global",
+    "aurora",
+    "dr-strategies",
+    "rto-rpo"
+  ],
+  "topics": [
+    "ha-dr",
+    "databases"
+  ],
+  "domain": 3
+}

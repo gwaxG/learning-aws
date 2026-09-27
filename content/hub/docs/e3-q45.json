@@ -1,0 +1,28 @@
+{
+  "id": "e3-q45",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "Route 53: latency-based routing с health checks",
+  "tests": "Как направлять пользователей в ближайший здоровый регион с автоматическим failover.",
+  "expected": "Latency-based routing + health checks: пользователь идёт в регион с наименьшей задержкой, нездоровые endpoints исключаются. Триггеры: «nearest healthy regional endpoint», «failing over automatically».",
+  "why_not": "Simple/static record не умеет маршрутизировать по задержке и не делает failover; weighted распределяет по весам, а не по близости.",
+  "keywords": [
+    "latency-based routing",
+    "health checks",
+    "Route 53",
+    "failover",
+    "nearest region",
+    "ближайший регион"
+  ],
+  "services": [
+    "route53",
+    "ha"
+  ],
+  "topics": [
+    "edge-dns",
+    "ha-dr"
+  ],
+  "domain": 3
+}

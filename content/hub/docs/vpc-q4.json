@@ -1,0 +1,30 @@
+{
+  "id": "vpc-q4",
+  "source": {
+    "type": "topic",
+    "ref": "vpc-networking"
+  },
+  "concept": "Transit Gateway: hub-and-spoke для многих VPC и on-premises",
+  "tests": "Выбор сервиса для связности многих VPC между собой и с on-premises без full mesh.",
+  "expected": "AWS Transit Gateway — центральный hub с транзитивной маршрутизацией, одно attachment на VPC, on-prem через VPN/Direct Connect. Триггеры: «12 VPCs all communicate», «on-premises», «avoid full mesh».",
+  "why_not": "Full-mesh VPC peering — 66 соединений и peering нетранзитивен; IGW не соединяет VPC; отдельные VPN на каждую VPC не решают VPC-to-VPC и множат управление.",
+  "keywords": [
+    "Transit Gateway",
+    "hub-and-spoke",
+    "transitive routing",
+    "VPC peering",
+    "full mesh",
+    "on-premises",
+    "много VPC"
+  ],
+  "services": [
+    "transit-gateway",
+    "vpc-peering",
+    "site-to-site-vpn",
+    "direct-connect"
+  ],
+  "topics": [
+    "vpc-networking"
+  ],
+  "domain": 2
+}

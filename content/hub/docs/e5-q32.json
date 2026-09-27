@@ -1,0 +1,31 @@
+{
+  "id": "e5-q32",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "Global Accelerator: static anycast IP и быстрый failover по AWS backbone",
+  "tests": "Выбор сервиса для маршрутизации к ближайшему здоровому региональному endpoint со статическими IP.",
+  "expected": "AWS Global Accelerator — 2 static anycast IP, трафик по глобальной сети AWS к ближайшему здоровому endpoint, быстрый failover, TCP/UDP. Триггеры: «static anycast IPs», «AWS global network», «fast failover», «closest healthy endpoint».",
+  "why_not": "CloudFront — кэширование HTTP(S)-контента, не произвольные TCP/UDP endpoints; Route 53 weighted — по весам, не по близости; ALB — региональный.",
+  "keywords": [
+    "Global Accelerator",
+    "anycast IP",
+    "static IP",
+    "AWS backbone",
+    "fast failover",
+    "TCP/UDP",
+    "ближайший endpoint"
+  ],
+  "services": [
+    "global-accelerator",
+    "cloudfront",
+    "route53",
+    "elb"
+  ],
+  "topics": [
+    "edge-dns",
+    "ha-dr"
+  ],
+  "domain": 2
+}

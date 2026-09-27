@@ -1,0 +1,28 @@
+{
+  "id": "e3-q63",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "AWS Config: автоматическое исправление через SSM Automation",
+  "tests": "Как автоматически исправлять несоответствующие ресурсы (например, вернуть шифрование S3) с минимумом кода.",
+  "expected": "AWS Config rules + automatic remediation actions на SSM Automation documents. Триггеры: «automatic remediation», «non-compliant», «least custom code».",
+  "why_not": "CloudTrail и дашборды только наблюдают; ручной аудит медленный и не автоматический.",
+  "keywords": [
+    "Config rules",
+    "automatic remediation",
+    "SSM Automation",
+    "non-compliant",
+    "compliance",
+    "автоисправление"
+  ],
+  "services": [
+    "config",
+    "systems-manager"
+  ],
+  "topics": [
+    "monitoring",
+    "iam-security"
+  ],
+  "domain": 4
+}

@@ -1,0 +1,29 @@
+{
+  "id": "e2-q27",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "EBS: шеринг зашифрованного snapshot через CMK между аккаунтами",
+  "tests": "Что нужно для передачи зашифрованного customer managed key EBS snapshot в другой аккаунт.",
+  "expected": "Два шага: share snapshot (modify permissions) с целевым аккаунтом + дать этому аккаунту права на CMK в key policy (kms:Decrypt, kms:CreateGrant, DescribeKey и т.д.). Триггеры: «encrypted snapshot», «customer managed key», «another account».",
+  "why_not": "Зашифрованный snapshot нельзя сделать публичным; снять шифрование — не механизм шеринга; снапшоты не шарятся через S3 бакет. Snapshot с AWS managed key (aws/ebs) шарить нельзя вообще.",
+  "keywords": [
+    "EBS snapshot",
+    "share",
+    "customer managed key",
+    "key policy",
+    "kms:Decrypt",
+    "cross-account"
+  ],
+  "services": [
+    "ebs",
+    "kms",
+    "encryption"
+  ],
+  "topics": [
+    "iam-security",
+    "storage"
+  ],
+  "domain": 1
+}

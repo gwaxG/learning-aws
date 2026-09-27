@@ -1,0 +1,29 @@
+{
+  "id": "e4-q34",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "Stateless веб-слой: вынос сессий в ElastiCache/DynamoDB",
+  "tests": "Где хранить сессии для горизонтально масштабируемого флота, чтобы они переживали замену серверов.",
+  "expected": "Amazon ElastiCache for Redis как общий in-memory session store — низкая латентность, переживает замену инстансов. Триггеры: «session state», «horizontally scaled», «server is replaced», «low-latency shared».",
+  "why_not": "Локальный диск и EBS привязаны к инстансу и теряются; sticky sessions без внешнего хранилища ломаются при удалении target.",
+  "keywords": [
+    "session store",
+    "ElastiCache for Redis",
+    "stateless",
+    "horizontal scaling",
+    "sticky sessions",
+    "хранение сессий"
+  ],
+  "services": [
+    "elasticache",
+    "scaling",
+    "elb"
+  ],
+  "topics": [
+    "databases",
+    "architecture"
+  ],
+  "domain": 2
+}

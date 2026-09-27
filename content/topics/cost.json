@@ -1,122 +1,122 @@
 {
   "slug": "cost",
-  "title": "Cost Optimization",
+  "title": "Оптимизация затрат",
   "domains": [
     4
   ],
   "essentials": [
     {
-      "heading": "EC2 pricing models & matching workloads",
-      "body": "**What.** Four ways to pay for AWS compute: **On-Demand** (per-second, no commit), **Savings Plans** (1y/3y $/hr commit), **Reserved Instances** (1y/3y capacity commit), and **Spot** (spare capacity, interruptible).\n\n**Why.** Matching commitment level to workload shape unlocks 30-90% savings without changing the application.\n\n**How.** Cover the steady 24/7 baseline with a **Compute Savings Plan** (flexible across family/region/OS/tenancy/Fargate/Lambda) for up to ~72% off, or an **EC2 Instance SP** for slightly more savings locked to a family+region. Use **Standard RIs** for predictable capacity (resellable on Marketplace) and **Convertible RIs** when you may swap family/OS. Run fault-tolerant batch on **Spot** (up to ~90% off, `2-minute` interruption warning). Burst above baseline with **On-Demand**.\n\n**Exam.** Compute Savings Plans are the **most flexible** discount mechanism and cover Fargate/Lambda. Convertible RIs trade discount for flexibility. Spot is never for stateful single-node DBs - only checkpointable, stateless work.",
+      "heading": "Модели оплаты EC2 и подбор под нагрузку",
+      "body": "**Что.** Четыре способа платить за compute в AWS: **On-Demand** (посекундно, без обязательств), **Savings Plans** (обязательство на 1/3 года в $/час), **Reserved Instances** (обязательство по ёмкости на 1/3 года) и **Spot** (свободная ёмкость, может быть прервана).\n\n**Зачем.** Если подобрать уровень обязательств под профиль нагрузки, можно сэкономить 30-90% без изменений в приложении.\n\n**Как.** Стабильную базовую нагрузку 24/7 покрывайте **Compute Savings Plan** (гибкий по семейству/региону/ОС/tenancy/Fargate/Lambda) со скидкой до ~72% или **EC2 Instance SP** — чуть большая экономия, но с привязкой к семейству+региону. **Standard RIs** — для предсказуемой ёмкости (их можно перепродать на Marketplace), **Convertible RIs** — если может понадобиться сменить семейство/ОС. Отказоустойчивый batch запускайте на **Spot** (скидка до ~90%, предупреждение о прерывании за `2-minute`). Всплески сверх базы — на **On-Demand**.\n\n**Экзамен.** Compute Savings Plans — **самый гибкий** механизм скидок, покрывает Fargate/Lambda. Convertible RIs жертвуют частью скидки ради гибкости. Spot никогда не подходит для stateful-баз на одном узле — только для stateless-задач с checkpoint.",
       "diagram": {
         "src": "aws-pricing-models.svg",
-        "caption": "On-Demand, Savings Plans, Reserved Instances, and Spot compared by commitment, discount, and ideal workload."
+        "caption": "On-Demand, Savings Plans, Reserved Instances и Spot: сравнение по обязательствам, скидке и подходящей нагрузке."
       }
     },
     {
-      "heading": "Right-sizing & Compute Optimizer",
-      "body": "**What.** Right-sizing is matching instance type, EBS volume, Lambda memory, and ASG config to actual utilization rather than guessed peaks. **AWS Compute Optimizer** uses ML on CloudWatch metrics to recommend optimal configurations.\n\n**Why.** Over-provisioned resources are the single largest source of cloud waste; resizing first prevents committing to oversized capacity with Savings Plans or RIs.\n\n**How.** Enable Compute Optimizer (free) to flag **over-** and **under-provisioned** EC2, EBS, Lambda, ECS-on-Fargate, and Auto Scaling groups. Install the **CloudWatch agent** to expose `mem_used_percent` for memory-aware recommendations. **Cost Explorer** also surfaces idle/low-use right-sizing tips. Stop or schedule non-prod with **Instance Scheduler** to cut nights/weekends.\n\n**Exam.** Right-size *before* buying SP/RIs - otherwise you lock in waste. Compute Optimizer is the dedicated **resize-recommendation** service; Trusted Advisor only flags idle resources, and CUR/CloudWatch alarms don't recommend sizes."
+      "heading": "Right-sizing и Compute Optimizer",
+      "body": "**Что.** Right-sizing — подбор типа инстанса, тома EBS, памяти Lambda и конфигурации ASG под реальную утилизацию, а не под предполагаемые пики. **AWS Compute Optimizer** применяет ML к метрикам CloudWatch и рекомендует оптимальные конфигурации.\n\n**Зачем.** Избыточно выделенные ресурсы — крупнейший источник потерь в облаке; если сначала уменьшить размеры, вы не зафиксируете завышенную ёмкость в Savings Plans или RIs.\n\n**Как.** Включите Compute Optimizer (бесплатно), чтобы он помечал **over-** и **under-provisioned** EC2, EBS, Lambda, ECS-on-Fargate и Auto Scaling groups. Установите **CloudWatch agent**, чтобы отдавать `mem_used_percent` для рекомендаций с учётом памяти. **Cost Explorer** тоже показывает советы по right-sizing для простаивающих/малонагруженных ресурсов. Останавливайте non-prod или ставьте его по расписанию через **Instance Scheduler**, чтобы не платить за ночи/выходные.\n\n**Экзамен.** Сначала right-sizing, *потом* покупка SP/RIs — иначе вы закрепите потери. Compute Optimizer — специализированный сервис **рекомендаций по размеру**; Trusted Advisor лишь помечает простаивающие ресурсы, а CUR/CloudWatch alarms размеры не рекомендуют."
     },
     {
-      "heading": "S3 & EBS cost levers",
-      "body": "**What.** Storage cost levers are lifecycle transitions, the right storage class, modern EBS types, and removing orphaned volumes/snapshots.\n\n**Why.** Storage grows silently; old logs, snapshots, and unattached volumes accumulate charges with no business value.\n\n**How.** On **S3**, use **lifecycle rules** to transition to Standard-IA, Glacier Instant/Flexible, or Deep Archive and to **expire** old objects. **S3 Intelligent-Tiering** auto-moves objects between tiers for a small monitoring fee with **no retrieval charges** - ideal for unknown/changing access patterns. On **EBS**, prefer **`gp3` over `gp2`** (~20% cheaper, IOPS/throughput decoupled from size); delete unattached volumes and orphan snapshots via **Data Lifecycle Manager**.\n\n**Exam.** Intelligent-Tiering wins when access patterns are **unknown** - it has no retrieval fee. For predictably cold data, plain lifecycle to IA/Glacier is cheaper. IA/Glacier carry **minimum storage durations** (30/90/180 days); transitioning small objects early can cost more than it saves."
+      "heading": "Рычаги экономии на S3 и EBS",
+      "body": "**Что.** Рычаги экономии на хранении — lifecycle-переходы, правильный storage class, современные типы EBS и удаление брошенных томов/snapshots.\n\n**Зачем.** Объём хранения растёт незаметно; старые логи, snapshots и неподключённые тома копят расходы без пользы для бизнеса.\n\n**Как.** В **S3** используйте **lifecycle rules**, чтобы переводить объекты в Standard-IA, Glacier Instant/Flexible или Deep Archive и **удалять (expire)** старые объекты. **S3 Intelligent-Tiering** автоматически перемещает объекты между уровнями за небольшую плату за мониторинг и **без платы за извлечение** — идеально для неизвестных/меняющихся паттернов доступа. В **EBS** выбирайте **`gp3` вместо `gp2`** (~на 20% дешевле, IOPS/throughput не зависят от размера); удаляйте неподключённые тома и брошенные snapshots через **Data Lifecycle Manager**.\n\n**Экзамен.** Intelligent-Tiering выигрывает, когда паттерн доступа **неизвестен** — у него нет платы за извлечение. Для предсказуемо холодных данных дешевле обычный lifecycle в IA/Glacier. У IA/Glacier есть **минимальный срок хранения** (30/90/180 дней); ранний перевод мелких объектов может стоить дороже, чем сэкономит."
     },
     {
-      "heading": "Data transfer costs (egress, cross-AZ, NAT)",
-      "body": "**What.** Network charges fall into four buckets: ingress (mostly free), internet egress (paid per GB), inter-AZ (paid both ways), and NAT Gateway processing (hourly fee plus per-GB).\n\n**Why.** Data transfer is invisible on a per-resource console view but can dwarf compute spend in chatty or egress-heavy workloads.\n\n**How.** Keep latency-sensitive chatter **intra-AZ** over private IPs (free). Add **VPC Gateway Endpoints** for `S3` and `DynamoDB` (free) so private subnets reach those services without traversing NAT. Use **Interface Endpoints / PrivateLink** (hourly + per-GB but cheaper than NAT) for other AWS services. Front internet workloads with **CloudFront** - cache reduces origin egress, and S3->CloudFront transfer is free.\n\n**Exam.** **S3 Gateway endpoint** is the classic fix for high NAT bills from private subnets pulling S3. CloudFront cuts internet egress through edge caching. Cross-AZ traffic is charged on **both** sides.",
+      "heading": "Стоимость передачи данных (egress, cross-AZ, NAT)",
+      "body": "**Что.** Сетевые расходы делятся на четыре группы: ingress (в основном бесплатно), egress в интернет (оплата за GB), трафик между AZ (оплачивается в обе стороны) и обработка в NAT Gateway (почасовая плата плюс за GB).\n\n**Зачем.** Передача данных не видна при просмотре отдельных ресурсов в консоли, но в «болтливых» или egress-нагруженных системах может многократно превышать расходы на compute.\n\n**Как.** Держите чувствительный к задержкам обмен **внутри AZ** по приватным IP (бесплатно). Добавьте **VPC Gateway Endpoints** для `S3` и `DynamoDB` (бесплатно), чтобы приватные subnets обращались к этим сервисам в обход NAT. Для остальных сервисов AWS используйте **Interface Endpoints / PrivateLink** (почасово + за GB, но дешевле NAT). Ставьте перед интернет-нагрузками **CloudFront** — кэш сокращает egress с origin, а передача S3->CloudFront бесплатна.\n\n**Экзамен.** **S3 Gateway endpoint** — классическое решение для больших счетов за NAT, когда приватные subnets тянут данные из S3. CloudFront сокращает egress в интернет за счёт кэширования на edge. Трафик между AZ оплачивается с **обеих** сторон.",
       "diagram": {
         "src": "data-transfer-costs.svg",
-        "caption": "Ingress free, intra-AZ private IP free, cross-AZ and internet egress paid, NAT processed per GB; S3 Gateway endpoint and CloudFront avoid charges."
+        "caption": "Ingress бесплатен, трафик внутри AZ по приватным IP бесплатен, cross-AZ и egress в интернет платные, NAT тарифицирует обработку за GB; S3 Gateway endpoint и CloudFront помогают избежать расходов."
       }
     },
     {
       "heading": "Budgets vs Cost Explorer vs CUR",
-      "body": "**What.** Three complementary cost tools: **AWS Budgets** (proactive thresholds and alerts), **Cost Explorer** (interactive visualization and forecasts), and the **Cost and Usage Report (CUR)** (granular billing data in S3).\n\n**Why.** Each answers a different question - *am I about to overspend?*, *where did I spend last month?*, *who owes what for chargeback?*\n\n**How.** **Budgets** monitor cost, usage, or RI/SP utilization/coverage and can trigger SNS alerts or automated actions when approaching limits. **Cost Explorer** filters by tag/service across 12+ months and surfaces right-sizing and SP recommendations. **CUR** delivers hourly, resource-level line items to S3, queryable with **Athena**, Redshift, or QuickSight.\n\n**Exam.** Budgets to **alert**, Cost Explorer to **investigate**, CUR to **analyze in detail**. CUR is the only option for **custom SQL chargeback** at the resource line-item level."
+      "body": "**Что.** Три взаимодополняющих инструмента: **AWS Budgets** (проактивные пороги и алерты), **Cost Explorer** (интерактивная визуализация и прогнозы) и **Cost and Usage Report (CUR)** (детальные данные биллинга в S3).\n\n**Зачем.** Каждый отвечает на свой вопрос: *не превышу ли я бюджет?*, *на что я потратил в прошлом месяце?*, *кто сколько должен при chargeback?*\n\n**Как.** **Budgets** отслеживают стоимость, использование или утилизацию/покрытие RI/SP и при приближении к лимиту могут отправлять алерты в SNS или запускать автоматические действия. **Cost Explorer** фильтрует по тегам/сервисам за 12+ месяцев и показывает рекомендации по right-sizing и SP. **CUR** выгружает в S3 почасовые позиции на уровне ресурсов, которые можно запрашивать через **Athena**, Redshift или QuickSight.\n\n**Экзамен.** Budgets — чтобы **алертить**, Cost Explorer — чтобы **разбираться**, CUR — чтобы **детально анализировать**. CUR — единственный вариант для **собственного SQL-chargeback** на уровне отдельных позиций по ресурсам."
     },
     {
-      "heading": "Cost allocation tags & Organizations billing",
-      "body": "**What.** **Cost allocation tags** map every resource to a team/project/env. **AWS Organizations** with **consolidated billing** rolls many accounts into one bill and shares volume discounts.\n\n**Why.** Tags make spend attributable; Organizations centralizes governance and unlocks aggregated pricing that single accounts cannot reach alone.\n\n**How.** Activate AWS-generated or user-defined tags in the **Billing console** to use them in Cost Explorer and CUR; enforce coverage with **Tag Policies**. Consolidated billing aggregates **volume/tiered pricing** across accounts and **shares Reserved Instances and Savings Plans** org-wide by default (toggle off per account). Combine with **SCPs** and per-account budgets for governance.\n\n**Exam.** Consolidated billing pools usage so volume discounts are reached **faster**, and RI/SP discount sharing lets unused commitment in one account benefit others - the default behavior and a frequent exam pattern."
+      "heading": "Cost allocation tags и биллинг в Organizations",
+      "body": "**Что.** **Cost allocation tags** привязывают каждый ресурс к команде/проекту/окружению. **AWS Organizations** с **consolidated billing** сводит много аккаунтов в один счёт и делит объёмные скидки.\n\n**Зачем.** Теги позволяют атрибутировать расходы; Organizations централизует governance и открывает агрегированные цены, недоступные одиночным аккаунтам.\n\n**Как.** Активируйте сгенерированные AWS или пользовательские теги в **Billing console**, чтобы использовать их в Cost Explorer и CUR; контролируйте покрытие через **Tag Policies**. Consolidated billing суммирует использование для **объёмных/ступенчатых цен** по всем аккаунтам и по умолчанию **делит Reserved Instances и Savings Plans** на всю организацию (можно отключить для отдельного аккаунта). Для governance комбинируйте с **SCPs** и бюджетами на уровне аккаунтов.\n\n**Экзамен.** Consolidated billing объединяет использование, поэтому объёмные скидки достигаются **быстрее**, а шаринг скидок RI/SP позволяет неиспользованным обязательствам одного аккаунта приносить пользу другим — это поведение по умолчанию и частый паттерн на экзамене."
     },
     {
-      "heading": "Trusted Advisor & serverless/managed to cut idle cost",
-      "body": "**What.** **Trusted Advisor** is AWS's best-practice checker; its cost category surfaces idle and underutilized resources. **Serverless/managed** services (Lambda, Fargate, DynamoDB on-demand, Aurora Serverless v2, S3) charge per request or scale-to-zero.\n\n**Why.** Always-on EC2 wastes money during idle periods; rearchitecting to per-request services eliminates that floor entirely.\n\n**How.** Trusted Advisor flags **idle EC2/RDS/ELB**, **unassociated Elastic IPs**, **underutilized EBS**, and **RI/SP** optimization (full checks require Business/Enterprise Support). For spiky or low-volume workloads, replace EC2 with **Lambda + API Gateway** or **Fargate** so you only pay during execution; move tables to **DynamoDB on-demand** when traffic is unpredictable.\n\n**Exam.** For sporadic/idle-heavy APIs, **Lambda behind API Gateway** beats RIs and even Spot, because it scales to zero. Trusted Advisor cost checks beyond the free seven require **Business or Enterprise Support**."
+      "heading": "Trusted Advisor и serverless/managed против расходов на простой",
+      "body": "**Что.** **Trusted Advisor** — проверка на соответствие best practices от AWS; её категория cost показывает простаивающие и недогруженные ресурсы. **Serverless/managed** сервисы (Lambda, Fargate, DynamoDB on-demand, Aurora Serverless v2, S3) тарифицируются за запрос или масштабируются до нуля.\n\n**Зачем.** Постоянно работающий EC2 тратит деньги во время простоя; переход на сервисы с оплатой за запрос полностью убирает этот минимальный порог.\n\n**Как.** Trusted Advisor помечает **простаивающие EC2/RDS/ELB**, **непривязанные Elastic IPs**, **недогруженные EBS** и возможности оптимизации **RI/SP** (полный набор проверок требует Business/Enterprise Support). Для пиковых или малообъёмных нагрузок замените EC2 на **Lambda + API Gateway** или **Fargate**, чтобы платить только за время выполнения; переводите таблицы на **DynamoDB on-demand**, когда трафик непредсказуем.\n\n**Экзамен.** Для API с эпизодическим трафиком и долгим простоем **Lambda за API Gateway** выигрывает у RIs и даже у Spot, потому что масштабируется до нуля. Проверки стоимости в Trusted Advisor сверх семи бесплатных требуют **Business или Enterprise Support**."
     }
   ],
   "labs": [
     {
       "id": "cost-budget-alert",
-      "title": "Create a monthly cost budget with an email alert",
-      "intro": "Set a **$100/month** cost budget that emails you when **actual or forecasted** spend crosses 80%. This is the simplest proactive cost guardrail.",
+      "title": "Создать месячный бюджет расходов с алертом на email",
+      "intro": "Задайте бюджет **$100/месяц**, который шлёт письмо, когда **фактические или прогнозные** расходы превышают 80%. Это самый простой проактивный ограничитель расходов.",
       "cli": "cat > budget.json <<'EOF'\n{\n  \"BudgetName\": \"monthly-100\",\n  \"BudgetLimit\": {\"Amount\": \"100\", \"Unit\": \"USD\"},\n  \"TimeUnit\": \"MONTHLY\",\n  \"BudgetType\": \"COST\"\n}\nEOF\n\ncat > notifications.json <<'EOF'\n[\n  {\n    \"Notification\": {\n      \"NotificationType\": \"ACTUAL\",\n      \"ComparisonOperator\": \"GREATER_THAN\",\n      \"Threshold\": 80,\n      \"ThresholdType\": \"PERCENTAGE\"\n    },\n    \"Subscribers\": [\n      {\"SubscriptionType\": \"EMAIL\", \"Address\": \"you@example.com\"}\n    ]\n  }\n]\nEOF\n\nACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)\naws budgets create-budget \\\n  --account-id \"$ACCOUNT_ID\" \\\n  --budget file://budget.json \\\n  --notifications-with-subscribers file://notifications.json",
       "pulumi": "import pulumi\nimport pulumi_aws as aws\n\nmonthly = aws.budgets.Budget(\n    \"monthly-100\",\n    budget_type=\"COST\",\n    limit_amount=\"100\",\n    limit_unit=\"USD\",\n    time_unit=\"MONTHLY\",\n    notifications=[\n        aws.budgets.BudgetNotificationArgs(\n            comparison_operator=\"GREATER_THAN\",\n            threshold=80,\n            threshold_type=\"PERCENTAGE\",\n            notification_type=\"ACTUAL\",\n            subscriber_email_addresses=[\"you@example.com\"],\n        )\n    ],\n)\n\npulumi.export(\"budget_name\", monthly.name)",
-      "note": "**Cleanup:** `aws budgets delete-budget --account-id $ACCOUNT_ID --budget-name monthly-100` or `pulumi destroy`. Budgets themselves are free (first ~2 budgets free, then a small per-budget/day fee). Delete the temp `budget.json`/`notifications.json` files."
+      "note": "**Очистка:** `aws budgets delete-budget --account-id $ACCOUNT_ID --budget-name monthly-100` или `pulumi destroy`. Сами бюджеты бесплатны (первые ~2 бюджета бесплатно, дальше небольшая плата за бюджет в день). Удалите временные файлы `budget.json`/`notifications.json`."
     },
     {
       "id": "cost-s3-lifecycle",
-      "title": "Add an S3 lifecycle rule to cut storage cost",
-      "intro": "Transition objects to **Standard-IA** after 30 days, **Glacier Flexible Retrieval** after 90 days, and **expire** them after 365 days. Big savings for logs/backups that are rarely read after creation.",
+      "title": "Добавить S3 lifecycle rule для снижения стоимости хранения",
+      "intro": "Переводите объекты в **Standard-IA** через 30 дней, в **Glacier Flexible Retrieval** через 90 дней и **удаляйте (expire)** через 365 дней. Большая экономия для логов/бэкапов, которые после создания почти не читают.",
       "cli": "cat > lifecycle.json <<'EOF'\n{\n  \"Rules\": [\n    {\n      \"ID\": \"archive-then-expire\",\n      \"Status\": \"Enabled\",\n      \"Filter\": {\"Prefix\": \"logs/\"},\n      \"Transitions\": [\n        {\"Days\": 30, \"StorageClass\": \"STANDARD_IA\"},\n        {\"Days\": 90, \"StorageClass\": \"GLACIER\"}\n      ],\n      \"Expiration\": {\"Days\": 365}\n    }\n  ]\n}\nEOF\n\naws s3api put-bucket-lifecycle-configuration \\\n  --bucket my-cost-demo-bucket \\\n  --lifecycle-configuration file://lifecycle.json\n\n# verify\naws s3api get-bucket-lifecycle-configuration --bucket my-cost-demo-bucket",
       "pulumi": "import pulumi_aws as aws\n\nlifecycle = aws.s3.BucketLifecycleConfigurationV2(\n    \"archive-then-expire\",\n    bucket=\"my-cost-demo-bucket\",\n    rules=[\n        aws.s3.BucketLifecycleConfigurationV2RuleArgs(\n            id=\"archive-then-expire\",\n            status=\"Enabled\",\n            filter=aws.s3.BucketLifecycleConfigurationV2RuleFilterArgs(prefix=\"logs/\"),\n            transitions=[\n                aws.s3.BucketLifecycleConfigurationV2RuleTransitionArgs(\n                    days=30, storage_class=\"STANDARD_IA\"\n                ),\n                aws.s3.BucketLifecycleConfigurationV2RuleTransitionArgs(\n                    days=90, storage_class=\"GLACIER\"\n                ),\n            ],\n            expiration=aws.s3.BucketLifecycleConfigurationV2RuleExpirationArgs(days=365),\n        )\n    ],\n)",
-      "note": "**Cleanup:** `aws s3api delete-bucket-lifecycle --bucket my-cost-demo-bucket` or `pulumi destroy`. The rule itself costs nothing; transitions to IA/Glacier carry per-object transition request charges, and IA/Glacier have minimum storage durations (30/90 days) - moving objects too early can cost more than it saves."
+      "note": "**Очистка:** `aws s3api delete-bucket-lifecycle --bucket my-cost-demo-bucket` или `pulumi destroy`. Само правило ничего не стоит; переходы в IA/Glacier тарифицируются за запрос на каждый объект, а у IA/Glacier есть минимальный срок хранения (30/90 дней) — слишком ранний перевод может стоить дороже, чем сэкономит."
     }
   ],
   "questions": [
     {
       "id": "cost-q1",
       "domain": 4,
-      "stem": "A company runs a fault-tolerant, stateless batch image-processing job that can checkpoint and resume if interrupted. The job runs for a few hours each night and the schedule is flexible. Which EC2 purchasing option is the MOST cost-effective?",
+      "stem": "Компания запускает отказоустойчивую stateless пакетную обработку изображений, которая умеет сохранять checkpoint и продолжать работу после прерывания. Задача работает несколько часов каждую ночь, расписание гибкое. Какой вариант покупки EC2 будет MOST cost-effective?",
       "options": [
         "Spot Instances",
-        "A 3-year Standard Reserved Instance",
+        "Standard Reserved Instance на 3 года",
         "On-Demand Instances",
-        "A 1-year Compute Savings Plan"
+        "Compute Savings Plan на 1 год"
       ],
       "answer": 0,
-      "explanation": "Correct: **Spot Instances** offer up to ~90% savings and are ideal for fault-tolerant, interruptible, stateless work like batch image processing that can checkpoint/resume. On-Demand has no commitment but is the most expensive per hour. A 3-year Standard RI and a 1-year Compute Savings Plan both require long-term commitment and suit steady-state baseline workloads, not a flexible, interruptible nightly batch - committing would overpay for capacity used only a few hours a day."
+      "explanation": "Верно: **Spot Instances** дают экономию до ~90% и идеальны для отказоустойчивой, прерываемой stateless-работы вроде пакетной обработки изображений с checkpoint/resume. On-Demand не требует обязательств, но стоит дороже всего за час. Standard RI на 3 года и Compute Savings Plan на 1 год требуют долгосрочных обязательств и подходят для стабильной базовой нагрузки, а не для гибкого прерываемого ночного batch — с обязательством вы переплатите за ёмкость, которая используется лишь несколько часов в сутки."
     },
     {
       "id": "cost-q2",
       "domain": 4,
-      "stem": "A web application has a predictable, steady baseline of compute running 24/7, but the team expects to change instance families and move between Fargate and EC2 over the next year. They want maximum savings while keeping flexibility. What should they choose for the baseline?",
+      "stem": "У веб-приложения предсказуемая стабильная базовая нагрузка на compute 24/7, но в течение года команда планирует менять семейства инстансов и переносить нагрузку между Fargate и EC2. Нужна максимальная экономия с сохранением гибкости. Что выбрать для базовой нагрузки?",
       "options": [
         "EC2 Instance Savings Plan",
         "On-Demand Instances",
         "Compute Savings Plan",
-        "Standard Reserved Instances for a fixed instance type"
+        "Standard Reserved Instances для фиксированного типа инстанса"
       ],
       "answer": 2,
-      "explanation": "Correct: a **Compute Savings Plan** commits to a $/hour spend and applies across instance families, regions, OS, and even Fargate and Lambda - giving large discounts while preserving the flexibility to change families and move between EC2 and Fargate. An EC2 Instance Savings Plan and Standard RIs lock you to a family/region (or specific type), conflicting with the planned changes. On-Demand keeps flexibility but provides no discount on a 24/7 baseline, so it is the most expensive."
+      "explanation": "Верно: **Compute Savings Plan** — это обязательство по расходам в $/час, которое применяется к любым семействам инстансов, регионам, ОС и даже к Fargate и Lambda; он даёт большие скидки и сохраняет свободу менять семейства и переходить между EC2 и Fargate. EC2 Instance Savings Plan и Standard RIs привязывают к семейству/региону (или конкретному типу), что противоречит планам. On-Demand гибок, но не даёт скидки на базовую нагрузку 24/7, поэтому самый дорогой."
     },
     {
       "id": "cost-q3",
       "domain": 4,
-      "stem": "A solutions architect notices that EC2 instances in a fleet show consistently low CPU and memory utilization. They want data-driven recommendations to resize the instances to cheaper types based on observed usage. Which AWS service should they use?",
+      "stem": "Solutions architect замечает, что у инстансов EC2 в парке стабильно низкая утилизация CPU и памяти. Нужны рекомендации на основе данных, чтобы перевести инстансы на более дешёвые типы с учётом фактического использования. Какой сервис AWS использовать?",
       "options": [
-        "Amazon CloudWatch alarms",
+        "Алармы Amazon CloudWatch",
         "AWS Cost and Usage Report (CUR)",
-        "AWS Trusted Advisor service limits check",
+        "Проверка service limits в AWS Trusted Advisor",
         "AWS Compute Optimizer"
       ],
       "answer": 3,
-      "explanation": "Correct: **AWS Compute Optimizer** analyzes CloudWatch metrics with ML and recommends optimal (right-sized) instance types, flagging over-provisioned resources. The Trusted Advisor *service limits* check is about quotas, not right-sizing (its cost checks flag idle resources but don't give detailed resize recommendations like Compute Optimizer). The CUR provides granular billing line items but no resize recommendations. CloudWatch alarms react to thresholds but don't recommend instance types."
+      "explanation": "Верно: **AWS Compute Optimizer** анализирует метрики CloudWatch с помощью ML и рекомендует оптимальные (right-sized) типы инстансов, помечая избыточные ресурсы. Проверка *service limits* в Trusted Advisor касается квот, а не right-sizing (его проверки стоимости помечают простаивающие ресурсы, но не дают детальных рекомендаций по размеру, как Compute Optimizer). CUR даёт детальные позиции биллинга, но не рекомендации по размеру. CloudWatch alarms срабатывают по порогам, но не рекомендуют типы инстансов."
     },
     {
       "id": "cost-q4",
       "domain": 4,
-      "stem": "EC2 instances in private subnets download large volumes of data from Amazon S3, and the resulting NAT Gateway data-processing charges are very high. What is the MOST cost-effective change to reduce these charges while keeping the instances private?",
+      "stem": "Инстансы EC2 в приватных subnets скачивают большие объёмы данных из Amazon S3, и плата NAT Gateway за обработку данных получается очень высокой. Какое изменение будет MOST cost-effective для снижения этих расходов при сохранении приватности инстансов?",
       "options": [
-        "Enable S3 Transfer Acceleration on the bucket",
-        "Create an S3 Gateway VPC endpoint and route S3 traffic through it",
-        "Move the instances to public subnets with public IP addresses",
-        "Replace the NAT Gateway with a NAT instance on a small EC2 type"
+        "Включить S3 Transfer Acceleration на bucket",
+        "Создать S3 Gateway VPC endpoint и направить через него трафик S3",
+        "Перенести инстансы в публичные subnets с публичными IP-адресами",
+        "Заменить NAT Gateway на NAT instance небольшого типа EC2"
       ],
       "answer": 1,
-      "explanation": "Correct: an **S3 Gateway VPC endpoint** is free and routes S3 traffic over the AWS network, bypassing the NAT Gateway entirely - eliminating the per-GB NAT processing charges while instances stay private. A NAT instance can be cheaper at low volume but still processes the traffic and adds management overhead at high volume. Moving to public subnets reduces NAT cost but breaks the private requirement and adds egress exposure. Transfer Acceleration speeds uploads via edge locations and adds cost - it does not bypass NAT."
+      "explanation": "Верно: **S3 Gateway VPC endpoint** бесплатен и направляет трафик S3 по сети AWS полностью в обход NAT Gateway — плата за обработку в NAT за GB исчезает, а инстансы остаются приватными. NAT instance может быть дешевле при малых объёмах, но всё равно обрабатывает трафик и при больших объёмах добавляет операционную нагрузку. Перенос в публичные subnets снижает стоимость NAT, но нарушает требование приватности и увеличивает поверхность egress. Transfer Acceleration ускоряет загрузку через edge locations и стоит дополнительных денег — NAT он не обходит."
     },
     {
       "id": "cost-q5",
       "domain": 4,
-      "stem": "A finance team needs the most granular, hourly, resource-level billing data so they can run custom SQL queries in Amazon Athena for detailed chargeback across business units. Which tool provides this?",
+      "stem": "Финансовой команде нужны максимально детальные почасовые данные биллинга на уровне ресурсов, чтобы выполнять собственные SQL-запросы в Amazon Athena для детального chargeback по бизнес-подразделениям. Какой инструмент это даёт?",
       "options": [
         "AWS Budgets",
         "Cost Explorer",
@@ -124,49 +124,49 @@
         "AWS Cost and Usage Report (CUR)"
       ],
       "answer": 3,
-      "explanation": "Correct: the **Cost and Usage Report (CUR)** delivers the most granular, line-item billing data (down to hourly/resource level) to S3, where it can be queried with Athena/Redshift/QuickSight - ideal for custom chargeback analysis. AWS Budgets is for setting thresholds and proactive alerts, not detailed querying. Cost Explorer offers interactive visualization and trends but not raw line-item SQL access. Trusted Advisor gives best-practice cost checks, not billing data."
+      "explanation": "Верно: **Cost and Usage Report (CUR)** выгружает в S3 самые детальные построчные данные биллинга (вплоть до уровня часа/ресурса), которые можно запрашивать через Athena/Redshift/QuickSight — идеально для собственного анализа chargeback. AWS Budgets нужен для порогов и проактивных алертов, а не для детальных запросов. Cost Explorer даёт интерактивную визуализацию и тренды, но не SQL-доступ к сырым позициям. Trusted Advisor выполняет проверки стоимости по best practices, а не предоставляет данные биллинга."
     },
     {
       "id": "cost-q6",
       "domain": 4,
-      "stem": "A startup stores application data in Amazon S3 but its access patterns are unpredictable - some objects are read frequently, others rarely, and this changes over time. They want to minimize storage cost without building and tuning lifecycle policies or paying retrieval fees for guessing wrong. Which S3 storage class should they use?",
+      "stem": "Стартап хранит данные приложения в Amazon S3, но паттерны доступа непредсказуемы: одни объекты читаются часто, другие редко, и это меняется со временем. Нужно минимизировать стоимость хранения, не создавая и не настраивая lifecycle-политики и не платя за извлечение при неверном прогнозе. Какой storage class S3 выбрать?",
       "options": [
-        "S3 Standard-IA with a 30-day lifecycle transition",
+        "S3 Standard-IA с lifecycle-переходом через 30 дней",
         "S3 Intelligent-Tiering",
-        "S3 Standard for all objects",
+        "S3 Standard для всех объектов",
         "S3 Glacier Deep Archive"
       ],
       "answer": 1,
-      "explanation": "Correct: **S3 Intelligent-Tiering** automatically moves objects between access tiers based on usage for a small monitoring fee and charges **no retrieval fees**, making it ideal when access patterns are unknown or changing. S3 Standard never optimizes cold data. Standard-IA with a fixed lifecycle assumes a known pattern and adds retrieval fees plus minimum-duration charges if you guess wrong. Glacier Deep Archive is for rarely-accessed archival data with hours-long retrieval - unsuitable for frequently read objects."
+      "explanation": "Верно: **S3 Intelligent-Tiering** автоматически перемещает объекты между уровнями доступа в зависимости от использования за небольшую плату за мониторинг и **не берёт плату за извлечение** — идеально, когда паттерны доступа неизвестны или меняются. S3 Standard никак не оптимизирует холодные данные. Standard-IA с фиксированным lifecycle предполагает известный паттерн и при ошибке добавляет плату за извлечение и за минимальный срок хранения. Glacier Deep Archive предназначен для редко используемых архивных данных с извлечением за часы — не подходит для часто читаемых объектов."
     },
     {
       "id": "cost-q7",
       "domain": 4,
-      "stem": "A company has 15 AWS accounts. They want a single bill, want to reach volume pricing discounts faster, and want unused Reserved Instance and Savings Plan commitment in one account to automatically benefit other accounts. Which approach achieves this? (Choose two)",
+      "stem": "У компании 15 аккаунтов AWS. Нужен единый счёт, более быстрое достижение объёмных скидок, и чтобы неиспользованные обязательства по Reserved Instances и Savings Plans в одном аккаунте автоматически приносили пользу другим. Какой подход это обеспечит? (Выберите два)",
       "options": [
-        "Purchase separate Savings Plans in every account and disable sharing",
-        "Keep RI/Savings Plan discount sharing enabled across the organization",
-        "Create a separate AWS Budget in each account to merge their bills",
-        "Use AWS Organizations with consolidated billing"
+        "Купить отдельные Savings Plans в каждом аккаунте и отключить шаринг",
+        "Оставить включённым шаринг скидок RI/Savings Plan по всей организации",
+        "Создать отдельный AWS Budget в каждом аккаунте, чтобы объединить их счета",
+        "Использовать AWS Organizations с consolidated billing"
       ],
       "answer": [
         1,
         3
       ],
-      "explanation": "Correct: **AWS Organizations consolidated billing** produces one bill, aggregates usage so volume/tiered discounts are reached faster, and by default **shares RI/Savings Plan** discounts across member accounts. **Keeping RI/SP discount sharing enabled** ensures unused commitment in one account automatically benefits others. Purchasing separate Savings Plans per account *and disabling sharing* prevents cross-account benefit and fragments commitment - the opposite of the goal. AWS Budgets only sets alerts/thresholds; it does not merge bills or aggregate discounts."
+      "explanation": "Верно: **consolidated billing в AWS Organizations** даёт один счёт, суммирует использование, чтобы объёмные/ступенчатые скидки достигались быстрее, и по умолчанию **делит скидки RI/Savings Plan** между аккаунтами-участниками. **Включённый шаринг скидок RI/SP** гарантирует, что неиспользованные обязательства одного аккаунта автоматически приносят пользу другим. Отдельные Savings Plans в каждом аккаунте *с отключённым шарингом* исключают межаккаунтную выгоду и дробят обязательства — ровно противоположно цели. AWS Budgets только задаёт алерты/пороги; он не объединяет счета и не суммирует скидки."
     },
     {
       "id": "cost-q8",
       "domain": 4,
-      "stem": "A team runs a small internal API on an always-on m5.large EC2 instance, but traffic is sporadic - often idle for hours with occasional short bursts. They want to stop paying for idle capacity while keeping the API available on demand. What is the MOST cost-effective re-architecture?",
+      "stem": "Команда держит небольшой внутренний API на постоянно работающем инстансе EC2 m5.large, но трафик эпизодический — часами простой, изредка короткие всплески. Нужно перестать платить за простаивающую ёмкость, сохранив доступность API по запросу. Какая переработка архитектуры будет MOST cost-effective?",
       "options": [
-        "Buy a 3-year Reserved Instance for the m5.large",
-        "Switch the instance to a Spot Instance",
-        "Move the EBS volume from gp2 to gp3",
-        "Migrate the API to AWS Lambda behind Amazon API Gateway"
+        "Купить Reserved Instance на 3 года для m5.large",
+        "Перевести инстанс на Spot Instance",
+        "Перевести том EBS с gp2 на gp3",
+        "Перенести API в AWS Lambda за Amazon API Gateway"
       ],
       "answer": 3,
-      "explanation": "Correct: **Lambda behind API Gateway** charges only per request/execution and scales to zero, eliminating payment for idle capacity for a sporadic, bursty internal API. A 3-year RI commits to paying for the instance 24/7 - worse for idle-heavy usage. A Spot Instance is cheaper per hour but can be reclaimed with 2 minutes' notice (poor for an always-available API) and still runs continuously. Moving gp2 to gp3 trims storage cost slightly but the instance still runs idle, so it does not address the core waste."
+      "explanation": "Верно: **Lambda за API Gateway** тарифицируется только за запросы/выполнение и масштабируется до нуля, так что за простой эпизодического, пикового внутреннего API вы не платите. RI на 3 года — это обязательство платить за инстанс 24/7, что хуже при долгих простоях. Spot Instance дешевле за час, но может быть отозван с уведомлением за 2 минуты (плохо для постоянно доступного API) и всё равно работает непрерывно. Переход с gp2 на gp3 немного снижает стоимость хранения, но инстанс по-прежнему простаивает, так что основная проблема не решается."
     }
   ]
 }

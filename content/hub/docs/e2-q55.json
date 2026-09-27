@@ -1,0 +1,30 @@
+{
+  "id": "e2-q55",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "HA: запас ёмкости в каждой AZ (static stability, N+1 по AZ)",
+  "tests": "Принцип проектирования, при котором отказ целой AZ не ухудшает обслуживание.",
+  "expected": "Распределить по нескольким AZ и держать такой запас, чтобы оставшиеся AZ приняли нагрузку упавшей (N+1 across AZs, static stability). Триггеры: «entire AZ fails», «without degradation», «three AZs».",
+  "why_not": "Всё в одной AZ или вертикальное масштабирование — SPOF; один общий NAT gateway — сам по себе SPOF уровня AZ.",
+  "keywords": [
+    "AZ failure",
+    "N+1",
+    "static stability",
+    "multi-AZ",
+    "headroom",
+    "без деградации"
+  ],
+  "services": [
+    "ha",
+    "global-infra",
+    "auto-scaling",
+    "nat-gateway"
+  ],
+  "topics": [
+    "ha-dr",
+    "architecture"
+  ],
+  "domain": 2
+}

@@ -1,0 +1,28 @@
+{
+  "id": "e1-q33",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "Direct Connect + IPsec VPN: приватный канал с шифрованием",
+  "tests": "Как обеспечить зашифрованный трафик on-premises ↔ VPC по выделенному приватному каналу со стабильной пропускной способностью (выбрать два).",
+  "expected": "AWS Direct Connect (выделенное приватное подключение, стабильный throughput) + IPsec VPN поверх Direct Connect (шифрование). Триггеры: «encrypted», «private, dedicated connection», «consistent throughput».",
+  "why_not": "Site-to-Site VPN только через интернет — нет выделенного стабильного канала; internet gateway делает трафик публичным.",
+  "keywords": [
+    "Direct Connect",
+    "IPsec VPN",
+    "dedicated connection",
+    "consistent throughput",
+    "шифрование",
+    "on-premises"
+  ],
+  "services": [
+    "direct-connect",
+    "site-to-site-vpn",
+    "encryption"
+  ],
+  "topics": [
+    "vpc-networking"
+  ],
+  "domain": 1
+}

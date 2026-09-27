@@ -1,0 +1,30 @@
+{
+  "id": "e5-q14",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "GuardDuty: обнаружение угроз (скомпрометированные credentials, malicious IP)",
+  "tests": "Какой managed-сервис обнаруживает активные угрозы: необычные API-вызовы, связь с известными вредоносными IP.",
+  "expected": "Amazon GuardDuty — ML + threat intelligence по CloudTrail, VPC Flow Logs, DNS logs; включается в один клик. Триггеры: «compromised credentials», «unusual API calls», «known malicious IPs», «minimal setup».",
+  "why_not": "Inspector — уязвимости ПО; Config — соответствие конфигураций; Trusted Advisor — best-practice проверки.",
+  "keywords": [
+    "GuardDuty",
+    "threat detection",
+    "compromised credentials",
+    "malicious IP",
+    "anomalous API calls",
+    "угрозы"
+  ],
+  "services": [
+    "guardduty",
+    "inspector",
+    "config",
+    "trusted-advisor"
+  ],
+  "topics": [
+    "iam-security",
+    "monitoring"
+  ],
+  "domain": 1
+}

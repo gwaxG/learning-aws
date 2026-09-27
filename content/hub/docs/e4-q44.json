@@ -1,0 +1,29 @@
+{
+  "id": "e4-q44",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "S3 Lifecycle: transition и expiration по возрасту объектов",
+  "tests": "Простейший способ автоматически переводить объекты в дешёвый класс через 30 дней и удалять через 365.",
+  "expected": "S3 Lifecycle policy с transition rule (30 дней → дешёвый класс) и expiration rule (365 дней) — без кода. Триггеры: «transition after 30 days», «deleted after 365 days», «automatically», «simplest».",
+  "why_not": "Lambda по расписанию — лишний кастомный код; S3 Replication копирует, а не меняет класс; ручной перенос — ошибки и overhead.",
+  "keywords": [
+    "S3 Lifecycle",
+    "transition",
+    "expiration",
+    "30 дней",
+    "365 дней",
+    "автоматическое удаление"
+  ],
+  "services": [
+    "s3-lifecycle",
+    "s3-storage-classes",
+    "s3-replication"
+  ],
+  "topics": [
+    "storage",
+    "cost"
+  ],
+  "domain": 3
+}

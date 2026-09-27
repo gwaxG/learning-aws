@@ -1,0 +1,29 @@
+{
+  "id": "e4-q26",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "RDS Read Replicas + ElastiCache: разгрузка чтения с БД",
+  "tests": "Какие два изменения эффективнее всего снижают нагрузку чтения на RDS при повторяющихся запросах.",
+  "expected": "ElastiCache (in-memory кэш для повторяющихся одинаковых запросов) + RDS read replicas (распределение read-трафика). Триггеры: «read-heavy», «repeated identical queries», «growing read traffic», (Choose two).",
+  "why_not": "Переход на Single-AZ снижает доступность и не помогает чтению; backup retention не влияет на производительность чтения.",
+  "keywords": [
+    "read replicas",
+    "ElastiCache",
+    "read-heavy",
+    "caching",
+    "repeated queries",
+    "разгрузка чтения"
+  ],
+  "services": [
+    "read-replicas",
+    "elasticache",
+    "caching",
+    "rds"
+  ],
+  "topics": [
+    "databases"
+  ],
+  "domain": 2
+}

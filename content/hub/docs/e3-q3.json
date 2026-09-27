@@ -1,0 +1,29 @@
+{
+  "id": "e3-q3",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "IAM: роль EC2 через instance profile вместо долгоживущих ключей",
+  "tests": "Самый безопасный способ дать приложению на EC2 доступ к AWS API (Secrets Manager) без хранения постоянных credentials.",
+  "expected": "IAM role через instance profile: временные, автоматически ротируемые credentials из IMDS. Триггеры: «EC2 needs to access», «without storing long-term credentials».",
+  "why_not": "Ключи в user data/env или в AMI — утечка секретов; root access keys приложениям нельзя никогда.",
+  "keywords": [
+    "instance profile",
+    "IAM role",
+    "temporary credentials",
+    "instance metadata",
+    "long-term credentials",
+    "без долгоживущих ключей"
+  ],
+  "services": [
+    "iam",
+    "ec2",
+    "secrets-manager"
+  ],
+  "topics": [
+    "iam-security",
+    "ec2-compute"
+  ],
+  "domain": 1
+}

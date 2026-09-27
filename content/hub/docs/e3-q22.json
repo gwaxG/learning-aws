@@ -1,0 +1,29 @@
+{
+  "id": "e3-q22",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "Высокая доступность: ASG и ALB в нескольких AZ",
+  "tests": "Как спроектировать веб-слой, переживающий отказ целой Availability Zone.",
+  "expected": "Auto Scaling group и ALB минимум в двух AZ. Триггеры: «remain available if an entire AZ fails», «Auto Scaling group behind an ALB».",
+  "why_not": "Всё в одной AZ со standby — single point of failure; скрипт перекидывания Elastic IP — хрупко; Multi-AZ RDS не защищает веб-слой.",
+  "keywords": [
+    "Multi-AZ",
+    "Auto Scaling group",
+    "ALB",
+    "Availability Zone failure",
+    "high availability",
+    "отказ AZ"
+  ],
+  "services": [
+    "ha",
+    "auto-scaling",
+    "elb"
+  ],
+  "topics": [
+    "ha-dr",
+    "ec2-compute"
+  ],
+  "domain": 2
+}

@@ -1,0 +1,29 @@
+{
+  "id": "e3-q9",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "EBS: шифрование по умолчанию на уровне аккаунта/региона",
+  "tests": "Как гарантировать шифрование всех новых EBS-томов в регионе без ручных действий разработчиков.",
+  "expected": "Включить EBS encryption by default в настройках аккаунта для региона — все новые тома и snapshot-копии шифруются автоматически. Триггеры: «by default», «without relying on developers».",
+  "why_not": "Tag policy не форсирует шифрование; SCP на ec2:RunInstances просто блокирует запуск; ручное шифрование — ошибки и не автоматично.",
+  "keywords": [
+    "EBS encryption by default",
+    "account setting",
+    "region",
+    "KMS",
+    "по умолчанию",
+    "без участия разработчиков"
+  ],
+  "services": [
+    "ebs",
+    "kms",
+    "encryption"
+  ],
+  "topics": [
+    "storage",
+    "iam-security"
+  ],
+  "domain": 1
+}

@@ -1,0 +1,28 @@
+{
+  "id": "e3-q39",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "FSx for Lustre: файловая система для HPC",
+  "tests": "Выбор общей файловой системы с sub-ms латентностью и высокой пропускной способностью для Linux HPC.",
+  "expected": "Amazon FSx for Lustre — HPC/ML, sub-ms, сотни ГБ/с, интеграция с S3. Триггеры: «high-performance computing», «sub-millisecond», «high throughput», «Linux compute nodes».",
+  "why_not": "EFS — general purpose NFS с большей латентностью; S3 — объектное, не POSIX; FSx for Windows — SMB для Windows.",
+  "keywords": [
+    "FSx for Lustre",
+    "HPC",
+    "sub-millisecond",
+    "high throughput",
+    "Linux",
+    "parallel file system"
+  ],
+  "services": [
+    "fsx",
+    "efs",
+    "s3"
+  ],
+  "topics": [
+    "storage"
+  ],
+  "domain": 3
+}

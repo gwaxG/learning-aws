@@ -1,0 +1,28 @@
+{
+  "id": "e3-q32",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "ECS на Fargate: контейнеры без управления серверами",
+  "tests": "Выбор оркестрации контейнеров с минимальной операционной нагрузкой и serverless-вычислениями.",
+  "expected": "Amazon ECS с Fargate launch type — ни control plane, ни инстансов. Триггеры: «avoid managing the control plane», «serverless compute for tasks», «least operational overhead».",
+  "why_not": "Self-managed Kubernetes и EC2 launch type требуют патчей и управления ёмкостью; cron на одной VM — нет оркестрации и отказоустойчивости.",
+  "keywords": [
+    "ECS",
+    "Fargate",
+    "serverless containers",
+    "launch type",
+    "least operational overhead",
+    "без управления серверами"
+  ],
+  "services": [
+    "fargate",
+    "ecs",
+    "eks"
+  ],
+  "topics": [
+    "serverless-containers"
+  ],
+  "domain": 2
+}

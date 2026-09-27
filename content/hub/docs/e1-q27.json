@@ -1,0 +1,30 @@
+{
+  "id": "e1-q27",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "WAF: защита L7 от SQL injection и XSS",
+  "tests": "Какой сервис защищает публичное веб-приложение от атак прикладного уровня (SQL injection, XSS).",
+  "expected": "AWS WAF с managed rule groups на CloudFront или ALB (или API Gateway) — инспектирует HTTP-запросы. Триггеры: «SQL injection», «cross-site scripting», «application layer».",
+  "why_not": "Shield Standard — от DDoS, не от эксплойтов приложения; security groups и NACL фильтруют по IP/порту, не по содержимому запроса.",
+  "keywords": [
+    "AWS WAF",
+    "SQL injection",
+    "XSS",
+    "managed rule groups",
+    "layer 7",
+    "прикладной уровень"
+  ],
+  "services": [
+    "waf",
+    "shield",
+    "security-groups",
+    "nacl"
+  ],
+  "topics": [
+    "iam-security",
+    "edge-dns"
+  ],
+  "domain": 1
+}

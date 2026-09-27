@@ -1,0 +1,28 @@
+{
+  "id": "e1-q17",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "DR: warm standby (минуты RTO, секунды RPO)",
+  "tests": "Выбор DR-стратегии под RTO в минуты и RPO в секунды дешевле, чем полноценное дублирующее окружение.",
+  "expected": "Warm standby — уменьшенная, но работающая копия окружения, быстро масштабируется при аварии. Триггеры: «RTO of a few minutes», «RPO of seconds», «lower cost than full duplicate».",
+  "why_not": "Backup and restore и pilot light — дольше восстановление; multi-site active-active — самый дорогой, полная мощность постоянно.",
+  "keywords": [
+    "warm standby",
+    "RTO",
+    "RPO",
+    "pilot light",
+    "active-active",
+    "backup and restore",
+    "disaster recovery"
+  ],
+  "services": [
+    "dr-strategies",
+    "rto-rpo"
+  ],
+  "topics": [
+    "ha-dr"
+  ],
+  "domain": 2
+}

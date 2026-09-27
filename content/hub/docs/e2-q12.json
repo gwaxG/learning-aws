@@ -1,0 +1,28 @@
+{
+  "id": "e2-q12",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "IAM: роль EC2 через instance profile вместо access keys",
+  "tests": "Рекомендуемый способ дать приложению на EC2 доступ к S3.",
+  "expected": "Прикрепить IAM role (instance profile) с least-privilege политикой s3:GetObject на бакет — временные, автоматически ротируемые креды. Триггеры: «EC2 application», «no credentials», «recommended way».",
+  "why_not": "Access keys в env vars — риск утечки и ротация вручную; bucket policy по публичному IP — не тот механизм; ACL — legacy и не может ссылаться на инстанс.",
+  "keywords": [
+    "IAM role",
+    "instance profile",
+    "s3:GetObject",
+    "least privilege",
+    "temporary credentials",
+    "EC2"
+  ],
+  "services": [
+    "iam",
+    "ec2",
+    "s3-security"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1
+}

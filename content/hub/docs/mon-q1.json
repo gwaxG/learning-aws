@@ -1,0 +1,31 @@
+{
+  "id": "mon-q1",
+  "source": {
+    "type": "topic",
+    "ref": "monitoring"
+  },
+  "concept": "CloudTrail: аудит API-вызовов — кто, когда, с какого IP",
+  "tests": "Различение сервисов мониторинга: кто выполнил конкретный API-вызов и откуда.",
+  "expected": "AWS CloudTrail — логирует identity, время и source IP вызова (DeleteSecurityGroup). Триггеры: «which IAM user», «deleted», «source IP» — вопрос «кто что сделал».",
+  "why_not": "CloudWatch — метрики производительности; Config — состояние и история конфигурации, но не identity каждого вызова; X-Ray — трассировка запросов.",
+  "keywords": [
+    "CloudTrail",
+    "API calls",
+    "audit",
+    "source IP",
+    "IAM user",
+    "кто удалил",
+    "who did what"
+  ],
+  "services": [
+    "cloudtrail",
+    "config",
+    "cloudwatch",
+    "xray"
+  ],
+  "topics": [
+    "monitoring",
+    "iam-security"
+  ],
+  "domain": 2
+}

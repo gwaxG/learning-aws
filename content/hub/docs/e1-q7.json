@@ -1,0 +1,30 @@
+{
+  "id": "e1-q7",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "SQS FIFO: строгий порядок и exactly-once",
+  "tests": "Выбор сервиса для decoupling с буферизацией пиков, строгим порядком обработки и без дублей.",
+  "expected": "SQS FIFO queue — гарантирует порядок и exactly-once processing, буферизует всплески. Триггеры: «exactly in the sequence received», «never duplicated», «decouple».",
+  "why_not": "SQS standard — возможны дубли и порядок best-effort; SNS — pub/sub без буферизации; Firehose — доставка потоков в хранилища, не очередь заданий.",
+  "keywords": [
+    "SQS FIFO",
+    "ordering",
+    "exactly-once",
+    "decoupling",
+    "без дублей",
+    "порядок сообщений"
+  ],
+  "services": [
+    "sqs-fifo",
+    "sqs",
+    "sns",
+    "firehose",
+    "decoupling"
+  ],
+  "topics": [
+    "integration"
+  ],
+  "domain": 2
+}

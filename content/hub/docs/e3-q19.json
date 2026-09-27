@@ -1,0 +1,30 @@
+{
+  "id": "e3-q19",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "Теги: принудительный тег через SCP и aws:RequestTag",
+  "tests": "Как запретить создание ресурсов без обязательного тега CostCenter во всей организации.",
+  "expected": "SCP/IAM policy с Deny, если aws:RequestTag/CostCenter отсутствует (Null condition). Триггеры: «enforce tag», «prevent creation otherwise», «across the organization».",
+  "why_not": "Budgets и Cost Explorer только показывают траты; CloudWatch alarms мониторят метрики — никто не блокирует создание.",
+  "keywords": [
+    "aws:RequestTag",
+    "SCP",
+    "tag enforcement",
+    "CostCenter",
+    "Deny",
+    "обязательный тег"
+  ],
+  "services": [
+    "scp",
+    "cost-allocation-tags",
+    "organizations",
+    "iam"
+  ],
+  "topics": [
+    "iam-security",
+    "cost"
+  ],
+  "domain": 1
+}

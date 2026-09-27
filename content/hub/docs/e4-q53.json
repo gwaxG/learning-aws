@@ -1,0 +1,28 @@
+{
+  "id": "e4-q53",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "DMS: миграция БД с CDC и минимальным простоем",
+  "tests": "Выбор сервиса миграции production-БД с непрерывной репликацией изменений до cutover.",
+  "expected": "AWS DMS с ongoing replication — full load + CDC, near-zero downtime cutover. Триггеры: «minimal downtime», «continuously replicating changes until cutover».",
+  "why_not": "Snowball — офлайн bulk-перенос, не живая репликация; Transfer Acceleration ускоряет загрузку в S3; mysqldump/import требует долгого простоя.",
+  "keywords": [
+    "DMS",
+    "ongoing replication",
+    "CDC",
+    "minimal downtime",
+    "cutover",
+    "миграция БД"
+  ],
+  "services": [
+    "dms",
+    "snow-family"
+  ],
+  "topics": [
+    "data-migration",
+    "databases"
+  ],
+  "domain": 3
+}

@@ -1,0 +1,30 @@
+{
+  "id": "e2-q5",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "Lambda: SQS event source mapping для serverless обработки очереди",
+  "tests": "Выбор наименее трудоёмкого serverless-способа обрабатывать SQS с масштабированием по числу сообщений и оплатой только за работу.",
+  "expected": "Lambda + SQS event source mapping: Lambda сама опрашивает очередь, масштабирует concurrency по объёму, платишь за время выполнения. Триггеры: «serverlessly», «scale based on number of messages», «pay only when processed», «least operational overhead».",
+  "why_not": "ECS on EC2 и EC2 ASG требуют управления инстансами; EKS — самая тяжёлая по администрированию.",
+  "keywords": [
+    "Lambda",
+    "SQS",
+    "event source mapping",
+    "serverless",
+    "least operational overhead",
+    "pay per use"
+  ],
+  "services": [
+    "lambda",
+    "sqs",
+    "ecs",
+    "eks"
+  ],
+  "topics": [
+    "serverless-containers",
+    "integration"
+  ],
+  "domain": 4
+}

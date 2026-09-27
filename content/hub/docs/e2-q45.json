@@ -1,0 +1,29 @@
+{
+  "id": "e2-q45",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "RDS Multi-AZ: автоматический failover на standby в другой AZ",
+  "tests": "Какая конфигурация RDS даёт автоматическое переключение на резерв в другой AZ без ручных действий.",
+  "expected": "RDS Multi-AZ — синхронный standby в другой AZ, автоматический failover через смену DNS endpoint. Триггеры: «automatic failover», «standby in another AZ», «no manual intervention».",
+  "why_not": "Single-AZ с ручными снапшотами — нет авто-failover; cross-region read replica — для чтения/DR, промоут ручной; бэкапы в S3 — не failover.",
+  "keywords": [
+    "RDS Multi-AZ",
+    "synchronous standby",
+    "automatic failover",
+    "DNS endpoint",
+    "high availability"
+  ],
+  "services": [
+    "rds-multi-az",
+    "rds",
+    "read-replicas",
+    "ha"
+  ],
+  "topics": [
+    "databases",
+    "ha-dr"
+  ],
+  "domain": 3
+}

@@ -1,0 +1,29 @@
+{
+  "id": "e2-q63",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "S3 Event Notifications → Lambda: serverless обработка загрузок",
+  "tests": "Выбор event-driven serverless решения, реагирующего сразу на появление файла в S3, без стоимости простоя.",
+  "expected": "S3 event notification (s3:ObjectCreated) вызывает Lambda — мгновенно, оплата только за выполнение. Триггеры: «sporadic uploads», «start immediately when a file lands in S3», «fully serverless», «no idle cost», «thumbnails».",
+  "why_not": "Cron на EC2 и ECS с поллингом работают постоянно и стоят денег в простое; scheduled ASG action — по времени, не по событию.",
+  "keywords": [
+    "S3 event notification",
+    "Lambda",
+    "ObjectCreated",
+    "event-driven",
+    "thumbnails",
+    "no idle cost"
+  ],
+  "services": [
+    "lambda",
+    "s3",
+    "ecs"
+  ],
+  "topics": [
+    "serverless-containers",
+    "integration"
+  ],
+  "domain": 2
+}

@@ -1,0 +1,29 @@
+{
+  "id": "e3-q56",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "CloudWatch: метрики, логи, дашборды и alarms",
+  "tests": "Выбор сервиса для единого дашборда с custom metrics, логами, alarms и автоматическими действиями.",
+  "expected": "Amazon CloudWatch: metrics, Logs, dashboards, alarms → действия (SNS, Auto Scaling, EC2 actions). Триггеры: «single dashboard», «custom metrics, logs, and alarms», «automated responses».",
+  "why_not": "CloudTrail — аудит API; Config — compliance конфигураций; X-Ray — распределённая трассировка.",
+  "keywords": [
+    "CloudWatch",
+    "dashboard",
+    "custom metrics",
+    "alarms",
+    "logs",
+    "мониторинг здоровья"
+  ],
+  "services": [
+    "cloudwatch",
+    "cloudtrail",
+    "xray",
+    "config"
+  ],
+  "topics": [
+    "monitoring"
+  ],
+  "domain": 4
+}

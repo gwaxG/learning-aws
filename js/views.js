@@ -15,9 +15,12 @@ const mdLite = (s) =>
 export async function renderNav(nav) {
   const m = await loadManifest();
   nav.innerHTML =
-    `<a href="#/">Dashboard</a>` +
-    `<a href="#/exams">Mock Exams</a>` +
-    `<span class="nav-sep">Topics</span>` +
+    `<a href="#/">Дашборд</a>` +
+    `<a href="#/exams">Пробные экзамены</a>` +
+    `<span class="nav-sep">Карты</span>` +
+    `<a href="#/services">Карта сервисов</a>` +
+    `<a href="#/hub">Хаб вопросов</a>` +
+    `<span class="nav-sep">Темы</span>` +
     m.topics.map((t) => `<a href="#/topic/${t.slug}">${esc(t.title)}</a>`).join("");
 }
 
@@ -27,7 +30,7 @@ export async function renderDashboard(view) {
     m.topics.map(async (t) => {
       const topic = await loadTopic(t.slug).catch(() => null);
       if (!topic) {
-        return `<tr><td><a href="#/topic/${t.slug}">${esc(t.title)}</a></td><td colspan="3">not loaded</td></tr>`;
+        return `<tr><td><a href="#/topic/${t.slug}">${esc(t.title)}</a></td><td colspan="3">не загружено</td></tr>`;
       }
       const total = topic.questions.length;
       const done = topic.questions.filter((q) => store.getQuestion(q.id)).length;
@@ -46,17 +49,17 @@ export async function renderDashboard(view) {
         `<li>${esc(e.title)}: <strong>${a.score}</strong>/1000 <span class="${a.passed ? "ok" : "bad"}">${a.passed ? "PASS" : "FAIL"}</span></li>`
     )
   );
-  view.innerHTML = `<h1>Dashboard</h1>
-    <p class="lead">AWS Certified Solutions Architect – Associate (SAA-C03). Pass mark ${m.exam.passScore}/1000.</p>
+  view.innerHTML = `<h1>Дашборд</h1>
+    <p class="lead">AWS Certified Solutions Architect – Associate (SAA-C03). Проходной балл ${m.exam.passScore}/1000.</p>
     <table class="dash">
-      <thead><tr><th>Topic</th><th>Progress</th><th>Answered</th><th>Correct</th></tr></thead>
+      <thead><tr><th>Тема</th><th>Прогресс</th><th>Отвечено</th><th>Верно</th></tr></thead>
       <tbody>${rows.join("")}</tbody>
     </table>
-    <h2>Exam attempts</h2>
-    <ul class="attempts">${attempts.join("") || "<li>None yet — try a mock exam.</li>"}</ul>
-    <button id="reset" class="danger">Reset all progress</button>`;
+    <h2>Попытки экзаменов</h2>
+    <ul class="attempts">${attempts.join("") || "<li>Пока нет — попробуй пробный экзамен.</li>"}</ul>
+    <button id="reset" class="danger">Сбросить весь прогресс</button>`;
   view.querySelector("#reset").onclick = () => {
-    if (confirm("Erase all saved progress?")) {
+    if (confirm("Стереть весь сохранённый прогресс?")) {
       store.reset();
       location.reload();
     }
@@ -76,7 +79,7 @@ export async function renderTopic(view, slug) {
     .map((e, i) => {
       const fig = e.diagram
         ? `<figure class="diagram" data-src="${esc(e.diagram.src)}" id="diagram-${i}">
-             <div class="diagram-svg loading">Loading diagram…</div>
+             <div class="diagram-svg loading">Загрузка диаграммы…</div>
              <figcaption>${esc(e.diagram.caption)}</figcaption>
            </figure>`
         : "";
@@ -86,18 +89,18 @@ export async function renderTopic(view, slug) {
   const refs = docLinks(t.references);
   view.innerHTML = `<h1>${esc(t.title)}</h1>
     <section class="card">
-      <h2>Exam essentials</h2>
+      <h2>Главное для экзамена</h2>
       ${essentials}
     </section>
     <section class="card">
-      <h2>Hands-on labs</h2>
+      <h2>Практические лабы</h2>
       <div id="labs"></div>
     </section>
     <section class="card">
-      <h2>Practice questions</h2>
+      <h2>Практические вопросы</h2>
       <div id="qs"></div>
     </section>
-    ${refs ? `<section class="card refs"><h2>AWS documentation</h2>${refs}</section>` : ""}`;
+    ${refs ? `<section class="card refs"><h2>Документация AWS</h2>${refs}</section>` : ""}`;
 
   // Inline diagram SVGs (themeable, offline).
   t.essentials.forEach((e, i) => {
@@ -110,7 +113,7 @@ export async function renderTopic(view, slug) {
       })
       .catch(() => {
         slot.classList.remove("loading");
-        slot.textContent = "Diagram unavailable.";
+        slot.textContent = "Диаграмма недоступна.";
       });
   });
 
@@ -138,7 +141,7 @@ export async function renderTopic(view, slug) {
     wrap.className = "q-card";
     const num = document.createElement("div");
     num.className = "q-num";
-    num.textContent = `Question ${i + 1}`;
+    num.textContent = `Вопрос ${i + 1}`;
     wrap.append(num);
     const body = document.createElement("div");
     wrap.append(body);
@@ -149,16 +152,16 @@ export async function renderTopic(view, slug) {
 
 export async function renderExamList(view) {
   const m = await loadManifest();
-  view.innerHTML = `<h1>Mock Exams</h1>
-    <p class="lead">Full-length timed exams. ${m.exams[0]?.questions ?? 65} questions, ${m.exams[0]?.minutes ?? 130} minutes, domain-weighted like the real SAA-C03.</p>
+  view.innerHTML = `<h1>Пробные экзамены</h1>
+    <p class="lead">Полноценные экзамены на время: ${m.exams[0]?.questions ?? 65} вопросов, ${m.exams[0]?.minutes ?? 130} минут, веса доменов как в настоящем SAA-C03.</p>
     <div class="exam-grid">${m.exams
       .map((e) => {
         const attempts = store.getExamAttempts(e.id);
         const best = attempts.reduce((mx, a) => Math.max(mx, a.score), 0);
         return `<a class="exam-card" href="#/exam/${e.id}">
           <h3>${esc(e.title)}</h3>
-          <p>${e.questions} questions · ${e.minutes} min</p>
-          <p class="exam-best">Best: ${best ? best + "/1000" : "—"} · ${attempts.length} attempt(s)</p>
+          <p>${e.questions} вопросов · ${e.minutes} мин</p>
+          <p class="exam-best">Лучший: ${best ? best + "/1000" : "—"} · попыток: ${attempts.length}</p>
         </a>`;
       })
       .join("")}</div>`;

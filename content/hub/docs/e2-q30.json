@@ -1,0 +1,28 @@
+{
+  "id": "e2-q30",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "Secrets Manager: автоматическая ротация паролей БД",
+  "tests": "Выбор сервиса для безопасного получения пароля БД в рантайме с автоматической ротацией без изменений кода.",
+  "expected": "AWS Secrets Manager — хранение в зашифрованном виде + встроенная ротация (Lambda) для поддерживаемых БД, приложение всегда читает актуальное значение. Триггеры: «rotated automatically every 30 days», «database password», «without code changes».",
+  "why_not": "Parameter Store standard parameters — нет встроенной ротации; env vars и зашифрованный объект S3 требуют своей логики ротации.",
+  "keywords": [
+    "Secrets Manager",
+    "automatic rotation",
+    "database password",
+    "Parameter Store",
+    "credentials",
+    "30 days"
+  ],
+  "services": [
+    "secrets-manager",
+    "systems-manager",
+    "kms"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1
+}

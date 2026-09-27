@@ -1,0 +1,29 @@
+{
+  "id": "e4-q48",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "Fargate: serverless-контейнеры без управления инстансами",
+  "tests": "Выбор launch type для контейнеров без управления мощностью EC2 с оплатой за vCPU и память задач.",
+  "expected": "AWS Fargate — serverless запуск контейнеров, оплата только за запрошенные vCPU и memory. Триггеры: «eliminate EC2 capacity management», «pay only for vCPU and memory their tasks consume».",
+  "why_not": "ECS EC2 launch type и self-managed Kubernetes требуют управлять инстансами; Reserved Instances — модель цены EC2, не serverless.",
+  "keywords": [
+    "Fargate",
+    "launch type",
+    "serverless containers",
+    "vCPU",
+    "memory",
+    "ECS"
+  ],
+  "services": [
+    "fargate",
+    "ecs",
+    "ec2-purchasing"
+  ],
+  "topics": [
+    "serverless-containers",
+    "cost"
+  ],
+  "domain": 3
+}

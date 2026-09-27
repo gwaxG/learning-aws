@@ -1,0 +1,29 @@
+{
+  "id": "e1-q53",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "Inspector: непрерывное сканирование уязвимостей EC2 и контейнеров",
+  "tests": "Какой сервис автоматически и непрерывно сканирует EC2 и container images на уязвимости ПО и сетевую доступность.",
+  "expected": "Amazon Inspector — автоматическое непрерывное сканирование EC2, образов в ECR (и Lambda) на CVE и network reachability. Триггеры: «software vulnerabilities», «container images», «unintended network exposure».",
+  "why_not": "AWS Config — соответствие конфигураций; GuardDuty — обнаружение угроз по логам и поведению; Trusted Advisor — общие проверки best practices.",
+  "keywords": [
+    "Amazon Inspector",
+    "vulnerability scanning",
+    "CVE",
+    "container images",
+    "network reachability",
+    "уязвимости"
+  ],
+  "services": [
+    "inspector",
+    "guardduty",
+    "config",
+    "ecr"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1
+}

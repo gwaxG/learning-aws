@@ -1,0 +1,29 @@
+{
+  "id": "e4-q19",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "Secrets Manager: автоматическая ротация credentials БД",
+  "tests": "Выбор хранилища секретов с автоматической ротацией паролей БД каждые 30 дней.",
+  "expected": "AWS Secrets Manager с включённой rotation — нативная интеграция с RDS через managed rotation Lambda. Триггеры: «rotate automatically», «every 30 days», «database credentials», RDS.",
+  "why_not": "Parameter Store (standard) не ротирует автоматически; S3 и KMS (хранит ключи, а не секреты) не подходят.",
+  "keywords": [
+    "Secrets Manager",
+    "automatic rotation",
+    "RDS",
+    "database credentials",
+    "30 дней",
+    "Parameter Store"
+  ],
+  "services": [
+    "secrets-manager",
+    "systems-manager",
+    "rds"
+  ],
+  "topics": [
+    "iam-security",
+    "databases"
+  ],
+  "domain": 1
+}

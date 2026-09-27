@@ -1,0 +1,30 @@
+{
+  "id": "e5-q31",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "EFS: общая NFS-файловая система для многих Linux EC2 в нескольких AZ",
+  "tests": "Выбор хранилища, одновременно доступного сотням Linux-инстансов в разных AZ с автоматическим масштабированием.",
+  "expected": "Amazon EFS — управляемая эластичная NFS, multi-AZ, конкурентный доступ. Триггеры: «shared file storage», «concurrently from hundreds of Linux instances», «multiple AZs», «scaling automatically».",
+  "why_not": "EBS — к одному инстансу (Multi-Attach только в одной AZ); S3 — объектное, не POSIX; instance store — эфемерный и локальный.",
+  "keywords": [
+    "EFS",
+    "NFS",
+    "shared file system",
+    "multi-AZ",
+    "Linux",
+    "POSIX",
+    "общее хранилище"
+  ],
+  "services": [
+    "efs",
+    "ebs",
+    "instance-store",
+    "s3"
+  ],
+  "topics": [
+    "storage"
+  ],
+  "domain": 2
+}

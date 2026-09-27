@@ -1,0 +1,30 @@
+{
+  "id": "e2-q9",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "NAT Gateway: по одному в каждой AZ для HA исходящего доступа",
+  "tests": "Как дать приватным инстансам исходящий интернет с высокой доступностью и минимальным администрированием.",
+  "expected": "Managed NAT gateway в public subnet каждой AZ, маршруты private subnets на NAT своей AZ. Триггеры: «outbound only», «must not be reachable from the internet», «private subnets», «high availability, low management».",
+  "why_not": "IGW в приватных подсетях делает их публичными; одиночный NAT instance — SPOF и самоуправляемый; VPC endpoint даёт доступ только к AWS-сервисам, не к произвольным репозиториям.",
+  "keywords": [
+    "NAT gateway",
+    "private subnet",
+    "outbound",
+    "per AZ",
+    "high availability",
+    "patches"
+  ],
+  "services": [
+    "nat-gateway",
+    "subnets",
+    "vpc",
+    "igw"
+  ],
+  "topics": [
+    "vpc-networking",
+    "ha-dr"
+  ],
+  "domain": 2
+}

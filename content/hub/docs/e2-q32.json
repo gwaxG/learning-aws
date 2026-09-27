@@ -1,0 +1,28 @@
+{
+  "id": "e2-q32",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "FSx for Lustre: HPC файловая система с интеграцией S3",
+  "tests": "Выбор shared файловой системы для HPC с субмиллисекундной латентностью, сотнями ГБ/с и связкой с S3.",
+  "expected": "Amazon FSx for Lustre — параллельная ФС для HPC/ML, огромная пропускная способность, нативная интеграция с S3 (data repository). Триггеры: «HPC», «hundreds of GB/s», «sub-millisecond», «integrated with S3».",
+  "why_not": "EFS не достигает Lustre-уровня пропускной способности; FSx for Windows — SMB; EBS io2 Block Express — блочное хранилище одного инстанса, не shared ФС.",
+  "keywords": [
+    "FSx for Lustre",
+    "HPC",
+    "parallel file system",
+    "S3 integration",
+    "throughput",
+    "machine learning"
+  ],
+  "services": [
+    "fsx",
+    "efs",
+    "ebs"
+  ],
+  "topics": [
+    "storage"
+  ],
+  "domain": 3
+}

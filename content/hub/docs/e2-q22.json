@@ -1,0 +1,26 @@
+{
+  "id": "e2-q22",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "ELB: ALB для path-based routing на L7",
+  "tests": "Выбор балансировщика, умеющего маршрутизировать HTTP(S) по URL path на разные target groups.",
+  "expected": "Application Load Balancer — L7, path-based и host-based routing на target groups. Триггеры: «based on the URL path», «/api vs /images», «HTTPS microservices».",
+  "why_not": "NLB — L4, не видит URL; GWLB — для inline-аппаратов (firewalls); Classic LB — устаревший, без современного path-routing.",
+  "keywords": [
+    "Application Load Balancer",
+    "path-based routing",
+    "layer 7",
+    "target group",
+    "NLB",
+    "microservices"
+  ],
+  "services": [
+    "elb"
+  ],
+  "topics": [
+    "vpc-networking"
+  ],
+  "domain": 2
+}

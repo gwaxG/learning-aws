@@ -1,0 +1,28 @@
+{
+  "id": "e4-q58",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "X-Ray: distributed tracing для поиска задержки в микросервисах",
+  "tests": "Какой сервис даёт end-to-end трассировку запросов через микросервисы.",
+  "expected": "AWS X-Ray — трассирует запросы через распределённые сервисы, service map и анализ латентности. Триггеры: «trace requests across microservices», «find bottlenecks», «end-to-end tracing».",
+  "why_not": "CloudWatch Logs хранит логи; CloudTrail — API-вызовы; Config — конфигурация; трассировки запросов не дают.",
+  "keywords": [
+    "X-Ray",
+    "distributed tracing",
+    "service map",
+    "microservices",
+    "bottlenecks",
+    "latency"
+  ],
+  "services": [
+    "xray",
+    "cloudwatch-logs",
+    "cloudtrail"
+  ],
+  "topics": [
+    "monitoring"
+  ],
+  "domain": 4
+}

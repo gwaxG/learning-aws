@@ -1,0 +1,28 @@
+{
+  "id": "e4-q55",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "CloudWatch agent + Logs Insights: централизованные логи и запросы",
+  "tests": "Как централизовать логи многих EC2 и запрашивать их для troubleshooting с минимальным overhead.",
+  "expected": "Установить CloudWatch agent → отправка логов в CloudWatch Logs → интерактивные запросы через Logs Insights. Триггеры: «centralize logs from many EC2», «run queries to troubleshoot», «LEAST operational overhead».",
+  "why_not": "Ручное копирование в S3 и email — overhead и медленно; логи только на инстансах теряются при их замене.",
+  "keywords": [
+    "CloudWatch agent",
+    "CloudWatch Logs",
+    "Logs Insights",
+    "centralized logging",
+    "troubleshooting",
+    "централизованные логи"
+  ],
+  "services": [
+    "cloudwatch-logs",
+    "cloudwatch",
+    "ec2"
+  ],
+  "topics": [
+    "monitoring"
+  ],
+  "domain": 4
+}

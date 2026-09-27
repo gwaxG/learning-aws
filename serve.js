@@ -6,8 +6,8 @@ import { extname, join, normalize } from "node:path";
 const ROOT = process.cwd();
 const PORT = process.env.PORT || 8000;
 const TYPES = {
-  ".html": "text/html", ".css": "text/css", ".js": "text/javascript",
-  ".mjs": "text/javascript", ".json": "application/json", ".svg": "image/svg+xml",
+  ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "text/javascript; charset=utf-8",
+  ".mjs": "text/javascript; charset=utf-8", ".json": "application/json; charset=utf-8", ".svg": "image/svg+xml; charset=utf-8",
 };
 
 createServer(async (req, res) => {

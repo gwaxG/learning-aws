@@ -1,0 +1,29 @@
+{
+  "id": "e2-q28",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "ECS Service Auto Scaling: target tracking по ALBRequestCountPerTarget",
+  "tests": "Как масштабировать число задач ECS на Fargate по числу запросов на target.",
+  "expected": "ECS service auto scaling (Application Auto Scaling) с target tracking на метрике ALBRequestCountPerTarget. Триггеры: «number of tasks», «request count per target», «Fargate».",
+  "why_not": "EC2 ASG не применим к Fargate (нет инстансов); scheduled scaling — по времени, не по нагрузке; ручное изменение desired count — не автоматика.",
+  "keywords": [
+    "ECS service auto scaling",
+    "target tracking",
+    "ALBRequestCountPerTarget",
+    "Fargate",
+    "tasks",
+    "ALB"
+  ],
+  "services": [
+    "ecs",
+    "fargate",
+    "elb",
+    "auto-scaling"
+  ],
+  "topics": [
+    "serverless-containers"
+  ],
+  "domain": 2
+}

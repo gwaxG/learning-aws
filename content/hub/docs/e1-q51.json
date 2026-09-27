@@ -1,0 +1,27 @@
+{
+  "id": "e1-q51",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "ELB: ALB для path-based routing на L7",
+  "tests": "Какой балансировщик маршрутизирует запросы в разные target groups по URL path.",
+  "expected": "Application Load Balancer с path-based listener rules (/api → одна target group, /images → другая). Триггеры: «route based on URL path», «different target groups».",
+  "why_not": "NLB работает на L4 без понимания path; Classic LB без content-based routing; Route 53 weighted делит трафик по весам, не по path.",
+  "keywords": [
+    "ALB",
+    "path-based routing",
+    "listener rules",
+    "target group",
+    "layer 7",
+    "URL path"
+  ],
+  "services": [
+    "elb",
+    "route53"
+  ],
+  "topics": [
+    "vpc-networking"
+  ],
+  "domain": 2
+}

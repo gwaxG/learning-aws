@@ -1,0 +1,29 @@
+{
+  "id": "e1-q22",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "EFS: общая NFS для множества Linux-инстансов в разных AZ",
+  "tests": "Выбор общей файловой системы для одновременного монтирования сотнями Linux EC2 в нескольких AZ с автоматическим ростом.",
+  "expected": "Amazon EFS — управляемая эластичная NFS, монтируется из многих AZ одновременно. Триггеры: «shared file system», «hundreds of Linux instances», «multiple AZs», «scales automatically».",
+  "why_not": "EBS — привязан к одной AZ и обычно одному инстансу; FSx for Windows — SMB для Windows; S3 — объектное хранилище, не POSIX.",
+  "keywords": [
+    "EFS",
+    "NFS",
+    "shared file system",
+    "Linux",
+    "Multi-AZ",
+    "POSIX"
+  ],
+  "services": [
+    "efs",
+    "ebs",
+    "fsx",
+    "s3"
+  ],
+  "topics": [
+    "storage"
+  ],
+  "domain": 3
+}

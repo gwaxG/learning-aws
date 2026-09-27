@@ -1,0 +1,30 @@
+{
+  "id": "int-q7",
+  "source": {
+    "type": "topic",
+    "ref": "integration"
+  },
+  "concept": "API Gateway: throttling и response caching для защиты backend",
+  "tests": "Знание функций API Gateway, снижающих нагрузку на backend без изменения кода Lambda.",
+  "expected": "Throttling (rate и burst limits) на stage/method + response caching для повторяющихся одинаковых запросов. Триггеры: «cap the request rate», «repeated identical calls», «without changing the Lambda code».",
+  "why_not": "WebSocket API — для двунаправленного real-time, не защищает от пиков; отключение CloudWatch logging только ухудшает наблюдаемость.",
+  "keywords": [
+    "API Gateway",
+    "throttling",
+    "rate limit",
+    "burst limit",
+    "response caching",
+    "REST API",
+    "ограничение частоты запросов"
+  ],
+  "services": [
+    "api-gateway",
+    "caching",
+    "lambda"
+  ],
+  "topics": [
+    "integration",
+    "serverless-containers"
+  ],
+  "domain": 2
+}

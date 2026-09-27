@@ -1,0 +1,27 @@
+{
+  "id": "e4-q63",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "CloudWatch Anomaly Detection: ML-алерты без статических порогов",
+  "tests": "Какая возможность CloudWatch автоматически находит аномалии в метриках без ручных порогов.",
+  "expected": "CloudWatch Anomaly Detection — ML изучает нормальный паттерн метрики (band) и алертит на отклонения. Триггеры: «detect anomalies in metrics automatically», «without manually setting static thresholds».",
+  "why_not": "Static threshold alarms требуют ручных порогов; CloudTrail Insights — аномалии API-активности, не метрик; Config rules — compliance.",
+  "keywords": [
+    "CloudWatch Anomaly Detection",
+    "machine learning",
+    "metrics",
+    "static thresholds",
+    "anomaly",
+    "аномалии метрик"
+  ],
+  "services": [
+    "cloudwatch",
+    "cloudtrail"
+  ],
+  "topics": [
+    "monitoring"
+  ],
+  "domain": 4
+}

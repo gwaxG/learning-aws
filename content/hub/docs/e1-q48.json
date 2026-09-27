@@ -1,0 +1,29 @@
+{
+  "id": "e1-q48",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "API Gateway: throttling, авторизация и кэширование REST API",
+  "tests": "Какой управляемый сервис ставить перед REST API для throttling, авторизации и кэширования ответов без серверов.",
+  "expected": "Amazon API Gateway — throttling, authorizers, валидация запросов, кэширование ответов, полностью managed. Триггеры: «REST API», «throttling», «authorization», «caching of responses».",
+  "why_not": "ALB не даёт встроенного API throttling и авторизации такого уровня; CloudFront — CDN без семантики управления API; Direct Connect — сетевое подключение.",
+  "keywords": [
+    "API Gateway",
+    "REST API",
+    "throttling",
+    "authorization",
+    "response caching",
+    "mobile clients"
+  ],
+  "services": [
+    "api-gateway",
+    "elb",
+    "cloudfront"
+  ],
+  "topics": [
+    "serverless-containers",
+    "edge-dns"
+  ],
+  "domain": 3
+}

@@ -1,0 +1,29 @@
+{
+  "id": "e2-q65",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "DR strategies: Backup & Restore — минимальная стоимость при RTO в часы",
+  "tests": "Выбор DR-стратегии для некритичного приложения с RTO в несколько часов и минимальным бюджетом.",
+  "expected": "Backup and restore — бэкапы хранятся, инфраструктура разворачивается по требованию; самая дешёвая. Триггеры: «non-critical», «RTO of several hours», «low budget», «simplest».",
+  "why_not": "Pilot light и warm standby держат часть ресурсов запущенными — дороже; multi-site active-active — самый дорогой, избыточно.",
+  "keywords": [
+    "backup and restore",
+    "pilot light",
+    "warm standby",
+    "active-active",
+    "RTO",
+    "DR cost"
+  ],
+  "services": [
+    "dr-strategies",
+    "rto-rpo",
+    "backup"
+  ],
+  "topics": [
+    "ha-dr",
+    "cost"
+  ],
+  "domain": 4
+}

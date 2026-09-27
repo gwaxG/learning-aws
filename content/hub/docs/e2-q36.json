@@ -1,0 +1,26 @@
+{
+  "id": "e2-q36",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "DynamoDB: table class Standard-IA для снижения стоимости хранения",
+  "tests": "Как снизить стоимость хранения редко читаемых данных DynamoDB без смены API.",
+  "expected": "Включить table class DynamoDB Standard-Infrequent Access — дешевле хранение (выше цена запросов), те же API и производительность. Триггеры: «rarely read», «storage cost», «same APIs».",
+  "why_not": "Provisioned capacity влияет на оплату throughput, не хранение; Streams — CDC и доп. стоимость; LSI — паттерн доступа, хранение не уменьшает.",
+  "keywords": [
+    "DynamoDB Standard-IA",
+    "table class",
+    "storage cost",
+    "infrequent access",
+    "same APIs"
+  ],
+  "services": [
+    "dynamodb"
+  ],
+  "topics": [
+    "databases",
+    "cost"
+  ],
+  "domain": 3
+}

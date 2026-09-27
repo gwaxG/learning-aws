@@ -1,0 +1,29 @@
+{
+  "id": "hadr-q7",
+  "source": {
+    "type": "topic",
+    "ref": "ha-dr"
+  },
+  "concept": "S3 Cross-Region Replication: копия объектов в другом регионе",
+  "tests": "Выбор механизма защиты объектов S3 от отказа целого региона с низким RPO.",
+  "expected": "S3 Cross-Region Replication (CRR) с versioning на обоих бакетах. Триггеры: «пережить outage целого региона», «low RPO», «постоянно обновляемая копия во втором регионе».",
+  "why_not": "Lifecycle в Glacier остаётся в том же регионе; SRR — только внутри региона; EBS snapshots к S3 не относятся.",
+  "keywords": [
+    "Cross-Region Replication",
+    "CRR",
+    "versioning",
+    "Same-Region Replication",
+    "Region outage",
+    "второй регион"
+  ],
+  "services": [
+    "s3-replication",
+    "s3",
+    "s3-lifecycle"
+  ],
+  "topics": [
+    "ha-dr",
+    "storage"
+  ],
+  "domain": 2
+}

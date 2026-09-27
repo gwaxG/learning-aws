@@ -1,0 +1,28 @@
+{
+  "id": "e3-q7",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "Secrets Manager: автоматическая ротация учётных данных БД",
+  "tests": "Выбор сервиса для централизованного хранения и автоматической ротации паролей БД для многих Lambda с минимумом усилий.",
+  "expected": "Secrets Manager с automatic rotation (rotation Lambda, встроенная поддержка RDS и др.). Триггеры: «centrally manage and rotate database credentials», «minimal operational effort».",
+  "why_not": "Parameter Store standard — нет нативной ротации; env vars Lambda — статичны и небезопасны; KMS шифрует, но не хранит и не ротирует пароли.",
+  "keywords": [
+    "Secrets Manager",
+    "automatic rotation",
+    "database credentials",
+    "Parameter Store",
+    "ротация паролей",
+    "minimal operational effort"
+  ],
+  "services": [
+    "secrets-manager",
+    "systems-manager",
+    "lambda"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1
+}

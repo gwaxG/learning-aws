@@ -1,0 +1,29 @@
+{
+  "id": "e5-q12",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "EBS: encryption by default на уровне региона",
+  "tests": "Как гарантировать шифрование всех новых EBS-томов без участия пользователей.",
+  "expected": "Включить EBS encryption by default в настройках EC2 каждого региона — новые тома и снапшоты шифруются автоматически. Триггеры: «always encrypted», «without relying on users».",
+  "why_not": "Ручное шифрование после создания — ошибки и окно plaintext; SCP с deny RunInstances блокирует все запуски; S3 default encryption не относится к EBS.",
+  "keywords": [
+    "EBS encryption by default",
+    "per region",
+    "EBS",
+    "автоматическое шифрование",
+    "snapshots",
+    "KMS"
+  ],
+  "services": [
+    "ebs",
+    "encryption",
+    "kms"
+  ],
+  "topics": [
+    "storage",
+    "iam-security"
+  ],
+  "domain": 1
+}

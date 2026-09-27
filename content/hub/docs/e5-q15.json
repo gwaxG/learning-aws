@@ -1,0 +1,32 @@
+{
+  "id": "e5-q15",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "VPC endpoints: interface для AWS-сервисов + gateway для S3 без NAT",
+  "tests": "Как дать инстансам в private subnet доступ к Systems Manager и S3 без интернета и NAT gateway.",
+  "expected": "Interface endpoints (PrivateLink) для Systems Manager (ssm, ssmmessages, ec2messages) + gateway endpoint для S3. Триггеры: «private subnet», «without traversing the public internet», «avoids a NAT gateway».",
+  "why_not": "IGW или public IP открывают инстансы в интернет; публичный proxy всё равно идёт через интернет.",
+  "keywords": [
+    "VPC endpoint",
+    "interface endpoint",
+    "gateway endpoint",
+    "PrivateLink",
+    "private subnet",
+    "без NAT",
+    "Systems Manager"
+  ],
+  "services": [
+    "vpc-endpoints",
+    "privatelink",
+    "systems-manager",
+    "s3",
+    "nat-gateway"
+  ],
+  "topics": [
+    "vpc-networking",
+    "iam-security"
+  ],
+  "domain": 1
+}

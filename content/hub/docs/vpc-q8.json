@@ -1,0 +1,28 @@
+{
+  "id": "vpc-q8",
+  "source": {
+    "type": "topic",
+    "ref": "vpc-networking"
+  },
+  "concept": "Egress-only Internet Gateway: исходящий IPv6 без входящих",
+  "tests": "Знание IPv6-аналога NAT для исходящего трафика из private subnet.",
+  "expected": "Egress-only Internet Gateway — stateful исходящие IPv6-соединения, входящие блокируются. Триггеры: «IPv6», «outbound-only», «without allowing inbound».",
+  "why_not": "NAT Gateway и NAT instance работают только с IPv4; обычный IGW с IPv6-маршрутом даёт двунаправленный доступ и открывает инстансы.",
+  "keywords": [
+    "egress-only Internet Gateway",
+    "IPv6",
+    "outbound-only",
+    "NAT Gateway",
+    "Internet Gateway",
+    "только исходящий"
+  ],
+  "services": [
+    "igw",
+    "nat-gateway",
+    "subnets"
+  ],
+  "topics": [
+    "vpc-networking"
+  ],
+  "domain": 2
+}

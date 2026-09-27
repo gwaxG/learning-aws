@@ -1,0 +1,29 @@
+{
+  "id": "e4-q27",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "CloudFront: CDN-кэширование на edge",
+  "tests": "Как ускорить глобальную загрузку статического сайта и отдавать кэш при сбоях origin.",
+  "expected": "S3 как origin + CloudFront distribution — кэш на edge locations, низкая латентность и отдача кэша при кратковременном сбое origin. Триггеры: «static website», «global users», «load quickly worldwide», «origin outages for cached content».",
+  "why_not": "Прямой доступ к S3 в одном регионе — высокая латентность для дальних пользователей; EC2 в одном регионе не глобален; EBS нельзя шарить глобально.",
+  "keywords": [
+    "CloudFront",
+    "S3 origin",
+    "edge locations",
+    "static website",
+    "global users",
+    "кэширование"
+  ],
+  "services": [
+    "cloudfront",
+    "s3",
+    "caching"
+  ],
+  "topics": [
+    "edge-dns",
+    "storage"
+  ],
+  "domain": 2
+}

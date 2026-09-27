@@ -1,0 +1,29 @@
+{
+  "id": "e4-q47",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "CloudFront: кэш и сжатие на edge для снижения data transfer out",
+  "tests": "Какие два изменения снижают стоимость передачи данных и латентность при повторяющихся запросах к origin.",
+  "expected": "CloudFront кэширует контент на edge (меньше нагрузки на origin и data transfer out) + compression текстовых ответов на edge (меньше байт). Триггеры: «reduce data transfer costs», «repeated requests to origin», «global users», (Choose two).",
+  "why_not": "Отдача всего из EC2 в одном регионе повышает стоимость и латентность; больший инстанс не снижает стоимость передачи.",
+  "keywords": [
+    "CloudFront",
+    "edge caching",
+    "compression",
+    "data transfer out",
+    "origin",
+    "снижение стоимости трафика"
+  ],
+  "services": [
+    "cloudfront",
+    "data-transfer-costs",
+    "caching"
+  ],
+  "topics": [
+    "edge-dns",
+    "cost"
+  ],
+  "domain": 3
+}

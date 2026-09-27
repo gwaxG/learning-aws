@@ -1,0 +1,28 @@
+{
+  "id": "e1-q41",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "DMS: миграция БД с CDC и минимальным простоем",
+  "tests": "Выбор сервиса для миграции большой on-premises БД с непрерывной репликацией изменений до cutover.",
+  "expected": "AWS DMS: full load + ongoing replication (change data capture) → cutover почти без простоя. Триггеры: «minimal downtime», «continuously replicating ongoing changes until cutover».",
+  "why_not": "Snowball — разовый перенос без непрерывной репликации; S3 multipart upload — для объектов; DataSync — файлы/объекты, не транзакционные изменения БД.",
+  "keywords": [
+    "DMS",
+    "CDC",
+    "ongoing replication",
+    "minimal downtime",
+    "cutover",
+    "миграция БД"
+  ],
+  "services": [
+    "dms",
+    "snow-family",
+    "datasync"
+  ],
+  "topics": [
+    "data-migration"
+  ],
+  "domain": 2
+}

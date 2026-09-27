@@ -1,0 +1,29 @@
+{
+  "id": "e5-q19",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "EKS: IRSA — IAM-роли для pod через OIDC provider",
+  "tests": "Механизм, дающий отдельным pod в EKS собственные ограниченные AWS-права.",
+  "expected": "IAM Roles for Service Accounts (IRSA): service account связан с IAM role через OIDC provider кластера. Триггеры: «pods get scoped AWS permissions», «service accounts».",
+  "why_not": "Общий node instance profile даёт всем pod одинаково широкие права; access keys в Kubernetes secrets — долгоживущие; NAT gateway к IAM отношения не имеет.",
+  "keywords": [
+    "IRSA",
+    "OIDC provider",
+    "service account",
+    "EKS",
+    "pod",
+    "least privilege"
+  ],
+  "services": [
+    "eks",
+    "iam",
+    "sts"
+  ],
+  "topics": [
+    "serverless-containers",
+    "iam-security"
+  ],
+  "domain": 1
+}

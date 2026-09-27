@@ -1,0 +1,30 @@
+{
+  "id": "e2-q1",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "S3 шифрование: SSE-KMS с customer managed key и автоматической ротацией",
+  "tests": "Выбор типа серверного шифрования S3, дающего ежегодную автоматическую ротацию ключа, контроль и аудит при минимальных усилиях.",
+  "expected": "SSE-KMS с customer managed key + включённая automatic rotation (раз в год), свой key policy, аудит через CloudTrail. Триггеры: «rotated automatically every year», «PII», «low operational overhead».",
+  "why_not": "SSE-S3 — ключи целиком у AWS, без контроля ротации; aws/s3 (AWS managed key) — нельзя свой key policy; client-side с ключами в конфиге — небезопасно и трудоёмко.",
+  "keywords": [
+    "SSE-KMS",
+    "customer managed key",
+    "automatic rotation",
+    "SSE-S3",
+    "aws/s3",
+    "PII",
+    "шифрование at rest"
+  ],
+  "services": [
+    "kms",
+    "s3-security",
+    "encryption"
+  ],
+  "topics": [
+    "iam-security",
+    "storage"
+  ],
+  "domain": 1
+}

@@ -1,0 +1,29 @@
+{
+  "id": "e5-q6",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "CloudHSM: single-tenant HSM FIPS 140-2 Level 3 под контролем клиента",
+  "tests": "Выбор между KMS и CloudHSM, когда ключи должны оставаться в выделенном HSM, полностью контролируемом клиентом.",
+  "expected": "AWS CloudHSM — single-tenant HSM, FIPS 140-2 Level 3, клиент полностью управляет ключами. Триггеры: «FIPS 140-2 Level 3», «hardware boundary that they fully control», «single-tenant».",
+  "why_not": "KMS (AWS managed и customer managed keys) — multi-tenant, ключами управляет инфраструктура AWS; ACM — TLS-сертификаты, не произвольные ключи шифрования.",
+  "keywords": [
+    "CloudHSM",
+    "FIPS 140-2 Level 3",
+    "single-tenant",
+    "HSM",
+    "полный контроль ключей",
+    "KMS"
+  ],
+  "services": [
+    "cloudhsm",
+    "kms",
+    "acm",
+    "encryption"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1
+}

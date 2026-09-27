@@ -1,0 +1,30 @@
+{
+  "id": "e4-q21",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "HA: Auto Scaling group в нескольких AZ за ALB",
+  "tests": "Архитектура веб-уровня под непредсказуемые пики с автоматическим масштабированием и HA.",
+  "expected": "Auto Scaling group в нескольких AZ за Application Load Balancer. Триггеры: «unpredictable traffic spikes», «scale automatically», «highly available across multiple AZs».",
+  "why_not": "Один большой инстанс — SPOF; одна AZ — не HA; ручной запуск — не автоматический.",
+  "keywords": [
+    "Auto Scaling group",
+    "Application Load Balancer",
+    "multi-AZ",
+    "elasticity",
+    "unpredictable traffic",
+    "высокая доступность"
+  ],
+  "services": [
+    "auto-scaling",
+    "elb",
+    "ha"
+  ],
+  "topics": [
+    "ec2-compute",
+    "ha-dr",
+    "architecture"
+  ],
+  "domain": 2
+}

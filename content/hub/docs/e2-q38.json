@@ -1,0 +1,31 @@
+{
+  "id": "e2-q38",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "DMS + SCT: гетерогенная миграция БД с минимальным простоем",
+  "tests": "Выбор сервисов для миграции Oracle → Aurora PostgreSQL с конверсией схемы и минимальным downtime.",
+  "expected": "AWS SCT конвертирует схему и код (Oracle → PostgreSQL), AWS DMS переносит данные с CDC (ongoing replication) для cutover с минимальным простоем. Триггеры: «heterogeneous», «Oracle → PostgreSQL», «convert schema», «minimal downtime».",
+  "why_not": "Snowmobile — физический перенос эксабайт; Kinesis Data Firehose — стриминг в S3 и т.п.; Glue DataBrew — подготовка данных.",
+  "keywords": [
+    "DMS",
+    "SCT",
+    "schema conversion",
+    "Oracle",
+    "Aurora PostgreSQL",
+    "CDC",
+    "minimal downtime"
+  ],
+  "services": [
+    "dms",
+    "sct",
+    "aurora",
+    "snow-family"
+  ],
+  "topics": [
+    "data-migration",
+    "databases"
+  ],
+  "domain": 3
+}

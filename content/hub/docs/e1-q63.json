@@ -1,0 +1,28 @@
+{
+  "id": "e1-q63",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "RDS Proxy: пул соединений для Lambda",
+  "tests": "Как устранить исчерпание соединений с RDS, когда каждое выполнение Lambda открывает новое подключение.",
+  "expected": "Amazon RDS Proxy — пулит и переиспользует соединения с БД. Триггеры: «Lambda», «connection exhaustion», «each invocation opens a new connection», «traffic spikes».",
+  "why_not": "Увеличение инстанса не решает проблему лимита соединений; больше concurrency Lambda — только хуже; переход на DynamoDB — серьёзная переделка.",
+  "keywords": [
+    "RDS Proxy",
+    "connection pooling",
+    "Lambda",
+    "connection exhaustion",
+    "пул соединений"
+  ],
+  "services": [
+    "rds-proxy",
+    "rds",
+    "lambda"
+  ],
+  "topics": [
+    "databases",
+    "serverless-containers"
+  ],
+  "domain": 3
+}

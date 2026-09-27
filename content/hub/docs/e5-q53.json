@@ -1,0 +1,29 @@
+{
+  "id": "e5-q53",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "Keyspaces: serverless Cassandra-совместимая БД",
+  "tests": "Выбор managed-сервиса для Apache Cassandra-совместимой нагрузки без серверов.",
+  "expected": "Amazon Keyspaces (for Apache Cassandra) — serverless, автоматическое масштабирование throughput. Триггеры: «Apache Cassandra-compatible», «without operating servers».",
+  "why_not": "RDS — реляционная; Neptune — графовая; DocumentDB — MongoDB-совместимая.",
+  "keywords": [
+    "Keyspaces",
+    "Cassandra",
+    "CQL",
+    "serverless",
+    "wide-column",
+    "без серверов"
+  ],
+  "services": [
+    "keyspaces",
+    "documentdb",
+    "neptune",
+    "rds"
+  ],
+  "topics": [
+    "databases"
+  ],
+  "domain": 3
+}

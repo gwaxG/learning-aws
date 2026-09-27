@@ -1,0 +1,28 @@
+{
+  "id": "e3-q5",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "KMS: envelope encryption с GenerateDataKey и кэшем data keys",
+  "tests": "Как снизить число и стоимость KMS-вызовов при шифровании больших объектов, сохранив уникальный data key на объект.",
+  "expected": "Envelope encryption: GenerateDataKey → шифруем объект локально data key, храним зашифрованный data key рядом; кэширование data keys на клиенте сокращает вызовы KMS. Триггеры: «large objects», «reduce KMS API calls and cost», «unique data keys».",
+  "why_not": "KMS Encrypt ограничен 4 КБ и дорог на каждый объект; один data key навсегда ослабляет безопасность; SSE-S3 уходит от контроля KMS.",
+  "keywords": [
+    "envelope encryption",
+    "GenerateDataKey",
+    "data key caching",
+    "4 KB limit",
+    "KMS API cost",
+    "большие объекты"
+  ],
+  "services": [
+    "kms",
+    "encryption"
+  ],
+  "topics": [
+    "iam-security",
+    "cost"
+  ],
+  "domain": 1
+}

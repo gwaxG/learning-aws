@@ -1,0 +1,29 @@
+{
+  "id": "e5-q58",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "EC2 purchasing: Reserved Instances / Savings Plans для стабильной нагрузки",
+  "tests": "Выбор модели покупки для стабильного предсказуемого compute на 3 года.",
+  "expected": "Standard Reserved Instances для базовой нагрузки и Compute Savings Plans — глубокие скидки за обязательство на срок. Триггеры: «steady, predictable usage», «next three years», «specific instance family in one Region».",
+  "why_not": "On-Demand для всей базы — нет скидки за обязательство; Spot для always-on production БД — прерывания; Dedicated Hosts on-demand — самые дорогие.",
+  "keywords": [
+    "Reserved Instances",
+    "Savings Plans",
+    "3 года",
+    "steady usage",
+    "commitment",
+    "On-Demand",
+    "Spot"
+  ],
+  "services": [
+    "ec2-purchasing",
+    "ec2"
+  ],
+  "topics": [
+    "cost",
+    "ec2-compute"
+  ],
+  "domain": 4
+}

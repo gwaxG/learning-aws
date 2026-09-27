@@ -1,0 +1,31 @@
+{
+  "id": "db-q6",
+  "source": {
+    "type": "topic",
+    "ref": "databases"
+  },
+  "concept": "Aurora Global Database: кросс-региональное чтение и DR",
+  "tests": "Выбор реляционной БД с 6 копиями в 3 AZ, авторасширением storage и чтением из нескольких регионов.",
+  "expected": "Aurora с Global Database — 6 копий в 3 AZ, auto-scaling storage, до 5 read-only secondary регионов. Триггеры: «relational», «six copies across three AZs», «low-latency reads из нескольких регионов».",
+  "why_not": "RDS MySQL Multi-AZ — один регион, standby не читается; DynamoDB Global Tables — NoSQL, не реляционная; Redshift — аналитика, не OLTP.",
+  "keywords": [
+    "Aurora Global Database",
+    "six copies",
+    "three AZs",
+    "auto-scaling storage",
+    "cross-Region reads",
+    "реляционная",
+    "глобальные пользователи"
+  ],
+  "services": [
+    "aurora-global",
+    "aurora",
+    "dynamodb-global",
+    "rds-multi-az"
+  ],
+  "topics": [
+    "databases",
+    "ha-dr"
+  ],
+  "domain": 2
+}

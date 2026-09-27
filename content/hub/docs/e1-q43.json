@@ -1,0 +1,28 @@
+{
+  "id": "e1-q43",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "EBS: encryption by default с KMS",
+  "tests": "Как гарантировать шифрование всех новых EBS volumes и snapshots в аккаунте по умолчанию.",
+  "expected": "Включить EBS encryption by default в настройках аккаунта (Region) с KMS key — все новые volumes и их snapshots шифруются автоматически. Триггеры: «encrypted by default», «across the account».",
+  "why_not": "Ручное шифрование файлов ненадёжно; instance store эфемерен; шифрование только на уровне ОС не управляется AWS и усложняет snapshots.",
+  "keywords": [
+    "EBS encryption by default",
+    "KMS",
+    "snapshots",
+    "шифрование по умолчанию",
+    "at rest"
+  ],
+  "services": [
+    "ebs",
+    "kms",
+    "encryption"
+  ],
+  "topics": [
+    "storage",
+    "iam-security"
+  ],
+  "domain": 1
+}

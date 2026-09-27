@@ -1,0 +1,27 @@
+{
+  "id": "e3-q26",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "Lambda: provisioned concurrency против cold start",
+  "tests": "Как устранить задержки cold start у чувствительного к латентности API на Lambda с минимумом усилий.",
+  "expected": "Provisioned concurrency держит заранее инициализированные execution environments. Триггеры: «cold starts», «latency spikes», «latency-sensitive endpoint».",
+  "why_not": "Timeout не влияет на инициализацию; больше памяти ускоряет выполнение, но не устраняет cold start стабильно; переход на EC2 — рост операционной нагрузки.",
+  "keywords": [
+    "provisioned concurrency",
+    "cold start",
+    "Lambda",
+    "API Gateway",
+    "latency",
+    "холодный старт"
+  ],
+  "services": [
+    "lambda",
+    "api-gateway"
+  ],
+  "topics": [
+    "serverless-containers"
+  ],
+  "domain": 2
+}

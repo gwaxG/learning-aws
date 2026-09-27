@@ -1,0 +1,29 @@
+{
+  "id": "iam-q6",
+  "source": {
+    "type": "topic",
+    "ref": "iam-security"
+  },
+  "concept": "Organizations: SCP-guardrail на регион (aws:RequestedRegion)",
+  "tests": "Знание централизованного способа запретить всем member-аккаунтам работать вне разрешённого региона.",
+  "expected": "SCP на OU с Deny, если aws:RequestedRegion ≠ eu-west-1. Триггеры: «no member account», «outside region», «MOST effective», «organization».",
+  "why_not": "IAM-политики на каждого пользователя — ошибкоопасно и обходится новыми ролями; MFA на root не ограничивает регионы; permission boundary на management account не распространяется на member-аккаунты.",
+  "keywords": [
+    "SCP",
+    "OU",
+    "aws:RequestedRegion",
+    "guardrail",
+    "member accounts",
+    "ограничение регионов",
+    "вся организация"
+  ],
+  "services": [
+    "scp",
+    "organizations",
+    "iam"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1
+}

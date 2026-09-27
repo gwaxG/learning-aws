@@ -1,0 +1,28 @@
+{
+  "id": "e3-q35",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "ElastiCache Redis: HA-кэш с Multi-AZ и репликами",
+  "tests": "Выбор in-memory кэша с автоматическим failover и persistence (leaderboard).",
+  "expected": "ElastiCache for Redis с репликами и Multi-AZ auto failover, persistence (AOF/snapshots), sorted sets для leaderboard. Триггеры: «highly available», «automatic failover», «persistence», «leaderboard».",
+  "why_not": "Memcached — нет репликации и failover; DAX только для DynamoDB; query cache RDS — не отдельный кэш-сервис.",
+  "keywords": [
+    "ElastiCache for Redis",
+    "Multi-AZ",
+    "replicas",
+    "automatic failover",
+    "persistence",
+    "leaderboard"
+  ],
+  "services": [
+    "elasticache",
+    "dax",
+    "caching"
+  ],
+  "topics": [
+    "databases"
+  ],
+  "domain": 2
+}

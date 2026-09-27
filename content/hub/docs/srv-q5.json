@@ -1,0 +1,30 @@
+{
+  "id": "srv-q5",
+  "source": {
+    "type": "topic",
+    "ref": "serverless-containers"
+  },
+  "concept": "EKS: перенос Kubernetes-нагрузок с сохранением инструментов",
+  "tests": "Выбор оркестратора для команды с экспертизой в Kubernetes, Helm и operators, которой нужна переносимость между облаками.",
+  "expected": "Amazon EKS — managed Kubernetes: Helm charts, custom operators и навыки K8s переносятся напрямую, сохраняется портируемость. Триггеры: «Kubernetes tooling», «Helm», «operators», «portability across clouds».",
+  "why_not": "ECS — проприетарная оркестрация AWS, манифесты K8s надо переделывать; Lambda — функции, не K8s-нагрузки; App Runner — упрощённый PaaS без совместимости с Kubernetes.",
+  "keywords": [
+    "EKS",
+    "Kubernetes",
+    "Helm",
+    "operators",
+    "portability",
+    "multi-cloud",
+    "минимум переделок"
+  ],
+  "services": [
+    "eks",
+    "ecs",
+    "app-runner",
+    "lambda"
+  ],
+  "topics": [
+    "serverless-containers"
+  ],
+  "domain": 4
+}

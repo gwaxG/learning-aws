@@ -1,0 +1,30 @@
+{
+  "id": "data-q8",
+  "source": {
+    "type": "topic",
+    "ref": "data-migration"
+  },
+  "concept": "EMR: управляемые кластеры Spark/HBase с тонкой настройкой",
+  "tests": "Выбор платформы для петабайтной обработки на долгоживущем кластере Spark/HBase со Spot для task nodes.",
+  "expected": "Amazon EMR — managed Hadoop/Spark/HBase, долгоживущие кластеры, тонкая настройка фреймворков, Spot для task nodes. Триггеры: «petabyte-scale», «long-running cluster», «HBase», «fine-grained tuning», «Spot task nodes».",
+  "why_not": "Glue — serverless ETL без контроля кластера и HBase; Athena — serverless SQL по S3; Managed Flink (KDA) — real-time стриминг.",
+  "keywords": [
+    "EMR",
+    "Spark",
+    "HBase",
+    "Spot task nodes",
+    "petabyte-scale",
+    "долгоживущий кластер",
+    "тонкая настройка"
+  ],
+  "services": [
+    "emr",
+    "glue",
+    "athena",
+    "managed-flink"
+  ],
+  "topics": [
+    "data-migration"
+  ],
+  "domain": 3
+}

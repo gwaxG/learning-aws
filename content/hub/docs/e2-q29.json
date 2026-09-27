@@ -1,0 +1,29 @@
+{
+  "id": "e2-q29",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "ElastiCache Redis: HA хранилище сессий с Multi-AZ и failover",
+  "tests": "Выбор управляемого высокодоступного кэша для session state, переживающего отказ узла.",
+  "expected": "ElastiCache for Redis с репликацией, Multi-AZ и automatic failover — сессии сохраняются при падении узла. Триггеры: «session state», «survive node failures», «highly available caching layer».",
+  "why_not": "Memcached — нет репликации/персистентности; память инстанса теряется при его потере; DynamoDB можно, но это не кэш-слой, который просит вопрос.",
+  "keywords": [
+    "ElastiCache for Redis",
+    "session state",
+    "Multi-AZ",
+    "automatic failover",
+    "Memcached",
+    "replication"
+  ],
+  "services": [
+    "elasticache",
+    "caching",
+    "ha"
+  ],
+  "topics": [
+    "databases",
+    "ha-dr"
+  ],
+  "domain": 3
+}

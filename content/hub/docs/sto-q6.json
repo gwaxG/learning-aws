@@ -1,0 +1,32 @@
+{
+  "id": "sto-q6",
+  "source": {
+    "type": "topic",
+    "ref": "storage"
+  },
+  "concept": "S3: SSE-KMS с customer-managed key — аудит и контроль доступа к ключу",
+  "tests": "Выбор варианта шифрования S3 с аудитом каждого использования ключа и тонким контролем расшифровки, включая cross-account.",
+  "expected": "SSE-KMS с customer-managed key: каждый Decrypt логируется в CloudTrail, доступ управляется key policy (в т.ч. cross-account). Для экономии — S3 Bucket Keys. Триггеры: «auditable trail of every key use», «who can decrypt», «cross-account».",
+  "why_not": "SSE-S3 без аудита на уровне запросов и без контроля по ключу; SSE-C — ключи передаются в каждом запросе, нет аудита KMS; захардкоженный ключ небезопасен.",
+  "keywords": [
+    "SSE-KMS",
+    "customer managed key",
+    "key policy",
+    "CloudTrail",
+    "cross-account",
+    "SSE-S3",
+    "SSE-C",
+    "аудит использования ключа"
+  ],
+  "services": [
+    "kms",
+    "s3-security",
+    "cloudtrail",
+    "encryption"
+  ],
+  "topics": [
+    "storage",
+    "iam-security"
+  ],
+  "domain": 1
+}

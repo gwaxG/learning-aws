@@ -1,4 +1,4 @@
-<svg viewBox="0 0 760 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="EC2 purchasing options compared by cost, commitment, and flexibility">
+<svg viewBox="0 0 760 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Варианты покупки EC2: стоимость, обязательства и гибкость">
   <style>
     .axis { stroke: #25395a; stroke-width: 1.5; }
     .axlbl { fill: #8aa0bd; font: 11px system-ui, sans-serif; }
@@ -10,38 +10,38 @@
     .ttl { fill: #ff9900; font: 700 12px system-ui, sans-serif; text-anchor: middle; }
   </style>
 
-  <text x="380" y="28" class="ttl">Higher cost, no commitment, full flexibility  →  Lower cost, longer commitment or interruption risk</text>
+  <text x="380" y="28" class="ttl">Дороже, без обязательств, полная гибкость  →  Дешевле, долгие обязательства или риск прерывания</text>
 
   <line class="axis" x1="40" y1="240" x2="720" y2="240"/>
-  <text x="40" y="264" class="axlbl">always available · pay per second</text>
-  <text x="540" y="264" class="axlbl">cheapest · can be reclaimed / locked-in</text>
-  <text x="40" y="282" class="axlbl">flexible workloads</text>
-  <text x="600" y="282" class="axlbl">fault-tolerant / steady baseline</text>
+  <text x="40" y="264" class="axlbl">всегда доступно · посекундная оплата</text>
+  <text x="720" y="264" class="axlbl" style="text-anchor:end">дешевле · прерывания / привязка</text>
+  <text x="40" y="282" class="axlbl">гибкие нагрузки</text>
+  <text x="720" y="282" class="axlbl" style="text-anchor:end">отказоустойчивые / стабильная база</text>
 
   <rect class="box" x="40" y="110" width="150" height="115" rx="8"/>
   <text class="bt" x="115" y="140">On-Demand</text>
-  <text class="sub" x="115" y="162">no commit</text>
-  <text class="sub" x="115" y="178">highest price</text>
-  <text class="sub" x="115" y="200">dev/test, unpredictable</text>
+  <text class="sub" x="115" y="162">без обязательств</text>
+  <text class="sub" x="115" y="178">самая высокая цена</text>
+  <text class="sub" x="115" y="200">dev/test, непредсказ.</text>
 
   <rect class="box" x="210" y="95" width="170" height="130" rx="8"/>
   <text class="bt" x="295" y="125">Savings Plans /</text>
   <text class="bt" x="295" y="141">Reserved Instances</text>
-  <text class="sub" x="295" y="165">1y or 3y commit</text>
-  <text class="sub" x="295" y="181">up to ~72% off</text>
-  <text class="sub" x="295" y="203">steady 24/7 baseline</text>
+  <text class="sub" x="295" y="165">обязательство 1 или 3 г.</text>
+  <text class="sub" x="295" y="181">скидка до ~72%</text>
+  <text class="sub" x="295" y="203">стабильная база 24/7</text>
 
   <rect class="spot" x="400" y="80" width="160" height="145" rx="8"/>
   <text class="bt" x="480" y="110">Spot</text>
-  <text class="sub" x="480" y="132">spare capacity</text>
-  <text class="sub" x="480" y="148">up to ~90% off</text>
-  <text class="sub" x="480" y="170">2-min interruption</text>
-  <text class="sub" x="480" y="186">warning</text>
+  <text class="sub" x="480" y="132">свободные мощности</text>
+  <text class="sub" x="480" y="148">скидка до ~90%</text>
+  <text class="sub" x="480" y="170">прерывание с</text>
+  <text class="sub" x="480" y="186">предупр. за 2 мин</text>
   <text class="sub" x="480" y="208">batch, CI, stateless</text>
 
   <rect class="ded" x="580" y="105" width="150" height="120" rx="8"/>
   <text class="bt" x="655" y="135">Dedicated Host</text>
-  <text class="sub" x="655" y="158">physical server</text>
+  <text class="sub" x="655" y="158">физический сервер</text>
   <text class="sub" x="655" y="174">BYOL / compliance</text>
-  <text class="sub" x="655" y="196">licence isolation</text>
+  <text class="sub" x="655" y="196">изоляция лицензий</text>
 </svg>

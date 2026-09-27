@@ -17,13 +17,13 @@ export async function renderExam(view, examId) {
     <div class="exam-bar">
       <span id="timer" class="timer"></span>
       <span id="counter"></span>
-      <button id="finish" class="danger">Finish exam</button>
+      <button id="finish" class="danger">Завершить экзамен</button>
     </div>
     <div id="q" class="q-card"></div>
     <div class="exam-controls">
-      <button id="prev">◀ Prev</button>
-      <button id="flag" class="ghost">⚑ Flag</button>
-      <button id="next">Next ▶</button>
+      <button id="prev">◀ Назад</button>
+      <button id="flag" class="ghost">⚑ Отметить</button>
+      <button id="next">Далее ▶</button>
     </div>
     <div id="grid" class="q-grid"></div>`;
 
@@ -70,11 +70,11 @@ export async function renderExam(view, examId) {
 
   function draw() {
     const q = questions[idx];
-    counterEl.textContent = `Question ${idx + 1} / ${questions.length}`;
+    counterEl.textContent = `Вопрос ${idx + 1} / ${questions.length}`;
     const multi = Array.isArray(q.answer);
     qEl.innerHTML =
       `<p class="q-stem">${esc(q.stem)}</p>` +
-      (multi ? `<p class="q-hint">(Choose ${q.answer.length})</p>` : "") +
+      (multi ? `<p class="q-hint">(Выберите ${q.answer.length})</p>` : "") +
       `<div class="q-options">` +
       q.options
         .map((o, i) => {
@@ -118,7 +118,7 @@ export async function renderExam(view, examId) {
   };
   view.querySelector("#finish").onclick = () => {
     const unanswered = questions.length - Object.keys(responses).length;
-    const msg = unanswered ? `${unanswered} question(s) unanswered. Finish anyway?` : "Finish and score the exam?";
+    const msg = unanswered ? `Без ответа: ${unanswered}. Всё равно завершить?` : "Завершить экзамен и посчитать результат?";
     if (confirm(msg)) finish();
   };
   draw();
@@ -135,10 +135,10 @@ export async function renderExam(view, examId) {
       total: result.total,
       perDomain: result.perDomain,
     });
-    view.innerHTML = `<h1>${esc(exam.title)} — Result</h1>
+    view.innerHTML = `<h1>${esc(exam.title)} — результат</h1>
       <p class="big ${result.passed ? "ok" : "bad"}">${result.score} / 1000 — ${result.passed ? "PASS" : "FAIL"}</p>
-      <p class="lead">${result.correct} / ${result.total} correct (pass mark ${m.exam.passScore})</p>
-      <h2>By domain</h2>
+      <p class="lead">${result.correct} / ${result.total} верно (проходной балл ${m.exam.passScore})</p>
+      <h2>По доменам</h2>
       <ul class="domain-breakdown">${m.domains
         .map((d) => {
           const pd = result.perDomain[d.id] || { correct: 0, total: 0 };
@@ -147,10 +147,10 @@ export async function renderExam(view, examId) {
         })
         .join("")}</ul>
       <div class="result-actions">
-        <a class="btn" href="#/exams">Back to exams</a>
-        <button id="retake" class="btn">Retake</button>
+        <a class="btn" href="#/exams">К экзаменам</a>
+        <button id="retake" class="btn">Пройти заново</button>
       </div>
-      <h2>Review all questions</h2>
+      <h2>Разбор всех вопросов</h2>
       <div id="review"></div>`;
     view.querySelector("#retake").onclick = () => renderExam(view, examId);
 

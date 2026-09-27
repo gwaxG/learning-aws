@@ -1,0 +1,30 @@
+{
+  "id": "e3-q13",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "GuardDuty: управляемое обнаружение угроз",
+  "tests": "Выбор сервиса для обнаружения скомпрометированных credentials, криптомайнинга и аномальной активности API с минимальной настройкой.",
+  "expected": "GuardDuty анализирует CloudTrail, VPC Flow Logs, DNS logs и выдаёт findings. Триггеры: «compromised credentials», «cryptocurrency mining», «unusual API activity», «minimal setup».",
+  "why_not": "Macie — чувствительные данные в S3; Config — compliance конфигураций; Detective — расследование уже найденных findings.",
+  "keywords": [
+    "GuardDuty",
+    "threat detection",
+    "crypto mining",
+    "compromised credentials",
+    "anomalous API",
+    "обнаружение угроз"
+  ],
+  "services": [
+    "guardduty",
+    "macie",
+    "detective",
+    "config"
+  ],
+  "topics": [
+    "iam-security",
+    "monitoring"
+  ],
+  "domain": 1
+}

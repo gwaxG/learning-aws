@@ -1,0 +1,29 @@
+{
+  "id": "int-q8",
+  "source": {
+    "type": "topic",
+    "ref": "integration"
+  },
+  "concept": "EventBridge: content-based routing, SaaS-источники, archive/replay",
+  "tests": "Выбор сервиса-шины событий для маршрутизации по содержимому из AWS, custom и SaaS-источников с архивом и повтором.",
+  "expected": "Amazon EventBridge: rules по содержимому события, partner event sources (Datadog и др.), события AWS-сервисов, archive и replay. Триггеры: «third-party SaaS», «based on event content», «archive and replay».",
+  "why_not": "SNS делает fan-out, но без богатых правил, SaaS-источников и replay; SQS — point-to-point очередь; Step Functions оркестрирует workflow, а не маршрутизирует события.",
+  "keywords": [
+    "EventBridge",
+    "event bus",
+    "content-based routing",
+    "SaaS partner",
+    "archive",
+    "replay",
+    "маршрутизация событий"
+  ],
+  "services": [
+    "eventbridge",
+    "sns",
+    "sqs"
+  ],
+  "topics": [
+    "integration"
+  ],
+  "domain": 3
+}

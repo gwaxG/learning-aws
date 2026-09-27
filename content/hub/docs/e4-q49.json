@@ -1,0 +1,29 @@
+{
+  "id": "e4-q49",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "Redshift: колоночный DWH + Spectrum для запросов к S3",
+  "tests": "Выбор сервиса петабайтного аналитического хранилища с колоночным хранением и запросами к S3.",
+  "expected": "Amazon Redshift (колоночный DWH для сложных SQL-агрегаций) + Redshift Spectrum (запросы к данным в S3 без загрузки). Триггеры: «petabyte-scale analytics warehouse», «complex SQL aggregations», «columnar», «query S3 data directly».",
+  "why_not": "DynamoDB — NoSQL key-value; RDS for MySQL — строчная OLTP; ElastiCache — in-memory кэш.",
+  "keywords": [
+    "Redshift",
+    "Redshift Spectrum",
+    "columnar",
+    "data warehouse",
+    "petabyte",
+    "OLAP"
+  ],
+  "services": [
+    "redshift",
+    "s3",
+    "rds",
+    "dynamodb"
+  ],
+  "topics": [
+    "databases"
+  ],
+  "domain": 3
+}

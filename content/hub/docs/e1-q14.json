@@ -1,0 +1,29 @@
+{
+  "id": "e1-q14",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "Долговечность данных EC2: EBS snapshots и EFS multi-AZ",
+  "tests": "Как сделать данные stateful-приложения на EBS устойчивыми к отказу инстанса или AZ (выбрать два).",
+  "expected": "EBS snapshots (хранятся в S3, восстановление в любой AZ) и Amazon EFS, смонтированный в нескольких AZ (региональная долговечность). Триггеры: «survives instance or AZ failure», «durability».",
+  "why_not": "EBS Multi-Attach работает только в пределах одной AZ; рост IOPS влияет на производительность, а не на долговечность.",
+  "keywords": [
+    "EBS snapshots",
+    "EFS",
+    "Multi-AZ",
+    "Multi-Attach",
+    "durability",
+    "отказ AZ"
+  ],
+  "services": [
+    "ebs",
+    "efs",
+    "backup"
+  ],
+  "topics": [
+    "storage",
+    "ha-dr"
+  ],
+  "domain": 2
+}

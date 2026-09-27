@@ -1,0 +1,29 @@
+{
+  "id": "e3-q34",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "RDS Proxy и reserved concurrency: защита БД от Lambda",
+  "tests": "Как пережить пики Lambda-чекаута и не исчерпать соединения RDS.",
+  "expected": "RDS Proxy пулит соединения; reserved concurrency ограничивает число одновременных Lambda и защищает downstream. Триггеры: «flash-sale spikes», «Lambda», «connection exhaustion».",
+  "why_not": "Отключение retry теряет запросы; соединение на вызов без пула усугубляет проблему; Single-AZ снижает доступность.",
+  "keywords": [
+    "RDS Proxy",
+    "connection pooling",
+    "reserved concurrency",
+    "Lambda",
+    "connection exhaustion",
+    "пики нагрузки"
+  ],
+  "services": [
+    "rds-proxy",
+    "lambda",
+    "rds"
+  ],
+  "topics": [
+    "databases",
+    "serverless-containers"
+  ],
+  "domain": 2
+}

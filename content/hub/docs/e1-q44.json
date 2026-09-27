@@ -1,0 +1,28 @@
+{
+  "id": "e1-q44",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "RDS Multi-AZ: автоматический failover через DNS endpoint",
+  "tests": "Понимание механизма failover в RDS Multi-AZ.",
+  "expected": "RDS автоматически переключается на синхронно реплицируемый standby в другой AZ и обновляет DNS endpoint — приложение переподключается к тому же endpoint. Триггеры: «Multi-AZ», «what happens during failover».",
+  "why_not": "Менять connection string вручную не нужно; cross-Region read replica — отдельная функция; восстановление из snapshot не требуется.",
+  "keywords": [
+    "Multi-AZ",
+    "failover",
+    "standby",
+    "DNS endpoint",
+    "synchronous replication"
+  ],
+  "services": [
+    "rds-multi-az",
+    "rds",
+    "read-replicas"
+  ],
+  "topics": [
+    "databases",
+    "ha-dr"
+  ],
+  "domain": 2
+}

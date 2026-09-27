@@ -1,0 +1,32 @@
+{
+  "id": "hadr-q3",
+  "source": {
+    "type": "topic",
+    "ref": "ha-dr"
+  },
+  "concept": "DR-стратегии: Multi-Site Active/Active (Global Tables + Route 53)",
+  "tests": "Построение multi-Region active/active с почти нулевыми RTO/RPO (выбрать два).",
+  "expected": "DynamoDB Global Tables (multi-active репликация) + Route 53 latency/failover routing с health checks. Триггеры: «два региона одновременно», «near-zero RTO и RPO», «автоматический региональный failover».",
+  "why_not": "RDS Single-AZ с ручными cross-Region снапшотами — высокие RPO/RTO, не active/active; один EC2 с EIP — нет multi-Region устойчивости.",
+  "keywords": [
+    "DynamoDB Global Tables",
+    "active/active",
+    "multi-Region",
+    "near-zero RTO",
+    "Route 53",
+    "health checks",
+    "два региона одновременно"
+  ],
+  "services": [
+    "dynamodb-global",
+    "route53",
+    "dr-strategies",
+    "rto-rpo"
+  ],
+  "topics": [
+    "ha-dr",
+    "databases",
+    "edge-dns"
+  ],
+  "domain": 2
+}

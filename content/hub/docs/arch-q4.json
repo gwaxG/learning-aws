@@ -1,0 +1,32 @@
+{
+  "id": "arch-q4",
+  "source": {
+    "type": "topic",
+    "ref": "architecture"
+  },
+  "concept": "DynamoDB Global Tables: multi-Region active-active запись",
+  "tests": "Выбор хранилища с локальной записью в нескольких регионах и независимой работой при недоступности другого региона.",
+  "expected": "DynamoDB global tables — multi-leader репликация, каждый регион принимает локальные записи, конфликты — last-writer-wins. Триггеры: «low-latency writes в нескольких регионах», «регион продолжает работать, если другой недоступен», «active-active».",
+  "why_not": "RDS Multi-AZ — один регион, нет локальной записи в других; Aurora cross-region read replicas принимают записи только в primary-регионе; S3 CRR JSON-файла — не конкурентная multi-writer БД.",
+  "keywords": [
+    "global tables",
+    "multi-leader",
+    "active-active",
+    "multi-Region",
+    "last-writer-wins",
+    "локальная запись",
+    "регион работает независимо"
+  ],
+  "services": [
+    "dynamodb-global",
+    "dynamodb",
+    "aurora",
+    "rds-multi-az"
+  ],
+  "topics": [
+    "architecture",
+    "databases",
+    "ha-dr"
+  ],
+  "domain": 2
+}

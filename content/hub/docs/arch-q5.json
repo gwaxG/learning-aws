@@ -1,0 +1,31 @@
+{
+  "id": "arch-q5",
+  "source": {
+    "type": "topic",
+    "ref": "architecture"
+  },
+  "concept": "Batch-обработка в S3: Glue (serverless Spark) + Athena",
+  "tests": "Различение batch и streaming обработки и выбор serverless-инструментов для ночной агрегации терабайтов логов в S3.",
+  "expected": "AWS Glue (serverless Spark) для трансформации + Athena для запросов к результатам. Триггеры: «раз в ночь», «терабайты уже в S3», «latency не критична», «минимум управления кластером», «cost-effective».",
+  "why_not": "Kinesis + Lambda — для неограниченных real-time потоков, не для переработки истории; сканы DynamoDB на ТБ дорогие и медленные; один EC2 с cron не масштабируется и требует управления сервером.",
+  "keywords": [
+    "batch processing",
+    "AWS Glue",
+    "Athena",
+    "serverless Spark",
+    "clickstream",
+    "раз в ночь",
+    "минимальное управление кластером"
+  ],
+  "services": [
+    "glue",
+    "athena",
+    "s3",
+    "kinesis-data-streams"
+  ],
+  "topics": [
+    "architecture",
+    "data-migration"
+  ],
+  "domain": 3
+}

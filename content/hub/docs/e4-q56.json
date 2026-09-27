@@ -1,0 +1,29 @@
+{
+  "id": "e4-q56",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "AWS Config: история конфигураций и непрерывный compliance",
+  "tests": "Какой сервис записывает полную историю изменений конфигурации ресурсов и оценивает их по правилам.",
+  "expected": "AWS Config — configuration history + непрерывная оценка по Config rules. Триггеры: «complete history of configuration changes», «evaluate against compliance rules over time».",
+  "why_not": "CloudTrail — API-активность, не состояние конфигурации во времени; CloudWatch — метрики и логи; Trusted Advisor — разовые best-practice проверки.",
+  "keywords": [
+    "AWS Config",
+    "configuration history",
+    "Config rules",
+    "compliance",
+    "configuration changes",
+    "история изменений"
+  ],
+  "services": [
+    "config",
+    "cloudtrail",
+    "trusted-advisor"
+  ],
+  "topics": [
+    "monitoring",
+    "iam-security"
+  ],
+  "domain": 4
+}

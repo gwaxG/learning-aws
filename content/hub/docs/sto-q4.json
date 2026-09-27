@@ -1,0 +1,29 @@
+{
+  "id": "sto-q4",
+  "source": {
+    "type": "topic",
+    "ref": "storage"
+  },
+  "concept": "FSx for Lustre: HPC/ML файловая система, связанная с S3",
+  "tests": "Выбор файловой системы для HPC/ML с экстремальной пропускной способностью и загрузкой данных из S3.",
+  "expected": "Amazon FSx for Lustre, связанная с S3 bucket (lazy load и write-back). Триггеры: «HPC», «ML training», «hundreds of GB/s», «sub-millisecond latency», «load data from S3».",
+  "why_not": "EFS Max I/O не достигает throughput/latency Lustre; FSx for Windows — SMB-файлсервер; Transfer Acceleration ускоряет загрузку в S3 и не является монтируемой ФС.",
+  "keywords": [
+    "FSx for Lustre",
+    "HPC",
+    "machine learning",
+    "high throughput",
+    "S3 integration",
+    "sub-millisecond",
+    "высокопроизводительные вычисления"
+  ],
+  "services": [
+    "fsx",
+    "s3",
+    "efs"
+  ],
+  "topics": [
+    "storage"
+  ],
+  "domain": 3
+}

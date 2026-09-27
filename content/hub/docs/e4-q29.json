@@ -1,0 +1,29 @@
+{
+  "id": "e4-q29",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "DR strategies: multi-site active/active — минимальные RPO/RTO",
+  "tests": "Распознать DR-стратегию, где полная мощность работает в двух регионах с трафиком в оба.",
+  "expected": "Multi-site active/active — полная production-мощность в нескольких регионах обслуживает живой трафик, near-zero RPO/RTO. Триггеры: «full production capacity in two Regions simultaneously», «traffic routed to both», «near-zero RPO and RTO».",
+  "why_not": "Warm standby — уменьшенная копия, масштабируется при failover; pilot light и backup & restore — ещё дольше восстановление.",
+  "keywords": [
+    "multi-site",
+    "active/active",
+    "RPO",
+    "RTO",
+    "DR strategy",
+    "warm standby",
+    "pilot light"
+  ],
+  "services": [
+    "dr-strategies",
+    "rto-rpo",
+    "route53"
+  ],
+  "topics": [
+    "ha-dr"
+  ],
+  "domain": 2
+}

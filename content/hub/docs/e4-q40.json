@@ -1,0 +1,27 @@
+{
+  "id": "e4-q40",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "EC2 Purchasing: Compute Savings Plans — скидка с гибкостью семейства",
+  "tests": "Выбор модели покупки для стабильной 24/7 нагрузки на 3 года с возможностью менять семейство инстансов.",
+  "expected": "3-year Compute Savings Plan — глубокая скидка, применяется к любым семействам, размерам, регионам, а также Fargate/Lambda. Триггеры: «steady 24/7 baseline», «three years», «flexibility to change instance family».",
+  "why_not": "On-Demand — самый дорогой для постоянной нагрузки; Spot — для прерываемых задач; Standard RI привязан к семейству инстансов.",
+  "keywords": [
+    "Compute Savings Plans",
+    "3-year",
+    "steady baseline",
+    "24/7",
+    "instance family flexibility",
+    "Reserved Instances"
+  ],
+  "services": [
+    "ec2-purchasing"
+  ],
+  "topics": [
+    "cost",
+    "ec2-compute"
+  ],
+  "domain": 3
+}

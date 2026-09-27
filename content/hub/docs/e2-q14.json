@@ -1,0 +1,28 @@
+{
+  "id": "e2-q14",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "RDS Read Replicas: масштабирование чтения vs Multi-AZ",
+  "tests": "Как масштабировать read-нагрузку RDS MySQL с минимальными изменениями приложения и отличие replicas от Multi-AZ.",
+  "expected": "Добавить RDS read replicas и направить чтения на их endpoints. Триггеры: «read-heavy», «scale read capacity», «minimal application changes».",
+  "why_not": "Multi-AZ standby не обслуживает чтения — это failover; вертикальный рост ограничен; миграция на DynamoDB — большая переделка.",
+  "keywords": [
+    "read replicas",
+    "read-heavy",
+    "Multi-AZ",
+    "WordPress",
+    "scale reads",
+    "RDS MySQL"
+  ],
+  "services": [
+    "read-replicas",
+    "rds-multi-az",
+    "rds"
+  ],
+  "topics": [
+    "databases"
+  ],
+  "domain": 3
+}

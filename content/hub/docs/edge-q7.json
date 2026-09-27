@@ -1,0 +1,28 @@
+{
+  "id": "edge-q7",
+  "source": {
+    "type": "topic",
+    "ref": "edge-dns"
+  },
+  "concept": "CloudFront geo-restriction: блокировка по странам",
+  "tests": "Простейший способ разрешить контент только в лицензированных странах при доставке через CloudFront.",
+  "expected": "Включить CloudFront geo-restriction (allow-list лицензированных стран). Триггеры: «права на распространение по странам», «блокировать остальные», «CloudFront».",
+  "why_not": "Route 53 geoproximity — смещение трафика по расстоянию/bias, не блокировка; IAM — для AWS principals, не анонимных зрителей; signed cookies — кому выдан доступ, не страна.",
+  "keywords": [
+    "geo-restriction",
+    "CloudFront",
+    "allow-list",
+    "countries",
+    "geoproximity",
+    "signed cookies",
+    "лицензированные страны"
+  ],
+  "services": [
+    "cloudfront",
+    "route53"
+  ],
+  "topics": [
+    "edge-dns"
+  ],
+  "domain": 3
+}

@@ -1,0 +1,28 @@
+{
+  "id": "ec2-q8",
+  "source": {
+    "type": "topic",
+    "ref": "ec2-compute"
+  },
+  "concept": "Compute Savings Plan: гибкая скидка на стабильный baseline",
+  "tests": "Выбор commitment для стабильного 24/7 baseline на нескольких семействах, регионах и Fargate.",
+  "expected": "Compute Savings Plan — $/час commitment на любые семейства, размеры, регионы, Fargate/Lambda. Триггеры: «steady 24/7 baseline», «несколько семейств и регионов», «плюс Fargate», «deepest savings + maximum flexibility».",
+  "why_not": "Standard RI привязаны к типу/региону; Spot — для прерываемых нагрузок; On-Demand Capacity Reservations гарантируют ёмкость, но без скидки.",
+  "keywords": [
+    "Compute Savings Plan",
+    "Reserved Instances",
+    "Capacity Reservations",
+    "Fargate",
+    "baseline 24/7",
+    "гибкость"
+  ],
+  "services": [
+    "ec2-purchasing",
+    "fargate"
+  ],
+  "topics": [
+    "ec2-compute",
+    "cost"
+  ],
+  "domain": 3
+}

@@ -1,0 +1,30 @@
+{
+  "id": "data-q3",
+  "source": {
+    "type": "topic",
+    "ref": "data-migration"
+  },
+  "concept": "Snow Family: офлайн-перенос сотен ТБ при узком канале",
+  "tests": "Оценка времени передачи по сети и выбор офлайн-устройства для большого объёма данных.",
+  "expected": "AWS Snowball Edge — физическая доставка зашифрованного устройства. Триггеры: «500 TB», «100 Mbps», «канал нужен для повседневной работы» ⇒ по сети месяцы ⇒ offline.",
+  "why_not": "DataSync и S3 multipart upload идут через тот же узкий канал; Transfer Family — обмен файлами с партнёрами по SFTP, не разовая миграция сотен ТБ.",
+  "keywords": [
+    "Snowball Edge",
+    "offline transfer",
+    "500 TB",
+    "100 Mbps",
+    "bandwidth",
+    "узкий канал",
+    "месяцы передачи"
+  ],
+  "services": [
+    "snow-family",
+    "datasync",
+    "transfer-family",
+    "s3"
+  ],
+  "topics": [
+    "data-migration"
+  ],
+  "domain": 3
+}

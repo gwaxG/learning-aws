@@ -1,0 +1,31 @@
+{
+  "id": "e4-q20",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "GuardDuty: управляемое обнаружение угроз",
+  "tests": "Выбор сервиса непрерывного интеллектуального обнаружения угроз без агентов.",
+  "expected": "Amazon GuardDuty — анализирует CloudTrail, VPC Flow Logs, DNS logs с ML, без агентов. Триггеры: «threat detection», «unusual API activity», «no agents», перечисление этих логов.",
+  "why_not": "Config — compliance конфигураций; Inspector — уязвимости ПО; Trusted Advisor — best-practice проверки.",
+  "keywords": [
+    "GuardDuty",
+    "threat detection",
+    "CloudTrail",
+    "VPC Flow Logs",
+    "DNS logs",
+    "no agents",
+    "machine learning"
+  ],
+  "services": [
+    "guardduty",
+    "inspector",
+    "config",
+    "trusted-advisor"
+  ],
+  "topics": [
+    "iam-security",
+    "monitoring"
+  ],
+  "domain": 1
+}

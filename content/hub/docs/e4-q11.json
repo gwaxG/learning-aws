@@ -1,0 +1,28 @@
+{
+  "id": "e4-q11",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "NAT Gateway: исходящий интернет для private subnet",
+  "tests": "Доступ инстансов в private subnet к интернету (патчи) без входящей доступности.",
+  "expected": "NAT Gateway в public subnet + маршрут 0.0.0.0/0 из private subnet на него. Триггеры: «private subnets», «download patches», «must not be reachable from the internet».",
+  "why_not": "Public subnet / public IP / IGW делают инстансы доступными из интернета; Egress-Only IGW — только IPv6.",
+  "keywords": [
+    "NAT Gateway",
+    "private subnet",
+    "outbound only",
+    "IPv4",
+    "Egress-Only Internet Gateway",
+    "патчи"
+  ],
+  "services": [
+    "nat-gateway",
+    "subnets",
+    "igw"
+  ],
+  "topics": [
+    "vpc-networking"
+  ],
+  "domain": 1
+}

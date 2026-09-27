@@ -1,0 +1,29 @@
+{
+  "id": "e1-q15",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "VPC: NAT gateway для исходящего доступа из private subnet",
+  "tests": "Как дать инстансам в private subnet исходящий доступ в интернет (патчи) без входящих подключений.",
+  "expected": "NAT gateway в public subnet + маршрут 0.0.0.0/0 из private subnet на него. Триггеры: «private subnet», «download patches», «cannot receive inbound».",
+  "why_not": "IGW для private subnet делает её публичной; egress-only internet gateway — только для IPv6; VPC peering не даёт доступа в интернет.",
+  "keywords": [
+    "NAT gateway",
+    "private subnet",
+    "public subnet",
+    "outbound",
+    "egress-only internet gateway",
+    "IPv4"
+  ],
+  "services": [
+    "nat-gateway",
+    "igw",
+    "subnets",
+    "vpc-peering"
+  ],
+  "topics": [
+    "vpc-networking"
+  ],
+  "domain": 2
+}

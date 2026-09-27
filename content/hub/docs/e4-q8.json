@@ -1,0 +1,32 @@
+{
+  "id": "e4-q8",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "AWS Config: непрерывная оценка конфигурации (публичные S3 бакеты)",
+  "tests": "Комбинация для обнаружения изменения bucket policy на публичный доступ и автоматического алерта.",
+  "expected": "AWS Config managed rule s3-bucket-public-read-prohibited + EventBridge rule на compliance change → SNS. Триггеры: «detect when policy changed», «alerted automatically», (Choose two).",
+  "why_not": "Shield Advanced — DDoS; Transfer Acceleration — скорость загрузки; к обнаружению публичного доступа отношения не имеют.",
+  "keywords": [
+    "AWS Config",
+    "managed rule",
+    "s3-bucket-public-read-prohibited",
+    "EventBridge",
+    "SNS",
+    "noncompliance",
+    "публичный доступ"
+  ],
+  "services": [
+    "config",
+    "eventbridge",
+    "sns",
+    "s3-security"
+  ],
+  "topics": [
+    "monitoring",
+    "iam-security",
+    "storage"
+  ],
+  "domain": 1
+}

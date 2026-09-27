@@ -1,0 +1,29 @@
+{
+  "id": "e2-q20",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "Kinesis Data Streams: высокая пропускная способность, несколько консьюмеров, replay",
+  "tests": "Выбор сервиса для потоковой ингестии миллионов событий в секунду с несколькими независимыми потребителями и повторным чтением.",
+  "expected": "Kinesis Data Streams — real-time stream, несколько консьюмеров читают одни данные независимо, retention до 365 дней (replay). Триггеры: «millions of events per second», «multiple independent consumers», «replay», «retained 7 days», «clickstream».",
+  "why_not": "SQS удаляет сообщения после обработки, нет replay для нескольких потребителей; SNS — fan-out без хранения; Amazon MQ — классический брокер, не массивный streaming.",
+  "keywords": [
+    "Kinesis Data Streams",
+    "clickstream",
+    "replay",
+    "retention",
+    "multiple consumers",
+    "real-time"
+  ],
+  "services": [
+    "kinesis-data-streams",
+    "sqs",
+    "sns",
+    "mq"
+  ],
+  "topics": [
+    "integration"
+  ],
+  "domain": 2
+}

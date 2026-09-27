@@ -1,0 +1,28 @@
+{
+  "id": "e5-q52",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "Data transfer: межрегиональный трафик платный — обрабатывать в том же регионе",
+  "tests": "Понимание модели стоимости передачи данных: что увеличивает расходы при обработке объектов S3.",
+  "expected": "Избегать передачи данных на EC2 в другом регионе — inter-Region transfer тарифицируется; обработка в том же регионе дешева. Триггеры: «minimize data transfer cost», «same Region», «What should they avoid».",
+  "why_not": "Чтение из S3 на EC2 в том же регионе — бесплатно/дёшево; S3 Standard даёт нужную durability; gateway endpoint для S3 наоборот снижает затраты (обход NAT).",
+  "keywords": [
+    "data transfer",
+    "cross-Region",
+    "inter-Region transfer",
+    "same Region",
+    "gateway endpoint",
+    "стоимость трафика"
+  ],
+  "services": [
+    "data-transfer-costs",
+    "s3",
+    "vpc-endpoints"
+  ],
+  "topics": [
+    "cost"
+  ],
+  "domain": 3
+}

@@ -1,0 +1,27 @@
+{
+  "id": "edge-q8",
+  "source": {
+    "type": "topic",
+    "ref": "edge-dns"
+  },
+  "concept": "Route 53 weighted routing: canary / процентное разделение трафика",
+  "tests": "Выбор routing policy для постепенного процентного переключения на новую версию.",
+  "expected": "Weighted routing — относительные веса (10/90) у записей с одним именем, регулируются со временем. Триггеры: «10% пользователей на новый стек», «менять долю со временем», canary/blue-green.",
+  "why_not": "Failover — active/passive HA; Geolocation — по местоположению; Simple — одна record set без весов.",
+  "keywords": [
+    "weighted routing",
+    "canary",
+    "blue-green",
+    "traffic split",
+    "Route 53",
+    "10% / 90%",
+    "постепенный rollout"
+  ],
+  "services": [
+    "route53"
+  ],
+  "topics": [
+    "edge-dns"
+  ],
+  "domain": 3
+}

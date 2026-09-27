@@ -1,0 +1,30 @@
+{
+  "id": "e1-q9",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "CloudTrail: аудит API-вызовов (кто и когда)",
+  "tests": "Какой сервис записывает все API-вызовы в аккаунте с identity вызывающего и временем.",
+  "expected": "AWS CloudTrail — журнал API-активности: кто, откуда, когда. Триггеры: «all API calls recorded», «identity», «compliance/security analysis».",
+  "why_not": "CloudWatch — метрики и логи; AWS Config — история изменений конфигурации ресурсов; Inspector — оценка уязвимостей.",
+  "keywords": [
+    "CloudTrail",
+    "API calls",
+    "аудит",
+    "identity",
+    "compliance",
+    "кто сделал вызов"
+  ],
+  "services": [
+    "cloudtrail",
+    "config",
+    "cloudwatch",
+    "inspector"
+  ],
+  "topics": [
+    "monitoring",
+    "iam-security"
+  ],
+  "domain": 1
+}

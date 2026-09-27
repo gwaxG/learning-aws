@@ -1,0 +1,29 @@
+{
+  "id": "e4-q22",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "RDS Multi-AZ: синхронный standby и автоматический failover",
+  "tests": "Какая конфигурация RDS переживает отказ AZ с автоматическим failover и синхронной репликацией.",
+  "expected": "RDS Multi-AZ deployment — синхронный standby в другой AZ, автоматический failover. Триггеры: «survive failure of an AZ», «automatic failover», «synchronous replication».",
+  "why_not": "Cross-Region read replica — асинхронная, для DR/чтения; Single-AZ без standby; больший класс инстанса не добавляет доступности.",
+  "keywords": [
+    "Multi-AZ",
+    "synchronous replication",
+    "automatic failover",
+    "standby",
+    "AZ failure",
+    "read replica"
+  ],
+  "services": [
+    "rds-multi-az",
+    "read-replicas",
+    "rds"
+  ],
+  "topics": [
+    "databases",
+    "ha-dr"
+  ],
+  "domain": 2
+}

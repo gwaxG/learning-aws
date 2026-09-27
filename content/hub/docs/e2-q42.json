@@ -1,0 +1,28 @@
+{
+  "id": "e2-q42",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "EC2 Purchasing: Spot для прерываемых отказоустойчивых batch-задач",
+  "tests": "Выбор самой дешёвой модели покупки EC2 для прерываемой задачи с checkpoint.",
+  "expected": "Spot Instances — скидка до ~90%, идеальны для fault-tolerant, interruptible, checkpointable batch. Триггеры: «interruptible», «can be checkpointed and resumed», «lowest possible cost», «batch».",
+  "why_not": "On-Demand и RI дороже для прерываемой задачи; Dedicated Hosts — самые дорогие, для лицензий/compliance.",
+  "keywords": [
+    "Spot Instances",
+    "interruptible",
+    "checkpoint",
+    "batch processing",
+    "fault-tolerant",
+    "lowest cost"
+  ],
+  "services": [
+    "ec2-purchasing",
+    "ec2"
+  ],
+  "topics": [
+    "cost",
+    "ec2-compute"
+  ],
+  "domain": 4
+}

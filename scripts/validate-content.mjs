@@ -88,6 +88,41 @@ for (const e of manifest.exams) {
   });
 }
 
+// ---- Map 1: services cheat-sheet map ----
+let serviceIds = new Set();
+try {
+  const svc = JSON.parse(await readFile("content/maps/services.json", "utf8"));
+  const all = svc.categories.flatMap((c) => c.services);
+  serviceIds = new Set(all.map((s) => s.id));
+  if (serviceIds.size !== all.length) err("services.json", "duplicate service ids");
+  for (const c of svc.categories) {
+    if (!c.id || !c.name) err("services.json", "category missing id/name");
+    for (const s of c.services) {
+      const where = `service ${s.id}`;
+      if (!s.name || !s.tagline) err(where, "missing name/tagline");
+      if (!Array.isArray(s.facts) || !s.facts.length) err(where, "missing facts");
+      if (!Array.isArray(s.keywords) || !s.keywords.length) err(where, "missing keywords");
+      (s.vs || []).forEach((v) => serviceIds.has(v.id) || err(where, `vs id not found: ${v.id}`));
+      if (s.doc !== undefined && !/^https?:\/\//.test(s.doc)) err(where, "bad doc url");
+    }
+  }
+} catch (e) {
+  err("content/maps/services.json", `cannot read/parse: ${e.message}`);
+}
+
+// ---- Map 2: question hub (docs + generated index freshness) ----
+{
+  const { loadHubInputs } = await import("./build-hub.mjs");
+  const { buildIndex } = await import("./hub-lib.mjs");
+  const { docs, sourceQuestions, errors: hubErrors } = await loadHubInputs();
+  hubErrors.forEach((m) => errors.push(m));
+  if (!hubErrors.length) {
+    const cur = await readFile("content/hub/index.json", "utf8").catch(() => "");
+    if (cur !== JSON.stringify(buildIndex(docs, sourceQuestions)))
+      err("content/hub/index.json", "stale — run: node scripts/build-hub.mjs");
+  }
+}
+
 if (errors.length) {
   console.error(`✗ ${errors.length} content errors:\n` + errors.join("\n"));
   process.exit(1);

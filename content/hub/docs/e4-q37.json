@@ -1,0 +1,29 @@
+{
+  "id": "e4-q37",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "EC2 Spot: mixed instances policy в ASG по нескольким типам и AZ",
+  "tests": "Устойчивые и дешёвые вычисления для прерываемых batch-задач с автоматической заменой прерванной мощности.",
+  "expected": "Spot Instances в Auto Scaling group с mixed instances policy + диверсификация по нескольким instance types и AZ — выше доступность Spot-мощности. Триггеры: «tolerate interruption and restart», «cost-aware», «automatically replaces interrupted capacity», (Choose two).",
+  "why_not": "Один On-Demand инстанс не устойчив и не оптимален по цене; Dedicated Hosts дорогие и не повышают устойчивость.",
+  "keywords": [
+    "Spot Instances",
+    "mixed instances policy",
+    "Auto Scaling group",
+    "multiple instance types",
+    "interruptible",
+    "диверсификация"
+  ],
+  "services": [
+    "ec2-purchasing",
+    "auto-scaling",
+    "ha"
+  ],
+  "topics": [
+    "ec2-compute",
+    "cost"
+  ],
+  "domain": 2
+}

@@ -1,0 +1,28 @@
+{
+  "id": "e1-q38",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "VPC: БД в private subnet, SG ссылается на SG app-tier",
+  "tests": "Как разместить уровень БД трёхуровневого приложения, чтобы он был недоступен из интернета, но доступен app-tier.",
+  "expected": "Private subnet без маршрута к IGW + security group БД, разрешающая трафик только от security group app-tier. Триггеры: «not reachable from the internet», «accessed by the application tier».",
+  "why_not": "Public subnet, подсеть балансировщика или маршрут к internet gateway делают БД доступной из интернета.",
+  "keywords": [
+    "private subnet",
+    "security group reference",
+    "three-tier",
+    "database tier",
+    "без доступа из интернета"
+  ],
+  "services": [
+    "subnets",
+    "security-groups",
+    "vpc"
+  ],
+  "topics": [
+    "vpc-networking",
+    "architecture"
+  ],
+  "domain": 2
+}

@@ -1,0 +1,29 @@
+{
+  "id": "e5-q60",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "CloudWatch Logs: централизованные логи приложений, metric filters, dashboards",
+  "tests": "Выбор сервиса для централизованного поиска по логам EC2 и Lambda с metric filters и дашбордами.",
+  "expected": "Amazon CloudWatch Logs (CloudWatch agent на EC2, Lambda пишет автоматически) + metric filters, alarms, dashboards, Logs Insights. Триггеры: «centralized, searchable application logs», «metric filters and dashboards».",
+  "why_not": "CloudTrail — API-активность, не логи приложений; S3 server access logs — только запросы к S3; X-Ray — трассировка, не агрегация логов.",
+  "keywords": [
+    "CloudWatch Logs",
+    "metric filters",
+    "dashboards",
+    "application logs",
+    "CloudWatch agent",
+    "централизованные логи"
+  ],
+  "services": [
+    "cloudwatch-logs",
+    "cloudwatch",
+    "cloudtrail",
+    "xray"
+  ],
+  "topics": [
+    "monitoring"
+  ],
+  "domain": 4
+}

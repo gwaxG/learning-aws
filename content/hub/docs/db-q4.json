@@ -1,0 +1,29 @@
+{
+  "id": "db-q4",
+  "source": {
+    "type": "topic",
+    "ref": "databases"
+  },
+  "concept": "ElastiCache Redis Multi-AZ + lazy loading: HA-кэш",
+  "tests": "Выбор движка кэша с репликацией и автоматическим failover плюс стратегии кэширования (выбрать два).",
+  "expected": "ElastiCache for Redis с Multi-AZ (автоматический failover) + lazy loading (cache-aside). Триггеры: «repeatedly queries same data», «microsecond reads», «HA и автоматический failover для кэша».",
+  "why_not": "Memcached без репликации и failover — не HA; Redshift — OLAP, не кэш для приложения.",
+  "keywords": [
+    "ElastiCache for Redis",
+    "Multi-AZ",
+    "lazy loading",
+    "cache-aside",
+    "Memcached",
+    "automatic failover",
+    "повторяющиеся запросы"
+  ],
+  "services": [
+    "elasticache",
+    "caching",
+    "rds"
+  ],
+  "topics": [
+    "databases"
+  ],
+  "domain": 3
+}

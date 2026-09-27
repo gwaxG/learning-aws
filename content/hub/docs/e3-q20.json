@@ -1,0 +1,29 @@
+{
+  "id": "e3-q20",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "ECS: инъекция секретов из Secrets Manager в task definition",
+  "tests": "Как передать пароль БД в контейнер Fargate без вызовов API из кода приложения.",
+  "expected": "Поле secrets в ECS task definition со ссылкой на Secrets Manager (или SSM Parameter) — значение подставляется как env var при старте задачи. Триггеры: «injected without the application code calling any API», «least effort».",
+  "why_not": "Plaintext env var, секрет в образе или в незашифрованном S3 — утечка credentials.",
+  "keywords": [
+    "task definition",
+    "secrets field",
+    "Secrets Manager",
+    "Fargate",
+    "environment variable",
+    "без вызова API"
+  ],
+  "services": [
+    "ecs",
+    "secrets-manager",
+    "fargate"
+  ],
+  "topics": [
+    "serverless-containers",
+    "iam-security"
+  ],
+  "domain": 1
+}

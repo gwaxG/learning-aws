@@ -1,0 +1,28 @@
+{
+  "id": "e3-q51",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "S3 Lifecycle: transition и expiration без кода",
+  "tests": "Как с минимумом операционной работы переводить объекты в дешёвый класс через 90 дней и удалять через год.",
+  "expected": "S3 Lifecycle policy: transition rule (90 дней → IA/Glacier) + expiration rule (365 дней). Триггеры: «move to cheaper tier», «deleted after one year», «least operational».",
+  "why_not": "Custom Lambda, EC2 cron и ручное удаление — лишний код, нагрузка и риск ошибок.",
+  "keywords": [
+    "S3 Lifecycle",
+    "transition",
+    "expiration",
+    "90 days",
+    "one year",
+    "автоматическое удаление"
+  ],
+  "services": [
+    "s3-lifecycle",
+    "s3-storage-classes"
+  ],
+  "topics": [
+    "storage",
+    "cost"
+  ],
+  "domain": 3
+}

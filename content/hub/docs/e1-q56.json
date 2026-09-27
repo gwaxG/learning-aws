@@ -1,0 +1,28 @@
+{
+  "id": "e1-q56",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "S3 Object Lock: compliance mode (WORM) для неизменяемого хранения",
+  "tests": "Как гарантировать, что объекты S3 нельзя удалить или перезаписать в течение срока хранения даже администраторам.",
+  "expected": "S3 Object Lock в compliance mode — WORM, никто (включая root) не может сократить или обойти retention. Триггеры: «cannot be deleted or overwritten», «even by administrators», «regulatory compliance».",
+  "why_not": "Versioning сам по себе не мешает удалению; lifecycle управляет переходами и expiration; bucket policy может изменить администратор. (Governance mode — привилегированные пользователи могут обойти.)",
+  "keywords": [
+    "Object Lock",
+    "compliance mode",
+    "WORM",
+    "retention period",
+    "governance mode",
+    "неизменяемость"
+  ],
+  "services": [
+    "s3-security",
+    "s3"
+  ],
+  "topics": [
+    "storage",
+    "iam-security"
+  ],
+  "domain": 1
+}

@@ -1,0 +1,31 @@
+{
+  "id": "e5-q29",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "Stateless: вынос session state в ElastiCache/DynamoDB",
+  "tests": "Как избавиться от разлогинивания пользователей при scale-in, когда сессии хранятся в памяти инстансов.",
+  "expected": "Хранить session state в ElastiCache или DynamoDB — web tier становится stateless. Триггеры: «session state in instance memory», «logouts when instances scale in».",
+  "why_not": "Sticky sessions всё равно теряют состояние при завершении инстанса; отключение Auto Scaling убирает эластичность; больший инстанс не решает проблему.",
+  "keywords": [
+    "session state",
+    "stateless",
+    "ElastiCache",
+    "DynamoDB",
+    "sticky sessions",
+    "scale in",
+    "сессии"
+  ],
+  "services": [
+    "elasticache",
+    "dynamodb",
+    "auto-scaling",
+    "elb"
+  ],
+  "topics": [
+    "architecture",
+    "databases"
+  ],
+  "domain": 2
+}

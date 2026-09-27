@@ -1,0 +1,28 @@
+{
+  "id": "e4-q64",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "SSM Automation runbooks + CloudWatch alarm actions: авто-remediation",
+  "tests": "Как автоматизировать операционную реакцию (перезапуск сервиса) при срабатывании CloudWatch alarm по runbook.",
+  "expected": "Systems Manager Automation runbooks (повторяемые шаги remediation) + CloudWatch alarm actions, вызывающие SSM Automation или Lambda. Триггеры: «automate operational responses», «when alarm fires», «predefined runbooks», (Choose two).",
+  "why_not": "Macie классифицирует чувствительные данные, Shield защищает от DDoS — к автоматизации remediation не относятся.",
+  "keywords": [
+    "SSM Automation",
+    "runbooks",
+    "CloudWatch alarm actions",
+    "remediation",
+    "Lambda",
+    "автоматизация реакции"
+  ],
+  "services": [
+    "systems-manager",
+    "cloudwatch",
+    "lambda"
+  ],
+  "topics": [
+    "monitoring"
+  ],
+  "domain": 4
+}

@@ -1,0 +1,28 @@
+{
+  "id": "e2-q44",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "ACM: бесплатные публичные TLS-сертификаты с автопродлением для ALB",
+  "tests": "Как автоматизировать бесплатное управление TLS-сертификатами для публичного ALB.",
+  "expected": "AWS Certificate Manager — выдаёт публичные сертификаты бесплатно и автоматически продлевает (DNS validation), интеграция с ALB/CloudFront. Триггеры: «automated and free», «renew without manual effort», «ALB TLS».",
+  "why_not": "Покупка у стороннего CA — ручная ротация и риск истечения; отключение TLS убирает шифрование in transit; self-signed + своя Lambda — огромный overhead.",
+  "keywords": [
+    "ACM",
+    "TLS certificate",
+    "auto-renew",
+    "ALB",
+    "free",
+    "HTTPS"
+  ],
+  "services": [
+    "acm",
+    "elb",
+    "encryption"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1
+}

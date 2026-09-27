@@ -1,0 +1,31 @@
+{
+  "id": "data-q2",
+  "source": {
+    "type": "topic",
+    "ref": "data-migration"
+  },
+  "concept": "Kinesis Data Streams: несколько consumers, порядок и replay",
+  "tests": "Выбор сервиса, где несколько независимых приложений читают один поток по порядку и могут переиграть данные.",
+  "expected": "Kinesis Data Streams — хранение записей 1–365 дней, порядок в пределах шарда, независимые consumers, replay в окне retention. Триггеры: «несколько приложений читают ТОТ ЖЕ поток», «in order», «replay последних 24 часов».",
+  "why_not": "SQS Standard/FIFO удаляют сообщение после обработки, replay нет; SNS — push pub/sub без хранимого лога.",
+  "keywords": [
+    "Kinesis Data Streams",
+    "replay",
+    "retention",
+    "ordering per shard",
+    "multiple consumers",
+    "переиграть данные",
+    "тот же поток"
+  ],
+  "services": [
+    "kinesis-data-streams",
+    "sqs",
+    "sqs-fifo",
+    "sns"
+  ],
+  "topics": [
+    "data-migration",
+    "integration"
+  ],
+  "domain": 3
+}

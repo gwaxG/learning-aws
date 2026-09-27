@@ -1,0 +1,28 @@
+{
+  "id": "e4-q43",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "EC2 Purchasing: Spot для прерываемых отказоустойчивых batch-задач",
+  "tests": "Самый дешёвый вариант вычислений для ночного ETL, допускающего повторный запуск при прерывании.",
+  "expected": "Spot Instances — максимальная скидка для прерываемых перезапускаемых batch-задач. Триггеры: «nightly», «about two hours», «tolerate occasional reruns», «minimize compute cost».",
+  "why_not": "On-Demand дороже; Reserved Instances — для стабильной 24/7 нагрузки, не для 2 часов в сутки; Dedicated Hosts — самые дорогие, для лицензий/compliance.",
+  "keywords": [
+    "Spot Instances",
+    "batch",
+    "ETL",
+    "interruptible",
+    "rerun",
+    "минимальная стоимость"
+  ],
+  "services": [
+    "ec2-purchasing",
+    "ec2"
+  ],
+  "topics": [
+    "cost",
+    "ec2-compute"
+  ],
+  "domain": 3
+}

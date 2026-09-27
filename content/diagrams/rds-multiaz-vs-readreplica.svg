@@ -1,4 +1,4 @@
-<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="RDS Multi-AZ synchronous standby for HA versus asynchronous Read Replicas for read scaling">
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="RDS Multi-AZ с синхронным standby для HA против асинхронных Read Replica для масштабирования чтения">
   <style>
     .panel { fill: none; stroke: #ff9900; stroke-width: 2; stroke-dasharray: 6 4; }
     .db { fill: #1d3150; stroke: #4aa3ff; }
@@ -28,23 +28,23 @@
 
   <!-- LEFT panel: Multi-AZ -->
   <rect class="panel" x="20" y="20" width="350" height="320" rx="10"/>
-  <text x="195" y="44" class="ttl">RDS Multi-AZ  (HA, no read scaling)</text>
+  <text x="195" y="44" class="ttl">RDS Multi-AZ  (HA, без масштаба чтения)</text>
 
   <rect class="app" x="115" y="60" width="160" height="36" rx="8"/>
-  <text class="nodet" x="195" y="83">Application</text>
+  <text class="nodet" x="195" y="83">Приложение</text>
 
   <text x="100" y="120" class="azlbl">AZ A</text>
   <text x="290" y="120" class="azlbl">AZ B</text>
 
   <rect class="db" x="50" y="135" width="130" height="70" rx="8"/>
   <text class="nodet" x="115" y="162">Primary (writer)</text>
-  <text class="sub" x="115" y="180">reads + writes</text>
-  <text class="sub" x="115" y="195">single endpoint</text>
+  <text class="sub" x="115" y="180">чтение + запись</text>
+  <text class="sub" x="115" y="195">один endpoint</text>
 
   <rect class="standby" x="220" y="135" width="130" height="70" rx="8"/>
   <text class="nodet" x="285" y="162">Standby</text>
-  <text class="sub" x="285" y="180">NOT readable</text>
-  <text class="sub" x="285" y="195">failover target only</text>
+  <text class="sub" x="285" y="180">НЕ читается</text>
+  <text class="sub" x="285" y="195">только цель failover</text>
 
   <path class="sync" d="M180,170 L220,170"/>
   <text x="200" y="158" class="lbl" text-anchor="middle">sync</text>
@@ -52,29 +52,29 @@
   <path class="rd" d="M195,96 L115,135"/>
   <text x="115" y="115" class="sub">r/w</text>
 
-  <text x="195" y="240" class="sub">DNS CNAME swap on failure (60–120s)</text>
-  <text x="195" y="258" class="sub">Same region · single endpoint</text>
-  <text x="195" y="276" class="sub">Purpose: availability, durability</text>
-  <text x="195" y="294" class="sub">No data loss (synchronous commit)</text>
-  <text x="195" y="318" class="lbl" text-anchor="middle">Multi-AZ = resilience</text>
+  <text x="195" y="240" class="sub">Смена DNS CNAME при сбое (60–120 с)</text>
+  <text x="195" y="258" class="sub">Тот же регион · один endpoint</text>
+  <text x="195" y="276" class="sub">Цель: доступность, надёжность</text>
+  <text x="195" y="294" class="sub">Без потери данных (синхронный commit)</text>
+  <text x="195" y="318" class="lbl" text-anchor="middle">Multi-AZ = устойчивость</text>
 
   <!-- RIGHT panel: Read Replicas -->
   <rect class="panel" x="390" y="20" width="350" height="320" rx="10"/>
-  <text x="565" y="44" class="ttl">Read Replicas  (read scaling, async)</text>
+  <text x="565" y="44" class="ttl">Read Replicas  (масштаб чтения, async)</text>
 
   <rect class="app" x="485" y="60" width="160" height="36" rx="8"/>
-  <text class="nodet" x="565" y="83">Application</text>
+  <text class="nodet" x="565" y="83">Приложение</text>
 
   <rect class="db" x="430" y="120" width="120" height="60" rx="8"/>
   <text class="nodet" x="490" y="145">Source (writer)</text>
-  <text class="sub" x="490" y="163">accepts writes</text>
+  <text class="sub" x="490" y="163">принимает запись</text>
 
   <rect class="replica" x="580" y="115" width="140" height="40" rx="8"/>
   <text class="nodet" x="650" y="138">Read Replica 1</text>
   <rect class="replica" x="580" y="165" width="140" height="40" rx="8"/>
   <text class="nodet" x="650" y="188">Read Replica 2</text>
   <rect class="replica" x="580" y="215" width="140" height="40" rx="8"/>
-  <text class="nodet" x="650" y="238">Read Replica N  (cross-region OK)</text>
+  <text class="nodet" x="650" y="232">Read Replica N</text><text class="sub" x="650" y="247">(можно cross-region)</text>
 
   <path class="async" d="M550,140 L580,135"/>
   <path class="async" d="M550,150 L580,185"/>
@@ -82,12 +82,12 @@
   <text x="565" y="112" class="lbl" text-anchor="middle">async</text>
 
   <path class="rd" d="M520,96 L490,120"/>
-  <text x="490" y="115" class="sub">writes</text>
+  <text x="490" y="115" class="sub">запись</text>
   <path class="rd" d="M620,96 L650,115"/>
-  <text x="650" y="113" class="sub">reads</text>
+  <text x="650" y="113" class="sub">чтение</text>
 
-  <text x="565" y="275" class="sub">Up to 15 per source · own endpoint per replica</text>
-  <text x="565" y="293" class="sub">Eventual consistency · can be promoted</text>
-  <text x="565" y="311" class="sub">Purpose: scale reads, offload reporting</text>
-  <text x="565" y="332" class="lbl" text-anchor="middle">Read Replicas = performance</text>
+  <text x="565" y="275" class="sub">До 15 на source · у каждой реплики свой endpoint</text>
+  <text x="565" y="293" class="sub">Eventual consistency · можно promote</text>
+  <text x="565" y="311" class="sub">Цель: масштаб чтения, разгрузка отчётов</text>
+  <text x="565" y="332" class="lbl" text-anchor="middle">Read Replicas = производительность</text>
 </svg>

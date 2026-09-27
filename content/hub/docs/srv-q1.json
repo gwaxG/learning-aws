@@ -1,0 +1,31 @@
+{
+  "id": "srv-q1",
+  "source": {
+    "type": "topic",
+    "ref": "serverless-containers"
+  },
+  "concept": "Lambda: event-driven обработка S3-событий с масштабированием до нуля",
+  "tests": "Выбор самого дешёвого и малообслуживаемого compute для непредсказуемой событийной нагрузки с короткими задачами.",
+  "expected": "Lambda, запускаемая S3 event notification: реагирует за секунды, scale to zero (не платишь в простое), 20 с ≪ лимита 15 мин. Триггеры: «highly unpredictable», «none for days», «within seconds of arrival», «cost-effective, low-ops».",
+  "why_not": "ASG на EC2 и ECS на EC2 24/7 стоят денег в простое и требуют обслуживания; EKS CronJob работает по расписанию, а не на каждый объект, и самый тяжёлый в эксплуатации.",
+  "keywords": [
+    "Lambda",
+    "S3 event notification",
+    "event-driven",
+    "scale to zero",
+    "serverless",
+    "непредсказуемая нагрузка",
+    "low-ops"
+  ],
+  "services": [
+    "lambda",
+    "s3",
+    "ecs",
+    "eks"
+  ],
+  "topics": [
+    "serverless-containers",
+    "cost"
+  ],
+  "domain": 3
+}

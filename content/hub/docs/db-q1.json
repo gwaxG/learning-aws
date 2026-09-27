@@ -1,0 +1,30 @@
+{
+  "id": "db-q1",
+  "source": {
+    "type": "topic",
+    "ref": "databases"
+  },
+  "concept": "RDS Multi-AZ: автоматический failover без потери данных",
+  "tests": "Различение Multi-AZ (HA, синхронный standby) и Read Replicas/снапшотов.",
+  "expected": "Включить Multi-AZ — синхронный standby в другой AZ, автоматический failover без потери данных. Триггеры: «automatic failover в другую AZ», «no data loss», «production».",
+  "why_not": "Read Replicas асинхронны (возможна потеря данных) и промоутятся вручную — это масштабирование чтения/DR; почасовые снапшоты — бэкап, не failover.",
+  "keywords": [
+    "Multi-AZ",
+    "synchronous standby",
+    "automatic failover",
+    "no data loss",
+    "Read Replica",
+    "автоматический failover",
+    "без потери данных"
+  ],
+  "services": [
+    "rds-multi-az",
+    "read-replicas",
+    "rds"
+  ],
+  "topics": [
+    "databases",
+    "ha-dr"
+  ],
+  "domain": 2
+}

@@ -1,0 +1,28 @@
+{
+  "id": "e5-q62",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "X-Ray: распределённая трассировка микросервисов",
+  "tests": "Выбор сервиса для end-to-end трассировки запросов и поиска узких мест в микросервисах.",
+  "expected": "AWS X-Ray — distributed tracing, service map, латентность и ошибки по сегментам. Триггеры: «trace requests across microservices», «latency bottlenecks», «end to end».",
+  "why_not": "CloudWatch Logs Insights — запросы по логам, без трассировки потока; CloudTrail — API-вызовы; Config — конфигурация ресурсов.",
+  "keywords": [
+    "X-Ray",
+    "distributed tracing",
+    "service map",
+    "microservices",
+    "latency",
+    "трассировка"
+  ],
+  "services": [
+    "xray",
+    "cloudwatch-logs",
+    "cloudtrail"
+  ],
+  "topics": [
+    "monitoring"
+  ],
+  "domain": 4
+}

@@ -1,0 +1,28 @@
+{
+  "id": "e1-q55",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "FSx for Windows File Server: SMB и интеграция с Active Directory",
+  "tests": "Выбор управляемой общей файловой системы для Windows-приложения с протоколом SMB и интеграцией с AD.",
+  "expected": "Amazon FSx for Windows File Server — managed SMB-файловая система с нативными функциями Windows и интеграцией с Active Directory. Триггеры: «Windows-based», «SMB», «Active Directory».",
+  "why_not": "EFS — NFS для Linux; S3 — объектное хранилище без SMB; EBS Multi-Attach — блочное хранилище для нескольких инстансов, не файловый ресурс Windows.",
+  "keywords": [
+    "FSx for Windows",
+    "SMB",
+    "Active Directory",
+    "Windows",
+    "shared file system",
+    "NTFS"
+  ],
+  "services": [
+    "fsx",
+    "efs",
+    "ebs"
+  ],
+  "topics": [
+    "storage"
+  ],
+  "domain": 3
+}

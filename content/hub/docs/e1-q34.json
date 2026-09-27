@@ -1,0 +1,27 @@
+{
+  "id": "e1-q34",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "SQS: dead-letter queue для poison messages",
+  "tests": "Как изолировать повреждённые сообщения SQS, которые постоянно роняют обработчик и блокируют очередь.",
+  "expected": "Dead-letter queue с maxReceiveCount в redrive policy — после N неудачных попыток сообщение уходит в DLQ для анализа. Триггеры: «malformed message», «fail repeatedly», «isolate messages».",
+  "why_not": "Увеличение visibility timeout лишь откладывает повторную доставку; FIFO меняет семантику порядка; long polling уменьшает пустые ответы, но не изолирует сообщения.",
+  "keywords": [
+    "dead-letter queue",
+    "DLQ",
+    "maxReceiveCount",
+    "poison message",
+    "visibility timeout",
+    "redrive policy"
+  ],
+  "services": [
+    "sqs",
+    "decoupling"
+  ],
+  "topics": [
+    "integration"
+  ],
+  "domain": 2
+}

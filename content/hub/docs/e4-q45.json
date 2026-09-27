@@ -1,0 +1,28 @@
+{
+  "id": "e4-q45",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "Snow Family: офлайн-перенос сотен ТБ при узком канале",
+  "tests": "Выбор способа переноса петабайтных объёмов, когда передача по сети займёт месяцы.",
+  "expected": "AWS Snowball / Snow Family — физические устройства для офлайн-переноса петабайт с шифрованием. Триггеры: «10 PB», «network would take months», «physical bulk transfer appliance».",
+  "why_not": "DataSync и прямая загрузка в S3 упираются в пропускную способность сети; Storage Gateway — гибридный доступ, не разовая миграция 10 PB.",
+  "keywords": [
+    "Snowball",
+    "Snow Family",
+    "petabyte-scale",
+    "offline transfer",
+    "physical appliance",
+    "сеть займёт месяцы"
+  ],
+  "services": [
+    "snow-family",
+    "datasync",
+    "storage-gateway"
+  ],
+  "topics": [
+    "data-migration"
+  ],
+  "domain": 3
+}

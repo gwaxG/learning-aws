@@ -1,0 +1,30 @@
+{
+  "id": "e3-q27",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "Step Functions: оркестрация Lambda с ветвлением и retry",
+  "tests": "Выбор сервиса для координации нескольких Lambda с ветвлением, повторами и обработкой ошибок.",
+  "expected": "AWS Step Functions — state machine с Choice, Retry, Catch. Триггеры: «coordinate multiple Lambda functions», «branching, retries, error handling», «maintainable».",
+  "why_not": "SQS только ставит в очередь; EventBridge маршрутизирует события, но не хранит состояние workflow; монолитная Lambda — сложна и ограничена 15 мин.",
+  "keywords": [
+    "Step Functions",
+    "state machine",
+    "orchestration",
+    "retries",
+    "error handling",
+    "ветвление"
+  ],
+  "services": [
+    "step-functions",
+    "lambda",
+    "eventbridge",
+    "sqs"
+  ],
+  "topics": [
+    "serverless-containers",
+    "integration"
+  ],
+  "domain": 2
+}

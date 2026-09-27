@@ -1,0 +1,32 @@
+{
+  "id": "hadr-q6",
+  "source": {
+    "type": "topic",
+    "ref": "ha-dr"
+  },
+  "concept": "Stateless-приложение: вынос сессий в ElastiCache/DynamoDB",
+  "tests": "Понимание, что состояние сессий нужно выносить из инстансов для устойчивости к их замене.",
+  "expected": "Хранить сессии во внешнем хранилище (ElastiCache for Redis или DynamoDB) — инстансы stateless, любой обслуживает любой запрос. Триггеры: «теряются сессии при замене инстансов Auto Scaling», «без изменения load balancer».",
+  "why_not": "Sticky sessions с локальным диском всё равно теряют состояние при терминации; отключение Auto Scaling убирает self-healing; одна AZ уничтожает HA.",
+  "keywords": [
+    "stateless",
+    "session state",
+    "ElastiCache",
+    "DynamoDB",
+    "sticky sessions",
+    "Auto Scaling",
+    "теряются сессии"
+  ],
+  "services": [
+    "elasticache",
+    "dynamodb",
+    "auto-scaling",
+    "elb",
+    "ha"
+  ],
+  "topics": [
+    "ha-dr",
+    "architecture"
+  ],
+  "domain": 2
+}

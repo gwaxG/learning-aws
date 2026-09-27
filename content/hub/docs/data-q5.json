@@ -1,0 +1,31 @@
+{
+  "id": "data-q5",
+  "source": {
+    "type": "topic",
+    "ref": "data-migration"
+  },
+  "concept": "Гетерогенная миграция БД: SCT + DMS с CDC",
+  "tests": "Выбор инструментов для миграции Oracle → Aurora PostgreSQL с минимальным простоем (выбрать два).",
+  "expected": "AWS SCT конвертирует схему и хранимые процедуры, AWS DMS переносит данные и реплицирует изменения через CDC до cutover. Триггеры: «разные движки (Oracle → PostgreSQL)», «heterogeneous», «minimal downtime».",
+  "why_not": "DataSync копирует файлы/объекты (NFS/SMB/S3), не живые БД; Snowball — офлайн-перенос файлов, не миграция с минимальным простоем.",
+  "keywords": [
+    "SCT",
+    "DMS",
+    "CDC",
+    "heterogeneous migration",
+    "Oracle",
+    "Aurora PostgreSQL",
+    "минимальный простой"
+  ],
+  "services": [
+    "dms",
+    "sct",
+    "aurora",
+    "datasync"
+  ],
+  "topics": [
+    "data-migration",
+    "databases"
+  ],
+  "domain": 3
+}

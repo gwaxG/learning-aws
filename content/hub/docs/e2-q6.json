@@ -1,0 +1,29 @@
+{
+  "id": "e2-q6",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "Snow Family: офлайн-миграция больших объёмов при узком канале",
+  "tests": "Расчёт, что сетевой перенос не укладывается в срок, и выбор физического устройства для переноса десятков ТБ.",
+  "expected": "AWS Snowball Edge — 50 ТБ при 100 Мбит/с заняли бы >1 месяца (~46 дней при 100% загрузке), а канал ещё и общий. Триггеры: «50 TB», «100 Mbps», «needed for daily operations», «within a week».",
+  "why_not": "DataSync и S3 Transfer Acceleration упираются в ту же узкую полосу; Direct Connect provisioning — недели и не для разовой передачи.",
+  "keywords": [
+    "Snowball Edge",
+    "50 TB",
+    "100 Mbps",
+    "within a week",
+    "офлайн перенос",
+    "bandwidth"
+  ],
+  "services": [
+    "snow-family",
+    "datasync",
+    "direct-connect",
+    "s3-performance"
+  ],
+  "topics": [
+    "data-migration"
+  ],
+  "domain": 4
+}

@@ -1,0 +1,32 @@
+{
+  "id": "e5-q40",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "Миграция БД: SCT для схемы + DMS с CDC для гетерогенной миграции",
+  "tests": "Какие инструменты нужны для миграции Oracle → Aurora PostgreSQL с конвертацией схемы и минимальным простоем.",
+  "expected": "AWS SCT конвертирует схему и код Oracle → PostgreSQL; AWS DMS переносит данные с ongoing replication (CDC) до cutover. Триггеры: «Oracle to Aurora PostgreSQL», «converting the schema», «minimizing downtime».",
+  "why_not": "Snowball — офлайн-перевозка, не конвертирует движок и не реплицирует; DataSync — файлы, не БД; Kinesis — не инструмент миграции схемы.",
+  "keywords": [
+    "SCT",
+    "DMS",
+    "heterogeneous migration",
+    "Oracle",
+    "Aurora PostgreSQL",
+    "CDC",
+    "минимальный простой"
+  ],
+  "services": [
+    "sct",
+    "dms",
+    "aurora",
+    "datasync",
+    "snow-family"
+  ],
+  "topics": [
+    "data-migration",
+    "databases"
+  ],
+  "domain": 3
+}

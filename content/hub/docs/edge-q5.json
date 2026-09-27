@@ -1,0 +1,30 @@
+{
+  "id": "edge-q5",
+  "source": {
+    "type": "topic",
+    "ref": "edge-dns"
+  },
+  "concept": "Route 53 failover routing: active/passive с health check",
+  "tests": "Настройка автоматического DNS-failover на standby-регион (выбрать два).",
+  "expected": "Failover routing policy с PRIMARY/SECONDARY + Route 53 health check на primary. Триггеры: «обычно primary», «standby только если primary unhealthy», «automatic DNS failover».",
+  "why_not": "CloudFront origin failover — на уровне origin через origin group, не DNS и не cache behaviors; S3 lifecycle к DNS не относится.",
+  "keywords": [
+    "failover routing",
+    "health check",
+    "PRIMARY",
+    "SECONDARY",
+    "active/passive",
+    "standby регион",
+    "автоматический failover"
+  ],
+  "services": [
+    "route53",
+    "cloudfront",
+    "dr-strategies"
+  ],
+  "topics": [
+    "edge-dns",
+    "ha-dr"
+  ],
+  "domain": 3
+}

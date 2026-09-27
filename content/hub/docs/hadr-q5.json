@@ -1,0 +1,30 @@
+{
+  "id": "hadr-q5",
+  "source": {
+    "type": "topic",
+    "ref": "ha-dr"
+  },
+  "concept": "Aurora Global Database: кросс-региональное чтение и DR",
+  "tests": "Знание фичи Aurora для кросс-региональной репликации с RPO ~1 с и RTO ~1 мин.",
+  "expected": "Aurora Global Database — репликация storage в secondary регионы, RPO ~1 с, RTO ~1 мин при promote. Триггеры: «Aurora», «cross-Region», «RPO about 1 second», «recovery about a minute».",
+  "why_not": "Aurora Multi-AZ в одном регионе и RDS Multi-AZ DB cluster — только внутрирегиональная HA; Aurora Serverless v2 — про масштабирование, не DR.",
+  "keywords": [
+    "Aurora Global Database",
+    "cross-Region replication",
+    "RPO 1 second",
+    "RTO 1 minute",
+    "promote secondary",
+    "кросс-региональное DR"
+  ],
+  "services": [
+    "aurora-global",
+    "aurora",
+    "aurora-serverless",
+    "rds-multi-az"
+  ],
+  "topics": [
+    "ha-dr",
+    "databases"
+  ],
+  "domain": 2
+}

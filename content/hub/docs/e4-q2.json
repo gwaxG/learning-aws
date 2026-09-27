@@ -1,0 +1,29 @@
+{
+  "id": "e4-q2",
+  "source": {
+    "type": "exam",
+    "ref": 4
+  },
+  "concept": "IAM: роль EC2 через instance profile вместо access keys",
+  "tests": "Выдача EC2 доступа к Secrets Manager без долгоживущих credentials на инстансе.",
+  "expected": "Прикрепить IAM instance profile с правами на чтение секрета — временные, автоматически ротируемые credentials через metadata service. Триггеры: «without storing long-lived credentials», EC2 → AWS API.",
+  "why_not": "Ключи в AMI или user data раскрываются и не ротируются; root credentials для workload — никогда.",
+  "keywords": [
+    "instance profile",
+    "IAM role",
+    "temporary credentials",
+    "metadata service",
+    "Secrets Manager",
+    "без долгоживущих ключей"
+  ],
+  "services": [
+    "iam",
+    "ec2",
+    "secrets-manager"
+  ],
+  "topics": [
+    "iam-security",
+    "ec2-compute"
+  ],
+  "domain": 1
+}

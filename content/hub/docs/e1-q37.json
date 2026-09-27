@@ -1,0 +1,29 @@
+{
+  "id": "e1-q37",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "AWS Budgets: алерты по прогнозу расходов",
+  "tests": "Какой сервис позволяет задать порог расходов и получать оповещения, когда фактические или прогнозные затраты его превышают.",
+  "expected": "AWS Budgets — cost/usage budgets с алертами по actual и forecasted spend. Триггеры: «custom alerts», «projected monthly costs exceed a threshold».",
+  "why_not": "Trusted Advisor даёт рекомендации, но не бюджетные алерты; CUR — сырые данные биллинга; CloudWatch billing widgets — визуализация без гибких алертов по прогнозу.",
+  "keywords": [
+    "AWS Budgets",
+    "forecast",
+    "alert",
+    "threshold",
+    "прогноз расходов",
+    "оповещение"
+  ],
+  "services": [
+    "budgets",
+    "cur",
+    "trusted-advisor",
+    "cloudwatch"
+  ],
+  "topics": [
+    "cost"
+  ],
+  "domain": 4
+}

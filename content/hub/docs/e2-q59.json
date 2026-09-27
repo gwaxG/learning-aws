@@ -1,0 +1,28 @@
+{
+  "id": "e2-q59",
+  "source": {
+    "type": "exam",
+    "ref": 2
+  },
+  "concept": "Redshift Serverless: оплата только за время выполнения запросов",
+  "tests": "Как избежать оплаты простаивающего кластера Redshift при эпизодической ежеквартальной отчётности.",
+  "expected": "Amazon Redshift Serverless — авто-провижининг и масштабирование, оплата (RPU-часы) только когда идут запросы. Триггеры: «few days per quarter», «mostly idle», «avoid paying for idle provisioned capacity».",
+  "why_not": "Постоянно работающий provisioned кластер и Reserved Nodes платят за простой; RDS не потянет аналитику такого масштаба.",
+  "keywords": [
+    "Redshift Serverless",
+    "intermittent workload",
+    "idle capacity",
+    "pay per use",
+    "Reserved Nodes",
+    "reporting"
+  ],
+  "services": [
+    "redshift",
+    "rds"
+  ],
+  "topics": [
+    "databases",
+    "cost"
+  ],
+  "domain": 3
+}

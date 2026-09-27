@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(node scripts/validate-content.mjs)",
-      "Bash(node --test)"
+      "Bash(node --test)",
+      "Bash(node scripts/build-hub.mjs)",
+      "Bash(node scripts/build-hub.mjs --check)",
+      "Bash(node scripts/list-services.mjs:*)"
     ]
   }
 }

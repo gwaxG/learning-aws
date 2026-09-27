@@ -1,0 +1,28 @@
+{
+  "id": "e1-q58",
+  "source": {
+    "type": "exam",
+    "ref": 1
+  },
+  "concept": "DynamoDB: on-demand capacity для непредсказуемого трафика",
+  "tests": "Выбор режима capacity DynamoDB, который сам справляется с внезапными всплесками без планирования мощности и throttling.",
+  "expected": "On-demand capacity mode — автоматически принимает пики, оплата за запрос. Триггеры: «sudden, unpredictable traffic», «without capacity planning or throttling».",
+  "why_not": "Provisioned с фиксированными RCU/WCU и без auto scaling — throttling при пиках; reserved capacity — биллинговое обязательство для стабильного provisioned.",
+  "keywords": [
+    "on-demand capacity",
+    "DynamoDB",
+    "provisioned capacity",
+    "RCU",
+    "WCU",
+    "throttling",
+    "непредсказуемый трафик"
+  ],
+  "services": [
+    "dynamodb",
+    "scaling"
+  ],
+  "topics": [
+    "databases"
+  ],
+  "domain": 3
+}

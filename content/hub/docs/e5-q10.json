@@ -1,0 +1,29 @@
+{
+  "id": "e5-q10",
+  "source": {
+    "type": "exam",
+    "ref": 5
+  },
+  "concept": "S3 encryption: client-side — AWS не видит plaintext и ключи",
+  "tests": "Различие client-side и server-side шифрования, когда AWS не должен иметь доступа ни к данным, ни к ключам.",
+  "expected": "Client-side encryption (AWS Encryption SDK) с ключами, которые контролирует клиент — в S3 попадает только ciphertext. Триггеры: «encrypt before sending», «AWS never has access to plaintext or the keys».",
+  "why_not": "SSE-S3 и SSE-KMS — server-side, шифрует AWS и имеет доступ к ключам; Block Public Access — про доступность, не шифрование.",
+  "keywords": [
+    "client-side encryption",
+    "AWS Encryption SDK",
+    "SSE-S3",
+    "SSE-KMS",
+    "ключи у клиента",
+    "plaintext"
+  ],
+  "services": [
+    "s3-security",
+    "encryption",
+    "kms"
+  ],
+  "topics": [
+    "storage",
+    "iam-security"
+  ],
+  "domain": 1
+}

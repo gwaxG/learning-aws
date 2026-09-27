@@ -1,0 +1,28 @@
+{
+  "id": "e3-q42",
+  "source": {
+    "type": "exam",
+    "ref": 3
+  },
+  "concept": "CloudFront: CDN-кэширование на edge",
+  "tests": "Выбор сервиса для кэширования статического и динамического контента близко к пользователям и снижения нагрузки на origin.",
+  "expected": "Amazon CloudFront кэширует на edge locations по всему миру. Триггеры: «cache content close to users», «reduce origin load», «global», «static and dynamic».",
+  "why_not": "Global Accelerator ускоряет сетевой путь, но не кэширует; Route 53 только маршрутизирует; ALB в одном регионе — нет edge.",
+  "keywords": [
+    "CloudFront",
+    "CDN",
+    "edge locations",
+    "caching",
+    "origin load",
+    "кэш у пользователей"
+  ],
+  "services": [
+    "cloudfront",
+    "global-accelerator",
+    "route53"
+  ],
+  "topics": [
+    "edge-dns"
+  ],
+  "domain": 3
+}
