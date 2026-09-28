@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "VPC endpoints: gateway endpoints S3/DynamoDB вместо NAT (экономия)",
-  "tests": "Как снизить плату NAT Gateway за обработку данных для трафика EC2 к S3 и DynamoDB в том же регионе.",
-  "expected": "Создать Gateway VPC endpoints для S3 и DynamoDB — приватный маршрут без платы за GB, трафик идёт мимо NAT Gateway. Триггеры: «NAT Gateway data processing charges», «S3 and DynamoDB», «same Region», «MOST cost-effective».",
-  "why_not": "Больше NAT Gateway — дороже; IGW и public subnets открывают инстансы и не решают задачу приватно.",
+  "concept": "VPC endpoints: S3/DynamoDB gateway endpoints instead of NAT (savings)",
+  "tests": "How to cut NAT Gateway data processing charges for EC2 traffic to S3 and DynamoDB in the same Region.",
+  "expected": "Create Gateway VPC endpoints for S3 and DynamoDB: a private route with no per-GB charge, traffic bypasses the NAT Gateway. Triggers: \"NAT Gateway data processing charges\", \"S3 and DynamoDB\", \"same Region\", \"MOST cost-effective\".",
+  "why_not": "More NAT Gateways cost more; IGW and public subnets expose instances and don't solve it privately.",
   "keywords": [
     "Gateway VPC endpoint",
     "S3",
     "DynamoDB",
     "NAT Gateway",
     "data processing charges",
-    "экономия на NAT"
+    "NAT cost savings"
   ],
   "services": [
     "vpc-endpoints",

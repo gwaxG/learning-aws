@@ -4,17 +4,17 @@
     "type": "topic",
     "ref": "data-migration"
   },
-  "concept": "Managed Service for Apache Flink: real-time аналитика потока",
-  "tests": "Выбор сервиса для непрерывной stateful обработки потока (оконные агрегаты, аномалии) на SQL/Flink.",
-  "expected": "Amazon Managed Service for Apache Flink (бывш. Kinesis Data Analytics). Триггеры: «continuous real-time aggregations», «sliding window», «anomaly detection», «SQL или Apache Flink» на Kinesis stream.",
-  "why_not": "Athena запрашивает данные в S3 в покое; Firehose только доставляет/буферизует без stateful аналитики; Glue ETL — пакетный Spark.",
+  "concept": "Managed Service for Apache Flink: real-time stream analytics",
+  "tests": "Choosing a service for continuous stateful stream processing (windowed aggregates, anomalies) with SQL/Flink.",
+  "expected": "Amazon Managed Service for Apache Flink (formerly Kinesis Data Analytics). Triggers: \"continuous real-time aggregations\", \"sliding window\", \"anomaly detection\", \"SQL or Apache Flink\" on a Kinesis stream.",
+  "why_not": "Athena queries data at rest in S3; Firehose only delivers/buffers without stateful analytics; Glue ETL is batch Spark.",
   "keywords": [
     "Managed Service for Apache Flink",
     "Kinesis Data Analytics",
     "sliding window",
     "anomaly detection",
     "real-time",
-    "оконные агрегаты"
+    "windowed aggregates"
   ],
   "services": [
     "managed-flink",

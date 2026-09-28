@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "EC2 Savings Plans/RI: скидка для стабильной нагрузки 24/7",
-  "tests": "Выбор модели покупки для постоянной production-нагрузки на 3+ года.",
-  "expected": "3-year Compute Savings Plan или Reserved Instances — максимальная скидка для предсказуемой нагрузки. Триггеры: «steady-state», «24/7», «at least three years».",
-  "why_not": "Spot прерывается — не для стабильного production; On-Demand дороже; Dedicated Hosts on demand — самый дорогой вариант.",
+  "concept": "EC2 purchasing: Savings Plans/RI discount for steady 24/7 load",
+  "tests": "Choosing a purchasing option for a constant production workload over 3+ years.",
+  "expected": "3-year Compute Savings Plan or Reserved Instances — maximum discount for predictable load. Triggers: \"steady-state\", \"24/7\", \"at least three years\".",
+  "why_not": "Spot gets interrupted — not for steady production; On-Demand is more expensive; On-Demand Dedicated Hosts — the most expensive option.",
   "keywords": [
     "Savings Plans",
     "Reserved Instances",
     "3-year",
     "steady-state",
     "24/7",
-    "постоянная нагрузка"
+    "constant load"
   ],
   "services": [
     "ec2-purchasing",

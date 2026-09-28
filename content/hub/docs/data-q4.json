@@ -4,18 +4,17 @@
     "type": "topic",
     "ref": "data-migration"
   },
-  "concept": "Athena + Glue Data Catalog: serverless SQL по данным в S3",
-  "tests": "Выбор serverless-способа ad-hoc SQL-запросов к файлам в S3 без загрузки в БД.",
-  "expected": "Amazon Athena + AWS Glue Data Catalog (схемы таблиц). Триггеры: «ad-hoc SQL», «прямо по файлам в S3», «без серверов», «без загрузки в базу».",
-  "why_not": "Redshift и RDS требуют загрузки данных; EMR с Hive — кластер, который нужно поднимать и администрировать.",
+  "concept": "Athena + Glue Data Catalog: serverless SQL on data in S3",
+  "tests": "Choosing a serverless way to run ad-hoc SQL queries on files in S3 without loading them into a DB.",
+  "expected": "Amazon Athena + AWS Glue Data Catalog (table schemas). Triggers: \"ad-hoc SQL\", \"directly on files in S3\", \"serverless\", \"no loading into a database\".",
+  "why_not": "Redshift and RDS require loading data; EMR with Hive is a cluster you must provision and administer.",
   "keywords": [
     "Athena",
     "Glue Data Catalog",
     "ad-hoc SQL",
     "serverless",
     "S3",
-    "без загрузки данных",
-    "без серверов"
+    "no data loading"
   ],
   "services": [
     "athena",

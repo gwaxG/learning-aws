@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "Config rules: обнаружение нарушений и автоматическое remediation (SSM Automation)",
-  "tests": "Какая связка обнаруживает несоответствующие ресурсы (например, публичные бакеты) и автоматически их исправляет.",
-  "expected": "AWS Config rules + automatic remediation actions через SSM Automation documents. Триггеры: «automatically remediate noncompliant resources», «S3 buckets that become public».",
-  "why_not": "CloudTrail с ручным просмотром и еженедельный аудит — не автоматизация; Inspector — уязвимости, а не соответствие конфигураций.",
+  "concept": "Config rules: detect violations and auto-remediate (SSM Automation)",
+  "tests": "Which combination detects noncompliant resources (e.g., public buckets) and fixes them automatically.",
+  "expected": "AWS Config rules + automatic remediation actions via SSM Automation documents. Triggers: \"automatically remediate noncompliant resources\", \"S3 buckets that become public\".",
+  "why_not": "CloudTrail with manual review and a weekly audit aren't automation; Inspector — vulnerabilities, not configuration compliance.",
   "keywords": [
     "AWS Config rules",
     "remediation",
     "SSM Automation",
     "noncompliant",
     "public bucket",
-    "автоисправление"
+    "auto-remediation"
   ],
   "services": [
     "config",

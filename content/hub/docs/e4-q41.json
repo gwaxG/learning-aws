@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "Cost Explorer + Budgets: анализ драйверов расходов и алерты по порогам",
-  "tests": "Какие инструменты показывают, какие сервисы/аккаунты растят расходы, и оповещают о превышении порогов.",
-  "expected": "AWS Cost Explorer — анализ трендов расходов по сервисам и аккаунтам; AWS Budgets — алерты при превышении порога. Триггеры: «which services and accounts are driving cost», «alerts when spending exceeds thresholds», (Choose two).",
-  "why_not": "CloudWatch Logs Insights — запросы к логам; Config — конфигурация ресурсов; ни то ни другое не анализирует стоимость.",
+  "concept": "Cost Explorer + Budgets: cost-driver analysis and threshold alerts",
+  "tests": "Which tools show which services/accounts drive cost growth and alert when thresholds are exceeded.",
+  "expected": "AWS Cost Explorer analyzes spending trends by service and account; AWS Budgets alerts when a threshold is exceeded. Triggers: \"which services and accounts are driving cost\", \"alerts when spending exceeds thresholds\", (Choose two).",
+  "why_not": "CloudWatch Logs Insights queries logs; Config tracks resource configuration; neither analyzes cost.",
   "keywords": [
     "Cost Explorer",
     "AWS Budgets",
     "cost alerts",
     "threshold",
     "spending trends",
-    "анализ расходов"
+    "cost analysis"
   ],
   "services": [
     "cost-explorer",

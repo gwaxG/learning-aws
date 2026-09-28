@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "Kinesis Data Streams: высокая пропускная способность, несколько консьюмеров, replay",
-  "tests": "Выбор сервиса для потоковой ингестии миллионов событий в секунду с несколькими независимыми потребителями и повторным чтением.",
-  "expected": "Kinesis Data Streams — real-time stream, несколько консьюмеров читают одни данные независимо, retention до 365 дней (replay). Триггеры: «millions of events per second», «multiple independent consumers», «replay», «retained 7 days», «clickstream».",
-  "why_not": "SQS удаляет сообщения после обработки, нет replay для нескольких потребителей; SNS — fan-out без хранения; Amazon MQ — классический брокер, не массивный streaming.",
+  "concept": "Kinesis Data Streams: high throughput, multiple consumers, replay",
+  "tests": "Choosing a service for streaming ingestion of millions of events per second with multiple independent consumers and re-reads.",
+  "expected": "Kinesis Data Streams — a real-time stream; multiple consumers read the same data independently, retention up to 365 days (replay). Triggers: \"millions of events per second\", \"multiple independent consumers\", \"replay\", \"retained 7 days\", \"clickstream\".",
+  "why_not": "SQS deletes messages after processing, no replay for multiple consumers; SNS — fan-out without retention; Amazon MQ — a classic broker, not massive streaming.",
   "keywords": [
     "Kinesis Data Streams",
     "clickstream",

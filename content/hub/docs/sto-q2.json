@@ -4,17 +4,16 @@
     "type": "topic",
     "ref": "storage"
   },
-  "concept": "S3: presigned URL для временного доступа к приватным объектам",
-  "tests": "Знание способа дать временный доступ к приватным объектам S3 без публичного bucket и без раздачи credentials.",
-  "expected": "Presigned URL с коротким сроком действия — доступ по правам подписавшего, bucket остаётся приватным. Триггеры: «limited time», «private objects», «without exposing the bucket», «without distributing credentials».",
-  "why_not": "Отключение Block Public Access + public-read открывает все объекты; передача access keys IAM user — грубое нарушение least privilege; static website hosting требует публичного доступа и не ограничивает по времени.",
+  "concept": "S3: presigned URL for temporary access to private objects",
+  "tests": "Knowing how to grant temporary access to private S3 objects without a public bucket or handing out credentials.",
+  "expected": "A presigned URL with a short expiry — access uses the signer's permissions, the bucket stays private. Triggers: \"limited time\", \"private objects\", \"without exposing the bucket\", \"without distributing credentials\".",
+  "why_not": "Disabling Block Public Access + public-read exposes all objects; handing out IAM user access keys grossly violates least privilege; static website hosting requires public access and has no time limit.",
   "keywords": [
     "presigned URL",
     "expiration",
     "private bucket",
     "Block Public Access",
-    "temporary access",
-    "временный доступ"
+    "temporary access"
   ],
   "services": [
     "s3-performance",

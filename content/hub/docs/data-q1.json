@@ -4,18 +4,18 @@
     "type": "topic",
     "ref": "data-migration"
   },
-  "concept": "Kinesis Data Firehose: serverless доставка потока в S3",
-  "tests": "Выбор полностью управляемого сервиса для near-real-time загрузки стриминговых данных в S3 с конвертацией формата.",
-  "expected": "Kinesis Data Firehose — буферизует и доставляет поток в S3 (Redshift/OpenSearch), встроенная конвертация JSON → Parquet/ORC, без шардов. Триггеры: «near-real-time в S3», «без серверов и шардов», «конвертировать в Parquet».",
-  "why_not": "Kinesis Data Streams требует свой consumer и управление шардами; SQS — очередь для decoupling, не доставка в S3; EMR/Spark Streaming — управляемый вручную кластер.",
+  "concept": "Kinesis Data Firehose: serverless stream delivery to S3",
+  "tests": "Choosing a fully managed service for near-real-time loading of streaming data into S3 with format conversion.",
+  "expected": "Kinesis Data Firehose — buffers and delivers the stream to S3 (Redshift/OpenSearch), built-in JSON → Parquet/ORC conversion, no shards. Triggers: \"near-real-time into S3\", \"no servers or shards\", \"convert to Parquet\".",
+  "why_not": "Kinesis Data Streams needs your own consumer and shard management; SQS is a queue for decoupling, not delivery to S3; EMR/Spark Streaming is a manually managed cluster.",
   "keywords": [
     "Kinesis Data Firehose",
     "near-real-time",
     "Parquet",
     "format conversion",
     "no shards",
-    "доставка в S3",
-    "без управления шардами"
+    "delivery to S3",
+    "no shard management"
   ],
   "services": [
     "firehose",

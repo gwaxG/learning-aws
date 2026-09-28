@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "Высокая доступность: ASG и ALB в нескольких AZ",
-  "tests": "Как спроектировать веб-слой, переживающий отказ целой Availability Zone.",
-  "expected": "Auto Scaling group и ALB минимум в двух AZ. Триггеры: «remain available if an entire AZ fails», «Auto Scaling group behind an ALB».",
-  "why_not": "Всё в одной AZ со standby — single point of failure; скрипт перекидывания Elastic IP — хрупко; Multi-AZ RDS не защищает веб-слой.",
+  "concept": "HA: ASG and ALB across multiple AZs",
+  "tests": "How to design a web tier that survives the failure of an entire Availability Zone.",
+  "expected": "Auto Scaling group and ALB in at least two AZs. Triggers: \"remain available if an entire AZ fails\", \"Auto Scaling group behind an ALB\".",
+  "why_not": "Everything in one AZ with a standby — single point of failure; an Elastic IP failover script — brittle; Multi-AZ RDS does not protect the web tier.",
   "keywords": [
     "Multi-AZ",
     "Auto Scaling group",
     "ALB",
     "Availability Zone failure",
     "high availability",
-    "отказ AZ"
+    "AZ failure"
   ],
   "services": [
     "ha",

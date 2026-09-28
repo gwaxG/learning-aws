@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "Aurora Serverless v2: реляционная БД для спайкового/простаивающего трафика",
-  "tests": "Выбор наиболее дешёвой реляционной БД без управления ёмкостью при непредсказуемой нагрузке и долгих простоях.",
-  "expected": "Aurora Serverless v2 — авто-масштабирование ACU, уходит на низкий минимум в простое, оплата за ACU-секунды. Триггеры: «relational», «unpredictable, spiky», «idle overnight», «avoid managing capacity».",
-  "why_not": "Provisioned RDS Multi-AZ платится постоянно; DynamoDB on-demand — не реляционная; Redshift — data warehouse, не OLTP.",
+  "concept": "Aurora Serverless v2: relational DB for spiky/idle traffic",
+  "tests": "Choosing the cheapest relational DB with no capacity management for unpredictable load and long idle periods.",
+  "expected": "Aurora Serverless v2 — auto-scales ACUs, drops to a low minimum when idle, billed per ACU-second. Triggers: \"relational\", \"unpredictable, spiky\", \"idle overnight\", \"avoid managing capacity\".",
+  "why_not": "Provisioned RDS Multi-AZ is paid for constantly; DynamoDB on-demand — not relational; Redshift — a data warehouse, not OLTP.",
   "keywords": [
     "Aurora Serverless v2",
     "ACU",
     "spiky traffic",
     "idle",
     "relational",
-    "минимизировать стоимость"
+    "minimize cost"
   ],
   "services": [
     "aurora-serverless",

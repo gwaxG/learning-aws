@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "KMS: automatic key rotation для customer managed key",
-  "tests": "Централизованное управление ключами с ежегодной ротацией без изменений в приложении.",
-  "expected": "KMS customer managed key с включённой automatic rotation — ежегодно, key ID тот же, старые данные расшифровываются. Триггеры: «rotate annually», «no application changes», «LEAST operational overhead».",
-  "why_not": "Ручная ротация и re-encrypt — большой overhead; SSE-S3 не даёт контроля/аудита политики ротации; хранить ключи в S3 — антипаттерн.",
+  "concept": "KMS: automatic key rotation for a customer managed key",
+  "tests": "Centralized key management with annual rotation and no application changes.",
+  "expected": "KMS customer managed key with automatic rotation enabled: yearly, same key ID, old data still decrypts. Triggers: \"rotate annually\", \"no application changes\", \"LEAST operational overhead\".",
+  "why_not": "Manual rotation and re-encryption are heavy overhead; SSE-S3 gives no control/audit of rotation policy; storing keys in S3 is an anti-pattern.",
   "keywords": [
     "KMS",
     "customer managed key",
     "automatic key rotation",
     "annually",
     "key ID",
-    "без изменений приложения"
+    "no application changes"
   ],
   "services": [
     "kms",

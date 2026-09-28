@@ -1,4 +1,4 @@
-<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Конвейер observability: от источников через CloudWatch и CloudTrail к alarm, действиям и архиву в S3">
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Observability pipeline from sources through CloudWatch and CloudTrail to alarms, actions, and S3 archive">
   <style>
     .src { fill: #1d3150; stroke: #4aa3ff; }
     .cw { fill: #1d3150; stroke: #2ecc71; }
@@ -22,19 +22,19 @@
     </marker>
   </defs>
 
-  <text x="380" y="22" class="hdr">Конвейер observability — телеметрия и аудит</text>
+  <text x="380" y="22" class="hdr">Observability pipeline — telemetry &amp; audit paths</text>
 
   <!-- Sources column -->
-  <text x="80" y="50" class="lane">Источники</text>
-  <rect class="src" x="20" y="62" width="160" height="34" rx="6"/><text class="nodet" x="100" y="84">EC2 + агент CW</text>
+  <text x="80" y="50" class="lane">Sources</text>
+  <rect class="src" x="20" y="62" width="160" height="34" rx="6"/><text class="nodet" x="100" y="84">EC2 + CW agent</text>
   <rect class="src" x="20" y="104" width="160" height="34" rx="6"/><text class="nodet" x="100" y="126">Lambda / ECS</text>
   <rect class="src" x="20" y="146" width="160" height="34" rx="6"/><text class="nodet" x="100" y="168">VPC Flow Logs</text>
   <rect class="src" x="20" y="188" width="160" height="34" rx="6"/><text class="nodet" x="100" y="210">ALB access logs</text>
-  <rect class="src" x="20" y="244" width="160" height="34" rx="6"/><text class="nodet" x="100" y="266">Вызовы AWS API</text>
-  <text class="sub" x="100" y="290">(все сервисы)</text>
+  <rect class="src" x="20" y="244" width="160" height="34" rx="6"/><text class="nodet" x="100" y="266">AWS API activity</text>
+  <text class="sub" x="100" y="290">(all services)</text>
 
   <!-- Ops lane: CloudWatch -->
-  <text x="260" y="50" class="lane">Телеметрия</text>
+  <text x="260" y="50" class="lane">Ops telemetry</text>
   <rect class="cw" x="220" y="62" width="170" height="74" rx="8"/>
   <text class="nodet" x="305" y="86">CloudWatch Logs</text>
   <text class="sub" x="305" y="104">log groups · retention</text>
@@ -47,29 +47,29 @@
   <!-- Alarm -->
   <rect class="cw" x="430" y="105" width="140" height="60" rx="8"/>
   <text class="nodet" x="500" y="130">Alarm</text>
-  <text class="sub" x="500" y="148">порог · N периодов</text>
+  <text class="sub" x="500" y="148">threshold · N periods</text>
 
   <!-- Action targets -->
   <rect class="act" x="610" y="62" width="140" height="40" rx="8"/>
-  <text class="nodet" x="680" y="86">Уведомление SNS</text>
+  <text class="nodet" x="680" y="86">SNS notify</text>
   <rect class="act" x="610" y="112" width="140" height="40" rx="8"/>
   <text class="nodet" x="680" y="136">Auto Scaling</text>
   <rect class="act" x="610" y="162" width="140" height="40" rx="8"/>
-  <text class="nodet" x="680" y="186">Действие Lambda</text>
+  <text class="nodet" x="680" y="186">Lambda action</text>
 
   <!-- Audit lane: CloudTrail -->
-  <text x="260" y="240" class="lane">Аудит</text>
+  <text x="260" y="240" class="lane">Audit path</text>
   <rect class="ct" x="220" y="252" width="170" height="50" rx="8"/>
   <text class="nodet" x="305" y="274">CloudTrail</text>
-  <text class="sub" x="305" y="290">mgmt и data events</text>
+  <text class="sub" x="305" y="290">mgmt &amp; data events</text>
 
   <rect class="arch" x="430" y="244" width="140" height="60" rx="8"/>
-  <text class="nodet" x="500" y="266">Архив S3</text>
-  <text class="sub" x="500" y="282">общий bucket логов</text>
+  <text class="nodet" x="500" y="266">S3 archive</text>
+  <text class="sub" x="500" y="282">central log bucket</text>
   <text class="sub" x="500" y="296">+ KMS · lifecycle</text>
 
   <rect class="act" x="610" y="244" width="140" height="28" rx="6"/>
-  <text class="nodet" x="680" y="262">Запрос Athena</text>
+  <text class="nodet" x="680" y="262">Athena query</text>
   <rect class="act" x="610" y="276" width="140" height="28" rx="6"/>
   <text class="nodet" x="680" y="294">Logs Insights</text>
 

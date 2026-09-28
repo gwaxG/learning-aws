@@ -4,17 +4,16 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "Lambda: provisioned concurrency против cold start",
-  "tests": "Как устранить задержки cold start у чувствительного к латентности API на Lambda с минимумом усилий.",
-  "expected": "Provisioned concurrency держит заранее инициализированные execution environments. Триггеры: «cold starts», «latency spikes», «latency-sensitive endpoint».",
-  "why_not": "Timeout не влияет на инициализацию; больше памяти ускоряет выполнение, но не устраняет cold start стабильно; переход на EC2 — рост операционной нагрузки.",
+  "concept": "Lambda: provisioned concurrency vs cold starts",
+  "tests": "How to eliminate cold-start latency for a latency-sensitive Lambda API with minimal effort.",
+  "expected": "Provisioned concurrency keeps pre-initialized execution environments. Triggers: \"cold starts\", \"latency spikes\", \"latency-sensitive endpoint\".",
+  "why_not": "Timeout does not affect initialization; more memory speeds up execution but does not reliably eliminate cold starts; moving to EC2 — more operational overhead.",
   "keywords": [
     "provisioned concurrency",
     "cold start",
     "Lambda",
     "API Gateway",
-    "latency",
-    "холодный старт"
+    "latency"
   ],
   "services": [
     "lambda",

@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "Macie: обнаружение PII и чувствительных данных в S3",
-  "tests": "Выбор сервиса для автоматического непрерывного поиска PII/номеров карт в S3 с оповещениями.",
-  "expected": "Amazon Macie — ML-классификация содержимого S3 (PII, финансовые данные), findings → EventBridge/Security Hub. Триггеры: «discover sensitive data», «PII», «credit card numbers», «across many S3 buckets».",
-  "why_not": "Config — соответствие конфигурации; GuardDuty — угрозы по логам; CloudTrail — журнал API; никто не анализирует содержимое объектов.",
+  "concept": "Macie: discovering PII and sensitive data in S3",
+  "tests": "Choosing a service for automated, continuous discovery of PII/card numbers in S3 with alerts.",
+  "expected": "Amazon Macie — ML classification of S3 content (PII, financial data), findings → EventBridge/Security Hub. Triggers: \"discover sensitive data\", \"PII\", \"credit card numbers\", \"across many S3 buckets\".",
+  "why_not": "Config — configuration compliance; GuardDuty — threats from logs; CloudTrail — API log; none of them analyzes object contents.",
   "keywords": [
     "Macie",
     "PII",

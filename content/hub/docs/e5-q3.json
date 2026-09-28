@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "SCP: запрет отключения CloudTrail во всех аккаунтах Organizations",
-  "tests": "Какой механизм запрещает действия в member accounts независимо от их собственных IAM-прав.",
-  "expected": "SCP на OU с Deny cloudtrail:StopLogging и cloudtrail:DeleteTrail — ограничивает максимум прав, перекрывает локальные IAM-разрешения. Триггеры: «AWS Organizations», «regardless of the account's own IAM permissions», «prevent any member account».",
-  "why_not": "Permission boundaries — на каждого principal отдельно, легко пропустить; IAM role с deny не покрывает всех; CloudWatch alarm лишь реагирует постфактум, не предотвращает.",
+  "concept": "SCP: deny disabling CloudTrail in all Organizations accounts",
+  "tests": "Which mechanism denies actions in member accounts regardless of their own IAM permissions.",
+  "expected": "SCP on the OU with Deny cloudtrail:StopLogging and cloudtrail:DeleteTrail — caps maximum permissions, overrides local IAM permissions. Triggers: \"AWS Organizations\", \"regardless of the account's own IAM permissions\", \"prevent any member account\".",
+  "why_not": "Permission boundaries are per principal, easy to miss; an IAM role with a deny doesn't cover everyone; a CloudWatch alarm only reacts after the fact, doesn't prevent.",
   "keywords": [
     "SCP",
     "organizational unit",
     "cloudtrail:StopLogging",
     "DeleteTrail",
     "member account",
-    "предотвратить",
+    "prevent",
     "guardrail"
   ],
   "services": [

@@ -5,10 +5,10 @@ import { buildIndex, checkDoc, similarity } from "../scripts/hub-lib.mjs";
 const base = (id, extra = {}) => ({
   id,
   source: { type: "topic", ref: "storage" },
-  concept: "S3 Lifecycle: каскад storage classes",
-  tests: "проверяет lifecycle",
+  concept: "S3 Lifecycle: storage class cascade",
+  tests: "tests lifecycle",
   expected: "Standard → IA → Deep Archive",
-  why_not: "остальные дороже",
+  why_not: "others cost more",
   keywords: ["lifecycle", "Glacier", "retention"],
   services: ["s3-lifecycle", "glacier"],
   topics: ["storage"],
@@ -49,5 +49,5 @@ test("buildIndex merges source questions, computes related and indexes", () => {
   assert.deepEqual(idx.docs[0].related, ["b"]);
   assert.deepEqual(idx.docs[2].related, []);
   assert.deepEqual(idx.byService.sqs, ["u-1"]);
-  assert.equal(idx.byConcept["S3 Lifecycle: каскад storage classes"].length, 2);
+  assert.equal(idx.byConcept["S3 Lifecycle: storage class cascade"].length, 2);
 });

@@ -4,18 +4,18 @@
     "type": "topic",
     "ref": "data-migration"
   },
-  "concept": "EMR: управляемые кластеры Spark/HBase с тонкой настройкой",
-  "tests": "Выбор платформы для петабайтной обработки на долгоживущем кластере Spark/HBase со Spot для task nodes.",
-  "expected": "Amazon EMR — managed Hadoop/Spark/HBase, долгоживущие кластеры, тонкая настройка фреймворков, Spot для task nodes. Триггеры: «petabyte-scale», «long-running cluster», «HBase», «fine-grained tuning», «Spot task nodes».",
-  "why_not": "Glue — serverless ETL без контроля кластера и HBase; Athena — serverless SQL по S3; Managed Flink (KDA) — real-time стриминг.",
+  "concept": "EMR: managed Spark/HBase clusters with fine-grained tuning",
+  "tests": "Choosing a platform for petabyte-scale processing on a long-running Spark/HBase cluster with Spot for task nodes.",
+  "expected": "Amazon EMR — managed Hadoop/Spark/HBase, long-running clusters, fine-grained framework tuning, Spot for task nodes. Triggers: \"petabyte-scale\", \"long-running cluster\", \"HBase\", \"fine-grained tuning\", \"Spot task nodes\".",
+  "why_not": "Glue is serverless ETL without cluster control or HBase; Athena is serverless SQL on S3; Managed Flink (KDA) is real-time streaming.",
   "keywords": [
     "EMR",
     "Spark",
     "HBase",
     "Spot task nodes",
     "petabyte-scale",
-    "долгоживущий кластер",
-    "тонкая настройка"
+    "long-running cluster",
+    "fine-grained tuning"
   ],
   "services": [
     "emr",

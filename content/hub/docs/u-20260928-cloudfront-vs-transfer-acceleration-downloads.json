@@ -1,0 +1,47 @@
+{
+  "id": "u-20260928-cloudfront-vs-transfer-acceleration-downloads",
+  "source": {
+    "type": "user",
+    "added": "2026-09-28"
+  },
+  "question": {
+    "stem": "A global company has deployed numerous AWS Outposts servers in various remote locations worldwide. These servers frequently need to download software updates consisting of multiple files from an S3 bucket in the `us-west-2` region. The company is experiencing significant delays in distributing these updates across all servers.\nWhat solution would most effectively reduce the deployment latency while minimizing operational overhead?",
+    "options": [
+      "Set up AWS Global Accelerator to route traffic from Outposts servers to the nearest AWS edge location, then use private VIF connections to access the S3 bucket in `us-west-2`.",
+      "Use Amazon S3 Transfer Acceleration on the existing S3 bucket and have the Outposts servers use the Transfer Acceleration endpoint for downloads.",
+      "Set up an Amazon CloudFront distribution with the `us-west-2` S3 bucket as the primary origin and create a secondary origin in another region, implementing a `CachingDisabled` cache policy. Use signed URLs for downloads.",
+      "Create an Amazon CloudFront distribution with the `us-west-2` S3 bucket as the origin. Use signed URLs for software downloads."
+    ],
+    "answer": 3,
+    "explanation": "Many servers worldwide repeatedly download the same files → a CDN. CloudFront with the S3 bucket as origin caches the update files at edge locations near each Outpost; after the first request in a region the rest are served from the edge cache with low latency, and signed URLs keep the downloads private. It is fully managed — minimal overhead. S3 Transfer Acceleration speeds up individual transfers over the AWS backbone (mainly used for uploads) but has no caching, so every server still pulls every file from us-west-2. Global Accelerator doesn't support S3 as an endpoint and private VIFs require Direct Connect — complex and not applicable. CachingDisabled removes the whole point of CloudFront, and a secondary origin in another Region adds cross-Region replication to manage."
+  },
+  "concept": "CloudFront: cache repeated downloads at the edge (vs S3 Transfer Acceleration)",
+  "tests": "Choosing CloudFront caching for many repeated global downloads of the same S3 objects, versus Transfer Acceleration, Global Accelerator or disabling caching.",
+  "expected": "CloudFront distribution with the S3 bucket as origin + signed URLs. Triggers: \"many servers worldwide\", \"frequently download the same files\", \"reduce latency\", \"minimal overhead\" → CloudFront caching.",
+  "why_not": "Transfer Acceleration has no cache (each download goes to us-west-2) and targets uploads; Global Accelerator can't front S3 and private VIF needs Direct Connect; CachingDisabled + secondary origin defeats caching and adds overhead.",
+  "keywords": [
+    "CloudFront",
+    "edge caching",
+    "S3 origin",
+    "signed URLs",
+    "S3 Transfer Acceleration",
+    "Global Accelerator",
+    "Outposts",
+    "software updates",
+    "CachingDisabled"
+  ],
+  "services": [
+    "cloudfront",
+    "s3-performance",
+    "global-accelerator",
+    "outposts"
+  ],
+  "topics": [
+    "edge-dns",
+    "storage"
+  ],
+  "domain": 3,
+  "related": [
+    "u-20260927-s3-cloudfront-static-global"
+  ]
+}

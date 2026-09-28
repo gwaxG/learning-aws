@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "EBS: шифрование по умолчанию на уровне аккаунта/региона",
-  "tests": "Как гарантировать шифрование всех новых EBS-томов в регионе без ручных действий разработчиков.",
-  "expected": "Включить EBS encryption by default в настройках аккаунта для региона — все новые тома и snapshot-копии шифруются автоматически. Триггеры: «by default», «without relying on developers».",
-  "why_not": "Tag policy не форсирует шифрование; SCP на ec2:RunInstances просто блокирует запуск; ручное шифрование — ошибки и не автоматично.",
+  "concept": "EBS: encryption by default at account/region level",
+  "tests": "How to guarantee encryption of all new EBS volumes in a region without manual action by developers.",
+  "expected": "Enable EBS encryption by default in the account settings for the region — all new volumes and snapshot copies are encrypted automatically. Triggers: \"by default\", \"without relying on developers\".",
+  "why_not": "A tag policy does not enforce encryption; an SCP on ec2:RunInstances just blocks launches; manual encryption — error-prone and not automatic.",
   "keywords": [
     "EBS encryption by default",
     "account setting",
     "region",
     "KMS",
-    "по умолчанию",
-    "без участия разработчиков"
+    "by default",
+    "no developer involvement"
   ],
   "services": [
     "ebs",

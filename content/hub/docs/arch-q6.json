@@ -4,18 +4,18 @@
     "type": "topic",
     "ref": "architecture"
   },
-  "concept": "SQS: decoupling и буферизация пиков между сервисами",
-  "tests": "Умение развязать синхронную цепочку сервисов очередью, чтобы пики не терялись и компоненты масштабировались независимо.",
-  "expected": "SQS-очередь между order и fulfillment, потребитель читает в своём темпе (масштабирование по глубине очереди), DLQ для poison messages. Триггеры: «синхронный вызов медленного сервиса», «пики перегружают», «заказы теряются», «масштабироваться независимо».",
-  "why_not": "Увеличение HTTP timeout сохраняет связанность и держит ресурсы; один большой EC2 связывает масштабирование и отказы; retries без backoff вызывают retry storm.",
+  "concept": "SQS: decoupling and buffering spikes between services",
+  "tests": "Decoupling a synchronous service chain with a queue so spikes are not lost and components scale independently.",
+  "expected": "SQS queue between order and fulfillment; the consumer reads at its own pace (scaling on queue depth), DLQ for poison messages. Triggers: \"synchronous call to a slow service\", \"spikes overload it\", \"orders are lost\", \"scale independently\".",
+  "why_not": "Raising the HTTP timeout keeps the coupling and holds resources; one big EC2 couples scaling and failures; retries without backoff cause a retry storm.",
   "keywords": [
     "SQS",
     "decoupling",
     "dead-letter queue",
     "back-pressure",
     "queue depth",
-    "пики трафика",
-    "масштабироваться независимо"
+    "traffic spikes",
+    "scale independently"
   ],
   "services": [
     "sqs",

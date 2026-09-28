@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "DR-стратегии: warm standby — уменьшенная полная копия",
-  "tests": "Распознавание warm standby: во втором регионе работает уменьшенная, но полностью функциональная копия.",
-  "expected": "Warm standby — scaled-down fully functional environment, быстро масштабируется при failover; низкие RTO/RPO при умеренной цене. Триггеры: «scaled-down but fully functional copy», «quickly scale up».",
-  "why_not": "Backup and restore — медленно; pilot light — только ядро; single-region — нет DR.",
+  "concept": "DR strategies: warm standby — scaled-down full copy",
+  "tests": "Recognizing warm standby: a scaled-down but fully functional copy runs in the second region.",
+  "expected": "Warm standby — scaled-down fully functional environment that scales up quickly on failover; low RTO/RPO at moderate cost. Triggers: \"scaled-down but fully functional copy\", \"quickly scale up\".",
+  "why_not": "Backup and restore — slow; pilot light — core only; single-region — no DR.",
   "keywords": [
     "warm standby",
     "disaster recovery",
@@ -15,7 +15,7 @@
     "fully functional",
     "low RTO",
     "RPO",
-    "уменьшенная копия"
+    "scaled-down copy"
   ],
   "services": [
     "dr-strategies",

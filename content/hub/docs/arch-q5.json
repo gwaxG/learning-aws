@@ -4,18 +4,18 @@
     "type": "topic",
     "ref": "architecture"
   },
-  "concept": "Batch-обработка в S3: Glue (serverless Spark) + Athena",
-  "tests": "Различение batch и streaming обработки и выбор serverless-инструментов для ночной агрегации терабайтов логов в S3.",
-  "expected": "AWS Glue (serverless Spark) для трансформации + Athena для запросов к результатам. Триггеры: «раз в ночь», «терабайты уже в S3», «latency не критична», «минимум управления кластером», «cost-effective».",
-  "why_not": "Kinesis + Lambda — для неограниченных real-time потоков, не для переработки истории; сканы DynamoDB на ТБ дорогие и медленные; один EC2 с cron не масштабируется и требует управления сервером.",
+  "concept": "Batch processing in S3: Glue (serverless Spark) + Athena",
+  "tests": "Distinguishing batch from streaming processing and choosing serverless tools for nightly aggregation of terabytes of logs in S3.",
+  "expected": "AWS Glue (serverless Spark) for transformation + Athena to query the results. Triggers: \"once a night\", \"terabytes already in S3\", \"latency not critical\", \"minimal cluster management\", \"cost-effective\".",
+  "why_not": "Kinesis + Lambda is for unbounded real-time streams, not reprocessing history; DynamoDB scans over TBs are expensive and slow; a single EC2 with cron does not scale and requires server management.",
   "keywords": [
     "batch processing",
     "AWS Glue",
     "Athena",
     "serverless Spark",
     "clickstream",
-    "раз в ночь",
-    "минимальное управление кластером"
+    "once a night",
+    "minimal cluster management"
   ],
   "services": [
     "glue",

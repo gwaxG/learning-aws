@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "storage"
   },
-  "concept": "S3: SSE-KMS с customer-managed key — аудит и контроль доступа к ключу",
-  "tests": "Выбор варианта шифрования S3 с аудитом каждого использования ключа и тонким контролем расшифровки, включая cross-account.",
-  "expected": "SSE-KMS с customer-managed key: каждый Decrypt логируется в CloudTrail, доступ управляется key policy (в т.ч. cross-account). Для экономии — S3 Bucket Keys. Триггеры: «auditable trail of every key use», «who can decrypt», «cross-account».",
-  "why_not": "SSE-S3 без аудита на уровне запросов и без контроля по ключу; SSE-C — ключи передаются в каждом запросе, нет аудита KMS; захардкоженный ключ небезопасен.",
+  "concept": "S3: SSE-KMS with customer managed key — audit and key access control",
+  "tests": "Choosing S3 encryption with an audit of every key use and fine-grained decryption control, including cross-account.",
+  "expected": "SSE-KMS with a customer managed key: every Decrypt is logged in CloudTrail, access is governed by the key policy (including cross-account). To save cost — S3 Bucket Keys. Triggers: \"auditable trail of every key use\", \"who can decrypt\", \"cross-account\".",
+  "why_not": "SSE-S3 has no request-level audit and no per-key control; SSE-C passes keys in every request with no KMS audit; a hardcoded key is insecure.",
   "keywords": [
     "SSE-KMS",
     "customer managed key",
@@ -16,7 +16,7 @@
     "cross-account",
     "SSE-S3",
     "SSE-C",
-    "аудит использования ключа"
+    "key usage audit"
   ],
   "services": [
     "kms",

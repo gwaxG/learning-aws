@@ -1,0 +1,46 @@
+{
+  "id": "u-20260927-nlb-elastic-ip-whitelisting",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "A company has developed public APIs hosted in Amazon EC2 instances behind an Elastic Load Balancer. The APIs will be used by various clients from respective on-premises data centers. A Solutions Architect received a report that the web service clients can only access trusted IP addresses whitelisted on the web service’s firewalls.\nWhat should be done to accomplish the above requirement?",
+    "options": [
+      "Create an Amazon CloudFront distribution whose origin points to the private IP addresses of your web servers.",
+      "Associate an Elastic IP address to an Application Load Balancer.",
+      "Associate an Elastic IP address to a Network Load Balancer.",
+      "Configure General Purpose SSD volumes on the load balancer nodes to provide static IP addresses."
+    ],
+    "answer": 2,
+    "explanation": "Clients' firewalls only allow whitelisted destination IPs, so the API endpoint needs fixed IP addresses. A Network Load Balancer supports assigning one Elastic IP per enabled AZ (subnet mapping), giving static IPs clients can whitelist. An ALB's IPs change as it scales and it cannot take an Elastic IP (put an NLB in front of the ALB or use Global Accelerator if L7 features are needed). CloudFront can't use private IPs as a custom origin (origins must be publicly reachable) and its own edge IPs are numerous and changing. EBS/gp2/gp3 volumes are storage — they have nothing to do with IP addresses, and you can't configure load balancer nodes."
+  },
+  "concept": "ELB: NLB with Elastic IPs for client IP whitelisting",
+  "tests": "Knowing which load balancer can have static Elastic IPs so clients can whitelist the endpoint.",
+  "expected": "Associate Elastic IPs with a Network Load Balancer (one per AZ). Triggers: \"whitelist / allowlist IPs on firewall\", \"static IP\" + load balancer → NLB with EIP (or Global Accelerator for 2 anycast IPs).",
+  "why_not": "ALB can't have an Elastic IP (its IPs change); CloudFront can't point to private IPs and its edge IPs aren't fixed; SSD volumes are storage, unrelated to IPs.",
+  "keywords": [
+    "Network Load Balancer",
+    "Elastic IP",
+    "static IP",
+    "whitelist",
+    "allowlist",
+    "firewall",
+    "ALB",
+    "Global Accelerator"
+  ],
+  "services": [
+    "elb",
+    "global-accelerator",
+    "cloudfront"
+  ],
+  "topics": [
+    "ec2-compute",
+    "vpc-networking"
+  ],
+  "domain": 3,
+  "related": [
+    "ec2-q3",
+    "e3-q49"
+  ]
+}

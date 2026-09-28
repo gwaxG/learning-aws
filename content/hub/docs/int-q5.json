@@ -4,17 +4,17 @@
     "type": "topic",
     "ref": "integration"
   },
-  "concept": "SQS: visibility timeout и ChangeMessageVisibility",
-  "tests": "Понимание, почему сообщение обрабатывается повторно другим consumer и как это предотвратить.",
-  "expected": "Увеличить visibility timeout очереди и/или вызывать ChangeMessageVisibility, продлевая таймаут во время долгой обработки. Триггеры: «takes longer», «picked up by a second consumer before the first finishes».",
-  "why_not": "Short polling меняет лишь способ выборки, не видимость; retention period определяет время жизни необработанных сообщений и не связан с дублями.",
+  "concept": "SQS: visibility timeout and ChangeMessageVisibility",
+  "tests": "Understanding why a message is reprocessed by another consumer and how to prevent it.",
+  "expected": "Increase the queue's visibility timeout and/or call ChangeMessageVisibility to extend it during long processing. Triggers: \"takes longer\", \"picked up by a second consumer before the first finishes\".",
+  "why_not": "Short polling only changes how messages are fetched, not visibility; the retention period defines how long unprocessed messages live and is unrelated to duplicates.",
   "keywords": [
     "visibility timeout",
     "ChangeMessageVisibility",
     "duplicate processing",
     "SQS",
     "consumer",
-    "повторная обработка"
+    "reprocessing"
   ],
   "services": [
     "sqs"

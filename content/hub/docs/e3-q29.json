@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "DynamoDB Global Tables: active-active запись в нескольких регионах",
-  "tests": "Выбор БД для глобальных профилей с single-digit ms чтением и записью в нескольких регионах.",
-  "expected": "DynamoDB global tables — multi-region, active-active репликация, миллисекундная латентность. Триггеры: «globally distributed», «reads and writes in multiple regions», «single-digit-millisecond».",
-  "why_not": "RDS Multi-AZ — один регион; ElastiCache в одном регионе — нет multi-region записи; Redshift — аналитика.",
+  "concept": "DynamoDB Global Tables: active-active writes in multiple regions",
+  "tests": "Choosing a DB for global profiles with single-digit ms reads and writes in multiple regions.",
+  "expected": "DynamoDB global tables — multi-region, active-active replication, millisecond latency. Triggers: \"globally distributed\", \"reads and writes in multiple regions\", \"single-digit-millisecond\".",
+  "why_not": "RDS Multi-AZ — single region; ElastiCache in one region — no multi-region writes; Redshift — analytics.",
   "keywords": [
     "DynamoDB global tables",
     "multi-region",
     "active-active",
     "single-digit millisecond",
     "user profiles",
-    "запись в нескольких регионах"
+    "multi-region writes"
   ],
   "services": [
     "dynamodb-global",

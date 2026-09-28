@@ -1,0 +1,49 @@
+{
+  "id": "u-20260928-network-firewall-layered-vpc",
+  "source": {
+    "type": "user",
+    "added": "2026-09-28"
+  },
+  "question": {
+    "stem": "A solutions architect is designing a three-tier website that will be hosted on an Amazon EC2 Auto Scaling group fronted by an Internet-facing Application Load Balancer (ALB). The website will persist data to an Amazon Aurora Serverless DB cluster, which will also be used for generating monthly reports.\nThe company requires a network topology that follows a layered approach to reduce the impact of misconfigured security groups or network access lists. Web filtering must also be enabled to automatically stop traffic to known malicious URLs and to immediately drop requests coming from blacklisted fully qualified domain names (FQDNs).\nWhich network topology provides the minimum resources needed for the website to work?",
+    "options": [
+      "Set up an Application Load Balancer deployed in a public subnet, then host the Auto Scaling Group of EC2 instances and the Aurora Serverless DB cluster in private subnets. Launch an AWS Network Firewall with the appropriate firewall policy to automatically stop traffic to known malicious URLs and drop requests coming from blacklisted FQDNs. Reroute your Amazon VPC network traffic through the firewall endpoints.",
+      "Set up an Application Load Balancer and a NAT Gateway deployed in public subnets. Launch the Auto Scaling Group of EC2 instances and Aurora Serverless DB cluster in private subnets. Directly integrate the AWS Network Firewall with the Application Load Balancer to automatically stop traffic to known malicious URLs and drop requests coming from blacklisted FQDNs.",
+      "Set up an Application Load Balancer in front of an Auto Scaling group of EC2 instances with an Aurora Serverless DB cluster to persist data. Launch a NAT Gateway in a public subnet to restrict external services from initiating a connection to the EC2 instances and immediately drop requests from unauthorized FQDNs. Deploy all other resources in private subnets.",
+      "Set up an Auto Scaling group of EC2 instances behind an Application Load Balancer with an Aurora Serverless DB cluster to store application data. Deploy all resources in a public subnet. Configure host-based routing to the Application Load Balancer to stop traffic to known malicious URLs and drop requests from blacklisted FQDNs."
+    ],
+    "answer": 0,
+    "explanation": "Minimum working three-tier layout: only the internet-facing ALB sits in public subnets; the EC2 Auto Scaling group and Aurora Serverless live in private subnets. AWS Network Firewall is deployed into its own firewall subnets and VPC route tables are changed to send traffic through the firewall endpoints; its stateful rule groups do domain-list (FQDN) filtering and Suricata-compatible URL/threat blocking — an extra inspection layer independent of SGs/NACLs (defense in depth). Option 2 adds a NAT Gateway the website doesn't need and claims Network Firewall integrates directly with an ALB — it doesn't, it works through routing. A NAT Gateway (option 3) only provides outbound internet for private subnets; it does no filtering of FQDNs or URLs. Option 4 puts everything, including the database, in public subnets, and ALB host-based routing forwards by Host header — it's not a threat-filtering feature."
+  },
+  "concept": "Network Firewall: layered VPC filtering (FQDN/URL) via route-table redirection",
+  "tests": "Designing a minimal three-tier VPC and adding AWS Network Firewall for FQDN/URL filtering as a defense-in-depth layer beyond SGs and NACLs.",
+  "expected": "ALB in public subnets, EC2 ASG + Aurora in private subnets, AWS Network Firewall in firewall subnets with VPC traffic routed through its endpoints. Triggers: \"layered approach\", \"misconfigured SGs/NACLs\", \"malicious URLs\", \"blacklisted FQDNs\" → Network Firewall.",
+  "why_not": "NAT Gateway isn't needed and Network Firewall doesn't attach to an ALB; NAT Gateway doesn't filter domains; public DB and ALB host-based routing are not security filtering.",
+  "keywords": [
+    "AWS Network Firewall",
+    "FQDN filtering",
+    "domain list",
+    "malicious URLs",
+    "defense in depth",
+    "layered security",
+    "firewall endpoints",
+    "route table",
+    "NAT Gateway",
+    "three-tier"
+  ],
+  "services": [
+    "network-firewall",
+    "subnets",
+    "elb",
+    "nat-gateway",
+    "aurora-serverless"
+  ],
+  "topics": [
+    "vpc-networking",
+    "iam-security"
+  ],
+  "domain": 1,
+  "related": [
+    "u-20260927-intra-vpc-sg-nacl"
+  ]
+}

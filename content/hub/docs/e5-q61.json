@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "Systems Manager Patch Manager: патчинг флота по расписанию",
-  "tests": "Какой сервис автоматизирует установку патчей на EC2 по расписанию с отчётом о соответствии.",
-  "expected": "AWS Systems Manager Patch Manager — patch baselines, maintenance windows, compliance reporting. Триггеры: «apply patches on a schedule», «track compliance», «avoid custom tooling».",
-  "why_not": "CodeDeploy — деплой кода приложений; EC2 Image Builder — golden AMI, не патчинг работающего флота; Lambda — самописный инструментарий.",
+  "concept": "Systems Manager Patch Manager: scheduled fleet patching",
+  "tests": "Which service automates scheduled patching of EC2 with compliance reporting.",
+  "expected": "AWS Systems Manager Patch Manager — patch baselines, maintenance windows, compliance reporting. Triggers: \"apply patches on a schedule\", \"track compliance\", \"avoid custom tooling\".",
+  "why_not": "CodeDeploy — application code deployment; EC2 Image Builder — golden AMIs, not patching a running fleet; Lambda — custom tooling.",
   "keywords": [
     "Patch Manager",
     "Systems Manager",
     "maintenance windows",
     "patch baseline",
     "compliance",
-    "патчи"
+    "patches"
   ],
   "services": [
     "systems-manager",

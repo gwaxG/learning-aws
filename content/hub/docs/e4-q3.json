@@ -4,16 +4,16 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "CloudTrail: аудит API-вызовов KMS — кто и когда расшифровал",
-  "tests": "Какой сервис фиксирует, кто и когда вызывал KMS Decrypt для объектов SSE-KMS.",
-  "expected": "AWS CloudTrail — логирует API-вызовы KMS (Decrypt) с principal, временем и ключом. Триггеры: «prove who decrypted and when», «compliance audits», SSE-KMS.",
-  "why_not": "Config — состояние конфигурации, не отдельные API-вызовы; Macie ищет чувствительные данные; Inspector — уязвимости.",
+  "concept": "CloudTrail: auditing KMS API calls (who decrypted and when)",
+  "tests": "Which service records who called KMS Decrypt and when for SSE-KMS objects.",
+  "expected": "AWS CloudTrail logs KMS API calls (Decrypt) with principal, time and key. Triggers: \"prove who decrypted and when\", \"compliance audits\", SSE-KMS.",
+  "why_not": "Config is configuration state, not individual API calls; Macie finds sensitive data; Inspector is vulnerabilities.",
   "keywords": [
     "CloudTrail",
     "KMS Decrypt",
     "SSE-KMS",
     "audit",
-    "кто и когда",
+    "who and when",
     "API calls"
   ],
   "services": [

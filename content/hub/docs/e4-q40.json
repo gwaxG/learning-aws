@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "EC2 Purchasing: Compute Savings Plans — скидка с гибкостью семейства",
-  "tests": "Выбор модели покупки для стабильной 24/7 нагрузки на 3 года с возможностью менять семейство инстансов.",
-  "expected": "3-year Compute Savings Plan — глубокая скидка, применяется к любым семействам, размерам, регионам, а также Fargate/Lambda. Триггеры: «steady 24/7 baseline», «three years», «flexibility to change instance family».",
-  "why_not": "On-Demand — самый дорогой для постоянной нагрузки; Spot — для прерываемых задач; Standard RI привязан к семейству инстансов.",
+  "concept": "EC2 purchasing: Compute Savings Plans — discount with family flexibility",
+  "tests": "Choosing a purchase model for a steady 24/7 load over 3 years with the ability to change instance family.",
+  "expected": "3-year Compute Savings Plan: deep discount that applies to any family, size, Region, plus Fargate/Lambda. Triggers: \"steady 24/7 baseline\", \"three years\", \"flexibility to change instance family\".",
+  "why_not": "On-Demand is the most expensive for a constant load; Spot is for interruptible jobs; a Standard RI is tied to an instance family.",
   "keywords": [
     "Compute Savings Plans",
     "3-year",

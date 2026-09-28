@@ -1,0 +1,43 @@
+{
+  "id": "u-20260928-lambda-edge-webp-jpeg",
+  "source": {
+    "type": "user",
+    "added": "2026-09-28"
+  },
+  "question": {
+    "stem": "A media company wants to ensure that the images it delivers through Amazon CloudFront are compatible across various user devices. The company plans to serve images in WebP format to user agents that support it and return to JPEG format for those that don’t. Additionally, the company wants to add a custom header to the response for tracking purposes.\nAs a solution architect, what approach would one recommend to meet these requirements while minimizing operational overhead?",
+    "options": [
+      "Create multiple CloudFront distributions, each serving a specific image format (WebP or JPEG). Route incoming requests based on the User-Agent header to the respective distribution using Amazon Route 53.",
+      "Configure CloudFront behaviors to handle different image formats based on the User-Agent header. Use Lambda@Edge functions to modify the response headers and serve the appropriate format.",
+      "Implement an image conversion service on Amazon EC2 instances and integrate it with CloudFront. Use AWS Lambda functions to modify the response headers and serve the appropriate format based on the User-Agent header.",
+      "Generate a CloudFront response headers policy. Utilize the policy to deliver the suitable image format according to the User-Agent HTTP header in the incoming request."
+    ],
+    "answer": 1,
+    "explanation": "Lambda@Edge runs code at CloudFront edge locations on viewer/origin request and response events: on the request it inspects User-Agent/Accept and rewrites the URI to the .webp or .jpg object (and the header can be part of the cache key so each variant is cached separately); on the response it adds the custom tracking header. Fully managed, no servers. Route 53 routes by DNS and never sees HTTP headers like User-Agent, and multiple distributions add management. An EC2 conversion fleet is operational overhead, and a regular Lambda can't sit inline in CloudFront. A response headers policy can add or override response headers (e.g. the tracking header, CORS, security headers) but cannot choose which image format to serve based on the request."
+  },
+  "concept": "CloudFront Lambda@Edge: content negotiation by header + custom response header",
+  "tests": "Choosing Lambda@Edge for request-based content selection (WebP vs JPEG by User-Agent) and response header modification, vs response headers policy, Route 53 or EC2.",
+  "expected": "CloudFront behaviors + Lambda@Edge: on viewer/origin request pick WebP or JPEG from User-Agent/Accept, on response add the custom header. Triggers: \"serve different content by User-Agent\", \"modify headers\", \"minimal overhead\" → Lambda@Edge (CloudFront Functions for very light header-only logic).",
+  "why_not": "Route 53 can't see HTTP headers and multiple distributions add overhead; EC2 conversion service is heavy and plain Lambda isn't inline with CloudFront; response headers policy only adds/overrides headers, it can't choose the image format.",
+  "keywords": [
+    "Lambda@Edge",
+    "CloudFront Functions",
+    "User-Agent",
+    "WebP",
+    "content negotiation",
+    "response headers policy",
+    "custom header",
+    "CloudFront behavior"
+  ],
+  "services": [
+    "cloudfront",
+    "lambda",
+    "route53"
+  ],
+  "topics": [
+    "edge-dns",
+    "serverless-containers"
+  ],
+  "domain": 3,
+  "related": []
+}

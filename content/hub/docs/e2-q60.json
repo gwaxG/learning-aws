@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "Route 53: latency/geoproximity routing + health checks с failover",
-  "tests": "Комбинация Route 53 для направления пользователей в ближайший здоровый регион и авто-переключения при отказе.",
-  "expected": "Latency-based или geoproximity routing records (ближайший регион) + Route 53 health checks с failover routing (переключение на вторичный регион). Триггеры: «nearest healthy regional endpoint», «automatically fail over to another region».",
-  "why_not": "Weighted со статическими весами не учитывает латентность/здоровье; private hosted zone — внутренний DNS; simple routing без health-based failover.",
+  "concept": "Route 53: latency/geoproximity routing + health checks with failover",
+  "tests": "The Route 53 combination to send users to the nearest healthy Region and fail over automatically.",
+  "expected": "Latency-based or geoproximity routing records (nearest Region) + Route 53 health checks with failover routing (switch to the secondary Region). Triggers: \"nearest healthy regional endpoint\", \"automatically fail over to another region\".",
+  "why_not": "Weighted with static weights ignores latency/health; a private hosted zone — internal DNS; simple routing has no health-based failover.",
   "keywords": [
     "Route 53",
     "latency-based routing",

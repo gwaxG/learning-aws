@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "RDS Read Replicas: масштабирование чтения vs Multi-AZ",
-  "tests": "Как масштабировать read-нагрузку RDS MySQL с минимальными изменениями приложения и отличие replicas от Multi-AZ.",
-  "expected": "Добавить RDS read replicas и направить чтения на их endpoints. Триггеры: «read-heavy», «scale read capacity», «minimal application changes».",
-  "why_not": "Multi-AZ standby не обслуживает чтения — это failover; вертикальный рост ограничен; миграция на DynamoDB — большая переделка.",
+  "concept": "RDS Read Replicas: scaling reads vs Multi-AZ",
+  "tests": "How to scale RDS MySQL read load with minimal application changes, and how replicas differ from Multi-AZ.",
+  "expected": "Add RDS read replicas and point reads at their endpoints. Triggers: \"read-heavy\", \"scale read capacity\", \"minimal application changes\".",
+  "why_not": "The Multi-AZ standby doesn't serve reads — it's for failover; vertical scaling is limited; migrating to DynamoDB is a major rewrite.",
   "keywords": [
     "read replicas",
     "read-heavy",

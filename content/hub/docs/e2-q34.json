@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "IAM Identity Center: SSO через корпоративный IdP (SAML)",
-  "tests": "Как дать сотрудникам вход в AWS с корпоративными учётками AD и временным ролевым доступом.",
-  "expected": "IAM Identity Center, федерированный с корпоративным IdP/AD по SAML 2.0 (или через AD Connector); пользователи получают permission sets → временные креды ролей. Триггеры: «existing corporate Active Directory credentials», «temporary access mapped to roles», «single sign-on».",
-  "why_not": "IAM users на каждого — дублирование identity и нагрузка; рассылка access keys и общий root — грубые анти-паттерны.",
+  "concept": "IAM Identity Center: SSO via the corporate IdP (SAML)",
+  "tests": "How to let employees sign in to AWS with corporate AD credentials and get temporary role-based access.",
+  "expected": "IAM Identity Center federated with the corporate IdP/AD via SAML 2.0 (or via AD Connector); users get permission sets → temporary role credentials. Triggers: \"existing corporate Active Directory credentials\", \"temporary access mapped to roles\", \"single sign-on\".",
+  "why_not": "An IAM user per person — duplicated identities and overhead; distributing access keys and a shared root — blatant anti-patterns.",
   "keywords": [
     "IAM Identity Center",
     "SAML",

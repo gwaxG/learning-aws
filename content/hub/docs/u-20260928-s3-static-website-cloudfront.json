@@ -1,0 +1,48 @@
+{
+  "id": "u-20260928-s3-static-website-cloudfront",
+  "source": {
+    "type": "user",
+    "added": "2026-09-28"
+  },
+  "question": {
+    "stem": "A solutions architect is instructed to host a website that consists of HTML, CSS, and some Javascript files. The web pages will display several high-resolution images. The website should have optimal loading times and be able to respond to high request rates.\nWhich of the following architectures can provide the most cost-effective and fastest loading experience?",
+    "options": [
+      "Upload the HTML, CSS, Javascript, and the images in a single bucket. Then enable website hosting. Create a CloudFront distribution and point the domain on the S3 website endpoint.",
+      "Host the website using an Nginx server in an EC2 instance. Upload the images in an S3 bucket. Use CloudFront as a CDN to deliver the images closer to end-users.",
+      "Host the website in an AWS Elastic Beanstalk environment. Upload the images in an S3 bucket. Use CloudFront as a CDN to deliver the images closer to your end-users.",
+      "Launch an Auto Scaling Group using an AMI that has a pre-configured Apache web server, then configure the scaling policy accordingly. Store the images in an Elastic Block Store. Then, point your instance’s endpoint to AWS Global Accelerator."
+    ],
+    "answer": 0,
+    "explanation": "HTML, CSS, JS and images are all static, so no servers are needed: S3 static website hosting serves them at virtually unlimited request rates for cents, and CloudFront in front caches everything (pages and high-resolution images) at edge locations for the fastest load times. The EC2/Nginx and Elastic Beanstalk options run and pay for servers just to serve static files, and only images get the CDN. ASG + Apache + EBS + Global Accelerator is the most expensive, EBS can't be shared across instances, and Global Accelerator doesn't cache."
+  },
+  "concept": "S3 + CloudFront + ACM: serverless static website",
+  "tests": "Recognizing a purely static website and choosing S3 website hosting + CloudFront over server-based options.",
+  "expected": "All static files in S3 with website hosting, CloudFront in front, domain pointed to CloudFront. Triggers: \"HTML, CSS, JavaScript\", \"images\", \"high request rates\", \"cost-effective, fastest\" → S3 + CloudFront, no servers.",
+  "why_not": "EC2/Nginx and Beanstalk pay for servers for static content; ASG + EBS + Global Accelerator is costliest, EBS isn't shared and GA has no cache.",
+  "keywords": [
+    "static website",
+    "S3 website hosting",
+    "CloudFront",
+    "HTML CSS JavaScript",
+    "high request rate",
+    "cost-effective",
+    "Global Accelerator",
+    "Elastic Beanstalk"
+  ],
+  "services": [
+    "s3",
+    "cloudfront",
+    "global-accelerator",
+    "elastic-beanstalk"
+  ],
+  "topics": [
+    "edge-dns",
+    "storage",
+    "cost"
+  ],
+  "domain": 4,
+  "related": [
+    "e2-q57",
+    "u-20260927-s3-cloudfront-static-global"
+  ]
+}

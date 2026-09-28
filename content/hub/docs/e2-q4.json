@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "IAM: cross-account role с external ID для третьей стороны",
-  "tests": "Безопасная выдача доступа стороннему AWS-аккаунту (SaaS) к ресурсу без передачи долгоживущих ключей.",
-  "expected": "Cross-account IAM role с trust policy на аккаунт провайдера + External ID; провайдер делает sts:AssumeRole и получает временные креды. External ID защищает от confused deputy. Триггеры: «third-party», «without sharing long-term credentials».",
-  "why_not": "IAM user с access keys — долгоживущие секреты; публичный бакет с фильтром по IP — риск утечки; встраивать креды в Lambda — плохая практика.",
+  "concept": "IAM: cross-account role with an external ID for a third party",
+  "tests": "Securely granting a third-party AWS account (SaaS) access to a resource without handing over long-lived keys.",
+  "expected": "Cross-account IAM role with a trust policy for the provider's account + External ID; the provider calls sts:AssumeRole and gets temporary credentials. The External ID protects against the confused deputy problem. Triggers: \"third-party\", \"without sharing long-term credentials\".",
+  "why_not": "IAM user with access keys — long-lived secrets; a public bucket with an IP filter — leak risk; embedding credentials in Lambda — bad practice.",
   "keywords": [
     "cross-account role",
     "external ID",
     "confused deputy",
     "AssumeRole",
     "third-party",
-    "временные креды"
+    "temporary credentials"
   ],
   "services": [
     "iam",

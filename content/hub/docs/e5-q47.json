@@ -4,16 +4,16 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "Snow Family: офлайн-перенос сотен ТБ при медленном канале",
-  "tests": "Выбор способа перенести сотни терабайт в S3, когда интернет-канал слишком медленный.",
-  "expected": "AWS Snowball Edge — физическая доставка устройств в AWS. Триггеры: «hundreds of terabytes», «internet connection is too slow», «reasonable time», разовая миграция.",
-  "why_not": "DataSync и multipart upload упираются в тот же медленный канал; Direct Connect — месяцы на подключение, избыточно для разового переноса.",
+  "concept": "Snow Family: offline transfer of hundreds of TB over a slow link",
+  "tests": "Choosing how to move hundreds of terabytes to S3 when the internet link is too slow.",
+  "expected": "AWS Snowball Edge — physical devices shipped to AWS. Triggers: \"hundreds of terabytes\", \"internet connection is too slow\", \"reasonable time\", one-time migration.",
+  "why_not": "DataSync and multipart upload are bottlenecked by the same slow link; Direct Connect takes months to provision, overkill for a one-time transfer.",
   "keywords": [
     "Snowball Edge",
     "offline transfer",
     "hundreds of TB",
     "slow internet",
-    "медленный канал",
+    "slow link",
     "bulk migration"
   ],
   "services": [

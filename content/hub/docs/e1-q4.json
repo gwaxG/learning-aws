@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "RDS: read replicas для масштабирования чтения",
-  "tests": "Отличие read replicas от Multi-AZ при read-heavy нагрузке с высокой CPU на primary.",
-  "expected": "Добавить RDS read replicas и направить на них чтение — это разгружает primary. Триггеры: «read-heavy», «high CPU on primary», «improve read performance».",
-  "why_not": "Multi-AZ — для failover, standby не обслуживает чтение; backup retention и больший объём storage не влияют на CPU при чтении.",
+  "concept": "RDS Read Replicas: scaling reads",
+  "tests": "How read replicas differ from Multi-AZ under a read-heavy workload with high CPU on the primary.",
+  "expected": "Add RDS read replicas and route reads to them — this offloads the primary. Triggers: \"read-heavy\", \"high CPU on primary\", \"improve read performance\".",
+  "why_not": "Multi-AZ — for failover, the standby doesn't serve reads; backup retention and more storage don't affect read CPU.",
   "keywords": [
     "read replicas",
     "read-heavy",
     "Multi-AZ",
     "standby",
-    "масштабирование чтения",
-    "нагрузка на CPU primary"
+    "read scaling",
+    "primary CPU load"
   ],
   "services": [
     "read-replicas",

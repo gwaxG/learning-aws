@@ -4,18 +4,18 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "SQS: буферизация запросов при недоступности downstream (loose coupling)",
-  "tests": "Какой паттерн позволяет продолжать работу, когда зависимость временно недоступна.",
-  "expected": "SQS queue буферизует запросы, обработка асинхронная — consumer догонит после восстановления. Триггеры: «downstream dependency temporarily unavailable», «buffering requests», «loose coupling».",
-  "why_not": "Синхронный REST и прямые TCP-соединения падают вместе с зависимостью; общая таблица с поллингом — хрупкая тесная связанность.",
+  "concept": "SQS: buffer requests when downstream is unavailable (loose coupling)",
+  "tests": "Which pattern keeps the system working while a dependency is temporarily unavailable.",
+  "expected": "An SQS queue buffers requests, processing is asynchronous — the consumer catches up after recovery. Triggers: \"downstream dependency temporarily unavailable\", \"buffering requests\", \"loose coupling\".",
+  "why_not": "Synchronous REST and direct TCP connections fail along with the dependency; a shared table with polling is fragile tight coupling.",
   "keywords": [
     "SQS",
     "buffering",
     "loose coupling",
     "asynchronous",
     "decouple",
-    "буфер",
-    "недоступность зависимости"
+    "buffer",
+    "dependency unavailable"
   ],
   "services": [
     "sqs",

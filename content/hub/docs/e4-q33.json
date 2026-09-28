@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "API Gateway + Lambda: serverless REST API с автоскейлингом",
-  "tests": "Выбор фронтового сервиса для REST API, который сам масштабируется под всплески без управления серверами.",
-  "expected": "Amazon API Gateway + Lambda — полностью managed, автоматически масштабируется, без серверов. Триггеры: «REST API», «automatically scale to handle bursts», «free of server management».",
-  "why_not": "Один EC2 — не HA и не масштабируется; on-prem LB не эластичен; EC2 Auto Scaling всё равно требует управления инстансами.",
+  "concept": "API Gateway + Lambda: serverless REST API with auto scaling",
+  "tests": "Choosing a front-door service for a REST API that scales for bursts on its own with no server management.",
+  "expected": "Amazon API Gateway + Lambda: fully managed, scales automatically, no servers. Triggers: \"REST API\", \"automatically scale to handle bursts\", \"free of server management\".",
+  "why_not": "A single EC2 isn't HA and doesn't scale; an on-prem LB isn't elastic; EC2 Auto Scaling still means managing instances.",
   "keywords": [
     "API Gateway",
     "Lambda",
     "REST API",
     "serverless",
     "bursts",
-    "без управления серверами"
+    "no server management"
   ],
   "services": [
     "api-gateway",

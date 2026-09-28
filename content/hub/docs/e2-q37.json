@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "CloudFront + WAF: низкая латентность и защита от DDoS/веб-эксплойтов",
-  "tests": "Комбинация для доставки контента с минимальной латентностью и защиты origin от DDoS и атак L7.",
-  "expected": "CloudFront перед origin (edge-кэш, встроенный Shield Standard) + AWS WAF на distribution (SQLi, XSS, rate-based rules). Триггеры: «lowest latency», «protect origin from DDoS», «common web exploits».",
-  "why_not": "Один большой EC2 origin не даёт ни латентности, ни защиты; Cognito — аутентификация; Direct Connect — приватная связность, не доставка контента.",
+  "concept": "CloudFront + WAF: low latency and DDoS/web-exploit protection",
+  "tests": "The combination for delivering content with minimal latency and protecting the origin from DDoS and L7 attacks.",
+  "expected": "CloudFront in front of the origin (edge cache, built-in Shield Standard) + AWS WAF on the distribution (SQLi, XSS, rate-based rules). Triggers: \"lowest latency\", \"protect origin from DDoS\", \"common web exploits\".",
+  "why_not": "A single large EC2 origin gives neither latency nor protection; Cognito — authentication; Direct Connect — private connectivity, not content delivery.",
   "keywords": [
     "CloudFront",
     "AWS WAF",

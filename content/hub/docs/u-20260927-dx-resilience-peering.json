@@ -1,0 +1,55 @@
+{
+  "id": "u-20260927-dx-resilience-peering",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "A media company has two VPCs: VPC-1 and VPC-2 with peering connection between each other. VPC-1 only contains private subnets, while VPC-2 only contains public subnets. The company uses a single AWS Direct Connect connection and a virtual interface to connect its on-premises network with VPC-1.\nWhich of the following options increases the fault tolerance of the connection to VPC-1? (Select TWO.)",
+    "options": [
+      "Use the AWS VPN CloudHub to create a new Direct Connect connection and private virtual interface in the same region as VPC-2.",
+      "Establish a hardware VPN over the Internet between VPC-1 and the on-premises network.",
+      "Establish a separate Direct Connect connection and private virtual interface in the same AWS region as VPC-1.",
+      "Establish a hardware VPN over the Internet between VPC-2 and the on-premises network.",
+      "Establish a separate Direct Connect connection and private virtual interface in the same AWS Region as VPC-2."
+    ],
+    "answer": [
+      1,
+      2
+    ],
+    "explanation": "Redundancy for the on-prem → VPC-1 link must terminate on VPC-1 itself: either a Site-to-Site (hardware) VPN to VPC-1's virtual private gateway as a backup path, or a second Direct Connect connection + private VIF to VPC-1. Anything that lands in VPC-2 does not help: VPC peering has no transitive / edge-to-edge routing, so on-prem traffic arriving in VPC-2 over VPN or DX cannot continue through the peering connection to VPC-1. VPN CloudHub is a hub-and-spoke VPN model for connecting branch sites via a VGW — it does not create Direct Connect connections."
+  },
+  "concept": "Direct Connect HA: backup path (second DX or VPN) to the same VPC; peering is not transitive",
+  "tests": "How to make a single Direct Connect link to a VPC fault tolerant, and knowing that a path into a peered VPC can't be used to reach the other VPC.",
+  "expected": "A second DX connection + private VIF to VPC-1, and/or a Site-to-Site VPN to VPC-1 as backup. Triggers: \"single Direct Connect\", \"increase fault tolerance\", \"peering\" between VPCs → the backup must terminate on the same VPC; peering has no edge-to-edge routing.",
+  "why_not": "DX or VPN into VPC-2 can't reach VPC-1 through peering (no transitive / edge-to-edge routing); VPN CloudHub doesn't create Direct Connect connections — it's VPN hub-and-spoke between branch offices.",
+  "keywords": [
+    "Direct Connect",
+    "fault tolerance",
+    "redundant connection",
+    "backup VPN",
+    "Site-to-Site VPN",
+    "private VIF",
+    "VPC peering",
+    "non-transitive",
+    "edge-to-edge routing",
+    "VPN CloudHub"
+  ],
+  "services": [
+    "direct-connect",
+    "site-to-site-vpn",
+    "vpc-peering",
+    "ha"
+  ],
+  "topics": [
+    "vpc-networking",
+    "ha-dr"
+  ],
+  "domain": 2,
+  "related": [
+    "vpc-q5",
+    "e1-q33",
+    "e4-q7",
+    "vpc-q4"
+  ]
+}

@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "SQS FIFO: строгий порядок и exactly-once processing",
-  "tests": "Какая очередь гарантирует порядок сообщений и exactly-once обработку для финансовых транзакций.",
-  "expected": "SQS FIFO queue — порядок в пределах message group и exactly-once processing (дедупликация). Триггеры: «strict ordering», «exactly-once», «financial transactions».",
-  "why_not": "SQS standard — at-least-once и best-effort ordering; SNS standard — без гарантии порядка; Firehose — доставка в хранилища, не транзакционные сообщения.",
+  "concept": "SQS FIFO: strict ordering and exactly-once processing",
+  "tests": "Which queue guarantees message ordering and exactly-once processing for financial transactions.",
+  "expected": "SQS FIFO queue — ordering within a message group and exactly-once processing (deduplication). Triggers: \"strict ordering\", \"exactly-once\", \"financial transactions\".",
+  "why_not": "SQS standard — at-least-once and best-effort ordering; SNS standard — no ordering guarantee; Firehose — delivery to storage, not transactional messaging.",
   "keywords": [
     "SQS FIFO",
     "exactly-once",
     "ordering",
     "message group",
     "deduplication",
-    "строгий порядок"
+    "strict ordering"
   ],
   "services": [
     "sqs-fifo",

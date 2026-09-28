@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "EBS: Provisioned IOPS SSD (io1/io2) для транзакционных БД",
-  "tests": "Выбор типа EBS volume для высоконагруженной транзакционной БД со стабильно высоким IOPS.",
-  "expected": "Provisioned IOPS SSD (io1/io2) — гарантированные высокие IOPS и низкая задержка. Триггеры: «high-transaction database», «consistent high IOPS», «low-latency block storage».",
-  "why_not": "gp2 — baseline IOPS зависит от размера и не гарантирует нужную производительность; st1 — throughput HDD; sc1 — холодное хранение.",
+  "concept": "EBS: Provisioned IOPS SSD (io1/io2) for transactional DBs",
+  "tests": "Choosing an EBS volume type for a high-load transactional DB with consistently high IOPS.",
+  "expected": "Provisioned IOPS SSD (io1/io2) — guaranteed high IOPS and low latency. Triggers: \"high-transaction database\", \"consistent high IOPS\", \"low-latency block storage\".",
+  "why_not": "gp2 — baseline IOPS depends on size and doesn't guarantee the required performance; st1 — throughput HDD; sc1 — cold storage.",
   "keywords": [
     "Provisioned IOPS",
     "io2",
@@ -16,7 +16,7 @@
     "st1",
     "sc1",
     "IOPS",
-    "транзакционная БД"
+    "transactional database"
   ],
   "services": [
     "ebs"

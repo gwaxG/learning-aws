@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "serverless-containers"
   },
-  "concept": "ECS на EC2 + Spot/Savings Plans для постоянной высокой нагрузки",
-  "tests": "Выбор самого дешёвого compute для контейнеров при стабильной 24/7 высокой загрузке, если команда готова управлять инфраструктурой.",
-  "expected": "ECS on EC2 launch type со Spot Instances или Compute Savings Plans — минимальная цена за единицу при постоянной загрузке. Триггеры: «steady, high CPU 24/7», «lowest possible compute cost», «willing to manage infrastructure».",
-  "why_not": "Lambda ограничена 15 минутами и дорога при постоянном большом объёме; Fargate (ECS или EKS) снимает эксплуатацию, но с наценкой относительно оптимизированного EC2.",
+  "concept": "ECS on EC2 + Spot/Savings Plans for constant high load",
+  "tests": "Choosing the cheapest container compute for steady 24/7 high utilization when the team is willing to manage infrastructure.",
+  "expected": "ECS on the EC2 launch type with Spot Instances or Compute Savings Plans — lowest unit price at constant utilization. Triggers: \"steady, high CPU 24/7\", \"lowest possible compute cost\", \"willing to manage infrastructure\".",
+  "why_not": "Lambda is limited to 15 minutes and expensive at constant high volume; Fargate (ECS or EKS) removes operations but at a premium over optimized EC2.",
   "keywords": [
     "ECS on EC2",
     "Spot Instances",
@@ -15,7 +15,7 @@
     "Fargate",
     "steady-state",
     "24/7",
-    "минимальная стоимость"
+    "lowest cost"
   ],
   "services": [
     "ecs",

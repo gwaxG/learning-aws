@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "Organizations SCP: guardrail ограничения регионов",
-  "tests": "Как принудительно запретить действия вне разрешённого региона во всех аккаунтах организации.",
-  "expected": "SCP на root/OU с Deny для EC2 вне eu-west-1 (условие aws:RequestedRegion) — guardrail, который не может обойти никакая IAM policy. Триггеры: «across all accounts in AWS Organization», «only in region X», «enforce».",
-  "why_not": "IAM policies и permissions boundaries — per-principal, легко пропустить/ошибиться; AWS Config лишь обнаруживает постфактум, не предотвращает.",
+  "concept": "Organizations SCP: Region restriction guardrail",
+  "tests": "How to forcibly deny actions outside the allowed Region across all accounts in the organization.",
+  "expected": "An SCP on the root/OU with Deny for EC2 outside eu-west-1 (aws:RequestedRegion condition) — a guardrail no IAM policy can bypass. Triggers: \"across all accounts in AWS Organization\", \"only in region X\", \"enforce\".",
+  "why_not": "IAM policies and permissions boundaries — per-principal, easy to miss or get wrong; AWS Config only detects after the fact, doesn't prevent.",
   "keywords": [
     "SCP",
     "region restriction",

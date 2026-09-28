@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "PrivateLink: endpoint service на NLB для доступа из других VPC",
-  "tests": "Как приватно опубликовать один сервис для потребителей из других VPC/аккаунтов без peering и интернета.",
-  "expected": "AWS PrivateLink: endpoint service за Network Load Balancer, потребители создают interface endpoints. Работает при пересекающихся CIDR. Триггеры: «expose a service», «other VPCs and accounts», «without VPC peering», «not exposed to internet».",
-  "why_not": "Transit Gateway соединяет сети целиком, а не публикует один сервис; public ALB выставляет в интернет; peering с каждой VPC не масштабируется и открывает всю сеть.",
+  "concept": "PrivateLink: NLB-backed endpoint service for access from other VPCs",
+  "tests": "How to privately expose a single service to consumers in other VPCs/accounts without peering or the internet.",
+  "expected": "AWS PrivateLink: an endpoint service behind a Network Load Balancer; consumers create interface endpoints. Works with overlapping CIDRs. Triggers: \"expose a service\", \"other VPCs and accounts\", \"without VPC peering\", \"not exposed to internet\".",
+  "why_not": "Transit Gateway connects whole networks rather than exposing one service; a public ALB exposes it to the internet; peering with every VPC doesn't scale and opens the whole network.",
   "keywords": [
     "PrivateLink",
     "endpoint service",
     "Network Load Balancer",
     "interface endpoint",
     "cross-account",
-    "без peering"
+    "no peering"
   ],
   "services": [
     "privatelink",

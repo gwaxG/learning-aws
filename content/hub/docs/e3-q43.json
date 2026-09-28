@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "Snowball Edge: офлайн-перенос больших объёмов данных",
-  "tests": "Выбор способа миграции 200 ТБ, когда передача по сети заняла бы месяцы.",
-  "expected": "AWS Snowball Edge — физическая доставка устройства. Триггеры: «200 TB», «internet link would take months».",
-  "why_not": "DataSync и Transfer Acceleration упираются в тот же медленный канал; Direct Connect 1 Gbps — недели на подключение и долгая передача.",
+  "concept": "Snowball Edge: offline transfer of large data volumes",
+  "tests": "Choosing a way to migrate 200 TB when a network transfer would take months.",
+  "expected": "AWS Snowball Edge — physical shipping of a device. Triggers: \"200 TB\", \"internet link would take months\".",
+  "why_not": "DataSync and Transfer Acceleration hit the same slow link; Direct Connect 1 Gbps — weeks to provision plus a long transfer.",
   "keywords": [
     "Snowball Edge",
     "offline transfer",
     "200 TB",
     "limited bandwidth",
     "data migration",
-    "месяцы по сети"
+    "months over the network"
   ],
   "services": [
     "snow-family",

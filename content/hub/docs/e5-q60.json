@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "CloudWatch Logs: централизованные логи приложений, metric filters, dashboards",
-  "tests": "Выбор сервиса для централизованного поиска по логам EC2 и Lambda с metric filters и дашбордами.",
-  "expected": "Amazon CloudWatch Logs (CloudWatch agent на EC2, Lambda пишет автоматически) + metric filters, alarms, dashboards, Logs Insights. Триггеры: «centralized, searchable application logs», «metric filters and dashboards».",
-  "why_not": "CloudTrail — API-активность, не логи приложений; S3 server access logs — только запросы к S3; X-Ray — трассировка, не агрегация логов.",
+  "concept": "CloudWatch Logs: centralized app logs, metric filters, dashboards",
+  "tests": "Choosing a service for centralized search over EC2 and Lambda logs with metric filters and dashboards.",
+  "expected": "Amazon CloudWatch Logs (CloudWatch agent on EC2, Lambda writes automatically) + metric filters, alarms, dashboards, Logs Insights. Triggers: \"centralized, searchable application logs\", \"metric filters and dashboards\".",
+  "why_not": "CloudTrail — API activity, not application logs; S3 server access logs — S3 requests only; X-Ray — tracing, not log aggregation.",
   "keywords": [
     "CloudWatch Logs",
     "metric filters",
     "dashboards",
     "application logs",
     "CloudWatch agent",
-    "централизованные логи"
+    "centralized logs"
   ],
   "services": [
     "cloudwatch-logs",

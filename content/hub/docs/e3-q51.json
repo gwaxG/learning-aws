@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "S3 Lifecycle: transition и expiration без кода",
-  "tests": "Как с минимумом операционной работы переводить объекты в дешёвый класс через 90 дней и удалять через год.",
-  "expected": "S3 Lifecycle policy: transition rule (90 дней → IA/Glacier) + expiration rule (365 дней). Триггеры: «move to cheaper tier», «deleted after one year», «least operational».",
-  "why_not": "Custom Lambda, EC2 cron и ручное удаление — лишний код, нагрузка и риск ошибок.",
+  "concept": "S3 Lifecycle: transition and expiration without code",
+  "tests": "How to move objects to a cheaper class after 90 days and delete them after a year with minimal operational work.",
+  "expected": "S3 Lifecycle policy: transition rule (90 days → IA/Glacier) + expiration rule (365 days). Triggers: \"move to cheaper tier\", \"deleted after one year\", \"least operational\".",
+  "why_not": "Custom Lambda, EC2 cron and manual deletion — extra code, overhead and risk of errors.",
   "keywords": [
     "S3 Lifecycle",
     "transition",
     "expiration",
     "90 days",
     "one year",
-    "автоматическое удаление"
+    "automatic deletion"
   ],
   "services": [
     "s3-lifecycle",

@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "Organizations: SCP и consolidated billing для множества аккаунтов",
-  "tests": "Какой сервис централизованно управляет guardrails (SCP) и объединённым биллингом для сотен аккаунтов.",
-  "expected": "AWS Organizations с Service Control Policies: OU, consolidated billing, SCP как ограничители прав. Триггеры: «hundreds of accounts», «service control policies», «consolidate billing».",
-  "why_not": "IAM Identity Center — вход пользователей, не guardrails; Config aggregator — сбор конфигураций; VPC sharing — сеть, не управление аккаунтами.",
+  "concept": "Organizations: SCPs and consolidated billing for many accounts",
+  "tests": "Which service centrally manages guardrails (SCPs) and consolidated billing for hundreds of accounts.",
+  "expected": "AWS Organizations with Service Control Policies: OUs, consolidated billing, SCPs as permission guardrails. Triggers: \"hundreds of accounts\", \"service control policies\", \"consolidate billing\".",
+  "why_not": "IAM Identity Center — user sign-in, not guardrails; Config aggregator — collects configurations; VPC sharing — networking, not account management.",
   "keywords": [
     "AWS Organizations",
     "SCP",

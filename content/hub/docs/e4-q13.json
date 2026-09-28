@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "Inspector: сканирование уязвимостей EC2 и container images",
-  "tests": "Выбор сервиса для автоматического поиска уязвимостей ПО и сетевой доступности EC2/контейнеров.",
-  "expected": "Amazon Inspector — непрерывно сканирует EC2 и образы в ECR на CVE и network reachability. Триггеры: «software vulnerabilities», «container images», «unintended network exposure».",
-  "why_not": "GuardDuty — угрозы по логам; Config — compliance конфигураций; Macie — чувствительные данные в S3.",
+  "concept": "Inspector: vulnerability scanning for EC2 and container images",
+  "tests": "Choosing a service to automatically find software vulnerabilities and network exposure of EC2/containers.",
+  "expected": "Amazon Inspector continuously scans EC2 and ECR images for CVEs and network reachability. Triggers: \"software vulnerabilities\", \"container images\", \"unintended network exposure\".",
+  "why_not": "GuardDuty is log-based threat detection; Config is configuration compliance; Macie finds sensitive data in S3.",
   "keywords": [
     "Inspector",
     "vulnerabilities",

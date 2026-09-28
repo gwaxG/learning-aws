@@ -1,0 +1,46 @@
+{
+  "id": "u-20260927-s3-sse-s3-request-header",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "All objects uploaded to an Amazon S3 bucket must be encrypted for security compliance. The bucket will use server-side encryption with Amazon S3-Managed encryption keys (SSE-S3) to encrypt data using 256-bit Advanced Encryption Standard (AES-256) block cipher.\nWhich of the following request headers must be used?",
+    "options": [
+      "`x-amz-server-side-encryption-customer-algorithm`",
+      "`x-amz-server-side-encryption-customer-key`",
+      "`x-amz-server-side-encryption-customer-key-MD5`",
+      "`x-amz-server-side-encryption`"
+    ],
+    "answer": 3,
+    "explanation": "SSE-S3 is requested with the single header `x-amz-server-side-encryption: AES256` (for SSE-KMS the value is `aws:kms`, optionally with `x-amz-server-side-encryption-aws-kms-key-id`). The three `-customer-*` headers belong to SSE-C, where the client supplies its own key on every request: `-customer-algorithm` (AES256), `-customer-key` (base64 key) and `-customer-key-MD5` (integrity check of the key). Note: since 2023 S3 applies SSE-S3 by default to all new objects, but the header is still how a request explicitly asks for it (and what a bucket policy can enforce)."
+  },
+  "concept": "S3 encryption: request headers — SSE-S3 / SSE-KMS vs SSE-C",
+  "tests": "Knowing which PUT request header selects SSE-S3 versus the SSE-C customer-key headers.",
+  "expected": "`x-amz-server-side-encryption` with value `AES256`. Triggers: \"SSE-S3\", \"S3-managed keys\", \"AES-256\" → this header; anything with `-customer-` = SSE-C.",
+  "why_not": "All three `x-amz-server-side-encryption-customer-*` headers are for SSE-C (customer-provided key, algorithm and key MD5), not SSE-S3.",
+  "keywords": [
+    "x-amz-server-side-encryption",
+    "AES256",
+    "SSE-S3",
+    "SSE-C",
+    "SSE-KMS",
+    "aws:kms",
+    "request header",
+    "customer-provided key"
+  ],
+  "services": [
+    "s3-security",
+    "encryption",
+    "kms"
+  ],
+  "topics": [
+    "storage",
+    "iam-security"
+  ],
+  "domain": 1,
+  "related": [
+    "e5-q2",
+    "e5-q10"
+  ]
+}

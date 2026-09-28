@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "databases"
   },
-  "concept": "ElastiCache Redis Multi-AZ + lazy loading: HA-кэш",
-  "tests": "Выбор движка кэша с репликацией и автоматическим failover плюс стратегии кэширования (выбрать два).",
-  "expected": "ElastiCache for Redis с Multi-AZ (автоматический failover) + lazy loading (cache-aside). Триггеры: «repeatedly queries same data», «microsecond reads», «HA и автоматический failover для кэша».",
-  "why_not": "Memcached без репликации и failover — не HA; Redshift — OLAP, не кэш для приложения.",
+  "concept": "ElastiCache Redis Multi-AZ + lazy loading: HA cache",
+  "tests": "Choosing a cache engine with replication and automatic failover plus a caching strategy (choose two).",
+  "expected": "ElastiCache for Redis with Multi-AZ (automatic failover) + lazy loading (cache-aside). Triggers: \"repeatedly queries same data\", \"microsecond reads\", \"HA and automatic failover for the cache\".",
+  "why_not": "Memcached has no replication or failover — not HA; Redshift is OLAP, not an application cache.",
   "keywords": [
     "ElastiCache for Redis",
     "Multi-AZ",
@@ -15,7 +15,7 @@
     "cache-aside",
     "Memcached",
     "automatic failover",
-    "повторяющиеся запросы"
+    "repeated queries"
   ],
   "services": [
     "elasticache",

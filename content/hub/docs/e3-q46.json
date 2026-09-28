@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "S3 Intelligent-Tiering: неизвестный паттерн доступа",
-  "tests": "Выбор класса хранения для автоматической оптимизации стоимости при неизвестном и меняющемся доступе без lifecycle-правил.",
-  "expected": "S3 Intelligent-Tiering автоматически перемещает объекты между tier-ами по фактическому доступу. Триггеры: «access patterns unknown and change over time», «without managing lifecycle rules».",
-  "why_not": "Standard не оптимизирует сам; Glacier Flexible Retrieval — для известного архива; One Zone-IA — одна AZ и предполагает редкий доступ.",
+  "concept": "S3 Intelligent-Tiering: unknown access patterns",
+  "tests": "Choosing a storage class for automatic cost optimization with unknown, changing access and no lifecycle rules.",
+  "expected": "S3 Intelligent-Tiering automatically moves objects between tiers based on actual access. Triggers: \"access patterns unknown and change over time\", \"without managing lifecycle rules\".",
+  "why_not": "Standard does not optimize on its own; Glacier Flexible Retrieval — for known archives; One Zone-IA — single AZ and assumes infrequent access.",
   "keywords": [
     "Intelligent-Tiering",
     "unknown access patterns",
     "automatic tiering",
     "cost optimization",
-    "без lifecycle",
-    "меняющийся доступ"
+    "no lifecycle rules",
+    "changing access"
   ],
   "services": [
     "s3-storage-classes",

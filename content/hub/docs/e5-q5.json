@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "IAM: роль через instance profile вместо access keys на EC2",
-  "tests": "Как дать приложению на EC2 доступ к S3 API без хранения долгосрочных credentials на инстансе.",
-  "expected": "Прикрепить IAM role через instance profile — временные, автоматически ротируемые credentials через instance metadata service. Триггеры: «forbids storing long-term credentials», «EC2 needs to call AWS API».",
-  "why_not": "Access keys в user data или env vars — долгоживущие секреты на хосте; root credentials — никогда.",
+  "concept": "IAM: role via instance profile instead of access keys on EC2",
+  "tests": "How to give an app on EC2 access to the S3 API without storing long-term credentials on the instance.",
+  "expected": "Attach an IAM role via an instance profile — temporary, automatically rotated credentials through the instance metadata service. Triggers: \"forbids storing long-term credentials\", \"EC2 needs to call AWS API\".",
+  "why_not": "Access keys in user data or env vars are long-lived secrets on the host; root credentials — never.",
   "keywords": [
     "instance profile",
     "IAM role",
@@ -15,7 +15,7 @@
     "instance metadata",
     "IMDS",
     "long-term credentials",
-    "без ключей"
+    "no access keys"
   ],
   "services": [
     "iam",

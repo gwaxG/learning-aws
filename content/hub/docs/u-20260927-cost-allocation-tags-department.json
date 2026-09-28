@@ -1,0 +1,47 @@
+{
+  "id": "u-20260927-cost-allocation-tags-department",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "A company wants to organize the way it tracks its spending on AWS resources. A report that summarizes the total billing accrued by each department must be generated at the end of the month. The company already uses a Savings Plan for pricing, but that does not break down costs by department.\nWhich solution will meet the requirements?",
+    "options": [
+      "Tag resources with the department name and configure a budget action in AWS Budget.",
+      "Tag resources with the department name and enable cost allocation tags.",
+      "Use AWS Cost Explorer to view spending and filter usage data by Resource.",
+      "Create a Cost and Usage report for AWS services that each department is using."
+    ],
+    "answer": 1,
+    "explanation": "To break down billing by department you tag resources (e.g. Department=Marketing) and activate that tag key as a cost allocation tag in the Billing console. Only activated tags appear as a dimension in Cost Explorer, Budgets and the Cost and Usage Report, so you can group/filter the monthly bill by department. A budget action automatically applies a policy or stops instances when a threshold is hit — it restricts, it doesn't report. Filtering Cost Explorer by resource shows per-resource spend but has no notion of departments without activated tags. A CUR per service lists line items by service, not by department — it also depends on activated cost allocation tags to group by department."
+  },
+  "concept": "Cost allocation tags: tag + activate to break down costs by department",
+  "tests": "Knowing that per-department cost reports need resource tags that are activated as cost allocation tags.",
+  "expected": "Tag resources with the department and activate the tag as a cost allocation tag (then group by it in Cost Explorer/CUR). Triggers: \"report per department / team / project / cost center\", \"break down costs\" → tags + activated cost allocation tags.",
+  "why_not": "Budget actions enforce limits, not reporting; Cost Explorer by resource ≠ by department without tags; CUR by service doesn't group by department on its own — it needs activated tags too.",
+  "keywords": [
+    "cost allocation tags",
+    "activate tags",
+    "department",
+    "chargeback",
+    "Billing console",
+    "Cost Explorer",
+    "CUR",
+    "Budgets",
+    "budget action"
+  ],
+  "services": [
+    "cost-allocation-tags",
+    "budgets",
+    "cost-explorer",
+    "cur"
+  ],
+  "topics": [
+    "cost"
+  ],
+  "domain": 4,
+  "related": [
+    "e2-q51",
+    "e5-q65"
+  ]
+}

@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "S3 Object Lock: compliance mode (WORM, не может удалить даже root)",
-  "tests": "Как хранить логи CloudTrail неизменяемо 7 лет, исключив удаление и изменение.",
-  "expected": "S3 bucket с Object Lock в Compliance mode и retention period — WORM, удалить/изменить нельзя даже root до истечения срока. Триггеры: «immutably», «seven years», «preventing deletion or modification», compliance.",
-  "why_not": "EBS не immutable и привязан к инстансу; CloudWatch Logs с retention 30 дней не покрывает 7 лет; DynamoDB не для неизменяемых архивов логов.",
+  "concept": "S3 Object Lock: compliance mode (WORM, not even root can delete)",
+  "tests": "How to store CloudTrail logs immutably for 7 years, preventing deletion and modification.",
+  "expected": "S3 bucket with Object Lock in Compliance mode and a retention period: WORM, nobody (not even root) can delete/modify until it expires. Triggers: \"immutably\", \"seven years\", \"preventing deletion or modification\", compliance.",
+  "why_not": "EBS isn't immutable and is tied to an instance; CloudWatch Logs with 30-day retention doesn't cover 7 years; DynamoDB isn't for immutable log archives.",
   "keywords": [
     "S3 Object Lock",
     "Compliance mode",
@@ -15,7 +15,7 @@
     "retention period",
     "CloudTrail logs",
     "immutable",
-    "7 лет"
+    "7 years"
   ],
   "services": [
     "s3-security",

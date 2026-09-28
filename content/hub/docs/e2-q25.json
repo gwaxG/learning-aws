@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "SQS: буферизация всплесков между API Gateway и Lambda",
-  "tests": "Как сгладить всплески запросов и защитить downstream БД, когда Lambda упирается в concurrency limit.",
-  "expected": "Поставить SQS очередь между API Gateway и Lambda — развязка скорости приёма и обработки, очередь буферизует пики, БД не перегружается. Триггеры: «throttling», «smooth bursts», «avoid overwhelming downstream database».",
-  "why_not": "Повышение burst limit API Gateway пропускает больше нагрузки, а не сглаживает; provisioned concurrency убирает cold start, но не буферизует; NLB не даёт очереди.",
+  "concept": "SQS: buffering bursts between API Gateway and Lambda",
+  "tests": "How to smooth request bursts and protect the downstream DB when Lambda hits its concurrency limit.",
+  "expected": "Put an SQS queue between API Gateway and Lambda — decouples ingest rate from processing rate; the queue buffers peaks and the DB isn't overwhelmed. Triggers: \"throttling\", \"smooth bursts\", \"avoid overwhelming downstream database\".",
+  "why_not": "Raising the API Gateway burst limit lets more load through instead of smoothing it; provisioned concurrency removes cold starts but doesn't buffer; an NLB provides no queue.",
   "keywords": [
     "SQS",
     "buffer",

@@ -1,0 +1,52 @@
+{
+  "id": "u-20260927-org-sso-ad-connector",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "A startup has multiple AWS accounts that are assigned to its development teams. Since the company is projected to grow rapidly, the management wants to consolidate all of its AWS accounts into a multi-account setup. To simplify the login process on the AWS accounts, the management wants to utilize its existing directory service for user authentication\nWhich combination of actions should a solutions architect recommend to meet these requirements? (Select TWO.)",
+    "options": [
+      "Create Service Control Policies (SCP) in the organization to manage the child accounts. Configure AWS IAM Identity Center (AWS Single Sign-On) to use AWS Directory Service.",
+      "On the master account, use AWS Organizations to create a new organization with all features turned on. Enable the organization’s external authentication and point it to use the company’s directory service.",
+      "On the master account, use AWS Organizations to create a new organization with all features turned on. Invite the child accounts to this new organization.",
+      "Create an identity pool on Amazon Cognito and configure it to use the company’s directory service. Configure AWS IAM Identity Center (AWS Single Sign-On) to accept Cognito authentication.",
+      "Configure AWS IAM Identity Center (AWS Single Sign-On) for the organization and integrate it with the company’s directory service using the Active Directory Connector"
+    ],
+    "answer": [
+      2,
+      4
+    ],
+    "explanation": "Account consolidation = AWS Organizations: create an organization with all features in the management account (required for IAM Identity Center and SCPs) and invite the existing accounts into it. Sign-in via the existing directory = IAM Identity Center connected to the on-prem AD through AD Connector (a proxy; users stay in the corporate AD). An SCP restricts permissions, it is not authentication, and \"use AWS Directory Service\" without AD Connector does not link to the existing directory. Organizations has no \"external authentication\" feature. Cognito identity pools are for application users (B2C); Identity Center does not accept Cognito as an identity source."
+  },
+  "concept": "IAM Identity Center + Organizations: multi-account SSO via AD Connector",
+  "tests": "Combining two steps: consolidating accounts with Organizations (all features, invite) and workforce SSO via IAM Identity Center with the existing directory.",
+  "expected": "Organizations with all features + invite the accounts; IAM Identity Center integrated with the corporate AD via AD Connector. Triggers: \"consolidate accounts / multi-account\" → Organizations; \"existing directory service for login\" → Identity Center + AD Connector.",
+  "why_not": "SCPs govern permissions, not sign-in; \"external authentication\" does not exist in Organizations; Cognito is for application customers, not workforce access to accounts.",
+  "keywords": [
+    "AWS Organizations",
+    "all features",
+    "IAM Identity Center",
+    "AWS SSO",
+    "AD Connector",
+    "existing directory",
+    "multi-account",
+    "consolidate accounts",
+    "sign-in via corporate directory"
+  ],
+  "services": [
+    "identity-center",
+    "organizations",
+    "directory-service",
+    "scp",
+    "cognito"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1,
+  "related": [
+    "e1-q24",
+    "e5-q13"
+  ]
+}

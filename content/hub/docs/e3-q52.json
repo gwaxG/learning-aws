@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "Athena: Parquet и партиционирование для снижения стоимости",
-  "tests": "Какие оптимизации данных уменьшают стоимость и ускоряют запросы Athena.",
-  "expected": "Колоночный формат (Parquet/ORC) + партиционирование по часто фильтруемым колонкам — меньше просканированных байт. Триггеры: «reduce query cost», «improve performance», «Athena».",
-  "why_not": "Несжатый CSV и один большой файл увеличивают объём сканирования; класс хранения не меняет стоимость за скан.",
+  "concept": "Athena: Parquet and partitioning to reduce cost",
+  "tests": "Which data optimizations reduce cost and speed up Athena queries.",
+  "expected": "Columnar format (Parquet/ORC) + partitioning by frequently filtered columns — fewer bytes scanned. Triggers: \"reduce query cost\", \"improve performance\", \"Athena\".",
+  "why_not": "Uncompressed CSV and a single large file increase the amount scanned; storage class does not change the per-scan cost.",
   "keywords": [
     "Athena",
     "Parquet",
     "columnar format",
     "partitioning",
     "data scanned",
-    "снижение стоимости запросов"
+    "lower query cost"
   ],
   "services": [
     "athena",

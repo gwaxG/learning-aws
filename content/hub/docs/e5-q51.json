@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "FSx for Windows File Server: SMB и интеграция с Active Directory",
-  "tests": "Выбор файлового хранилища для Windows-приложений с SMB и Active Directory.",
-  "expected": "Amazon FSx for Windows File Server — управляемые SMB-шары с интеграцией AD. Триггеры: «Windows-based applications», «SMB», «Active Directory».",
-  "why_not": "EFS — NFS для Linux; S3 — объектное хранилище; FSx for Lustre — HPC, не Windows SMB.",
+  "concept": "FSx for Windows File Server: SMB and Active Directory integration",
+  "tests": "Choosing file storage for Windows applications with SMB and Active Directory.",
+  "expected": "Amazon FSx for Windows File Server — managed SMB shares with AD integration. Triggers: \"Windows-based applications\", \"SMB\", \"Active Directory\".",
+  "why_not": "EFS — NFS for Linux; S3 — object storage; FSx for Lustre — HPC, not Windows SMB.",
   "keywords": [
     "FSx for Windows File Server",
     "SMB",
     "Active Directory",
     "Windows",
     "shared file system",
-    "файловые шары"
+    "file shares"
   ],
   "services": [
     "fsx",

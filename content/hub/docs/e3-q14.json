@@ -4,16 +4,16 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "S3 Block Public Access: запрет публичного доступа",
-  "tests": "Как гарантировать, что бакет не станет публичным, какие бы ACL и bucket policy ни добавили позже.",
-  "expected": "S3 Block Public Access на уровне бакета или всего аккаунта перекрывает публичные ACL и политики. Триггеры: «cannot be made public regardless of bucket policies or ACLs».",
-  "why_not": "Versioning защищает от перезаписи; VPC endpoint — сетевой путь; explicit allow в политике — наоборот открывает доступ.",
+  "concept": "S3 Block Public Access: prevent public access",
+  "tests": "How to guarantee a bucket never becomes public, whatever ACLs or bucket policies are added later.",
+  "expected": "S3 Block Public Access at the bucket or whole-account level overrides public ACLs and policies. Triggers: \"cannot be made public regardless of bucket policies or ACLs\".",
+  "why_not": "Versioning protects against overwrites; a VPC endpoint is a network path; an explicit allow in a policy does the opposite — opens access.",
   "keywords": [
     "Block Public Access",
     "account level",
     "ACL",
     "bucket policy",
-    "публичный доступ",
+    "public access",
     "regardless"
   ],
   "services": [

@@ -1,4 +1,4 @@
-<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Топологии репликации: single-leader, multi-leader и leaderless с кворумом">
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Replication topologies: single-leader, multi-leader, and leaderless quorum">
   <style>
     .ttl { fill: #ff9900; font: 700 13px system-ui, sans-serif; text-anchor: middle; }
     .node { fill: #1d3150; stroke: #4aa3ff; }
@@ -21,8 +21,8 @@
   <rect class="node" x="140" y="150" width="90" height="32" rx="6"/><text class="nodet" x="185" y="171">Replica</text>
   <path class="repl" d="M120,104 L82,150"/>
   <path class="repl" d="M150,104 L182,150"/>
-  <text x="130" y="210" class="sub">запись → лидер,</text>
-  <text x="130" y="226" class="sub">чтение масштабируется репликами</text>
+  <text x="130" y="210" class="sub">writes → leader,</text>
+  <text x="130" y="226" class="sub">reads scale on replicas</text>
 
   <!-- Multi-leader -->
   <text x="380" y="30" class="ttl">Multi-leader</text>
@@ -34,17 +34,17 @@
   <path class="repl" d="M385,90 L375,90"/>
   <path class="repl" d="M335,112 L368,160"/>
   <path class="repl" d="M425,112 L392,160"/>
-  <text x="380" y="222" class="sub">запись где угодно; last-writer-wins</text>
-  <text x="380" y="238" class="sub">разрешение конфликтов</text>
+  <text x="380" y="222" class="sub">write anywhere; last-writer-wins</text>
+  <text x="380" y="238" class="sub">conflict resolution</text>
 
   <!-- Leaderless / quorum -->
-  <text x="630" y="30" class="ttl">Leaderless (кворум)</text>
-  <text x="630" y="48" class="sub">напр. в стиле Cassandra</text>
-  <rect class="node" x="585" y="80" width="90" height="32" rx="6"/><text class="nodet" x="630" y="101">Узел 1</text>
-  <rect class="node" x="540" y="150" width="80" height="32" rx="6"/><text class="nodet" x="580" y="171">Узел 2</text>
-  <rect class="node" x="640" y="150" width="80" height="32" rx="6"/><text class="nodet" x="680" y="171">Узел 3</text>
+  <text x="630" y="30" class="ttl">Leaderless (quorum)</text>
+  <text x="630" y="48" class="sub">e.g. Cassandra-style</text>
+  <rect class="node" x="585" y="80" width="90" height="32" rx="6"/><text class="nodet" x="630" y="101">Node 1</text>
+  <rect class="node" x="540" y="150" width="80" height="32" rx="6"/><text class="nodet" x="580" y="171">Node 2</text>
+  <rect class="node" x="640" y="150" width="80" height="32" rx="6"/><text class="nodet" x="680" y="171">Node 3</text>
   <path class="repl" d="M610,112 L590,150"/>
   <path class="repl" d="M650,112 L670,150"/>
-  <text x="630" y="222" class="sub">W + R &gt; N для</text>
+  <text x="630" y="222" class="sub">W + R &gt; N for</text>
   <text x="630" y="238" class="sub">strong consistency</text>
 </svg>

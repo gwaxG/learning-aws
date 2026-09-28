@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "VPC Endpoints: Gateway для S3/DynamoDB и Interface для остальных сервисов",
-  "tests": "Как приватно и дёшево дать доступ к S3, DynamoDB и KMS из приватных подсетей.",
-  "expected": "Gateway endpoints для S3 и DynamoDB (бесплатны, через route table) + interface endpoint (PrivateLink) для KMS — у KMS нет gateway endpoint. Триггеры: «privately», «minimize cost», «keep traffic off the internet», «S3, DynamoDB, KMS».",
-  "why_not": "NAT gateway — трафик через интернет и плата за данные; IGW в приватных подсетях их открывает; Transit Gateway не даёт нативного доступа к AWS-сервисам.",
+  "concept": "VPC endpoints: Gateway for S3/DynamoDB, Interface for other services",
+  "tests": "How to give private subnets private, low-cost access to S3, DynamoDB and KMS.",
+  "expected": "Gateway endpoints for S3 and DynamoDB (free, via route table) + an interface endpoint (PrivateLink) for KMS — KMS has no gateway endpoint. Triggers: \"privately\", \"minimize cost\", \"keep traffic off the internet\", \"S3, DynamoDB, KMS\".",
+  "why_not": "NAT gateway — traffic over the internet and data charges; an IGW in private subnets exposes them; Transit Gateway gives no native access to AWS services.",
   "keywords": [
     "gateway endpoint",
     "interface endpoint",

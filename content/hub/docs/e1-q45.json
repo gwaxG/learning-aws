@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "Redshift: петабайтное хранилище данных для аналитики",
-  "tests": "Выбор сервиса для petabyte-scale data warehouse со сложными аналитическими запросами и join-ами.",
-  "expected": "Amazon Redshift — колоночное MPP-хранилище, оптимизированное для сложной аналитики по огромным структурированным данным. Триггеры: «petabyte-scale data warehouse», «complex analytical queries and joins».",
-  "why_not": "DynamoDB — NoSQL key-value без сложных join; RDS PostgreSQL плохо масштабируется до петабайтной аналитики; ElastiCache — in-memory кэш.",
+  "concept": "Redshift: petabyte-scale data warehouse for analytics",
+  "tests": "Choosing a service for a petabyte-scale data warehouse with complex analytical queries and joins.",
+  "expected": "Amazon Redshift — columnar MPP warehouse optimized for complex analytics over huge structured datasets. Triggers: \"petabyte-scale data warehouse\", \"complex analytical queries and joins\".",
+  "why_not": "DynamoDB — NoSQL key-value without complex joins; RDS PostgreSQL doesn't scale well to petabyte analytics; ElastiCache — in-memory cache.",
   "keywords": [
     "Redshift",
     "data warehouse",
@@ -15,7 +15,7 @@
     "columnar",
     "MPP",
     "OLAP",
-    "аналитические запросы"
+    "analytical queries"
   ],
   "services": [
     "redshift",

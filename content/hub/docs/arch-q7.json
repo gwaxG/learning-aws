@@ -4,18 +4,18 @@
     "type": "topic",
     "ref": "architecture"
   },
-  "concept": "Multi-AZ: ASG за ALB + RDS Multi-AZ против отказа AZ",
-  "tests": "Устранение единой точки отказа всех уровней в одной AZ (выбрать два).",
-  "expected": "(1) App tier в Auto Scaling group на нескольких AZ за ALB; (2) RDS Multi-AZ со standby в другой AZ. Триггеры: «всё в одной Availability Zone», «надёжность при отказе AZ».",
-  "why_not": "Vertical scaling БД оставляет всё в одной AZ — тот же failure domain; instance store эфемерен, состояние теряется при stop/отказе.",
+  "concept": "Multi-AZ: ASG behind ALB + RDS Multi-AZ against AZ failure",
+  "tests": "Eliminating the single point of failure of all tiers in one AZ (choose two).",
+  "expected": "(1) App tier in an Auto Scaling group across multiple AZs behind an ALB; (2) RDS Multi-AZ with a standby in another AZ. Triggers: \"everything in a single Availability Zone\", \"resilience to AZ failure\".",
+  "why_not": "Vertically scaling the DB leaves everything in one AZ — same failure domain; instance store is ephemeral, state is lost on stop/failure.",
   "keywords": [
     "Multi-AZ",
     "Auto Scaling group",
     "ALB",
     "RDS Multi-AZ",
     "single point of failure",
-    "отказ AZ",
-    "одна Availability Zone"
+    "AZ failure",
+    "single Availability Zone"
   ],
   "services": [
     "ha",

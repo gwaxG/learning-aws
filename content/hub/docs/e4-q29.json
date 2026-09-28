@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "DR strategies: multi-site active/active — минимальные RPO/RTO",
-  "tests": "Распознать DR-стратегию, где полная мощность работает в двух регионах с трафиком в оба.",
-  "expected": "Multi-site active/active — полная production-мощность в нескольких регионах обслуживает живой трафик, near-zero RPO/RTO. Триггеры: «full production capacity in two Regions simultaneously», «traffic routed to both», «near-zero RPO and RTO».",
-  "why_not": "Warm standby — уменьшенная копия, масштабируется при failover; pilot light и backup & restore — ещё дольше восстановление.",
+  "concept": "DR strategies: multi-site active/active for minimal RPO/RTO",
+  "tests": "Recognize the DR strategy with full capacity running in two Regions, traffic going to both.",
+  "expected": "Multi-site active/active: full production capacity in several Regions serves live traffic, near-zero RPO/RTO. Triggers: \"full production capacity in two Regions simultaneously\", \"traffic routed to both\", \"near-zero RPO and RTO\".",
+  "why_not": "Warm standby is a scaled-down copy that scales up on failover; pilot light and backup & restore recover even slower.",
   "keywords": [
     "multi-site",
     "active/active",

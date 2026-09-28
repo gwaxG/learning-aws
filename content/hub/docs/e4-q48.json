@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "Fargate: serverless-контейнеры без управления инстансами",
-  "tests": "Выбор launch type для контейнеров без управления мощностью EC2 с оплатой за vCPU и память задач.",
-  "expected": "AWS Fargate — serverless запуск контейнеров, оплата только за запрошенные vCPU и memory. Триггеры: «eliminate EC2 capacity management», «pay only for vCPU and memory their tasks consume».",
-  "why_not": "ECS EC2 launch type и self-managed Kubernetes требуют управлять инстансами; Reserved Instances — модель цены EC2, не serverless.",
+  "concept": "Fargate: serverless containers with no instance management",
+  "tests": "Choosing a launch type for containers with no EC2 capacity management, paying for task vCPU and memory.",
+  "expected": "AWS Fargate: serverless container execution, pay only for requested vCPU and memory. Triggers: \"eliminate EC2 capacity management\", \"pay only for vCPU and memory their tasks consume\".",
+  "why_not": "ECS EC2 launch type and self-managed Kubernetes require managing instances; Reserved Instances are an EC2 pricing model, not serverless.",
   "keywords": [
     "Fargate",
     "launch type",

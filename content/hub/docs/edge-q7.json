@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "edge-dns"
   },
-  "concept": "CloudFront geo-restriction: блокировка по странам",
-  "tests": "Простейший способ разрешить контент только в лицензированных странах при доставке через CloudFront.",
-  "expected": "Включить CloudFront geo-restriction (allow-list лицензированных стран). Триггеры: «права на распространение по странам», «блокировать остальные», «CloudFront».",
-  "why_not": "Route 53 geoproximity — смещение трафика по расстоянию/bias, не блокировка; IAM — для AWS principals, не анонимных зрителей; signed cookies — кому выдан доступ, не страна.",
+  "concept": "CloudFront geo-restriction: block by country",
+  "tests": "The simplest way to allow content only in licensed countries when delivering through CloudFront.",
+  "expected": "Enable CloudFront geo-restriction (allow-list of licensed countries). Triggers: \"distribution rights by country\", \"block the rest\", \"CloudFront\".",
+  "why_not": "Route 53 geoproximity shifts traffic by distance/bias, it does not block; IAM is for AWS principals, not anonymous viewers; signed cookies control who is granted access, not which country.",
   "keywords": [
     "geo-restriction",
     "CloudFront",
@@ -15,7 +15,7 @@
     "countries",
     "geoproximity",
     "signed cookies",
-    "лицензированные страны"
+    "licensed countries"
   ],
   "services": [
     "cloudfront",

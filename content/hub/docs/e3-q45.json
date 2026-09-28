@@ -4,17 +4,16 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "Route 53: latency-based routing с health checks",
-  "tests": "Как направлять пользователей в ближайший здоровый регион с автоматическим failover.",
-  "expected": "Latency-based routing + health checks: пользователь идёт в регион с наименьшей задержкой, нездоровые endpoints исключаются. Триггеры: «nearest healthy regional endpoint», «failing over automatically».",
-  "why_not": "Simple/static record не умеет маршрутизировать по задержке и не делает failover; weighted распределяет по весам, а не по близости.",
+  "concept": "Route 53: latency-based routing with health checks",
+  "tests": "How to route users to the nearest healthy region with automatic failover.",
+  "expected": "Latency-based routing + health checks: users go to the lowest-latency region, unhealthy endpoints are excluded. Triggers: \"nearest healthy regional endpoint\", \"failing over automatically\".",
+  "why_not": "A simple/static record cannot route by latency and does not fail over; weighted distributes by weights, not proximity.",
   "keywords": [
     "latency-based routing",
     "health checks",
     "Route 53",
     "failover",
-    "nearest region",
-    "ближайший регион"
+    "nearest region"
   ],
   "services": [
     "route53",

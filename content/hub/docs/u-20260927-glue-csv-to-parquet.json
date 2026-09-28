@@ -1,0 +1,50 @@
+{
+  "id": "u-20260927-glue-csv-to-parquet",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "An e-commerce company is receiving a large volume of sales data files in .csv format from its external partners on a daily basis. These data files are then stored in an Amazon S3 Bucket for processing and reporting purposes.\nThe company wants to create an automated solution to convert these .csv files into Apache Parquet format and store the output of the processed files in a new S3 bucket called “`tutorialsdojo-data-transformed`”. This new solution is meant to enhance the company’s data processing and analytics workloads while keeping its operating costs low.\nWhich of the following options must be implemented to meet these requirements with the LEAST operational overhead?",
+    "options": [
+      "Utilize an AWS Batch job definition with Bash syntax to convert the .csv files to the Apache Parquet format. Configure the job definition to run automatically whenever a new .csv file is uploaded to the source bucket.",
+      "Integrate Amazon EMR File System (EMRFS) with the source S3 bucket to automatically discover the new data files. Use an Amazon EMR Serverless with Apache Spark to convert the .csv files to the Apache Parquet format and then store the output in the “`tutorialsdojo-data-transformed`” bucket.",
+      "Use AWS Glue crawler to automatically discover the raw data file in S3 as well as check its corresponding schema. Create a scheduled ETL job in AWS Glue that will convert .csv files to Apache Parquet format and store the output of the processed files in the “`tutorialsdojo-data-transformed`” bucket.",
+      "Use Amazon S3 event notifications to trigger an AWS Lambda function that converts .csv files to Apache Parquet format using Apache Spark on an Amazon EMR cluster. Save the processed files to the “`tutorialsdojo-data-transformed`” bucket."
+    ],
+    "answer": 2,
+    "explanation": "AWS Glue is serverless ETL: a crawler discovers new files and infers the CSV schema into the Data Catalog, and a scheduled Glue ETL job (Spark, generated or visual) writes Parquet to the target bucket — no clusters, pay per run, CSV→Parquet is a built-in transform. AWS Batch with Bash means writing and maintaining your own conversion code and containers, and Batch jobs aren't triggered by S3 uploads on their own. EMRFS is just EMR's connector to S3 — it doesn't 'discover' new files or schemas; EMR Serverless still needs Spark code and job management. Lambda + an EMR cluster adds a cluster to run and pay for plus glue code — the most overhead."
+  },
+  "concept": "Glue: serverless ETL with crawlers and Data Catalog",
+  "tests": "Picking the least-overhead serverless way to discover CSV files and convert them to Parquet on a schedule.",
+  "expected": "Glue crawler (schema discovery → Data Catalog) + scheduled Glue ETL job writing Parquet to the new bucket. Triggers: \"convert CSV to Parquet\", \"automated\", \"LEAST operational overhead\", \"low cost\" → AWS Glue.",
+  "why_not": "Batch + Bash = custom code/containers and no native S3 trigger; EMRFS doesn't discover files or schemas and EMR Serverless still needs Spark jobs; Lambda + EMR cluster = cluster to manage and pay for.",
+  "keywords": [
+    "AWS Glue",
+    "Glue crawler",
+    "Glue ETL job",
+    "Data Catalog",
+    "CSV to Parquet",
+    "Apache Parquet",
+    "serverless ETL",
+    "EMRFS",
+    "EMR Serverless"
+  ],
+  "services": [
+    "glue",
+    "emr",
+    "batch",
+    "lambda"
+  ],
+  "topics": [
+    "data-migration",
+    "architecture"
+  ],
+  "domain": 3,
+  "related": [
+    "e1-q39",
+    "e3-q53",
+    "e5-q42",
+    "arch-q5"
+  ]
+}

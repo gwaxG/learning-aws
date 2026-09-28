@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "Stateless веб-слой: вынос сессий в ElastiCache/DynamoDB",
-  "tests": "Где хранить сессии для горизонтально масштабируемого флота, чтобы они переживали замену серверов.",
-  "expected": "Amazon ElastiCache for Redis как общий in-memory session store — низкая латентность, переживает замену инстансов. Триггеры: «session state», «horizontally scaled», «server is replaced», «low-latency shared».",
-  "why_not": "Локальный диск и EBS привязаны к инстансу и теряются; sticky sessions без внешнего хранилища ломаются при удалении target.",
+  "concept": "Stateless web tier: offload sessions to ElastiCache/DynamoDB",
+  "tests": "Where to store sessions for a horizontally scaled fleet so they survive server replacement.",
+  "expected": "Amazon ElastiCache for Redis as a shared in-memory session store: low latency, survives instance replacement. Triggers: \"session state\", \"horizontally scaled\", \"server is replaced\", \"low-latency shared\".",
+  "why_not": "Local disk and EBS are tied to the instance and get lost; sticky sessions without an external store break when a target is removed.",
   "keywords": [
     "session store",
     "ElastiCache for Redis",
     "stateless",
     "horizontal scaling",
     "sticky sessions",
-    "хранение сессий"
+    "session storage"
   ],
   "services": [
     "elasticache",

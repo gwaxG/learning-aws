@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "Kinesis Data Streams: real-time ingestion, несколько consumers и replay",
-  "tests": "Выбор сервиса для потока clickstream с несколькими независимыми потребителями и возможностью повторного чтения.",
-  "expected": "Kinesis Data Streams — высокий объём в реальном времени, несколько независимых consumers, хранение записей для replay в пределах retention. Триггеры: «real-time», «clickstream», «multiple independent consumers», «replay».",
-  "why_not": "SQS удаляет сообщения после обработки, point-to-point; SNS — pub/sub без хранения для replay; Glue — ETL, не real-time ingestion.",
+  "concept": "Kinesis Data Streams: real-time ingestion, multiple consumers and replay",
+  "tests": "Choosing a service for a clickstream with multiple independent consumers and the ability to re-read data.",
+  "expected": "Kinesis Data Streams — high-volume real-time, multiple independent consumers, records retained for replay within the retention period. Triggers: \"real-time\", \"clickstream\", \"multiple independent consumers\", \"replay\".",
+  "why_not": "SQS deletes messages after processing, point-to-point; SNS — pub/sub with no retention for replay; Glue — ETL, not real-time ingestion.",
   "keywords": [
     "Kinesis Data Streams",
     "clickstream",

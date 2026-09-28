@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "ElastiCache Redis: HA хранилище сессий с Multi-AZ и failover",
-  "tests": "Выбор управляемого высокодоступного кэша для session state, переживающего отказ узла.",
-  "expected": "ElastiCache for Redis с репликацией, Multi-AZ и automatic failover — сессии сохраняются при падении узла. Триггеры: «session state», «survive node failures», «highly available caching layer».",
-  "why_not": "Memcached — нет репликации/персистентности; память инстанса теряется при его потере; DynamoDB можно, но это не кэш-слой, который просит вопрос.",
+  "concept": "ElastiCache Redis: HA session store with Multi-AZ and failover",
+  "tests": "Choosing a managed, highly available cache for session state that survives node failure.",
+  "expected": "ElastiCache for Redis with replication, Multi-AZ and automatic failover — sessions survive a node failure. Triggers: \"session state\", \"survive node failures\", \"highly available caching layer\".",
+  "why_not": "Memcached — no replication/persistence; instance memory is lost with the instance; DynamoDB would work, but it isn't the caching layer the question asks for.",
   "keywords": [
     "ElastiCache for Redis",
     "session state",

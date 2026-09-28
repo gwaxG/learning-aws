@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "Aurora Replicas: reader endpoint для масштабирования чтения",
-  "tests": "Как разгрузить writer Aurora от отчётной нагрузки и легко масштабировать чтение.",
-  "expected": "Добавить Aurora Replicas (общий cluster storage) и направить отчёты на reader endpoint. Триггеры: «reporting workload overwhelms the primary», «offload reads», «scale read capacity».",
-  "why_not": "Больший primary не изолирует чтение от записи; отдельный Single-AZ RDS не связан с кластером; NAT Gateway — сетевой egress.",
+  "concept": "Aurora Replicas: reader endpoint for read scaling",
+  "tests": "How to offload reporting from the Aurora writer and scale reads easily.",
+  "expected": "Add Aurora Replicas (shared cluster storage) and point reports at the reader endpoint. Triggers: \"reporting workload overwhelms the primary\", \"offload reads\", \"scale read capacity\".",
+  "why_not": "A bigger primary doesn't isolate reads from writes; a separate Single-AZ RDS isn't tied to the cluster; NAT Gateway is network egress.",
   "keywords": [
     "Aurora Replicas",
     "reader endpoint",

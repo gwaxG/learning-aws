@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "S3 Lifecycle: каскад storage classes под паттерн доступа",
-  "tests": "Подбор цепочки lifecycle transitions под убывающую частоту доступа, требование мгновенного извлечения и долгий срок хранения.",
-  "expected": "Standard 30 дней → Standard-IA на год (мгновенный доступ) → Glacier Deep Archive до 7 лет. Триггеры: «immediately retrievable» ⇒ IA/Instant, «almost never accessed», «kept for 7 years» ⇒ Deep Archive.",
-  "why_not": "Glacier Flexible Retrieval через 30 дней ломает мгновенный доступ; удаление через год нарушает 7-летнее хранение; Intelligent-Tiering на 7 лет дороже Deep Archive для холодных данных.",
+  "concept": "S3 Lifecycle: cascading storage classes to match access patterns",
+  "tests": "Designing a chain of lifecycle transitions for declining access frequency, an instant-retrieval requirement and long retention.",
+  "expected": "Standard for 30 days → Standard-IA for a year (instant access) → Glacier Deep Archive until 7 years. Triggers: \"immediately retrievable\" ⇒ IA/Instant, \"almost never accessed\", \"kept for 7 years\" ⇒ Deep Archive.",
+  "why_not": "Glacier Flexible Retrieval after 30 days breaks instant access; deleting after a year violates 7-year retention; Intelligent-Tiering for 7 years costs more than Deep Archive for cold data.",
   "keywords": [
     "lifecycle",
     "Standard-IA",

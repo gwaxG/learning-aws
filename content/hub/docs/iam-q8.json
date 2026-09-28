@@ -4,17 +4,16 @@
     "type": "topic",
     "ref": "iam-security"
   },
-  "concept": "IAM: защита root user (MFA, без access keys)",
-  "tests": "Знание best practice обращения с root user аккаунта.",
-  "expected": "Включить MFA на root, удалить root access keys, повседневную работу вести через IAM roles/users с least privilege; root — только для редких задач. Триггеры: «root user», «least privilege», «after setting up the account».",
-  "why_not": "Root для ежедневной работы нарушает least privilege; root access keys (даже в Secrets Manager) — опасные долгоживущие credentials; root user удалить невозможно.",
+  "concept": "IAM: protecting the root user (MFA, no access keys)",
+  "tests": "Knowing best practices for handling the account root user.",
+  "expected": "Enable MFA on root, delete root access keys, do daily work through IAM roles/users with least privilege; root only for rare tasks. Triggers: \"root user\", \"least privilege\", \"after setting up the account\".",
+  "why_not": "Using root for daily work violates least privilege; root access keys (even in Secrets Manager) are dangerous long-lived credentials; the root user cannot be deleted.",
   "keywords": [
     "root user",
     "MFA",
     "access keys",
     "least privilege",
-    "IAM users",
-    "корневой пользователь"
+    "IAM users"
   ],
   "services": [
     "iam"

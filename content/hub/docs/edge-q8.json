@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "edge-dns"
   },
-  "concept": "Route 53 weighted routing: canary / процентное разделение трафика",
-  "tests": "Выбор routing policy для постепенного процентного переключения на новую версию.",
-  "expected": "Weighted routing — относительные веса (10/90) у записей с одним именем, регулируются со временем. Триггеры: «10% пользователей на новый стек», «менять долю со временем», canary/blue-green.",
-  "why_not": "Failover — active/passive HA; Geolocation — по местоположению; Simple — одна record set без весов.",
+  "concept": "Route 53 weighted routing: canary / percentage traffic split",
+  "tests": "Choosing a routing policy for a gradual percentage-based shift to a new version.",
+  "expected": "Weighted routing — relative weights (10/90) on records with the same name, adjusted over time. Triggers: \"10% of users to the new stack\", \"change the share over time\", canary/blue-green.",
+  "why_not": "Failover is active/passive HA; Geolocation routes by location; Simple is a single record set without weights.",
   "keywords": [
     "weighted routing",
     "canary",
@@ -15,7 +15,7 @@
     "traffic split",
     "Route 53",
     "10% / 90%",
-    "постепенный rollout"
+    "gradual rollout"
   ],
   "services": [
     "route53"

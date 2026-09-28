@@ -4,18 +4,17 @@
     "type": "topic",
     "ref": "vpc-networking"
   },
-  "concept": "VPC Flow Logs: метаданные трафика ACCEPT/REJECT в S3 для Athena",
-  "tests": "Выбор средства сбора метаданных IP-трафика подсети для последующего анализа.",
-  "expected": "VPC Flow Logs на subnet с доставкой в S3; Athena запрашивает их напрямую. Триггеры: «metadata about accepted and rejected traffic», «specific subnet», «analyzed in Athena».",
-  "why_not": "CloudTrail логирует API-активность, не трафик; Traffic Mirroring копирует полный payload — избыточно; «Security Group logging» не существует.",
+  "concept": "VPC Flow Logs: ACCEPT/REJECT traffic metadata to S3 for Athena",
+  "tests": "Choosing a way to capture a subnet's IP traffic metadata for later analysis.",
+  "expected": "VPC Flow Logs on the subnet delivered to S3; Athena queries them directly. Triggers: \"metadata about accepted and rejected traffic\", \"specific subnet\", \"analyzed in Athena\".",
+  "why_not": "CloudTrail logs API activity, not traffic; Traffic Mirroring copies the full payload — overkill; \"Security Group logging\" does not exist.",
   "keywords": [
     "VPC Flow Logs",
     "ACCEPT",
     "REJECT",
     "traffic metadata",
     "S3",
-    "Athena",
-    "метаданные трафика"
+    "Athena"
   ],
   "services": [
     "flow-logs",

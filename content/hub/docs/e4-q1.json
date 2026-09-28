@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "IAM: условие aws:MultiFactorAuthPresent для MFA на опасные действия",
-  "tests": "Как требовать MFA только для удаления объектов S3, не запрещая удаление полностью.",
-  "expected": "Разрешить s3:DeleteObject в IAM policy с Condition aws:MultiFactorAuthPresent = true. Триггеры: «require MFA for any deletion», «MOST secure», least-privilege роли.",
-  "why_not": "Явный Deny блокирует удаление вообще; Versioning защищает от потери, но MFA не требует; bucket ACL не умеет условия MFA.",
+  "concept": "IAM: aws:MultiFactorAuthPresent condition to require MFA for risky actions",
+  "tests": "How to require MFA only for S3 object deletion without denying deletion outright.",
+  "expected": "Allow s3:DeleteObject in the IAM policy with Condition aws:MultiFactorAuthPresent = true. Triggers: \"require MFA for any deletion\", \"MOST secure\", least-privilege roles.",
+  "why_not": "An explicit Deny blocks deletion entirely; Versioning protects against loss but doesn't require MFA; bucket ACLs can't express MFA conditions.",
   "keywords": [
     "aws:MultiFactorAuthPresent",
     "MFA",
     "s3:DeleteObject",
     "Condition",
     "IAM policy",
-    "требовать MFA для удаления"
+    "require MFA for deletion"
   ],
   "services": [
     "iam",

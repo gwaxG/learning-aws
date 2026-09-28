@@ -1,151 +1,145 @@
 {
   "slug": "data-migration",
-  "title": "Данные, аналитика и миграция",
+  "title": "Data, Analytics & Migration",
   "domains": [
     3
   ],
   "essentials": [
     {
-      "heading": "Kinesis: Data Streams, Firehose или Managed Service for Apache Flink",
-      "body": "**Что.** В AWS есть три сервиса Kinesis: **Data Streams** (KDS) — шардированный real-time лог, **Data Firehose** — управляемая труба доставки в хранилище, а **Managed Service for Apache Flink** выполняет потоковые вычисления над любым из этих источников.\n\n**Зачем.** Они разбивают задачу стриминга на приём, доставку и анализ, поэтому можно взять только нужные части, а не собирать Kafka + консьюмеры + ETL самостоятельно.\n\n**Как.** `KDS` использует **shards** (на вход 1 MB/s или 1000 записей/s, на выход 2 MB/s) с хранением 1-365 дней и множеством независимых консьюмеров (Lambda, KCL, Flink). `Firehose` полностью serverless, буферизует по размеру/времени (минимум ~60s), может вызывать Lambda для трансформаций, конвертирует JSON в **Parquet/ORC** и складывает данные в **S3, Redshift, OpenSearch, Splunk**. **Flink** считает оконные агрегаты и ищет аномалии.\n\n**Экзамен.** Правило: KDS = свои консьюмеры + replay; Firehose = управляемая serverless-выгрузка (без shards); Flink = real-time аналитика на SQL/Java. Минимальная задержка Firehose ограничена буферизацией (~60s), так что это *near*-real-time, а не доли секунды."
+      "heading": "Kinesis: Data Streams vs Firehose vs Managed Service for Apache Flink",
+      "body": "**What.** AWS provides three Kinesis services: **Data Streams** (KDS) is a sharded real-time log, **Data Firehose** is a managed delivery pipe to storage, and **Managed Service for Apache Flink** runs streaming compute over either source.\n\n**Why.** They split the streaming problem into ingest, deliver, and analyze so you can pick only the pieces you need instead of building Kafka + consumers + ETL yourself.\n\n**How.** `KDS` uses **shards** (1 MB/s or 1000 rec/s in, 2 MB/s out) with 1-365 day retention and many independent consumers (Lambda, KCL, Flink). `Firehose` is fully serverless, buffers by size/time (~60s min), can invoke Lambda for transforms, converts JSON to **Parquet/ORC**, and lands data in **S3, Redshift, OpenSearch, Splunk**. **Flink** does windowed aggregations and anomaly detection.\n\n**Exam.** Rule: KDS = custom consumers + replay; Firehose = managed serverless dump (no shards); Flink = real-time SQL/Java analytics. Firehose minimum latency is buffering-bound (~60s), so it is *near*-real-time, not sub-second. Not to be confused with **Kinesis Video Streams** — ingestion of live **video** from cameras/devices, typically analyzed by **Rekognition Video** (face/person detection) with alerts via **SNS** (SMS/email). \"Cameras + detect unauthorized people + SMS alert\" → **KVS + Rekognition + SNS**. **Processing vs delivery:** if records need custom processing before landing in S3 (and each batch fits in 15 min), attach a **Lambda consumer** to the stream (event source mapping) — serverless, pay per use. Firehose is for *delivery* (buffer → S3/Redshift/OpenSearch) with only light transforms; Step Functions or EC2 add cost for a single processing step."
     },
     {
       "heading": "Kinesis vs SQS",
-      "body": "**Что.** И **Kinesis Data Streams**, и **Amazon SQS** развязывают продюсеров и консьюмеров, но Kinesis — это **лог записей с возможностью replay**, а SQS — **очередь**, где сообщение удаляется после подтверждения консьюмером.\n\n**Зачем.** Они решают разные задачи: Kinesis раздаёт *одно и то же* событие многим аналитическим консьюмерам; SQS передаёт каждую единицу работы одному воркеру, чтобы задача выполнилась ровно один раз.\n\n**Как.** `KDS` упорядочивает записи в пределах shard, хранит их 1-365 дней и позволяет **многим приложениям-консьюмерам** читать независимо, каждое со своими checkpoints. `SQS Standard` — порядок best-effort, at-least-once; `SQS FIFO` добавляет упорядочивание и exactly-once обработку в пределах `MessageGroupId`. Удалённое сообщение SQS исчезает навсегда — replay нет.\n\n**Экзамен.** Много консьюмеров + replay + упорядоченный стриминг -> **Kinesis**. Развязать пул воркеров, каждое сообщение обрабатывается один раз, replay не нужен -> **SQS**. Порядок по всему потоку + exactly-once -> **SQS FIFO** (300 msg/s или 3000 с батчингом)."
+      "body": "**What.** Both **Kinesis Data Streams** and **Amazon SQS** decouple producers from consumers, but Kinesis is a **replayable log** of records while SQS is a **queue** where messages are deleted after a consumer acks them.\n\n**Why.** They solve different problems: Kinesis fans the *same* event out to many analytics consumers; SQS hands each work item to one worker so a job is done exactly once.\n\n**How.** `KDS` orders records per shard, retains 1-365 days, and lets **many consumer apps** read independently with their own checkpoints. `SQS Standard` is best-effort order, at-least-once; `SQS FIFO` adds ordering and exactly-once processing within a `MessageGroupId`. Once an SQS message is deleted it is gone — no replay.\n\n**Exam.** Many consumers + replay + ordered streaming -> **Kinesis**. Decouple worker pool, each message processed once, no replay needed -> **SQS**. Ordering across the whole stream + exactly-once -> **SQS FIFO** (300 msg/s, or 3000 with batching)."
     },
     {
-      "heading": "Glue, Athena и паттерн S3 Data Lake",
-      "body": "**Что.** **Data lake** хранит сырые и подготовленные данные в S3 и запрашивает их на месте. **AWS Glue** даёт serverless Spark ETL плюс **Glue Data Catalog** (центральный Hive-совместимый metastore), а **Amazon Athena** выполняет serverless SQL прямо по S3, используя этот каталог.\n\n**Зачем.** Не нужно загружать каждый набор данных в хранилище: любая команда кладёт файлы в S3, один раз регистрирует их и запрашивает привычным SQL — без кластеров, которые надо подбирать по размеру и обслуживать.\n\n**Как.** **Glue Crawlers** сканируют префиксы S3, выводят схему и создают таблицы в Catalog. **Glue Jobs** преобразуют CSV/JSON в партиционированный **Parquet/ORC**. Athena (движок Presto/Trino) берёт плату **за просканированный TB**, поэтому колоночный формат + сжатие + отсечение партиций резко снижают стоимость. Результаты можно визуализировать в **QuickSight**.\n\n**Экзамен.** Ad-hoc SQL по S3, serverless, оплата за сканирование -> **Athena**. Снизить стоимость Athena -> партиционирование + **Parquet** + сжатие Snappy. Нужны join-ы масштаба хранилища между таблицами S3 и Redshift -> **Redshift Spectrum**. Центральные метаданные для Athena, EMR, Spectrum -> **Glue Data Catalog**.",
-      "diagram": {
-        "src": "analytics-lake-pipeline.svg",
-        "caption": "Загрузка в S3, каталогизация в Glue, serverless-запросы через Athena, Redshift Spectrum, EMR и QuickSight."
-      }
+      "heading": "Glue, Athena & the S3 Data Lake pattern",
+      "body": "**What.** A **data lake** stores raw and curated data in S3 and queries it in place. **AWS Glue** provides serverless Spark ETL plus the **Glue Data Catalog** (central Hive-compatible metastore), and **Amazon Athena** runs serverless SQL directly on S3 using that catalog.\n\n**Why.** It avoids loading every dataset into a warehouse: any team can land files in S3, register them once, and query with familiar SQL — no clusters to size or maintain.\n\n**How.** **Glue Crawlers** scan S3 prefixes, infer schema, and create tables in the Catalog. **Glue Jobs** transform CSV/JSON into partitioned **Parquet/ORC**. Athena (Presto/Trino engine) charges **per TB scanned**, so columnar format + compression + partition pruning slash cost. Results can be visualized in **QuickSight**.\n\n**Exam.** Ad-hoc SQL over S3, serverless, pay-per-scan -> **Athena**. Reduce Athena cost -> partition + **Parquet** + Snappy compression. Need warehouse-scale joins across S3 + Redshift tables -> **Redshift Spectrum**. Central metadata for Athena, EMR, Spectrum -> **Glue Data Catalog**. \"Automatically convert CSV to Parquet with LEAST overhead\" → **Glue crawler + scheduled Glue ETL job** — not EMR/EMR Serverless (Spark jobs to write/manage; EMRFS is only EMR's S3 connector and discovers nothing), not AWS Batch with scripts, not Lambda driving an EMR cluster.",
+      "diagram": { "src": "analytics-lake-pipeline.svg", "caption": "Ingest into S3, catalog with Glue, query serverlessly via Athena, Redshift Spectrum, EMR, and QuickSight." }
     },
     {
-      "heading": "Основы EMR",
-      "body": "**Что.** **Amazon EMR** (Elastic MapReduce) — управляемые Hadoop, Spark, Hive, Presto, HBase и Flink на кластерах EC2, EKS или в EMR Serverless.\n\n**Зачем.** Он даёт полный open-source стек для big data с ручками настройки, которые serverless-сервисы вроде Glue и Athena скрывают, — это нужно, когда у команды уже есть код на Spark/Hadoop или требуется собственная обработка петабайтного масштаба.\n\n**Как.** В кластере есть узлы **master**, **core** (HDFS) и **task**; используйте **EC2 Spot** для task-узлов, чтобы снизить стоимость на 50-90 %. EMR читает из S3 через **EMRFS**, интегрируется с **Glue Data Catalog** и поддерживает временные (автоматически завершающиеся) и долгоживущие кластеры. EMR Serverless избавляет от планирования ёмкости для задач Spark/Hive.\n\n**Экзамен.** Spark/Hadoop/HBase с тонким контролем кластера + Spot для task-узлов -> **EMR**. Простой serverless ETL без настроек кластера -> **AWS Glue**. Ad-hoc SQL по S3 без управления compute -> **Athena**. Real-time потоковые вычисления -> **Managed Flink**, а не EMR."
+      "heading": "EMR basics",
+      "body": "**What.** **Amazon EMR** (Elastic MapReduce) is managed Hadoop, Spark, Hive, Presto, HBase, and Flink running on EC2 clusters, EKS, or EMR Serverless.\n\n**Why.** It exposes the full open-source big-data stack with tuning knobs that serverless services like Glue and Athena hide — required when teams already have Spark/Hadoop code or need petabyte-scale custom processing.\n\n**How.** A cluster has **master**, **core** (HDFS), and **task** nodes; use **EC2 Spot** for task nodes to cut cost by 50-90 %. EMR reads from S3 via **EMRFS**, integrates with the **Glue Data Catalog**, and supports transient (auto-terminating) or long-running clusters. EMR Serverless removes capacity planning for Spark/Hive jobs.\n\n**Exam.** Spark/Hadoop/HBase with fine cluster control + Spot task nodes -> **EMR**. Simple serverless ETL with no cluster knobs -> **AWS Glue**. Ad-hoc SQL on S3 without compute to manage -> **Athena**. Real-time streaming compute -> **Managed Flink**, not EMR."
     },
     {
-      "heading": "DMS + SCT (гомогенная vs гетерогенная миграция, CDC)",
-      "body": "**Что.** **AWS Database Migration Service (DMS)** переносит базы данных в AWS, пока **источник всё время онлайн**. **Schema Conversion Tool (SCT)** преобразует несовместимые схемы и хранимые процедуры, когда движки источника и цели различаются.\n\n**Зачем.** Это позволяет переключиться на RDS/Aurora/Redshift с **минимальным простоем** вместо долгого простоя на export/import и сглаживает различия движков (Oracle PL/SQL -> PostgreSQL PL/pgSQL).\n\n**Как.** **Replication instance** читает источник и пишет в цель. **Гомогенная** миграция (Oracle -> Oracle, MySQL -> RDS MySQL) выполняется одним DMS. **Гетерогенная** (Oracle -> Aurora PostgreSQL, SQL Server -> MySQL) — сначала **SCT** для схемы, затем DMS для данных. **CDC** держит цель синхронизированной после full load вплоть до переключения.\n\n**Экзамен.** Смена движка (гетерогенная) -> **SCT + DMS**. Переключение с минимальным простоем -> **DMS с непрерывным CDC**. Допустимые цели: **RDS, Aurora, Redshift, DynamoDB, S3, OpenSearch, Kinesis**. DMS не для передачи файлов/объектов — для этого есть **DataSync**."
+      "heading": "DMS + SCT (homogeneous vs heterogeneous, CDC)",
+      "body": "**What.** **AWS Database Migration Service (DMS)** moves databases to AWS with the **source online** the whole time. The **Schema Conversion Tool (SCT)** translates incompatible schemas and stored procedures when source and target engines differ.\n\n**Why.** It lets you cut over to RDS/Aurora/Redshift with **minimal downtime** instead of doing a long export/import outage, and it bridges engine differences (Oracle PL/SQL -> PostgreSQL PL/pgSQL).\n\n**How.** A **replication instance** reads the source and writes to the target. **Homogeneous** (Oracle -> Oracle, MySQL -> RDS MySQL) uses DMS alone. **Heterogeneous** (Oracle -> Aurora PostgreSQL, SQL Server -> MySQL) uses **SCT** for schema first, then DMS for data. **CDC** keeps the target in sync after the full load until cutover.\n\n**Exam.** Heterogeneous engine change -> **SCT + DMS**. Minimal downtime cutover -> **DMS with ongoing CDC**. Valid targets include **RDS, Aurora, Redshift, DynamoDB, S3, OpenSearch, Kinesis**. DMS is not for file/object transfer — that's **DataSync**. Task types: **full load** (one-time copy), **CDC only**, **full load + CDC** (copy, then continuously stream changes from the binlog/redo log) — \"then ongoing changes continually streamed\" → full load + CDC, even when the target is **S3 (CSV/Parquet)**. Secure in transit with an **SSL endpoint** (import the CA certificate into DMS)."
     },
     {
-      "heading": "Snow Family: офлайн-перенос больших объёмов",
-      "body": "**Что.** **Snow Family** — набор физических устройств, которые AWS присылает вам, чтобы вы локально скопировали данные и вернули устройство; используется, когда передача по сети заняла бы недели или месяцы.\n\n**Зачем.** Канал 100 Mbps в лучшем случае переносит ~1 TB в сутки; для сотен TB и более зашифрованный ящик в машине курьера дешевле, быстрее и не занимает сеть, нужную для повседневной работы.\n\n**Как.** **Snowcone** — портативный (~8 TB полезного объёма, 2 vCPU/4 GB, можно отправить физически или синхронизировать через **DataSync**). **Snowball Edge** — рабочая лошадка: **Storage Optimized ~80 TB** или **Compute Optimized 42 TB+** с EC2/Lambda для обработки на edge; объединяется в кластеры. **Snowmobile** — 45-футовый грузовик вместимостью до ~100 PB. Все устройства используют **256-битное шифрование** с KMS; после возврата AWS импортирует данные в **S3**.\n\n**Экзамен.** Сотни TB + медленный канал -> **Snowball Edge**. Лёгкий вариант, edge или совместимость с DataSync -> **Snowcone**. Уход из дата-центра с эксабайтами -> **Snowmobile** (новые заказы не принимаются, но на экзамене встречается). DataSync по тому же медленному каналу всё равно медленный.",
-      "diagram": {
-        "src": "snow-family.svg",
-        "caption": "Выбирайте устройство Snow по объёму данных, когда онлайн-передача слишком медленная; AWS импортирует данные с зашифрованного устройства в S3."
-      }
+      "heading": "Snow Family: offline bulk transfer",
+      "body": "**What.** The **Snow Family** is a set of physical devices AWS ships to you so you can copy data locally and return them, used when sending bytes over the wire would take weeks or months.\n\n**Why.** A 100 Mbps link moves only ~1 TB/day at best; for hundreds of TB or more, an encrypted box in a courier truck is cheaper, faster, and frees your network for daily ops.\n\n**How.** **Snowcone** is portable (~8 TB usable, 2 vCPU/4 GB, can ship or sync via **DataSync**). **Snowball Edge** is the workhorse — **Storage Optimized ~80 TB** or **Compute Optimized 42 TB+** with EC2/Lambda for edge processing; clusterable. **Snowmobile** is a 45-ft truck up to ~100 PB. All devices use **256-bit encryption** with KMS; AWS imports the data into **S3** on return.\n\n**Exam.** Hundreds of TB + slow link -> **Snowball Edge**. Lightweight or edge / DataSync-compatible -> **Snowcone**. Exabyte datacenter exit -> **Snowmobile** (retired from new orders but still on the exam). DataSync over the same slow link is still slow.",
+      "diagram": { "src": "snow-family.svg", "caption": "Pick the Snow device by data volume when online transfer is too slow; AWS imports the encrypted device into S3." }
     },
     {
-      "heading": "DataSync, Transfer Family, Storage Gateway и выбор способа передачи",
-      "body": "**Что.** **DataSync** — онлайн-перенос больших объёмов файлов через агента. **Transfer Family** предоставляет управляемые endpoints **SFTP/FTPS/FTP/AS2**. **Storage Gateway** (File/Volume/Tape) — гибридный on-prem appliance, открывающий хранилище AWS локальным приложениям. **S3 Transfer Acceleration** ускоряет загрузку в S3 на большие расстояния через edge-точки CloudFront.\n\n**Зачем.** Каждый закрывает свою нишу между онлайном и офлайном: постоянная синхронизация, обмен с партнёрами, гибридная файловая система, быстрая загрузка или отправка устройств.\n\n**Как.** `DataSync` переносит **NFS/SMB/HDFS/object** в **S3/EFS/FSx** с контрольными суммами, расписанием и 10-кратным ускорением по сравнению с rsync. `Transfer Family` складывает SFTP-файлы в **S3 или EFS** с аутентификацией через IAM/AD. Режимы `Storage Gateway`: **File Gateway** (NFS/SMB-кэш поверх S3), **Volume Gateway** (блочное iSCSI + EBS snapshots), **Tape Gateway** (VTL в S3/Glacier). `S3 Transfer Acceleration` использует edge POP для глобальной загрузки.\n\n**Экзамен.** NFS/SMB -> EFS/FSx/S3 онлайн -> **DataSync**. SFTP от партнёров в S3 -> **Transfer Family**. Гибридный бэкап/кэш on-prem -> **Storage Gateway**. Медленная глобальная загрузка в S3 -> **Transfer Acceleration**. Пропускной способности не хватает для объёма данных -> **Snowball** (офлайн)."
+      "heading": "DataSync, Transfer Family, Storage Gateway & choosing a transfer method",
+      "body": "**What.** **DataSync** is an online agent-based bulk file mover. **Transfer Family** offers managed **SFTP/FTPS/FTP/AS2** endpoints. **Storage Gateway** (File/Volume/Tape) is a hybrid on-prem appliance that surfaces AWS storage to local apps. **S3 Transfer Acceleration** speeds long-distance S3 uploads via CloudFront edges.\n\n**Why.** Each fills a niche between online and offline: ongoing sync, partner exchange, hybrid filesystem, fast uploads, or shipping boxes.\n\n**How.** `DataSync` moves **NFS/SMB/HDFS/object** to **S3/EFS/FSx** with checksums, scheduling, and 10x speedup over rsync. `Transfer Family` lands SFTP files in **S3 or EFS** with IAM/AD auth. `Storage Gateway` modes: **File Gateway** (NFS/SMB cache to S3), **Volume Gateway** (iSCSI block + EBS snapshots), **Tape Gateway** (VTL to S3/Glacier). `S3 Transfer Acceleration` uses edge POPs for global uploads.\n\n**Exam.** NFS/SMB -> EFS/FSx/S3 online -> **DataSync**. Partner SFTP into S3 -> **Transfer Family**. Hybrid backup/cache on-prem -> **Storage Gateway**. Slow global S3 upload -> **Transfer Acceleration**. Bandwidth too small for the data -> **Snowball** (offline). **DataSync vs Storage Gateway:** DataSync *moves* data (migration, recurring sync) and can write **directly into any S3 storage class** — cold historical data goes straight to **Glacier Deep Archive**, no Standard + lifecycle hop (that adds 30 days of Standard cost and transition requests). Storage Gateway is for **ongoing hybrid access** where on-prem apps keep using the data through a local cache."
     }
   ],
   "labs": [
     {
       "id": "data-firehose-s3",
-      "title": "Доставка Kinesis Data Firehose -> S3 (delivery stream)",
-      "intro": "Создайте delivery stream **Firehose**, который буферизует записи и пишет их в S3 bucket. Нужна IAM role, разрешающая Firehose запись в bucket.",
+      "title": "Kinesis Data Firehose -> S3 delivery stream",
+      "intro": "Create a **Firehose** delivery stream that buffers records and writes them to an S3 bucket. Requires an IAM role allowing Firehose to write to the bucket.",
       "cli": "# Create destination bucket\naws s3 mb s3://my-firehose-demo-bucket\n\n# Create the delivery stream (assumes role firehose-s3-role exists)\naws firehose create-delivery-stream \\\n  --delivery-stream-name demo-stream \\\n  --delivery-stream-type DirectPut \\\n  --extended-s3-destination-configuration \\\n      'RoleARN=arn:aws:iam::111122223333:role/firehose-s3-role,BucketARN=arn:aws:s3:::my-firehose-demo-bucket,BufferingHints={IntervalInSeconds=60,SizeInMBs=5},CompressionFormat=GZIP'\n\n# Put a test record\naws firehose put-record \\\n  --delivery-stream-name demo-stream \\\n  --record '{\"Data\":\"hello firehose\\n\"}'\n\n# Describe\naws firehose describe-delivery-stream --delivery-stream-name demo-stream",
       "pulumi": "import json\nimport pulumi\nimport pulumi_aws as aws\n\nbucket = aws.s3.BucketV2(\"firehose-demo\")\n\nrole = aws.iam.Role(\n    \"firehose-role\",\n    assume_role_policy=json.dumps({\n        \"Version\": \"2012-10-17\",\n        \"Statement\": [{\n            \"Effect\": \"Allow\",\n            \"Principal\": {\"Service\": \"firehose.amazonaws.com\"},\n            \"Action\": \"sts:AssumeRole\",\n        }],\n    }),\n)\n\naws.iam.RolePolicy(\n    \"firehose-s3-policy\",\n    role=role.id,\n    policy=bucket.arn.apply(lambda arn: json.dumps({\n        \"Version\": \"2012-10-17\",\n        \"Statement\": [{\n            \"Effect\": \"Allow\",\n            \"Action\": [\"s3:PutObject\", \"s3:GetBucketLocation\", \"s3:ListBucket\"],\n            \"Resource\": [arn, f\"{arn}/*\"],\n        }],\n    })),\n)\n\nstream = aws.kinesis.FirehoseDeliveryStream(\n    \"demo-stream\",\n    destination=\"extended_s3\",\n    extended_s3_configuration=aws.kinesis.FirehoseDeliveryStreamExtendedS3ConfigurationArgs(\n        role_arn=role.arn,\n        bucket_arn=bucket.arn,\n        buffering_interval=60,\n        buffering_size=5,\n        compression_format=\"GZIP\",\n    ),\n)\n\npulumi.export(\"stream_name\", stream.name)",
-      "note": "**Очистка**: `aws firehose delete-delivery-stream --delivery-stream-name demo-stream`, очистите и удалите bucket (`aws s3 rb s3://my-firehose-demo-bucket --force`), удалите IAM role/policy. С Pulumi достаточно `pulumi destroy`. Буферизованные данные могут появиться в S3 через ~60s."
+      "note": "**Cleanup**: `aws firehose delete-delivery-stream --delivery-stream-name demo-stream`, empty + delete the bucket (`aws s3 rb s3://my-firehose-demo-bucket --force`), and delete the IAM role/policy. With Pulumi just `pulumi destroy`. Buffered data may take ~60s to appear in S3."
     },
     {
       "id": "data-glue-athena",
-      "title": "Glue Crawler + запрос Athena по S3",
-      "intro": "Создайте таблицу в **Glue Data Catalog** по данным в S3 с помощью **crawler**, затем запросите её через **Athena**. Athena нужно место в S3 для результатов запросов.",
+      "title": "Glue Crawler + Athena query over S3",
+      "intro": "Build a **Glue Data Catalog** table from S3 data using a **crawler**, then query it with **Athena**. Athena needs an S3 location for query results.",
       "cli": "# 1. Glue database\naws glue create-database --database-input '{\"Name\":\"demo_db\"}'\n\n# 2. Crawler over the data prefix (role must allow Glue + S3 read)\naws glue create-crawler \\\n  --name demo-crawler \\\n  --role arn:aws:iam::111122223333:role/glue-crawler-role \\\n  --database-name demo_db \\\n  --targets '{\"S3Targets\":[{\"Path\":\"s3://my-data-lake/events/\"}]}'\n\naws glue start-crawler --name demo-crawler\n\n# 3. Athena: set result location and run SQL once the table exists\naws athena start-query-execution \\\n  --query-string 'SELECT count(*) FROM demo_db.events;' \\\n  --result-configuration 'OutputLocation=s3://my-athena-results/'",
       "pulumi": "import pulumi_aws as aws\n\ndb = aws.glue.CatalogDatabase(\"demo-db\", name=\"demo_db\")\n\ncrawler = aws.glue.Crawler(\n    \"demo-crawler\",\n    database_name=db.name,\n    role=\"arn:aws:iam::111122223333:role/glue-crawler-role\",\n    s3_targets=[aws.glue.CrawlerS3TargetArgs(\n        path=\"s3://my-data-lake/events/\",\n    )],\n)\n\n# Athena workgroup pinning the query-results location\nwg = aws.athena.Workgroup(\n    \"demo-wg\",\n    configuration=aws.athena.WorkgroupConfigurationArgs(\n        result_configuration=aws.athena.WorkgroupConfigurationResultConfigurationArgs(\n            output_location=\"s3://my-athena-results/\",\n        ),\n    ),\n)",
-      "note": "**Очистка**: `aws glue delete-crawler --name demo-crawler`, `aws glue delete-database --name demo_db`, удалите workgroup Athena и очистите/удалите bucket с результатами. С Pulumi выполните `pulumi destroy`. Совет по стоимости: храните данные как **партиционированный Parquet**, чтобы Athena сканировала меньше (оплата идёт за просканированные TB)."
+      "note": "**Cleanup**: `aws glue delete-crawler --name demo-crawler`, `aws glue delete-database --name demo_db`, delete the Athena workgroup, and empty/delete the results bucket. With Pulumi run `pulumi destroy`. Cost tips: store data as **partitioned Parquet** so Athena scans less (you pay per TB scanned)."
     }
   ],
   "questions": [
     {
       "id": "data-q1",
       "domain": 3,
-      "stem": "Компания стримит clickstream-данные, и их нужно загружать в S3 в near-real-time без серверов и shards в управлении, с возможностью по пути конвертировать JSON в Parquet. Какой сервис подходит лучше всего?",
+      "stem": "A company streams clickstream data and needs it loaded into S3 in near-real-time with no servers or shards to manage, optionally converting JSON to Parquet on the way. Which service fits best?",
       "options": [
-        "Amazon EMR со Spark Streaming",
+        "Amazon EMR with Spark Streaming",
         "Kinesis Data Firehose",
-        "Очередь Amazon SQS Standard",
-        "Kinesis Data Streams со своим консьюмером на KCL"
+        "Amazon SQS Standard queue",
+        "Kinesis Data Streams with a custom KCL consumer"
       ],
       "answer": 1,
-      "explanation": "Firehose — полностью управляемый serverless-сервис доставки, который буферизует и загружает потоковые данные в S3 (и Redshift/OpenSearch), со встроенной конвертацией в Parquet/ORC и без управления shards. Kinesis Data Streams потребовал бы написать и эксплуатировать консьюмера и управлять shards. SQS — очередь сообщений для развязки работы, а не для массовой доставки в S3 с конвертацией формата. EMR/Spark Streaming — тяжёлый кластер, которым нужно управлять, а не serverless."
+      "explanation": "Firehose is the fully managed, serverless delivery service that buffers and loads streaming data into S3 (and Redshift/OpenSearch), with built-in format conversion to Parquet/ORC and no shard management. Kinesis Data Streams would require you to build and operate a consumer and manage shards. SQS is a message queue for decoupling work, not bulk delivery to S3 with format conversion. EMR/Spark Streaming is a heavyweight cluster you must manage, not serverless."
     },
     {
       "id": "data-q2",
       "domain": 3,
-      "stem": "Аналитической команде нужно, чтобы несколько независимых приложений читали ОДИН И ТОТ ЖЕ поток событий по порядку, и чтобы при сбое консьюмера можно было воспроизвести (replay) данные за последние 24 часа. Какой сервис использовать?",
+      "stem": "An analytics team needs multiple independent applications to read the SAME stream of events in order, and must be able to replay the last 24 hours of data if a consumer fails. Which service should they use?",
       "options": [
-        "Топик Amazon SNS",
-        "Очередь Amazon SQS Standard",
-        "Очередь Amazon SQS FIFO",
+        "Amazon SNS topic",
+        "Amazon SQS Standard queue",
+        "Amazon SQS FIFO queue",
         "Amazon Kinesis Data Streams"
       ],
       "answer": 3,
-      "explanation": "Kinesis Data Streams хранит записи (1-365 дней), поддерживает порядок в пределах shard, позволяет нескольким консьюмерам независимо читать одни и те же данные и поддерживает replay в пределах срока хранения. SQS (Standard или FIFO) удаляет сообщения после обработки, replay нет, и он рассчитан на обработку работы одним консьюмером. SNS — push-модель pub/sub без надёжного лога записей для replay."
+      "explanation": "Kinesis Data Streams retains records (1-365 days), supports ordering per shard, lets multiple consumers read the same data independently, and supports replay within the retention window. SQS (Standard or FIFO) deletes messages after consumption with no replay and is geared to single-consumer work processing. SNS is pub/sub push with no durable replayable log of records."
     },
     {
       "id": "data-q3",
       "domain": 3,
-      "stem": "Компании нужно перенести в S3 500 TB архивных данных из on-premises. Интернет-канал — 100 Mbps, и он же нужен для повседневной работы. Какой способ передачи наиболее уместен?",
+      "stem": "A company has 500 TB of archival data on-premises to move to S3. Their internet uplink is a 100 Mbps connection that is also needed for daily operations. What is the most appropriate transfer method?",
       "options": [
-        "Загружать напрямую через S3 multipart upload по интернету",
-        "AWS Transfer Family по SFTP",
+        "Upload directly with S3 multipart upload over the internet",
+        "AWS Transfer Family using SFTP",
         "AWS Snowball Edge",
-        "AWS DataSync по существующему интернет-каналу"
+        "AWS DataSync over the existing internet connection"
       ],
       "answer": 2,
-      "explanation": "На 100 Mbps перенос 500 TB занял бы много месяцев и забил бы канал, поэтому правильно офлайн-устройство: Snowball Edge справляется с десятками-сотнями TB за счёт физической отправки зашифрованного устройства в AWS. DataSync и прямая загрузка в S3 используют тот же ограниченный интернет-канал. Transfer Family — для обмена файлами с партнёрами по SFTP/FTPS, а не для разовой массовой миграции 500 TB."
+      "explanation": "At 100 Mbps, 500 TB would take many months and saturate the link, so an offline device is correct: Snowball Edge handles tens-to-hundreds of TB by physically shipping the encrypted device to AWS. DataSync and direct S3 upload still use the same constrained internet link. Transfer Family is for partner file exchange over SFTP/FTPS, not bulk one-time migration of 500 TB."
     },
     {
       "id": "data-q4",
       "domain": 3,
-      "stem": "Команда хочет выполнять ad-hoc SQL-запросы прямо по полуструктурированным лог-файлам в S3, не поднимая серверов и не загружая данные в базу. Какая комбинация лучше всего?",
+      "stem": "A team wants to run ad-hoc SQL queries directly against semi-structured log files stored in S3 without provisioning any servers or loading data into a database. Which combination is best?",
       "options": [
-        "Импортировать файлы в Amazon RDS for PostgreSQL",
-        "Запустить кластер Amazon EMR с Hive",
-        "Использовать AWS Glue Data Catalog вместе с Amazon Athena",
-        "Загрузить данные в Amazon Redshift и запрашивать через SQL"
+        "Import the files into Amazon RDS for PostgreSQL",
+        "Launch an Amazon EMR cluster running Hive",
+        "Use AWS Glue Data Catalog with Amazon Athena",
+        "Load the data into Amazon Redshift and query with SQL"
       ],
       "answer": 2,
-      "explanation": "Athena выполняет serverless SQL прямо по S3 и использует Glue Data Catalog для определений таблиц/схем — без серверов и без загрузки данных. Redshift и RDS требуют загрузки данных в управляемую базу. EMR с Hive — кластер, который нужно поднимать и обслуживать, то есть противоположность serverless ad-hoc запросам."
+      "explanation": "Athena runs serverless SQL directly over S3 and uses the Glue Data Catalog for table/schema definitions, requiring no servers and no data loading. Redshift and RDS require loading data into a managed database. EMR with Hive is a cluster you must provision and manage, the opposite of serverless ad-hoc querying."
     },
     {
       "id": "data-q5",
       "domain": 3,
-      "stem": "Компания мигрирует самостоятельно управляемую базу Oracle в Amazon Aurora PostgreSQL с минимальным простоем. Какие инструменты AWS нужно использовать? (Выберите два)",
+      "stem": "A company is migrating a self-managed Oracle database to Amazon Aurora PostgreSQL with minimal downtime. Which AWS tools should they use? (Choose two)",
       "options": [
-        "AWS Snowball Edge, чтобы отправить базу физически",
-        "AWS DataSync, чтобы скопировать файлы базы",
-        "AWS Schema Conversion Tool (SCT) для преобразования схемы и хранимых процедур",
-        "AWS Database Migration Service (DMS) с непрерывной CDC-репликацией"
+        "AWS Snowball Edge to ship the database",
+        "AWS DataSync to copy the database files",
+        "AWS Schema Conversion Tool (SCT) to convert the schema and stored procedures",
+        "AWS Database Migration Service (DMS) with ongoing CDC replication"
       ],
       "answer": [
         2,
         3
       ],
-      "explanation": "Oracle -> Aurora PostgreSQL — гетерогенная миграция: SCT преобразует несовместимую схему/хранимые процедуры, затем DMS переносит данные и через CDC реплицирует текущие изменения для переключения с минимальным простоем. DataSync переносит файлы/объекты (NFS/SMB/S3), а не работающие реляционные движки. Snowball — для офлайн-передачи больших объёмов файлов, а не для миграции движка базы с малым простоем."
+      "explanation": "Oracle -> Aurora PostgreSQL is a heterogeneous migration: SCT converts the incompatible schema/stored procedures, then DMS migrates the data and uses CDC to replicate ongoing changes for minimal-downtime cutover. DataSync moves files/objects (NFS/SMB/S3), not live relational database engines. Snowball is for offline bulk file transfer, not a low-downtime database engine migration."
     },
     {
       "id": "data-q6",
       "domain": 3,
-      "stem": "IoT-платформе нужно непрерывно считать real-time агрегаты и искать аномалии в потоке Kinesis (например, средние по скользящему окну) с помощью SQL или Apache Flink и отправлять результаты дальше. Какой сервис создан именно для этого?",
+      "stem": "An IoT platform must run continuous real-time aggregations and anomaly detection on a Kinesis stream (e.g., sliding-window averages) using SQL or Apache Flink, with results pushed downstream. Which service is purpose-built for this?",
       "options": [
-        "ETL-задача AWS Glue",
+        "AWS Glue ETL job",
         "Amazon Kinesis Data Firehose",
         "Amazon Athena",
         "Amazon Managed Service for Apache Flink"
       ],
       "answer": 3,
-      "explanation": "Managed Service for Apache Flink (ранее Kinesis Data Analytics) выполняет Flink/SQL для real-time потоковой обработки, например оконных агрегатов и поиска аномалий. Athena запрашивает данные в покое в S3, а не живые потоки. Firehose только доставляет/буферизует данные в назначения и не выполняет stateful real-time аналитику. Glue ETL — пакетный Spark, а не real-time потоковые вычисления."
+      "explanation": "Managed Service for Apache Flink (formerly Kinesis Data Analytics) runs Flink/SQL for real-time stream processing such as windowed aggregations and anomaly detection. Athena queries data at rest in S3, not live streams. Firehose only delivers/buffers data to destinations; it does not perform stateful real-time analytics. Glue ETL is batch-oriented Spark, not real-time stream compute."
     },
     {
       "id": "data-q7",
       "domain": 3,
-      "stem": "Компании нужно дать внешним партнёрам загружать файлы по стандартному SFTP так, чтобы файлы автоматически попадали в S3 bucket, без запуска и патчинга SFTP-серверов. Какой сервис выбрать?",
+      "stem": "A company needs to let external partners upload files using standard SFTP, with the files landing automatically in an S3 bucket, without running and patching SFTP servers. Which service should they choose?",
       "options": [
         "Amazon Kinesis Data Firehose",
         "AWS Snowcone",
@@ -153,20 +147,20 @@
         "AWS Transfer Family"
       ],
       "answer": 3,
-      "explanation": "AWS Transfer Family предоставляет полностью управляемые endpoints SFTP/FTPS/FTP/AS2, которые кладут файлы прямо в S3 или EFS, — идеально для обмена файлами с партнёрами без управления серверами. DataSync — массовая синхронизация через агента, а не SFTP-endpoint для партнёров. Firehose принимает потоковые записи, а не загрузку файлов по SFTP. Snowcone — офлайн-устройство для передачи данных на edge."
+      "explanation": "AWS Transfer Family provides fully managed SFTP/FTPS/FTP/AS2 endpoints that deliver files directly into S3 or EFS, ideal for partner file exchange without managing servers. DataSync is agent-based bulk sync, not a partner-facing SFTP endpoint. Firehose ingests streaming records, not SFTP file uploads. Snowcone is an offline edge transfer device."
     },
     {
       "id": "data-q8",
       "domain": 3,
-      "stem": "Команде data engineering нужна обработка петабайтного масштаба на долгоживущем кластере Spark и HBase с тонкой настройкой фреймворков и возможностью использовать EC2 Spot Instances для task-узлов. Какой сервис подходит лучше всего?",
+      "stem": "A data engineering team needs petabyte-scale processing using a long-running Spark and HBase cluster with fine-grained framework tuning and the ability to use EC2 Spot Instances for task nodes. Which service best fits?",
       "options": [
         "Amazon EMR",
         "Amazon Kinesis Data Analytics",
-        "Serverless ETL-задачи AWS Glue",
-        "Federated queries в Amazon Athena"
+        "AWS Glue serverless ETL jobs",
+        "Amazon Athena federated queries"
       ],
       "answer": 0,
-      "explanation": "Amazon EMR — управляемые Hadoop/Spark/HBase на кластерах с поддержкой долгоживущих кластеров, глубокой настройки фреймворков и Spot Instances для экономии на task-узлах в петабайтном масштабе. Glue — serverless ETL без контроля над кластером и без HBase. Athena — serverless SQL по S3, а не платформа для Spark/HBase. Kinesis Data Analytics (Managed Service for Apache Flink) — для real-time стриминга, а не для пакетных big data кластеров."
+      "explanation": "Amazon EMR is managed Hadoop/Spark/HBase on clusters, supporting long-running clusters, deep framework tuning, and Spot Instances for cost savings on task nodes at petabyte scale. Glue is serverless ETL without cluster control or HBase. Athena is serverless SQL over S3, not a Spark/HBase platform. Kinesis Data Analytics (Managed Service for Apache Flink) is for real-time streaming, not batch big-data clusters."
     }
   ]
 }

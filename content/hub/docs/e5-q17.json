@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "KMS: key policy как основной контроль доступа к ключу",
-  "tests": "Как ограничить использование customer managed key одной IAM-ролью, управляя этим на самом ключе.",
-  "expected": "KMS key policy, дающая только этой роли kms:Encrypt/kms:Decrypt. Триггеры: «usable only by a specific IAM role», «control this directly on the key».",
-  "why_not": "Bucket policy управляет S3, а не ключом; security group — сетевой трафик; SCP с запретом всех KMS-действий блокирует и легитимное использование.",
+  "concept": "KMS: key policy as the primary access control for a key",
+  "tests": "How to restrict a customer managed key to a single IAM role, controlled on the key itself.",
+  "expected": "A KMS key policy granting only that role kms:Encrypt/kms:Decrypt. Triggers: \"usable only by a specific IAM role\", \"control this directly on the key\".",
+  "why_not": "A bucket policy governs S3, not the key; a security group — network traffic; an SCP denying all KMS actions also blocks legitimate use.",
   "keywords": [
     "KMS key policy",
     "customer managed key",
     "kms:Decrypt",
     "kms:Encrypt",
     "resource-based policy",
-    "доступ к ключу"
+    "key access"
   ],
   "services": [
     "kms",

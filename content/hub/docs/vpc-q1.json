@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "vpc-networking"
   },
-  "concept": "NACL vs Security Group: deny-правило для блокировки IP",
-  "tests": "Различие NACL и Security Group: только NACL поддерживает deny, правила оцениваются по номеру.",
-  "expected": "Network ACL inbound deny для IP с номером правила меньше, чем у allow. Триггеры: «block a single IP», «all instances in a subnet», «keep other traffic».",
-  "why_not": "Security Group поддерживает только allow; route table маршрутизирует по destination и не фильтрует источник; «IGW filter rule» не существует.",
+  "concept": "NACL vs Security Group: deny rule to block an IP",
+  "tests": "Distinguishing NACLs from Security Groups: only NACLs support deny, and rules are evaluated by number.",
+  "expected": "A Network ACL inbound deny for the IP with a lower rule number than the allow. Triggers: \"block a single IP\", \"all instances in a subnet\", \"keep other traffic\".",
+  "why_not": "Security Groups support allow only; a route table routes by destination and does not filter sources; an \"IGW filter rule\" does not exist.",
   "keywords": [
     "Network ACL",
     "deny rule",
@@ -15,7 +15,7 @@
     "Security Group",
     "stateless",
     "subnet",
-    "заблокировать IP"
+    "block IP"
   ],
   "services": [
     "nacl",

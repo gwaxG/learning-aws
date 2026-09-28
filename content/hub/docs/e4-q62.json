@@ -4,16 +4,16 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "Деплой: blue/green для минимального риска и быстрого rollback",
-  "tests": "Выбор стратегии развёртывания, при которой старая версия работает до проверки новой.",
-  "expected": "Blue/green deployment — новая версия (green) поднимается рядом со старой (blue), трафик переключается после проверки, быстрый rollback. Триггеры: «keeping the previous version running until the new one is verified», «minimizing risk».",
-  "why_not": "In-place обновление всех сразу — риск полного outage; остановка инстансов или пересоздание ASG дают простой.",
+  "concept": "Deployment: blue/green for minimal risk and fast rollback",
+  "tests": "Choosing a deployment strategy where the old version keeps running until the new one is verified.",
+  "expected": "Blue/green deployment: the new version (green) runs alongside the old one (blue), traffic switches after verification, fast rollback. Triggers: \"keeping the previous version running until the new one is verified\", \"minimizing risk\".",
+  "why_not": "Updating everything in place at once risks a full outage; stopping instances or recreating the ASG causes downtime.",
   "keywords": [
     "blue/green deployment",
     "rollback",
     "Auto Scaling group",
     "traffic shifting",
-    "минимальный риск"
+    "minimal risk"
   ],
   "services": [
     "auto-scaling",

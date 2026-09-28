@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "NAT Gateway: исходящий интернет для private subnet",
-  "tests": "Доступ инстансов в private subnet к интернету (патчи) без входящей доступности.",
-  "expected": "NAT Gateway в public subnet + маршрут 0.0.0.0/0 из private subnet на него. Триггеры: «private subnets», «download patches», «must not be reachable from the internet».",
-  "why_not": "Public subnet / public IP / IGW делают инстансы доступными из интернета; Egress-Only IGW — только IPv6.",
+  "concept": "NAT Gateway: outbound internet for private subnets",
+  "tests": "Internet access for instances in a private subnet (patches) without inbound reachability.",
+  "expected": "NAT Gateway in a public subnet + a 0.0.0.0/0 route from the private subnet to it. Triggers: \"private subnets\", \"download patches\", \"must not be reachable from the internet\".",
+  "why_not": "Public subnet / public IP / IGW make instances reachable from the internet; Egress-Only IGW is IPv6 only.",
   "keywords": [
     "NAT Gateway",
     "private subnet",
     "outbound only",
     "IPv4",
     "Egress-Only Internet Gateway",
-    "патчи"
+    "patches"
   ],
   "services": [
     "nat-gateway",

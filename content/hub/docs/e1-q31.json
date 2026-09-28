@@ -4,16 +4,16 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "Fargate: serverless-контейнеры для ECS/EKS",
-  "tests": "Выбор управляемой оркестрации контейнеров без управления EC2-хостами и с оплатой за ресурсы контейнера.",
-  "expected": "Amazon ECS или EKS на AWS Fargate — нет серверов, оплата за vCPU и память задачи. Триггеры: «containerized», «no management of underlying EC2», «billing per container resources».",
-  "why_not": "ECS EC2 launch type и Docker на EC2 требуют управлять серверами; Elastic Beanstalk single-instance работает на EC2-инстансе без биллинга за задачу.",
+  "concept": "Fargate: serverless containers for ECS/EKS",
+  "tests": "Choosing managed container orchestration with no EC2 hosts to manage and billing per container resources.",
+  "expected": "Amazon ECS or EKS on AWS Fargate — no servers, billed per task vCPU and memory. Triggers: \"containerized\", \"no management of underlying EC2\", \"billing per container resources\".",
+  "why_not": "ECS EC2 launch type and Docker on EC2 require managing servers; single-instance Elastic Beanstalk runs on an EC2 instance with no per-task billing.",
   "keywords": [
     "Fargate",
     "ECS",
     "EKS",
     "serverless containers",
-    "без управления серверами",
+    "no server management",
     "microservices"
   ],
   "services": [

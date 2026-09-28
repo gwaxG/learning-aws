@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "ha-dr"
   },
-  "concept": "DR-стратегии: Warm Standby для RTO в минуты",
-  "tests": "Сопоставление требований RTO минуты / RPO секунды и бюджета с DR-стратегией.",
-  "expected": "Warm Standby — уменьшенная, но полностью рабочая копия в DR-регионе, масштабируется при failover. Триггеры: «RTO несколько минут», «RPO секунды», «always-on standby, но не полная копия production».",
-  "why_not": "Backup & Restore — RTO часы; Pilot Light держит app-серверы выключенными — дольше подъём; Single-AZ — нет DR; Active/Active превышает бюджет.",
+  "concept": "DR strategies: Warm Standby for an RTO of minutes",
+  "tests": "Matching RTO minutes / RPO seconds and a budget to a DR strategy.",
+  "expected": "Warm Standby — a scaled-down but fully functional copy in the DR Region, scaled up on failover. Triggers: \"RTO of a few minutes\", \"RPO of seconds\", \"always-on standby, but not a full production copy\".",
+  "why_not": "Backup & Restore has an RTO of hours; Pilot Light keeps app servers off — slower to bring up; Single-AZ has no DR; Active/Active exceeds the budget.",
   "keywords": [
     "Warm Standby",
     "RTO minutes",
@@ -15,7 +15,7 @@
     "scaled-down",
     "Pilot Light",
     "always-on standby",
-    "не полная копия"
+    "not a full copy"
   ],
   "services": [
     "dr-strategies",

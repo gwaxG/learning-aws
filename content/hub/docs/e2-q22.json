@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "ELB: ALB для path-based routing на L7",
-  "tests": "Выбор балансировщика, умеющего маршрутизировать HTTP(S) по URL path на разные target groups.",
-  "expected": "Application Load Balancer — L7, path-based и host-based routing на target groups. Триггеры: «based on the URL path», «/api vs /images», «HTTPS microservices».",
-  "why_not": "NLB — L4, не видит URL; GWLB — для inline-аппаратов (firewalls); Classic LB — устаревший, без современного path-routing.",
+  "concept": "ELB: ALB for L7 path-based routing",
+  "tests": "Choosing a load balancer that can route HTTP(S) by URL path to different target groups.",
+  "expected": "Application Load Balancer — L7, path-based and host-based routing to target groups. Triggers: \"based on the URL path\", \"/api vs /images\", \"HTTPS microservices\".",
+  "why_not": "NLB — L4, can't see the URL; GWLB — for inline appliances (firewalls); Classic LB — legacy, no modern path routing.",
   "keywords": [
     "Application Load Balancer",
     "path-based routing",

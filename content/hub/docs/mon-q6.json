@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "monitoring"
   },
-  "concept": "EventBridge: реакция на события изменения состояния ресурсов",
-  "tests": "Выбор сервиса для event-driven автоматизации по событию AWS-сервиса.",
-  "expected": "EventBridge rule на событие EC2 Instance State-change (stopped) → target Lambda. Триггеры: «automatically run a Lambda whenever», «changes to the stopped state».",
-  "why_not": "CloudWatch alarms реагируют на пороги метрик, а не на дискретные события; Config remediation чинит несоответствия; subscription filter стримит содержимое логов.",
+  "concept": "EventBridge: react to resource state-change events",
+  "tests": "Choosing a service for event-driven automation on an AWS service event.",
+  "expected": "An EventBridge rule on the EC2 Instance State-change event (stopped) → Lambda target. Triggers: \"automatically run a Lambda whenever\", \"changes to the stopped state\".",
+  "why_not": "CloudWatch alarms react to metric thresholds, not discrete events; Config remediation fixes non-compliance; a subscription filter streams log content.",
   "keywords": [
     "EventBridge",
     "event rule",
@@ -15,7 +15,7 @@
     "EC2 stopped",
     "Lambda target",
     "event-driven",
-    "автоматический запуск"
+    "automatic trigger"
   ],
   "services": [
     "eventbridge",

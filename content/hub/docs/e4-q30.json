@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "SNS + SQS fan-out: одно событие во многие очереди",
-  "tests": "Какой сервис публикует события для асинхронного fan-out многим независимым потребителям.",
-  "expected": "SNS topic с несколькими subscriptions (SQS-очереди, Lambda) — каждое сообщение доставляется каждому подписчику. Триггеры: «fan-out», «one event notifies multiple independent consumers», «asynchronous».",
-  "why_not": "Одна SQS-очередь отдаёт сообщение одному consumer; прямые вызовы Lambda-to-Lambda связывают функции; EBS — блочное хранилище.",
+  "concept": "SNS + SQS fan-out: one event to many queues",
+  "tests": "Which service publishes events for asynchronous fan-out to many independent consumers.",
+  "expected": "An SNS topic with multiple subscriptions (SQS queues, Lambda): every message is delivered to every subscriber. Triggers: \"fan-out\", \"one event notifies multiple independent consumers\", \"asynchronous\".",
+  "why_not": "A single SQS queue hands a message to one consumer; direct Lambda-to-Lambda calls couple functions; EBS is block storage.",
   "keywords": [
     "SNS",
     "fan-out",
     "subscriptions",
     "pub/sub",
     "multiple consumers",
-    "асинхронно"
+    "asynchronous"
   ],
   "services": [
     "sns",

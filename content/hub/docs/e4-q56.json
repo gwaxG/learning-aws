@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "AWS Config: история конфигураций и непрерывный compliance",
-  "tests": "Какой сервис записывает полную историю изменений конфигурации ресурсов и оценивает их по правилам.",
-  "expected": "AWS Config — configuration history + непрерывная оценка по Config rules. Триггеры: «complete history of configuration changes», «evaluate against compliance rules over time».",
-  "why_not": "CloudTrail — API-активность, не состояние конфигурации во времени; CloudWatch — метрики и логи; Trusted Advisor — разовые best-practice проверки.",
+  "concept": "AWS Config: configuration history and continuous compliance",
+  "tests": "Which service records the full history of resource configuration changes and evaluates them against rules.",
+  "expected": "AWS Config: configuration history + continuous evaluation against Config rules. Triggers: \"complete history of configuration changes\", \"evaluate against compliance rules over time\".",
+  "why_not": "CloudTrail is API activity, not configuration state over time; CloudWatch is metrics and logs; Trusted Advisor is point-in-time best-practice checks.",
   "keywords": [
     "AWS Config",
     "configuration history",
     "Config rules",
     "compliance",
     "configuration changes",
-    "история изменений"
+    "change history"
   ],
   "services": [
     "config",

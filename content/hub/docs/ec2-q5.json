@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "ec2-compute"
   },
-  "concept": "EC2 instance families: memory optimized для in-memory нагрузок",
-  "tests": "Выбор семейства инстансов по профилю ресурсов (RAM/vCPU).",
-  "expected": "Memory optimized (R/X). Триггеры: «in-memory analytics/БД», «highest RAM-to-vCPU ratio».",
-  "why_not": "C — упор на CPU; I — локальные NVMe IOPS; T — burstable с низким baseline CPU и скромной памятью.",
+  "concept": "EC2 instance families: memory optimized for in-memory workloads",
+  "tests": "Choosing an instance family by resource profile (RAM/vCPU).",
+  "expected": "Memory optimized (R/X). Triggers: \"in-memory analytics/databases\", \"highest RAM-to-vCPU ratio\".",
+  "why_not": "C focuses on CPU; I on local NVMe IOPS; T is burstable with a low CPU baseline and modest memory.",
   "keywords": [
     "memory optimized",
     "R family",

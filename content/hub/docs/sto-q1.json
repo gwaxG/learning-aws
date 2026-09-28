@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "storage"
   },
-  "concept": "S3 Lifecycle: каскад storage classes под паттерн доступа",
-  "tests": "Умение подобрать цепочку transitions под убывающую частоту доступа, срок хранения и допустимое время извлечения.",
-  "expected": "Standard 30 дней → Standard-IA на 30-й день → Glacier Deep Archive на 90-й день. Триггеры: «хранить 7 лет», «retrieval within 12 hours» ⇒ Deep Archive (Standard retrieval до 12 ч); «occasionally» ⇒ Standard-IA.",
-  "why_not": "Всё в Standard — переплата за холодные данные; One Zone-IA рискует потерей при отказе AZ и дороже Deep Archive; Intelligent-Tiering с monitoring fee дороже явных transitions при известном паттерне.",
+  "concept": "S3 Lifecycle: cascading storage classes to match access patterns",
+  "tests": "Picking a chain of transitions for declining access frequency, retention period, and acceptable retrieval time.",
+  "expected": "Standard for 30 days → Standard-IA on day 30 → Glacier Deep Archive on day 90. Triggers: \"retain for 7 years\", \"retrieval within 12 hours\" ⇒ Deep Archive (Standard retrieval up to 12 h); \"occasionally\" ⇒ Standard-IA.",
+  "why_not": "Everything in Standard overpays for cold data; One Zone-IA risks loss on AZ failure and costs more than Deep Archive; Intelligent-Tiering with its monitoring fee costs more than explicit transitions when the pattern is known.",
   "keywords": [
     "S3 Lifecycle",
     "Standard-IA",
@@ -15,8 +15,8 @@
     "transition",
     "retention",
     "compliance",
-    "12 часов",
-    "минимизировать стоимость"
+    "12 hours",
+    "minimize cost"
   ],
   "services": [
     "s3-lifecycle",

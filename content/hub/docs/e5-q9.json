@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "Security Hub: агрегация и приоритизация security findings по аккаунтам",
-  "tests": "Какой сервис непрерывно агрегирует и приоритизирует находки (публичные бакеты, избыточные IAM-политики) во всех аккаунтах.",
-  "expected": "AWS Security Hub с интеграцией GuardDuty, Config, IAM Access Analyzer — единая приоритизированная картина posture. Триггеры: «across all accounts», «continuously», «findings prioritized».",
-  "why_not": "Config alone — записывает конфигурацию, но не агрегирует/не приоритизирует кросс-сервисные находки; Macie — чувствительные данные в S3; Trusted Advisor — ограниченные проверки.",
+  "concept": "Security Hub: aggregate and prioritize security findings across accounts",
+  "tests": "Which service continuously aggregates and prioritizes findings (public buckets, overly permissive IAM policies) across all accounts.",
+  "expected": "AWS Security Hub integrated with GuardDuty, Config, IAM Access Analyzer — a single prioritized view of security posture. Triggers: \"across all accounts\", \"continuously\", \"findings prioritized\".",
+  "why_not": "Config alone records configuration but doesn't aggregate/prioritize cross-service findings; Macie — sensitive data in S3; Trusted Advisor — limited checks.",
   "keywords": [
     "Security Hub",
     "findings",
@@ -15,7 +15,7 @@
     "multi-account",
     "IAM Access Analyzer",
     "security posture",
-    "публичные бакеты"
+    "public buckets"
   ],
   "services": [
     "security-hub",

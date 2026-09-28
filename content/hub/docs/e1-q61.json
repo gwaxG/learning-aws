@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "Macie: обнаружение и классификация PII в S3",
-  "tests": "Какой сервис находит и классифицирует чувствительные данные (PII) в S3 bucket для privacy compliance.",
-  "expected": "Amazon Macie — ML-обнаружение и классификация чувствительных данных (PII) в S3. Триггеры: «discover and classify sensitive data», «PII», «S3», «privacy compliance».",
-  "why_not": "GuardDuty — обнаружение угроз; AWS Config — конфигурации ресурсов; CloudTrail — API-активность; ни один не анализирует содержимое объектов.",
+  "concept": "Macie: discovering and classifying PII in S3",
+  "tests": "Which service finds and classifies sensitive data (PII) in S3 buckets for privacy compliance.",
+  "expected": "Amazon Macie — ML-based discovery and classification of sensitive data (PII) in S3. Triggers: \"discover and classify sensitive data\", \"PII\", \"S3\", \"privacy compliance\".",
+  "why_not": "GuardDuty — threat detection; AWS Config — resource configurations; CloudTrail — API activity; none of them analyzes object contents.",
   "keywords": [
     "Macie",
     "PII",
     "sensitive data",
     "data classification",
     "S3",
-    "персональные данные"
+    "personal data"
   ],
   "services": [
     "macie",

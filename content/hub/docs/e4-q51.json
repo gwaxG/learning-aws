@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "Compute Optimizer: rightsizing по фактической утилизации",
-  "tests": "Какой сервис даёт рекомендации по rightsizing недозагруженных EC2.",
-  "expected": "AWS Compute Optimizer — анализирует метрики утилизации и рекомендует оптимальные типы/размеры инстансов. Триггеры: «idle and underutilized», «recommendations to right-size», «reduce cost».",
-  "why_not": "Inspector — уязвимости; Config — состояние конфигурации; CloudWatch alarms алертят, но не рекомендуют размеры.",
+  "concept": "Compute Optimizer: rightsizing by actual utilization",
+  "tests": "Which service gives rightsizing recommendations for underutilized EC2.",
+  "expected": "AWS Compute Optimizer analyzes utilization metrics and recommends optimal instance types/sizes. Triggers: \"idle and underutilized\", \"recommendations to right-size\", \"reduce cost\".",
+  "why_not": "Inspector is vulnerabilities; Config is configuration state; CloudWatch alarms alert but don't recommend sizes.",
   "keywords": [
     "Compute Optimizer",
     "rightsizing",
     "underutilized",
     "idle instances",
     "recommendations",
-    "снижение затрат"
+    "cost reduction"
   ],
   "services": [
     "compute-optimizer",

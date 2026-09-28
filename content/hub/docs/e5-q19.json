@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "EKS: IRSA — IAM-роли для pod через OIDC provider",
-  "tests": "Механизм, дающий отдельным pod в EKS собственные ограниченные AWS-права.",
-  "expected": "IAM Roles for Service Accounts (IRSA): service account связан с IAM role через OIDC provider кластера. Триггеры: «pods get scoped AWS permissions», «service accounts».",
-  "why_not": "Общий node instance profile даёт всем pod одинаково широкие права; access keys в Kubernetes secrets — долгоживущие; NAT gateway к IAM отношения не имеет.",
+  "concept": "EKS: IRSA — IAM roles for pods via OIDC provider",
+  "tests": "Mechanism that gives individual EKS pods their own scoped AWS permissions.",
+  "expected": "IAM Roles for Service Accounts (IRSA): a service account is linked to an IAM role via the cluster's OIDC provider. Triggers: \"pods get scoped AWS permissions\", \"service accounts\".",
+  "why_not": "A shared node instance profile gives all pods the same broad permissions; access keys in Kubernetes secrets are long-lived; a NAT gateway has nothing to do with IAM.",
   "keywords": [
     "IRSA",
     "OIDC provider",

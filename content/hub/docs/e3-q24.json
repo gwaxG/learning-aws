@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "RDS Multi-AZ: автоматический failover при отказе AZ",
-  "tests": "Выбор варианта реляционной БД, переживающей потерю AZ с автоматическим failover и минимумом управления.",
-  "expected": "RDS Multi-AZ: синхронный standby в другой AZ, автоматический failover. Триггеры: «relational», «withstand loss of an AZ», «automatic failover», «minimal management».",
-  "why_not": "Single-AZ — нет failover; MySQL на одном EC2 — SPOF и ручное управление; DynamoDB global tables — не реляционная БД.",
+  "concept": "RDS Multi-AZ: automatic failover on AZ failure",
+  "tests": "Choosing a relational DB option that survives AZ loss with automatic failover and minimal management.",
+  "expected": "RDS Multi-AZ: synchronous standby in another AZ, automatic failover. Triggers: \"relational\", \"withstand loss of an AZ\", \"automatic failover\", \"minimal management\".",
+  "why_not": "Single-AZ — no failover; MySQL on a single EC2 — SPOF and manual management; DynamoDB global tables — not a relational DB.",
   "keywords": [
     "RDS Multi-AZ",
     "synchronous standby",
     "automatic failover",
     "Availability Zone",
     "relational",
-    "отказ AZ"
+    "AZ failure"
   ],
   "services": [
     "rds-multi-az",

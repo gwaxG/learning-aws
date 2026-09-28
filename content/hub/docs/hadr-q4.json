@@ -4,18 +4,18 @@
     "type": "topic",
     "ref": "ha-dr"
   },
-  "concept": "RDS Multi-AZ: автоматический failover без потери данных",
-  "tests": "Выбор HA-решения для реляционной БД в одном регионе с устойчивостью к отказу AZ.",
-  "expected": "RDS Multi-AZ — синхронный standby, автоматический failover через DNS без потери данных. Триггеры: «отказ одной AZ», «automatic failover», «no data loss», «один регион».",
-  "why_not": "Cross-Region read replica асинхронна и промоутится вручную; dual writes сложны и ненадёжны; Single-AZ с бэкапами — ручное восстановление и потеря данных.",
+  "concept": "RDS Multi-AZ: automatic failover with no data loss",
+  "tests": "Choosing an HA solution for a relational DB in one Region that survives an AZ failure.",
+  "expected": "RDS Multi-AZ — synchronous standby, automatic failover via DNS with no data loss. Triggers: \"single AZ failure\", \"automatic failover\", \"no data loss\", \"single Region\".",
+  "why_not": "A cross-Region read replica is asynchronous and promoted manually; dual writes are complex and unreliable; Single-AZ with backups means manual recovery and data loss.",
   "keywords": [
     "Multi-AZ",
     "synchronous standby",
     "automatic failover",
     "no data loss",
     "cross-Region read replica",
-    "отказ AZ",
-    "один регион"
+    "AZ failure",
+    "single Region"
   ],
   "services": [
     "rds-multi-az",

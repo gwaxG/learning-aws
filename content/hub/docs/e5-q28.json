@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "SNS: pub/sub fan-out на SQS и Lambda",
-  "tests": "Какой сервис реализует pub/sub, где одно событие рассылается нескольким независимым подписчикам.",
-  "expected": "Amazon SNS topic с подписчиками SQS, Lambda, HTTP (fan-out). Триггеры: «publish/subscribe», «fans out to multiple independent consumers».",
-  "why_not": "SQS alone — point-to-point; Step Functions — оркестрация; Kinesis Data Streams — потоковые данные, а не простая fan-out рассылка.",
+  "concept": "SNS: pub/sub fan-out to SQS and Lambda",
+  "tests": "Which service implements pub/sub where one event is delivered to multiple independent subscribers.",
+  "expected": "Amazon SNS topic with SQS, Lambda, HTTP subscribers (fan-out). Triggers: \"publish/subscribe\", \"fans out to multiple independent consumers\".",
+  "why_not": "SQS alone — point-to-point; Step Functions — orchestration; Kinesis Data Streams — streaming data, not simple fan-out delivery.",
   "keywords": [
     "SNS",
     "pub/sub",
@@ -15,7 +15,7 @@
     "subscribers",
     "SQS",
     "Lambda",
-    "несколько потребителей"
+    "multiple consumers"
   ],
   "services": [
     "sns",

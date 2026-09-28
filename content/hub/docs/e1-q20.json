@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "DynamoDB global tables: multi-Region active-active чтение и запись",
-  "tests": "Как обеспечить низкую задержку чтения и возможность записи в нескольких Region для таблицы DynamoDB.",
-  "expected": "DynamoDB global tables — multi-Region multi-active репликация, чтение и запись локально в каждом Region. Триггеры: «multiple Regions», «write in any Region», «low latency».",
-  "why_not": "DAX — кэш чтения внутри одного Region; on-demand — режим capacity; Streams сами не создают active-active реплики.",
+  "concept": "DynamoDB global tables: multi-Region active-active reads and writes",
+  "tests": "How to get low-latency reads and the ability to write in multiple Regions for a DynamoDB table.",
+  "expected": "DynamoDB global tables — multi-Region multi-active replication, local reads and writes in each Region. Triggers: \"multiple Regions\", \"write in any Region\", \"low latency\".",
+  "why_not": "DAX — a read cache within a single Region; on-demand — a capacity mode; Streams alone don't create active-active replicas.",
   "keywords": [
     "global tables",
     "multi-Region",
     "active-active",
     "DAX",
     "DynamoDB Streams",
-    "запись в любом Region"
+    "write in any Region"
   ],
   "services": [
     "dynamodb-global",

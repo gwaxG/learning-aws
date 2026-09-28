@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "FSx for Lustre: файловая система для HPC",
-  "tests": "Выбор общей файловой системы с sub-ms латентностью и высокой пропускной способностью для Linux HPC.",
-  "expected": "Amazon FSx for Lustre — HPC/ML, sub-ms, сотни ГБ/с, интеграция с S3. Триггеры: «high-performance computing», «sub-millisecond», «high throughput», «Linux compute nodes».",
-  "why_not": "EFS — general purpose NFS с большей латентностью; S3 — объектное, не POSIX; FSx for Windows — SMB для Windows.",
+  "concept": "FSx for Lustre: file system for HPC",
+  "tests": "Choosing a shared file system with sub-ms latency and high throughput for Linux HPC.",
+  "expected": "Amazon FSx for Lustre — HPC/ML, sub-ms, hundreds of GB/s, S3 integration. Triggers: \"high-performance computing\", \"sub-millisecond\", \"high throughput\", \"Linux compute nodes\".",
+  "why_not": "EFS — general-purpose NFS with higher latency; S3 — object storage, not POSIX; FSx for Windows — SMB for Windows.",
   "keywords": [
     "FSx for Lustre",
     "HPC",

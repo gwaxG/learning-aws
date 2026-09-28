@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "CloudWatch alarm на метрике + SNS-уведомление",
-  "tests": "Как с минимальными усилиями получать уведомление, когда CPU выше порога заданное время.",
-  "expected": "CloudWatch alarm на CPUUtilization (порог 80%, период/evaluation periods на 10 минут) с действием SNS notification. Триггеры: «notified automatically», «CPU above 80% for 10 minutes», «LEAST overhead».",
-  "why_not": "Lambda с поллингом — изобретает то, что есть в CloudWatch; ручная проверка консоли — не автоматизация; CloudTrail data events — API-активность, не метрики.",
+  "concept": "CloudWatch alarm on a metric + SNS notification",
+  "tests": "How to get notified with minimal effort when CPU stays above a threshold for a set time.",
+  "expected": "CloudWatch alarm on CPUUtilization (80% threshold, period/evaluation periods covering 10 minutes) with an SNS notification action. Triggers: \"notified automatically\", \"CPU above 80% for 10 minutes\", \"LEAST overhead\".",
+  "why_not": "A polling Lambda reinvents what CloudWatch already does; manually checking the console isn't automation; CloudTrail data events — API activity, not metrics.",
   "keywords": [
     "CloudWatch alarm",
     "CPUUtilization",
     "SNS",
     "threshold",
     "evaluation periods",
-    "уведомление"
+    "notification"
   ],
   "services": [
     "cloudwatch",

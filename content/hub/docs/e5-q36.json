@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "Aurora Global Database: cross-Region DR с быстрым promotion",
-  "tests": "Какая функция Aurora обеспечивает межрегиональный DR с минимальным RTO через постоянно обновляемую реплику.",
-  "expected": "Aurora Global Database (или cross-Region read replica) — репликация в другой регион с лагом ~1 с, быстрый promotion. Триггеры: «another Region», «minimal RTO», «continuously updated read replica», «fast promotion».",
-  "why_not": "Automated snapshots — долгое восстановление; Multi-AZ не защищает от отказа региона; ручной экспорт в S3 — высокий RPO и медленное восстановление.",
+  "concept": "Aurora Global Database: cross-Region DR with fast promotion",
+  "tests": "Which Aurora feature provides cross-Region DR with minimal RTO via a continuously updated replica.",
+  "expected": "Aurora Global Database (or a cross-Region read replica) — replication to another Region with ~1 s lag, fast promotion. Triggers: \"another Region\", \"minimal RTO\", \"continuously updated read replica\", \"fast promotion\".",
+  "why_not": "Automated snapshots — slow recovery; Multi-AZ doesn't protect against a Region failure; manual export to S3 — high RPO and slow recovery.",
   "keywords": [
     "Aurora Global Database",
     "cross-Region read replica",
     "promotion",
     "RTO",
     "DR",
-    "другой регион"
+    "another Region"
   ],
   "services": [
     "aurora-global",

@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "API Gateway: throttling, авторизация и кэширование REST API",
-  "tests": "Какой управляемый сервис ставить перед REST API для throttling, авторизации и кэширования ответов без серверов.",
-  "expected": "Amazon API Gateway — throttling, authorizers, валидация запросов, кэширование ответов, полностью managed. Триггеры: «REST API», «throttling», «authorization», «caching of responses».",
-  "why_not": "ALB не даёт встроенного API throttling и авторизации такого уровня; CloudFront — CDN без семантики управления API; Direct Connect — сетевое подключение.",
+  "concept": "API Gateway: throttling, authorization and caching for REST APIs",
+  "tests": "Which managed service to put in front of a REST API for throttling, authorization and response caching without servers.",
+  "expected": "Amazon API Gateway — throttling, authorizers, request validation, response caching, fully managed. Triggers: \"REST API\", \"throttling\", \"authorization\", \"caching of responses\".",
+  "why_not": "ALB lacks built-in API throttling and authorization at that level; CloudFront — a CDN without API management semantics; Direct Connect — a network connection.",
   "keywords": [
     "API Gateway",
     "REST API",

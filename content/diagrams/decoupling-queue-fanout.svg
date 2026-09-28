@@ -1,4 +1,4 @@
-<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Развязка (decoupling) через очереди SQS, dead-letter queue и fan-out через SNS/EventBridge">
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Decoupling with SQS queues, dead-letter queues, and SNS/EventBridge fan-out">
   <style>
     .ttl { fill: #ff9900; font: 700 13px system-ui, sans-serif; }
     .node { fill: #1d3150; stroke: #4aa3ff; }
@@ -19,13 +19,13 @@
   </defs>
 
   <!-- Queue pattern -->
-  <text x="20" y="30" class="ttl">Очередь (SQS) — буфер для медленных consumer, изоляция сбоев</text>
+  <text x="20" y="30" class="ttl">Queue (SQS) — buffer slow consumers, isolate failures</text>
 
   <rect class="node" x="20" y="50" width="120" height="44" rx="6"/>
   <text class="nodet" x="80" y="76">Producer</text>
 
   <rect class="node" x="200" y="50" width="140" height="44" rx="6"/>
-  <text class="nodet" x="270" y="76">Очередь SQS</text>
+  <text class="nodet" x="270" y="76">SQS queue</text>
 
   <rect class="node" x="400" y="50" width="140" height="44" rx="6"/>
   <text class="nodet" x="470" y="76">Consumer (ASG)</text>
@@ -37,10 +37,10 @@
   <path class="flow" d="M340,72 L400,72"/>
   <path class="fail" d="M470,94 L470,130"/>
 
-  <text x="20" y="200" class="sub" style="text-anchor:start">сглаживает пики · доставка at-least-once · «ядовитые» сообщения уходят в DLQ после maxReceiveCount</text>
+  <text x="20" y="200" class="sub">buffers spikes · at-least-once delivery · poison messages drain to DLQ after maxReceiveCount</text>
 
   <!-- Fan-out pattern -->
-  <text x="20" y="240" class="ttl">Fan-out (SNS / EventBridge) — одно событие, много подписчиков</text>
+  <text x="20" y="240" class="ttl">Fan-out (SNS / EventBridge) — one event, many subscribers</text>
 
   <rect class="node" x="20" y="260" width="120" height="44" rx="6"/>
   <text class="nodet" x="80" y="286">Producer</text>
@@ -49,7 +49,7 @@
   <text class="nodet" x="270" y="286">SNS / EventBridge</text>
 
   <rect class="node" x="400" y="240" width="140" height="34" rx="6"/>
-  <text class="nodet" x="470" y="262">SQS → Lambda</text>
+  <text class="nodet" x="470" y="262">SQS queue → Lambda</text>
 
   <rect class="node" x="400" y="282" width="140" height="34" rx="6"/>
   <text class="nodet" x="470" y="304">Lambda function</text>
@@ -62,7 +62,7 @@
   <path class="flow" d="M340,282 L400,299"/>
   <path class="flow" d="M340,282 L400,341"/>
 
-  <text x="560" y="262" class="sub" style="text-anchor:start">независимые повторы</text>
-  <text x="560" y="304" class="sub" style="text-anchor:start">фильтрация по target</text>
-  <text x="560" y="346" class="sub" style="text-anchor:start">подписчики без правки кода</text>
+  <text x="560" y="262" class="sub">independent retries</text>
+  <text x="560" y="304" class="sub">per-target filtering</text>
+  <text x="560" y="346" class="sub">add subscribers w/o code change</text>
 </svg>

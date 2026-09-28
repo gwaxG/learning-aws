@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "SQS FIFO: порядок и exactly-once обработка",
-  "tests": "Выбор очереди, сохраняющей порядок сообщений и исключающей дубликаты.",
-  "expected": "Amazon SQS FIFO queue — строгий порядок внутри message group и exactly-once processing (дедупликация). Триггеры: «exactly in the sequence received», «avoid duplicates».",
-  "why_not": "SQS Standard — best-effort порядок и at-least-once; SNS standard не гарантирует порядок; Firehose — доставка потока в хранилища.",
+  "concept": "SQS FIFO: ordering and exactly-once processing",
+  "tests": "Choosing a queue that preserves message order and eliminates duplicates.",
+  "expected": "Amazon SQS FIFO queue: strict ordering within a message group and exactly-once processing (deduplication). Triggers: \"exactly in the sequence received\", \"avoid duplicates\".",
+  "why_not": "SQS Standard is best-effort ordering and at-least-once; SNS standard doesn't guarantee order; Firehose delivers streams to storage.",
   "keywords": [
     "SQS FIFO",
     "ordering",
     "exactly-once",
     "deduplication",
     "message group",
-    "порядок сообщений"
+    "message ordering"
   ],
   "services": [
     "sqs-fifo",

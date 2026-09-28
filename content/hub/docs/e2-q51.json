@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "Budgets + Cost allocation tags: прогнозные алерты и учёт затрат по проектам",
-  "tests": "Комбинация для оповещения о прогнозируемом превышении бюджета и разбивки расходов по проектам.",
-  "expected": "AWS Budgets с алертами на forecasted cost + активировать cost allocation tags в Billing console (разбивка в Cost Explorer/Budgets). Триггеры: «forecasted to exceed», «threshold», «track spend by project using tags».",
-  "why_not": "CloudWatch billing alarms — только общий фактический расход, без прогноза и тегов; Trusted Advisor и Compute Optimizer — рекомендации, не бюджеты.",
+  "concept": "Budgets + cost allocation tags: forecast alerts and per-project cost tracking",
+  "tests": "The combination for alerting on a forecasted budget overrun and breaking down spend by project.",
+  "expected": "AWS Budgets with forecasted-cost alerts + activate cost allocation tags in the Billing console (breakdown in Cost Explorer/Budgets). Triggers: \"forecasted to exceed\", \"threshold\", \"track spend by project using tags\".",
+  "why_not": "CloudWatch billing alarms — total actual spend only, no forecast or tags; Trusted Advisor and Compute Optimizer — recommendations, not budgets.",
   "keywords": [
     "AWS Budgets",
     "forecasted cost",

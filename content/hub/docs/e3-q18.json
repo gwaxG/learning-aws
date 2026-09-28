@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "IAM cross-account: read-only роль для внешнего аудитора",
-  "tests": "Как дать стороннему аудитору read-only доступ без долгоживущих credentials.",
-  "expected": "Cross-account IAM role с read-only политикой (напр. ReadOnlyAccess/billing), аудитор assume-ит её и получает временные credentials. Триггеры: «third-party auditor», «read-only», «without long-term credentials».",
-  "why_not": "IAM user с ключами по email — долгоживущий секрет; root credentials — недопустимо; добавление в management account — избыточные права.",
+  "concept": "IAM: cross-account read-only role for an external auditor",
+  "tests": "How to give a third-party auditor read-only access without long-term credentials.",
+  "expected": "Cross-account IAM role with a read-only policy (e.g., ReadOnlyAccess/billing); the auditor assumes it and gets temporary credentials. Triggers: \"third-party auditor\", \"read-only\", \"without long-term credentials\".",
+  "why_not": "IAM user with keys sent by email — long-lived secret; root credentials — unacceptable; adding to the management account — excessive permissions.",
   "keywords": [
     "cross-account role",
     "read-only",
     "auditor",
     "temporary credentials",
     "AssumeRole",
-    "без долгоживущих ключей"
+    "no long-term keys"
   ],
   "services": [
     "iam",

@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "ECS Service Auto Scaling: target tracking по ALBRequestCountPerTarget",
-  "tests": "Как масштабировать число задач ECS на Fargate по числу запросов на target.",
-  "expected": "ECS service auto scaling (Application Auto Scaling) с target tracking на метрике ALBRequestCountPerTarget. Триггеры: «number of tasks», «request count per target», «Fargate».",
-  "why_not": "EC2 ASG не применим к Fargate (нет инстансов); scheduled scaling — по времени, не по нагрузке; ручное изменение desired count — не автоматика.",
+  "concept": "ECS Service Auto Scaling: target tracking on ALBRequestCountPerTarget",
+  "tests": "How to scale the number of ECS tasks on Fargate by requests per target.",
+  "expected": "ECS service auto scaling (Application Auto Scaling) with target tracking on the ALBRequestCountPerTarget metric. Triggers: \"number of tasks\", \"request count per target\", \"Fargate\".",
+  "why_not": "An EC2 ASG doesn't apply to Fargate (no instances); scheduled scaling — time-based, not load-based; manually changing desired count isn't automation.",
   "keywords": [
     "ECS service auto scaling",
     "target tracking",

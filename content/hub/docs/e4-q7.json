@@ -4,16 +4,16 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "VPC: приватная связь двух VPC (Peering / PrivateLink)",
-  "tests": "Как передавать данные между двумя VPC в одном регионе, не выходя в интернет.",
-  "expected": "VPC Peering (связь VPC целиком) или AWS PrivateLink (доступ к конкретному сервису) — трафик по сети AWS. Триггеры: «between two VPCs», «without traversing the public internet».",
-  "why_not": "IGW и NAT Gateway ведут в интернет; Site-to-Site VPN — для on-premises, лишняя сложность.",
+  "concept": "VPC: private connectivity between two VPCs (Peering / PrivateLink)",
+  "tests": "How to move data between two VPCs in the same Region without going over the internet.",
+  "expected": "VPC Peering (whole-VPC connectivity) or AWS PrivateLink (access to a specific service): traffic stays on the AWS network. Triggers: \"between two VPCs\", \"without traversing the public internet\".",
+  "why_not": "IGW and NAT Gateway lead to the internet; Site-to-Site VPN is for on-premises and adds needless complexity.",
   "keywords": [
     "VPC Peering",
     "PrivateLink",
     "private connectivity",
     "same Region",
-    "не через интернет"
+    "not over the internet"
   ],
   "services": [
     "vpc-peering",

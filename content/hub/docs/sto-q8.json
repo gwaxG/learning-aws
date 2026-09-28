@@ -4,18 +4,17 @@
     "type": "topic",
     "ref": "storage"
   },
-  "concept": "S3 Cross-Region Replication: versioning и IAM role",
-  "tests": "Знание обязательных условий для автоматического копирования объектов S3 в другой регион.",
-  "expected": "Cross-Region Replication с IAM role для репликации + versioning на source и destination bucket. Существующие объекты — только через S3 Batch Replication. Триггеры: «automatically copied», «bucket in another region», «disaster recovery».",
-  "why_not": "SRR реплицирует в пределах одного региона; Transfer Acceleration лишь ускоряет клиентские загрузки через edge locations и не копирует между bucket.",
+  "concept": "S3 Cross-Region Replication: versioning and IAM role",
+  "tests": "Knowing the prerequisites for automatically copying S3 objects to another Region.",
+  "expected": "Cross-Region Replication with an IAM role for replication + versioning on the source and destination buckets. Existing objects — only via S3 Batch Replication. Triggers: \"automatically copied\", \"bucket in another region\", \"disaster recovery\".",
+  "why_not": "SRR replicates within a single Region; Transfer Acceleration only speeds up client uploads via edge locations and does not copy between buckets.",
   "keywords": [
     "Cross-Region Replication",
     "CRR",
     "versioning",
     "IAM role",
     "SRR",
-    "disaster recovery",
-    "репликация в другой регион"
+    "disaster recovery"
   ],
   "services": [
     "s3-replication",

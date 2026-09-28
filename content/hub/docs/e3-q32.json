@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "ECS на Fargate: контейнеры без управления серверами",
-  "tests": "Выбор оркестрации контейнеров с минимальной операционной нагрузкой и serverless-вычислениями.",
-  "expected": "Amazon ECS с Fargate launch type — ни control plane, ни инстансов. Триггеры: «avoid managing the control plane», «serverless compute for tasks», «least operational overhead».",
-  "why_not": "Self-managed Kubernetes и EC2 launch type требуют патчей и управления ёмкостью; cron на одной VM — нет оркестрации и отказоустойчивости.",
+  "concept": "ECS on Fargate: containers without managing servers",
+  "tests": "Choosing container orchestration with minimal operational overhead and serverless compute.",
+  "expected": "Amazon ECS with the Fargate launch type — no control plane and no instances to manage. Triggers: \"avoid managing the control plane\", \"serverless compute for tasks\", \"least operational overhead\".",
+  "why_not": "Self-managed Kubernetes and the EC2 launch type require patching and capacity management; cron on a single VM — no orchestration or fault tolerance.",
   "keywords": [
     "ECS",
     "Fargate",
     "serverless containers",
     "launch type",
     "least operational overhead",
-    "без управления серверами"
+    "no server management"
   ],
   "services": [
     "fargate",

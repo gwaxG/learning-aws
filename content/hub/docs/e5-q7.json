@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "CloudTrail: аудит API-вызовов с долгим хранением в S3 + Glacier",
-  "tests": "Какие сервисы дают полный журнал API-вызовов (кто, когда, откуда) с дешёвым многолетним хранением.",
-  "expected": "CloudTrail trail → S3 bucket + S3 lifecycle policy → Glacier для старых логов. Триггеры: «every API call», «identity, time, source IP», «retained for several years», «cost-effectively».",
-  "why_not": "VPC Flow Logs — сетевой трафик, не API-вызовы; CloudWatch detailed monitoring — метрики; DynamoDB — дорого для архива логов.",
+  "concept": "CloudTrail: API call auditing with long-term retention in S3 + Glacier",
+  "tests": "Which services give a complete log of API calls (who, when, from where) with cheap multi-year retention.",
+  "expected": "CloudTrail trail → S3 bucket + S3 lifecycle policy → Glacier for older logs. Triggers: \"every API call\", \"identity, time, source IP\", \"retained for several years\", \"cost-effectively\".",
+  "why_not": "VPC Flow Logs — network traffic, not API calls; CloudWatch detailed monitoring — metrics; DynamoDB — expensive for a log archive.",
   "keywords": [
     "CloudTrail",
     "trail",
     "API calls",
     "S3 lifecycle",
     "Glacier",
-    "аудит",
+    "audit",
     "retention",
     "source IP"
   ],

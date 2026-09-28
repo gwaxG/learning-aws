@@ -4,18 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "Step Functions: оркестрация Lambda с ветвлением, retries и обработкой ошибок",
-  "tests": "Выбор сервиса для визуальной оркестрации нескольких Lambda с ветвлениями и повторами.",
-  "expected": "AWS Step Functions — state machine со встроенными Choice, Retry, Catch и визуализацией. Триггеры: «coordinate multiple Lambda functions», «branching logic, retries, error handling», «visual».",
-  "why_not": "SQS и SNS — обмен сообщениями, не оркестрация; AWS Batch — пакетные вычисления без state machine.",
+  "concept": "Step Functions: orchestrate Lambda with branching, retries, error handling",
+  "tests": "Choosing a service for visual orchestration of multiple Lambdas with branching and retries.",
+  "expected": "AWS Step Functions — state machine with built-in Choice, Retry, Catch and visualization. Triggers: \"coordinate multiple Lambda functions\", \"branching logic, retries, error handling\", \"visual\".",
+  "why_not": "SQS and SNS — messaging, not orchestration; AWS Batch — batch computing without a state machine.",
   "keywords": [
     "Step Functions",
     "state machine",
     "orchestration",
     "retries",
     "error handling",
-    "branching",
-    "оркестрация"
+    "branching"
   ],
   "services": [
     "step-functions",

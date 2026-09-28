@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "AWS Config: обнаружение + auto-remediation через SSM Automation",
-  "tests": "Комбинация для обнаружения открытого SSH 0.0.0.0/0 в security group и автоматического исправления.",
-  "expected": "AWS Config managed rule (restricted-ssh) + remediation action на SSM Automation document, удаляющий правило. Триггеры: «automatically remediate», «detection and automatic remediation», «0.0.0.0/0 SSH».",
-  "why_not": "CloudTrail только записывает изменение; ручной аудит медленный; Inspector network reachability оценивает экспозицию без исправления.",
+  "concept": "AWS Config: detection + auto-remediation via SSM Automation",
+  "tests": "The combination for detecting open SSH 0.0.0.0/0 in a security group and fixing it automatically.",
+  "expected": "AWS Config managed rule (restricted-ssh) + a remediation action using an SSM Automation document that removes the rule. Triggers: \"automatically remediate\", \"detection and automatic remediation\", \"0.0.0.0/0 SSH\".",
+  "why_not": "CloudTrail only records the change; manual audits are slow; Inspector network reachability assesses exposure without fixing it.",
   "keywords": [
     "AWS Config",
     "remediation",

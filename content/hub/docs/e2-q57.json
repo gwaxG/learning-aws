@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "S3 + CloudFront + ACM: статический сайт без серверов",
-  "tests": "Выбор самой дешёвой архитектуры для глобальной HTTPS-раздачи статического SPA без серверов.",
-  "expected": "S3 (static hosting / origin с OAC) + CloudFront distribution + ACM-сертификат — глобально, низкая латентность, HTTPS, копейки. Триггеры: «static single-page app», «globally», «HTTPS», «lowest cost», «without running servers».",
-  "why_not": "EC2+ALB и ECS Fargate — серверы и дороже; Lambda на каждый запрос — лишние compute и латентность для статики.",
+  "concept": "S3 + CloudFront + ACM: serverless static website",
+  "tests": "Choosing the cheapest architecture to serve a static SPA globally over HTTPS without servers.",
+  "expected": "S3 (static hosting / origin with OAC) + a CloudFront distribution + an ACM certificate — global, low latency, HTTPS, pennies. Triggers: \"static single-page app\", \"globally\", \"HTTPS\", \"lowest cost\", \"without running servers\".",
+  "why_not": "EC2+ALB and ECS Fargate — servers and more expensive; Lambda per request — unnecessary compute and latency for static content.",
   "keywords": [
     "S3 static website",
     "CloudFront",

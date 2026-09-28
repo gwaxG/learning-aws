@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "SQS: буферизация и развязка producer/consumer",
-  "tests": "Паттерн, при котором сервис остаётся доступным, пока downstream временно недоступен.",
-  "expected": "SQS-очередь между сервисами: producer продолжает работать, сообщения обрабатываются после восстановления consumer. Триггеры: «downstream temporarily down», «buffer requests», «process when recovers».",
-  "why_not": "Синхронные HTTP-вызовы связывают доступность; больший timeout или инстанс не дают буферизации и изоляции отказов.",
+  "concept": "SQS: buffering and producer/consumer decoupling",
+  "tests": "Pattern that keeps a service available while a downstream is temporarily down.",
+  "expected": "An SQS queue between services: the producer keeps working, messages are processed once the consumer recovers. Triggers: \"downstream temporarily down\", \"buffer requests\", \"process when recovers\".",
+  "why_not": "Synchronous HTTP calls couple availability; a longer timeout or bigger instance gives no buffering or failure isolation.",
   "keywords": [
     "SQS",
     "decoupling",
     "buffer",
     "loose coupling",
     "resilience",
-    "развязка сервисов"
+    "service decoupling"
   ],
   "services": [
     "sqs",

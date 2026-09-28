@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "Athena: serverless SQL по данным в S3",
-  "tests": "Выбор сервиса для SQL-запросов напрямую к S3 без серверов с оплатой за просканированные данные.",
-  "expected": "Amazon Athena — serverless, SQL по S3, оплата за scanned data. Триггеры: «query data in S3», «without provisioning servers», «pay per query».",
-  "why_not": "Redshift Spectrum требует кластер Redshift; EMR — управление кластерами; Glue ETL — трансформации, не ad hoc запросы.",
+  "concept": "Athena: serverless SQL over data in S3",
+  "tests": "Choosing a service for SQL queries directly against S3 with no servers, paying per data scanned.",
+  "expected": "Amazon Athena — serverless, SQL over S3, pay per data scanned. Triggers: \"query data in S3\", \"without provisioning servers\", \"pay per query\".",
+  "why_not": "Redshift Spectrum requires a Redshift cluster; EMR — cluster management; Glue ETL — transformations, not ad hoc queries.",
   "keywords": [
     "Athena",
     "serverless",

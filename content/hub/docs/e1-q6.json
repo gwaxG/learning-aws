@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "IAM: cross-account роль с trust policy",
-  "tests": "Как безопасно и с временным доступом дать внешнему AWS-аккаунту партнёра доступ к объектам S3 по принципу least privilege.",
-  "expected": "Создать IAM role с trust policy на аккаунт партнёра; партнёр делает AssumeRole и получает временные credentials. Триггеры: «external AWS account», «time-limited», «least privilege».",
-  "why_not": "Публичный bucket открывает данные всем; IAM user с постоянными ключами — долгоживущие секреты вне контроля; root credentials никогда не передаются.",
+  "concept": "IAM: cross-account role with a trust policy",
+  "tests": "How to securely give a partner's external AWS account time-limited, least-privilege access to S3 objects.",
+  "expected": "Create an IAM role with a trust policy for the partner account; the partner calls AssumeRole and gets temporary credentials. Triggers: \"external AWS account\", \"time-limited\", \"least privilege\".",
+  "why_not": "A public bucket exposes data to everyone; an IAM user with permanent keys — long-lived secrets outside your control; root credentials are never shared.",
   "keywords": [
     "cross-account",
     "trust policy",
     "AssumeRole",
     "temporary credentials",
     "least privilege",
-    "аккаунт партнёра"
+    "partner account"
   ],
   "services": [
     "iam",

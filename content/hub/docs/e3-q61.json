@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "CloudWatch Logs: Logs Insights и metric filters",
-  "tests": "Как централизованно анализировать логи интерактивно и строить alarms по паттернам логов.",
-  "expected": "CloudWatch Logs + Logs Insights (интерактивные запросы) + metric filters → метрики → alarms. Триггеры: «query log data interactively», «metric-based alarms», «centralizes logs».",
-  "why_not": "Логи только в S3 без анализа — нет алертинга; печать в консоль и рассылка по email не масштабируются.",
+  "concept": "CloudWatch Logs: Logs Insights and metric filters",
+  "tests": "How to centrally analyze logs interactively and build alarms on log patterns.",
+  "expected": "CloudWatch Logs + Logs Insights (interactive queries) + metric filters → metrics → alarms. Triggers: \"query log data interactively\", \"metric-based alarms\", \"centralizes logs\".",
+  "why_not": "Logs only in S3 without analysis — no alerting; printing to console and emailing do not scale.",
   "keywords": [
     "CloudWatch Logs",
     "Logs Insights",
     "metric filters",
     "alarms",
     "centralized logging",
-    "интерактивные запросы"
+    "interactive queries"
   ],
   "services": [
     "cloudwatch-logs",

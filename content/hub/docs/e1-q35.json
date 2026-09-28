@@ -4,16 +4,16 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "ElastiCache: lazy loading (cache-aside) для повторяющихся запросов",
-  "tests": "Выбор стратегии кэширования результатов повторяющихся запросов к реляционной БД с минимальными изменениями приложения.",
-  "expected": "Amazon ElastiCache с паттерном lazy loading (cache-aside): при промахе читать из БД и класть в кэш. Триггеры: «many repeated identical queries», «reduce database load», «minimal application changes».",
-  "why_not": "Вертикальное масштабирование RDS упирается в пределы и цену; S3 — не низколатентный кэш; переход на DynamoDB — серьёзная переделка.",
+  "concept": "ElastiCache: lazy loading (cache-aside) for repeated queries",
+  "tests": "Choosing a strategy to cache results of repeated relational DB queries with minimal application changes.",
+  "expected": "Amazon ElastiCache with the lazy loading (cache-aside) pattern: on a miss, read from the DB and put it in the cache. Triggers: \"many repeated identical queries\", \"reduce database load\", \"minimal application changes\".",
+  "why_not": "Scaling RDS vertically hits limits and cost; S3 isn't a low-latency cache; moving to DynamoDB is a major rewrite.",
   "keywords": [
     "ElastiCache",
     "lazy loading",
     "cache-aside",
-    "кэширование запросов",
-    "снизить нагрузку на БД"
+    "query caching",
+    "reduce database load"
   ],
   "services": [
     "elasticache",

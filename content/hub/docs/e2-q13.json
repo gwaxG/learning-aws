@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "Global Accelerator vs CloudFront: static anycast IP для API + кэш статики на edge",
-  "tests": "Различение: CloudFront для кэширования статики, Global Accelerator для ускорения динамического трафика и статических anycast IP.",
-  "expected": "CloudFront — кэш статических ассетов в edge locations; Global Accelerator — 2 статических anycast IP и маршрут по AWS backbone для API. Триггеры: «static anycast IP», «dynamic API», «static assets», «worldwide latency».",
-  "why_not": "Route 53 latency routing — только DNS, без backbone и статических IP; S3 Transfer Acceleration — для загрузок в S3; ALB в одном регионе не помогает глобальным пользователям.",
+  "concept": "Global Accelerator vs CloudFront: static anycast IPs for API + edge caching",
+  "tests": "Telling them apart: CloudFront caches static content, Global Accelerator speeds up dynamic traffic and provides static anycast IPs.",
+  "expected": "CloudFront — caches static assets at edge locations; Global Accelerator — 2 static anycast IPs and routing over the AWS backbone for the API. Triggers: \"static anycast IP\", \"dynamic API\", \"static assets\", \"worldwide latency\".",
+  "why_not": "Route 53 latency routing — DNS only, no backbone or static IPs; S3 Transfer Acceleration — for uploads to S3; an ALB in one Region doesn't help global users.",
   "keywords": [
     "Global Accelerator",
     "anycast IP",

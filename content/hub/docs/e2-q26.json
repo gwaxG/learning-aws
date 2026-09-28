@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "Rightsizing: Cost Explorer рекомендации + Compute Optimizer",
-  "tests": "Выбор инструментов для централизованных рекомендаций по rightsizing и поиску простаивающих ресурсов во многих аккаунтах.",
-  "expected": "Cost Explorer rightsizing recommendations + AWS Compute Optimizer — анализ утилизации, рекомендации по размеру и удалению idle ресурсов с ценовым контекстом. Триггеры: «right-size underutilized», «idle resources», «many accounts», «least setup».",
-  "why_not": "Compute Optimizer один — силён, но без cost-контекста (по версии вопроса); Budgets только отслеживают расходы против порогов; CloudWatch dashboards показывают метрики без рекомендаций.",
+  "concept": "Rightsizing: Cost Explorer recommendations + Compute Optimizer",
+  "tests": "Choosing tools for centralized rightsizing recommendations and finding idle resources across many accounts.",
+  "expected": "Cost Explorer rightsizing recommendations + AWS Compute Optimizer — utilization analysis, sizing and idle-resource removal recommendations with cost context. Triggers: \"right-size underutilized\", \"idle resources\", \"many accounts\", \"least setup\".",
+  "why_not": "Compute Optimizer alone — strong, but lacks cost context (per the question's framing); Budgets only track spend against thresholds; CloudWatch dashboards show metrics without recommendations.",
   "keywords": [
     "rightsizing",
     "Cost Explorer",

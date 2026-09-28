@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "EC2 Spot: самые дешёвые прерываемые вычисления",
-  "tests": "Выбор модели покупки EC2 для ночного batch, терпимого к прерываниям.",
-  "expected": "Spot Instances — до ~90% скидки, для interruption-tolerant задач. Триггеры: «can tolerate interruptions and restarts», «lowest compute cost», «batch».",
-  "why_not": "On-Demand дороже; 3-летние RI требуют постоянной нагрузки; Dedicated Hosts — дорого, для лицензий/изоляции.",
+  "concept": "EC2 purchasing: Spot — cheapest interruptible compute",
+  "tests": "Choosing an EC2 purchasing option for a nightly batch that tolerates interruptions.",
+  "expected": "Spot Instances — up to ~90% discount, for interruption-tolerant workloads. Triggers: \"can tolerate interruptions and restarts\", \"lowest compute cost\", \"batch\".",
+  "why_not": "On-Demand is more expensive; 3-year RIs require steady load; Dedicated Hosts — expensive, for licensing/isolation.",
   "keywords": [
     "Spot Instances",
     "interruption-tolerant",
     "batch",
     "lowest cost",
     "purchasing option",
-    "прерывания допустимы"
+    "interruptions acceptable"
   ],
   "services": [
     "ec2-purchasing",

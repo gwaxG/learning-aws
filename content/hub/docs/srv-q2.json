@@ -4,17 +4,17 @@
     "type": "topic",
     "ref": "serverless-containers"
   },
-  "concept": "Lambda в VPC: исходящий интернет только через NAT Gateway",
-  "tests": "Понимание, что Lambda, подключённая к VPC, теряет прямой выход в интернет, и как его вернуть.",
-  "expected": "Причина — функцию поместили в VPC; решение — NAT Gateway в public subnet и маршрут 0.0.0.0/0 из private subnets на него (для AWS-сервисов — VPC endpoints). Триггеры: «connects to RDS in private subnets», «cannot reach the public internet», «external API».",
-  "why_not": "Reserved и provisioned concurrency управляют масштабированием и cold start, а не сетевой доступностью.",
+  "concept": "Lambda in a VPC: outbound internet only via NAT Gateway",
+  "tests": "Understanding that a VPC-attached Lambda loses direct internet egress, and how to restore it.",
+  "expected": "Cause: the function was placed in a VPC; fix: a NAT Gateway in a public subnet and a 0.0.0.0/0 route to it from the private subnets (VPC endpoints for AWS services). Triggers: \"connects to RDS in private subnets\", \"cannot reach the public internet\", \"external API\".",
+  "why_not": "Reserved and provisioned concurrency control scaling and cold starts, not network reachability.",
   "keywords": [
     "Lambda VPC",
     "NAT Gateway",
     "private subnet",
     "outbound internet",
     "route table",
-    "нет выхода в интернет"
+    "no internet egress"
   ],
   "services": [
     "lambda",

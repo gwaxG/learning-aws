@@ -4,18 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "Inspector: сканирование уязвимостей EC2 и container images",
-  "tests": "Какой сервис автоматически сканирует EC2 и образы контейнеров на уязвимости ПО и сетевую доступность.",
-  "expected": "Amazon Inspector — непрерывное сканирование EC2 и ECR images на CVE и network reachability. Триггеры: «software vulnerabilities», «container images», «unintended network exposure».",
-  "why_not": "Macie — чувствительные данные в S3; Shield — DDoS; WAF — фильтрация веб-запросов.",
+  "concept": "Inspector: vulnerability scanning for EC2 and container images",
+  "tests": "Which service automatically scans EC2 and container images for software vulnerabilities and network exposure.",
+  "expected": "Amazon Inspector — continuous scanning of EC2 and ECR images for CVEs and network reachability. Triggers: \"software vulnerabilities\", \"container images\", \"unintended network exposure\".",
+  "why_not": "Macie — sensitive data in S3; Shield — DDoS; WAF — web request filtering.",
   "keywords": [
     "Inspector",
     "vulnerabilities",
     "CVE",
     "container images",
     "ECR",
-    "network reachability",
-    "уязвимости"
+    "network reachability"
   ],
   "services": [
     "inspector",

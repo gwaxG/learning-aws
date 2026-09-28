@@ -4,17 +4,17 @@
     "type": "topic",
     "ref": "cost"
   },
-  "concept": "EC2 Spot: прерываемые batch-нагрузки",
-  "tests": "Выбор самой дешёвой модели покупки EC2 для отказоустойчивой, прерываемой пакетной задачи с гибким расписанием.",
-  "expected": "Spot Instances (скидка до ~90%). Триггеры: «fault-tolerant», «stateless», «checkpoint и resume», «можно прервать», «гибкое расписание», «несколько часов за ночь».",
-  "why_not": "On-Demand — самый дорогой в час; 3-year Standard RI и 1-year Compute Savings Plan требуют долгосрочного commitment под стабильный 24/7 baseline — переплата за несколько часов в сутки.",
+  "concept": "EC2 Spot: interruptible batch workloads",
+  "tests": "Choosing the cheapest EC2 purchasing option for a fault-tolerant, interruptible batch job with a flexible schedule.",
+  "expected": "Spot Instances (up to ~90% discount). Triggers: \"fault-tolerant\", \"stateless\", \"checkpoint and resume\", \"can be interrupted\", \"flexible schedule\", \"a few hours per night\".",
+  "why_not": "On-Demand is the most expensive per hour; 3-year Standard RI and 1-year Compute Savings Plan require a long-term commitment for a steady 24/7 baseline — overpaying for a few hours a day.",
   "keywords": [
     "Spot Instances",
     "interruptible",
     "fault-tolerant",
     "checkpoint",
     "batch",
-    "можно прервать",
+    "can be interrupted",
     "MOST cost-effective"
   ],
   "services": [

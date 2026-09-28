@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "Kinesis Data Streams: real-time ingest, несколько consumers, replay",
-  "tests": "Выбор сервиса для приёма сотен тысяч событий в секунду с несколькими независимыми потребителями и возможностью повторного чтения.",
-  "expected": "Amazon Kinesis Data Streams — высокий throughput, несколько независимых consumers, хранение записей для replay. Триггеры: «clickstream», «hundreds of thousands events per second», «multiple consumers», «replay».",
-  "why_not": "SQS — сообщение читает один consumer и удаляет, replay нет; SNS — fan-out без хранения/replay; Batch — пакетные вычисления.",
+  "concept": "Kinesis Data Streams: real-time ingest, multiple consumers, replay",
+  "tests": "Choosing a service to ingest hundreds of thousands of events per second with multiple independent consumers and the ability to re-read.",
+  "expected": "Amazon Kinesis Data Streams — high throughput, multiple independent consumers, records retained for replay. Triggers: \"clickstream\", \"hundreds of thousands events per second\", \"multiple consumers\", \"replay\".",
+  "why_not": "SQS — a message is read by one consumer and deleted, no replay; SNS — fan-out without retention/replay; Batch — batch compute.",
   "keywords": [
     "Kinesis Data Streams",
     "clickstream",
     "real-time",
     "replay",
     "multiple consumers",
-    "потоковые данные"
+    "streaming data"
   ],
   "services": [
     "kinesis-data-streams",

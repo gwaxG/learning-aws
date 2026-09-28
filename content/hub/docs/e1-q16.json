@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "ElastiCache Redis: вынос session state",
-  "tests": "Где хранить состояние сессий, чтобы веб-инстансы стали stateless и масштабировались.",
-  "expected": "Amazon ElastiCache for Redis — in-memory хранилище с sub-millisecond задержкой для сессий. Триггеры: «session state off the instances», «fast, in-memory».",
-  "why_not": "RDS — лишний реляционный overhead для сессий; S3 — высокая задержка; Athena — SQL-запросы по S3, не хранилище сессий.",
+  "concept": "ElastiCache Redis: offloading session state",
+  "tests": "Where to store session state so web instances become stateless and can scale.",
+  "expected": "Amazon ElastiCache for Redis — in-memory store with sub-millisecond latency for sessions. Triggers: \"session state off the instances\", \"fast, in-memory\".",
+  "why_not": "RDS — unnecessary relational overhead for sessions; S3 — high latency; Athena — SQL queries over S3, not a session store.",
   "keywords": [
     "ElastiCache",
     "Redis",

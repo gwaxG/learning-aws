@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "S3 Glacier Flexible Retrieval: архив с извлечением за минуты",
-  "tests": "Выбор самого дешёвого класса хранения для редко используемого архива с извлечением за минуты.",
-  "expected": "S3 Glacier Flexible Retrieval — очень низкая стоимость хранения, expedited retrieval за 1–5 минут. Триггеры: «infrequently accessed archives», «retrievable within minutes», «a few times a year», «MOST cost-effective».",
-  "why_not": "Standard и Standard-IA дороже для редко используемых данных; One Zone-IA — одна AZ, не для долговременного архива.",
+  "concept": "S3 Glacier Flexible Retrieval: archive with retrieval in minutes",
+  "tests": "Choosing the cheapest storage class for a rarely used archive retrievable within minutes.",
+  "expected": "S3 Glacier Flexible Retrieval: very low storage cost, expedited retrieval in 1–5 minutes. Triggers: \"infrequently accessed archives\", \"retrievable within minutes\", \"a few times a year\", \"MOST cost-effective\".",
+  "why_not": "Standard and Standard-IA cost more for rarely used data; One Zone-IA is a single AZ, not for long-term archives.",
   "keywords": [
     "Glacier Flexible Retrieval",
     "expedited retrieval",
     "archive",
     "logs",
-    "в пределах минут",
-    "минимальная стоимость"
+    "within minutes",
+    "LEAST cost"
   ],
   "services": [
     "glacier",

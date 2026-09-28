@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "S3 bucket policy: aws:SecureTransport для принудительного TLS",
-  "tests": "Как заставить S3 отклонять запросы без TLS.",
-  "expected": "Bucket policy с Deny при aws:SecureTransport = false. Триггеры: «encrypted in transit», «reject any request not using TLS».",
-  "why_not": "Default encryption — at rest, не in transit; Versioning не связан; VPC endpoint не обязывает TLS.",
+  "concept": "S3 bucket policy: aws:SecureTransport to enforce TLS",
+  "tests": "How to make S3 reject requests without TLS.",
+  "expected": "Bucket policy with Deny when aws:SecureTransport = false. Triggers: \"encrypted in transit\", \"reject any request not using TLS\".",
+  "why_not": "Default encryption is at rest, not in transit; Versioning is unrelated; a VPC endpoint doesn't enforce TLS.",
   "keywords": [
     "aws:SecureTransport",
     "bucket policy",

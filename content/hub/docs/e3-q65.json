@@ -4,18 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "EC2 Savings Plans: Compute Savings Plan для гибкой базовой нагрузки",
-  "tests": "Выбор модели скидки для постоянной базовой нагрузки с возможностью менять семейства инстансов и регионы.",
-  "expected": "Compute Savings Plan — обязательство на $/час, скидка применяется к любым семействам, размерам, регионам, а также Fargate/Lambda. Триггеры: «baseline always-on», «flexibility to change instance families and regions».",
-  "why_not": "Standard RI привязаны к типу инстанса; Spot прерывается; On-Demand без скидки.",
+  "concept": "EC2 purchasing: Compute Savings Plan for flexible baseline load",
+  "tests": "Choosing a discount model for a constant baseline load with the ability to change instance families and regions.",
+  "expected": "Compute Savings Plan — a $/hour commitment; the discount applies to any family, size and region, plus Fargate/Lambda. Triggers: \"baseline always-on\", \"flexibility to change instance families and regions\".",
+  "why_not": "Standard RIs are tied to an instance type; Spot gets interrupted; On-Demand has no discount.",
   "keywords": [
     "Compute Savings Plan",
     "flexibility",
     "instance family",
     "region",
     "baseline",
-    "Reserved Instances",
-    "гибкость"
+    "Reserved Instances"
   ],
   "services": [
     "ec2-purchasing",

@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "CloudFormation: инфраструктура как код",
-  "tests": "Выбор сервиса для многократного развёртывания одинаковых сред из декларативных шаблонов под версионным контролем.",
-  "expected": "AWS CloudFormation — декларативные templates, stacks, повторяемость. Триггеры: «identical environments repeatedly», «version-controlled, declarative templates».",
-  "why_not": "Ручная настройка — ошибки и неповторяемость; Config оценивает compliance; CloudWatch — мониторинг.",
+  "concept": "CloudFormation: infrastructure as code",
+  "tests": "Choosing a service to repeatedly deploy identical environments from version-controlled declarative templates.",
+  "expected": "AWS CloudFormation — declarative templates, stacks, repeatability. Triggers: \"identical environments repeatedly\", \"version-controlled, declarative templates\".",
+  "why_not": "Manual setup — errors and non-repeatability; Config evaluates compliance; CloudWatch — monitoring.",
   "keywords": [
     "CloudFormation",
     "infrastructure as code",
     "templates",
     "declarative",
     "repeatable",
-    "одинаковые окружения"
+    "identical environments"
   ],
   "services": [
     "cloudformation",

@@ -1,0 +1,43 @@
+{
+  "id": "u-20260927-dynamodb-key-value-document",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "A music publishing company is building a multitier web application that requires a key-value store with provisioned capacity mode that will save the document models. Each model is composed of band ID, album ID, song ID, composer ID, lyrics, and other data. The web tier will be hosted in an Amazon ECS cluster with AWS Fargate launch type.\nWhich of the following is the MOST suitable setup for the database tier?",
+    "options": [
+      "Launch an Amazon DynamoDB table.",
+      "Launch an Amazon RDS database with Read Replicas.",
+      "Use Amazon WorkDocs to store the document models.",
+      "Launch an Amazon Aurora Serverless database."
+    ],
+    "answer": 0,
+    "explanation": "DynamoDB is AWS's managed NoSQL key-value and document database and it offers exactly the capacity modes named in the stem — provisioned (with auto scaling) or on-demand. Items like band/album/song IDs plus lyrics map naturally to a partition key (+ sort key) and document attributes. RDS and Aurora Serverless are relational databases, not key-value stores, and 'provisioned capacity mode' is DynamoDB terminology. WorkDocs is a document collaboration service for end users (files like Word/PDF), not an application database."
+  },
+  "concept": "DynamoDB: key-value/document store with provisioned or on-demand capacity",
+  "tests": "Recognizing DynamoDB from the keywords key-value store, document model and provisioned capacity mode.",
+  "expected": "Amazon DynamoDB table. Triggers: \"key-value store\", \"document model\", \"provisioned capacity mode\" (DynamoDB-only term) → DynamoDB.",
+  "why_not": "RDS/Aurora Serverless are relational, not key-value; WorkDocs is end-user file collaboration, not a database.",
+  "keywords": [
+    "DynamoDB",
+    "key-value store",
+    "document model",
+    "provisioned capacity mode",
+    "NoSQL",
+    "partition key"
+  ],
+  "services": [
+    "dynamodb",
+    "rds",
+    "aurora-serverless"
+  ],
+  "topics": [
+    "databases"
+  ],
+  "domain": 3,
+  "related": [
+    "db-q3",
+    "e1-q58"
+  ]
+}

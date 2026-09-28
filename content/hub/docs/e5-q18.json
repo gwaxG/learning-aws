@@ -4,18 +4,18 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "S3 Object Lock: compliance mode (WORM, не может удалить даже root)",
-  "tests": "Как гарантировать, что логи в S3 никто, включая администраторов, не удалит и не изменит в течение срока хранения.",
-  "expected": "S3 Object Lock в compliance mode — WORM, retention не может снять даже root. Триггеры: «cannot be deleted or altered by anyone, including administrators», «fixed retention period», «regulated».",
-  "why_not": "Versioning позволяет удалять версии; bucket policy администратор может изменить; lifecycle expiration наоборот удаляет объекты. (Governance mode — привилегированные пользователи могут обойти.)",
+  "concept": "S3 Object Lock: compliance mode (WORM, not even root can delete)",
+  "tests": "How to guarantee nobody, including administrators, can delete or modify S3 logs during the retention period.",
+  "expected": "S3 Object Lock in compliance mode — WORM, retention can't be removed even by root. Triggers: \"cannot be deleted or altered by anyone, including administrators\", \"fixed retention period\", \"regulated\".",
+  "why_not": "Versioning allows deleting versions; an administrator can change a bucket policy; lifecycle expiration actually deletes objects. (Governance mode — privileged users can bypass it.)",
   "keywords": [
     "Object Lock",
     "compliance mode",
     "WORM",
     "retention period",
     "immutable",
-    "неизменяемость",
-    "даже root"
+    "immutability",
+    "even root"
   ],
   "services": [
     "s3-security",

@@ -1,0 +1,48 @@
+{
+  "id": "u-20260927-s3-versioning-object-lock-lifecycle",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "A solutions architect is designing a secure, cost-effective, and highly available storage solution for a company’s data. One of the requirements is to ensure that the previous version of a file is preserved and can be retrieved if a modified version is uploaded. Additionally, the company must comply with strict regulatory requirements that mandate data retention in an immutable state for at least 3 years before being moved to an archive. Once archived, the data will only be accessed once a year.\nHow should the solutions architect build the solution?",
+    "options": [
+      "Create an Amazon S3 Standard bucket, enable object-level versioning, and then enable S3 Object Lock in compliance mode. After that, configure a lifecycle rule to move the files to S3 Glacier Deep Archive after 3 years.",
+      "Create an Amazon S3 Standard bucket with object-level versioning enabled and configure a lifecycle rule that transfers files to S3 Glacier Deep Archive after 3 years.",
+      "Create a One-Zone-IA bucket with object-level versioning enabled and configure a lifecycle rule that transfers files to Amazon S3 Glacier Deep Archive after 3 years.",
+      "Create an Amazon S3 Standard bucket and enable S3 Object Lock in governance mode."
+    ],
+    "answer": 0,
+    "explanation": "Three requirements, three features: versioning keeps previous versions on overwrite; Object Lock in compliance mode makes versions immutable for the retention period (no one, including root, can delete or shorten it) — this is what 'strict regulatory' requires; a lifecycle rule moves data to Glacier Deep Archive after 3 years, the cheapest class for once-a-year access. Option 2 lacks immutability; option 3 uses One Zone-IA, which isn't highly available (single AZ) and also lacks Object Lock; option 4 uses governance mode (users with special permissions can bypass it — not strict compliance) and has no archiving."
+  },
+  "concept": "S3 Object Lock: compliance mode (WORM, not even root can delete)",
+  "tests": "Combining S3 versioning, Object Lock compliance mode and a lifecycle transition to Deep Archive to meet version history, immutability and cheap archive requirements.",
+  "expected": "S3 Standard + versioning + Object Lock compliance mode + lifecycle to Glacier Deep Archive after 3 years. Triggers: \"previous version preserved\" → versioning; \"strict regulatory / immutable\" → Object Lock compliance; \"accessed once a year\" → Deep Archive; \"highly available\" → not One Zone-IA.",
+  "why_not": "Versioning + lifecycle alone isn't immutable; One Zone-IA isn't highly available and lacks WORM; governance mode can be bypassed with special permissions and there's no archive step.",
+  "keywords": [
+    "S3 Object Lock",
+    "compliance mode",
+    "governance mode",
+    "versioning",
+    "WORM",
+    "immutable",
+    "lifecycle rule",
+    "Glacier Deep Archive",
+    "regulatory retention"
+  ],
+  "services": [
+    "s3-security",
+    "s3-lifecycle",
+    "s3-storage-classes",
+    "glacier"
+  ],
+  "topics": [
+    "storage"
+  ],
+  "domain": 1,
+  "related": [
+    "e1-q56",
+    "e4-q65",
+    "e5-q18"
+  ]
+}

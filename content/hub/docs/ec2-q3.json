@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "ec2-compute"
   },
-  "concept": "ELB: NLB для static IP и L4 с ultra-low latency",
-  "tests": "Выбор типа балансировщика по требованиям static IP, TCP и миллионов соединений в секунду.",
-  "expected": "Network Load Balancer — Layer 4, миллионы req/s, ultra-low latency, static IP / Elastic IP на AZ. Триггеры: «static IP», «TCP/UDP», «millions of connections per second», «ultra-low latency».",
-  "why_not": "ALB — Layer 7 без static IP; Gateway Load Balancer — вставка сторонних appliance; Classic LB — legacy.",
+  "concept": "ELB: NLB for static IP and L4 with ultra-low latency",
+  "tests": "Choosing a load balancer type for static IP, TCP, and millions of connections per second.",
+  "expected": "Network Load Balancer — Layer 4, millions of req/s, ultra-low latency, static IP / Elastic IP per AZ. Triggers: \"static IP\", \"TCP/UDP\", \"millions of connections per second\", \"ultra-low latency\".",
+  "why_not": "ALB is Layer 7 without a static IP; Gateway Load Balancer inserts third-party appliances; Classic LB is legacy.",
   "keywords": [
     "Network Load Balancer",
     "NLB",

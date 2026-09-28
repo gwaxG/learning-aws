@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "KMS + CloudTrail: централизованное управление ключами и аудит их использования",
-  "tests": "Выбор сервисов для централизованного управления ключами, контроля доступа и журналирования каждого использования.",
-  "expected": "AWS KMS — ключи с key policies и IAM; CloudTrail логирует каждый вызов KMS API (Encrypt/Decrypt/GenerateDataKey). Триггеры: «centrally manage and audit encryption keys», «control who can use», «log every key usage».",
-  "why_not": "S3 default encryption — использует ключи, но не система управления/аудита; ключи в DynamoDB — самопальное небезопасное решение; Secrets Manager хранит секреты, а не криптоключи для операций.",
+  "concept": "KMS + CloudTrail: centralized key management and key-usage auditing",
+  "tests": "Choosing services for centralized key management, access control and logging of every key use.",
+  "expected": "AWS KMS — keys with key policies and IAM; CloudTrail logs every KMS API call (Encrypt/Decrypt/GenerateDataKey). Triggers: \"centrally manage and audit encryption keys\", \"control who can use\", \"log every key usage\".",
+  "why_not": "S3 default encryption — uses keys but isn't a management/audit system; keys in DynamoDB — a homegrown, insecure solution; Secrets Manager stores secrets, not cryptographic keys for operations.",
   "keywords": [
     "KMS",
     "CloudTrail",

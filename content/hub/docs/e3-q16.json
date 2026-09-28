@@ -4,16 +4,16 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "IAM condition: aws:PrincipalOrgID для доступа из организации",
-  "tests": "Какой condition key в resource policy ограничивает вызовы principals только из конкретной AWS Organization.",
-  "expected": "aws:PrincipalOrgID = o-xxxx в resource-based policy. Триггеры: «only from a particular AWS Organization», «resource policy».",
-  "why_not": "aws:userid — один principal; aws:SourceIp — сетевой адрес; lambda:FunctionArn описывает функцию, а не вызывающего.",
+  "concept": "IAM: aws:PrincipalOrgID condition to allow access from your organization",
+  "tests": "Which condition key in a resource policy restricts calls to principals from a specific AWS Organization only.",
+  "expected": "aws:PrincipalOrgID = o-xxxx in a resource-based policy. Triggers: \"only from a particular AWS Organization\", \"resource policy\".",
+  "why_not": "aws:userid — a single principal; aws:SourceIp — a network address; lambda:FunctionArn describes the function, not the caller.",
   "keywords": [
     "aws:PrincipalOrgID",
     "resource-based policy",
     "AWS Organizations",
     "condition key",
-    "только своя организация"
+    "own organization only"
   ],
   "services": [
     "iam",

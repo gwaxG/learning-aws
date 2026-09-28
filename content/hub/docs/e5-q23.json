@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "DR: Warm standby — уменьшенная копия в другом регионе, RTO минуты",
-  "tests": "Выбор DR-стратегии: восстановление в другом регионе за минуты с минимальной потерей данных без полного дублирования.",
-  "expected": "Warm standby: постоянно работающая уменьшенная копия во втором регионе + непрерывная репликация данных; при аварии масштабируется. Триггеры: «within minutes», «minimal data loss», «avoid running full duplicate infrastructure».",
-  "why_not": "Backup and restore — часы; Pilot light — долгий scale-up (compute выключен); Single-Region multi-AZ не защищает от отказа региона; Multi-site — полный дубль, дорого.",
+  "concept": "DR strategies: Warm standby — scaled-down copy in another Region, RTO minutes",
+  "tests": "Choosing a DR strategy: recover in another Region within minutes with minimal data loss, without full duplication.",
+  "expected": "Warm standby: an always-running scaled-down copy in a second Region + continuous data replication; scales up during a disaster. Triggers: \"within minutes\", \"minimal data loss\", \"avoid running full duplicate infrastructure\".",
+  "why_not": "Backup and restore — hours; Pilot light — slow scale-up (compute is off); Single-Region multi-AZ doesn't protect against a Region failure; Multi-site — full duplicate, expensive.",
   "keywords": [
     "warm standby",
     "pilot light",
     "backup and restore",
     "RTO",
     "RPO",
-    "другой регион",
+    "another Region",
     "scaled-down"
   ],
   "services": [

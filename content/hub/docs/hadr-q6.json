@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "ha-dr"
   },
-  "concept": "Stateless-приложение: вынос сессий в ElastiCache/DynamoDB",
-  "tests": "Понимание, что состояние сессий нужно выносить из инстансов для устойчивости к их замене.",
-  "expected": "Хранить сессии во внешнем хранилище (ElastiCache for Redis или DynamoDB) — инстансы stateless, любой обслуживает любой запрос. Триггеры: «теряются сессии при замене инстансов Auto Scaling», «без изменения load balancer».",
-  "why_not": "Sticky sessions с локальным диском всё равно теряют состояние при терминации; отключение Auto Scaling убирает self-healing; одна AZ уничтожает HA.",
+  "concept": "Stateless app: move sessions to ElastiCache/DynamoDB",
+  "tests": "Understanding that session state must be moved off instances to survive instance replacement.",
+  "expected": "Store sessions in an external store (ElastiCache for Redis or DynamoDB) — instances are stateless, any one can serve any request. Triggers: \"sessions lost when Auto Scaling replaces instances\", \"without changing the load balancer\".",
+  "why_not": "Sticky sessions with local disk still lose state on termination; disabling Auto Scaling removes self-healing; a single AZ destroys HA.",
   "keywords": [
     "stateless",
     "session state",
@@ -15,7 +15,7 @@
     "DynamoDB",
     "sticky sessions",
     "Auto Scaling",
-    "теряются сессии"
+    "sessions lost"
   ],
   "services": [
     "elasticache",

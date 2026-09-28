@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "edge-dns"
   },
-  "concept": "Route 53 latency-based routing: регион с минимальной задержкой",
-  "tests": "Выбор routing policy, отправляющей пользователя в регион с наименьшей задержкой.",
-  "expected": "Latency-based routing. Триггеры: «несколько регионов», «самый быстрый ответ», «lowest latency».",
-  "why_not": "Weighted — фиксированные проценты; Geolocation — по местоположению (локализация/compliance), не по задержке; Multivalue — несколько здоровых записей для клиентской балансировки.",
+  "concept": "Route 53 latency-based routing: lowest-latency Region",
+  "tests": "Choosing the routing policy that sends users to the Region with the lowest latency.",
+  "expected": "Latency-based routing. Triggers: \"multiple Regions\", \"fastest response\", \"lowest latency\".",
+  "why_not": "Weighted uses fixed percentages; Geolocation routes by location (localization/compliance), not latency; Multivalue returns several healthy records for client-side balancing.",
   "keywords": [
     "latency-based routing",
     "Route 53",
@@ -15,7 +15,7 @@
     "geolocation",
     "weighted",
     "multivalue",
-    "самый быстрый регион"
+    "fastest Region"
   ],
   "services": [
     "route53"

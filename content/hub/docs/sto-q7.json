@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "storage"
   },
-  "concept": "EBS gp3: IOPS и throughput независимо от размера тома",
-  "tests": "Выбор типа EBS для базы данных с заданными IOPS и throughput при минимальной стоимости.",
-  "expected": "gp3 с отдельно заданными IOPS (до 16 000) и throughput (до 1 000 MB/s) независимо от объёма — платишь только за нужную производительность. Триггеры: «16,000 IOPS», «500 MB/s», «self-managed database», «cost as low as possible».",
-  "why_not": "st1 и sc1 — HDD для последовательного чтения, не для случайных IOPS БД (sc1 — для холодных данных); io2 тоже подходит, но дороже для такой умеренной нагрузки.",
+  "concept": "EBS gp3: IOPS and throughput independent of volume size",
+  "tests": "Choosing an EBS type for a database with specified IOPS and throughput at minimal cost.",
+  "expected": "gp3 with separately provisioned IOPS (up to 16,000) and throughput (up to 1,000 MB/s) independent of size — pay only for the performance you need. Triggers: \"16,000 IOPS\", \"500 MB/s\", \"self-managed database\", \"cost as low as possible\".",
+  "why_not": "st1 and sc1 are HDD for sequential reads, not random DB IOPS (sc1 is for cold data); io2 also works but costs more for such a moderate load.",
   "keywords": [
     "EBS gp3",
     "IOPS",
@@ -15,7 +15,7 @@
     "io2",
     "st1",
     "sc1",
-    "независимо от размера тома"
+    "independent of volume size"
   ],
   "services": [
     "ebs"

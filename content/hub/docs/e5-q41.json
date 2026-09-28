@@ -4,18 +4,18 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "S3 Lifecycle: переход в Standard-IA при редком доступе с ms-извлечением",
-  "tests": "Подбор storage class после 30 дней частого доступа, когда нужен редкий, но миллисекундный доступ.",
-  "expected": "Lifecycle transition в S3 Standard-IA через 30 дней — дешевле хранение, извлечение за миллисекунды. Триггеры: «frequently for 30 days, then rarely», «retrievable within milliseconds», «cost-effective».",
-  "why_not": "Всё в Standard — дороже; Glacier Deep Archive — часы на извлечение; One Zone-IA сразу — игнорирует частый доступ первых 30 дней и хранит в одной AZ.",
+  "concept": "S3 Lifecycle: transition to Standard-IA for infrequent access with ms retrieval",
+  "tests": "Picking a storage class after 30 days of frequent access, when access becomes rare but must be millisecond-fast.",
+  "expected": "Lifecycle transition to S3 Standard-IA after 30 days — cheaper storage, millisecond retrieval. Triggers: \"frequently for 30 days, then rarely\", \"retrievable within milliseconds\", \"cost-effective\".",
+  "why_not": "Everything in Standard — more expensive; Glacier Deep Archive — hours to retrieve; One Zone-IA from day one — ignores the frequent access in the first 30 days and stores in a single AZ.",
   "keywords": [
     "S3 Standard-IA",
     "lifecycle",
-    "30 дней",
+    "30 days",
     "milliseconds",
     "One Zone-IA",
     "Glacier Deep Archive",
-    "редкий доступ"
+    "infrequent access"
   ],
   "services": [
     "s3-lifecycle",

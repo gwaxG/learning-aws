@@ -4,16 +4,16 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "IAM: least privilege — Resource = ARN конкретного секрета",
-  "tests": "Как в IAM policy ограничить доступ приложению только одним секретом.",
-  "expected": "Action secretsmanager:GetSecretValue + Resource = ARN конкретного секрета. Триггеры: «specific secret but nothing else», «least privilege».",
-  "why_not": "Resource \"*\" — доступ ко всем секретам; secretsmanager:* и AdministratorAccess — сильно избыточные права.",
+  "concept": "IAM: least privilege — Resource = ARN of a specific secret",
+  "tests": "How to restrict an app to a single secret in an IAM policy.",
+  "expected": "Action secretsmanager:GetSecretValue + Resource = ARN of the specific secret. Triggers: \"specific secret but nothing else\", \"least privilege\".",
+  "why_not": "Resource \"*\" grants access to all secrets; secretsmanager:* and AdministratorAccess are grossly excessive permissions.",
   "keywords": [
     "least privilege",
     "Resource ARN",
     "GetSecretValue",
     "IAM policy",
-    "минимальные права",
+    "minimal permissions",
     "wildcard"
   ],
   "services": [

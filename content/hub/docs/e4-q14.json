@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "Lambda: execution role с least privilege",
-  "tests": "Как дать Lambda права писать только в конкретную таблицу DynamoDB.",
-  "expected": "Execution role с политикой dynamodb:PutItem на ARN конкретной таблицы. Триггеры: «specific table and nothing else», «BEST practice» ⇒ least privilege.",
-  "why_not": "AdministratorAccess — избыточно; access key в env — небезопасно и не нужно; публичная запись — недопустимо.",
+  "concept": "Lambda: least-privilege execution role",
+  "tests": "How to let a Lambda function write only to a specific DynamoDB table.",
+  "expected": "Execution role with a dynamodb:PutItem policy on the specific table ARN. Triggers: \"specific table and nothing else\", \"BEST practice\" ⇒ least privilege.",
+  "why_not": "AdministratorAccess is excessive; an access key in env vars is insecure and unnecessary; public write is unacceptable.",
   "keywords": [
     "execution role",
     "least privilege",

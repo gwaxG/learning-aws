@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "CloudFront OAC: доступ к S3 origin только через CDN",
-  "tests": "Как раздавать контент из S3 через CloudFront, запретив прямой публичный доступ к бакету.",
-  "expected": "CloudFront Origin Access Control + bucket policy, разрешающая s3:GetObject только этому distribution (AWS:SourceArn). Триггеры: «prevent direct public access to the S3 origin», «only through the CDN».",
-  "why_not": "Публичный бакет или static website hosting открывает origin; отказ от CloudFront убирает CDN.",
+  "concept": "CloudFront OAC: S3 origin access only through the CDN",
+  "tests": "How to serve S3 content via CloudFront while blocking direct public access to the bucket.",
+  "expected": "CloudFront Origin Access Control + a bucket policy allowing s3:GetObject only for that distribution (AWS:SourceArn). Triggers: \"prevent direct public access to the S3 origin\", \"only through the CDN\".",
+  "why_not": "A public bucket or static website hosting exposes the origin; dropping CloudFront removes the CDN.",
   "keywords": [
     "Origin Access Control",
     "OAC",
     "CloudFront",
     "bucket policy",
     "S3 origin",
-    "только через CDN"
+    "only through CDN"
   ],
   "services": [
     "cloudfront",

@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "RDS Read Replicas: масштабирование чтения",
-  "tests": "Как экономично разгрузить primary RDS MySQL от повторяющихся read-запросов без изменения записи.",
-  "expected": "Добавить RDS read replicas и направить чтение на них. Триггеры: «read-heavy», «scale reads without changing the write path», «cost-effective».",
-  "why_not": "Вертикальный рост дороже и ограничен; Multi-AZ — доступность, standby не обслуживает чтение; миграция в DynamoDB — большая переделка.",
+  "concept": "RDS Read Replicas: scaling reads",
+  "tests": "How to cost-effectively offload repetitive read queries from a primary RDS MySQL without changing writes.",
+  "expected": "Add RDS read replicas and route reads to them. Triggers: \"read-heavy\", \"scale reads without changing the write path\", \"cost-effective\".",
+  "why_not": "Scaling up is more expensive and limited; Multi-AZ — availability, the standby does not serve reads; migrating to DynamoDB — major rework.",
   "keywords": [
     "read replicas",
     "read-heavy",
     "RDS MySQL",
     "scale reads",
     "offload",
-    "масштабирование чтения"
+    "read scaling"
   ],
   "services": [
     "read-replicas",

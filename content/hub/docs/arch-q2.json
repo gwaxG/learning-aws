@@ -4,18 +4,18 @@
     "type": "topic",
     "ref": "architecture"
   },
-  "concept": "DynamoDB: hot partition из-за низкой кардинальности ключа",
-  "tests": "Диагностика throttling при достаточной суммарной ёмкости: перекос трафика на несколько партиций из-за неудачного partition key.",
-  "expected": "Причина — hot partition (ключ country_code с низкой кардинальностью); решение — ключ с высокой кардинальностью (user_id), при необходимости write sharding суффиксом. Триггеры: «throttling, хотя ёмкости хватает», «большая часть трафика из двух значений ключа».",
-  "why_not": "Увеличение RCU не помогает — узкое место одна партиция; GSI на том же перекошенном атрибуте сохраняет перекос; consistency чтения не связана с распределением по партициям.",
+  "concept": "DynamoDB: hot partition from a low-cardinality key",
+  "tests": "Diagnosing throttling despite sufficient total capacity: traffic skewed to a few partitions due to a poor partition key.",
+  "expected": "Cause: hot partition (low-cardinality country_code key); fix: a high-cardinality key (user_id), plus write sharding with a suffix if needed. Triggers: \"throttling even though capacity is sufficient\", \"most traffic comes from two key values\".",
+  "why_not": "Adding RCU does not help — the bottleneck is a single partition; a GSI on the same skewed attribute keeps the skew; read consistency is unrelated to partition distribution.",
   "keywords": [
     "hot partition",
     "partition key",
     "cardinality",
     "write sharding",
     "throttling",
-    "ёмкости достаточно",
-    "перекос трафика"
+    "sufficient capacity",
+    "traffic skew"
   ],
   "services": [
     "dynamodb",

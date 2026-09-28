@@ -4,18 +4,18 @@
     "type": "topic",
     "ref": "data-migration"
   },
-  "concept": "Snow Family: офлайн-перенос сотен ТБ при узком канале",
-  "tests": "Оценка времени передачи по сети и выбор офлайн-устройства для большого объёма данных.",
-  "expected": "AWS Snowball Edge — физическая доставка зашифрованного устройства. Триггеры: «500 TB», «100 Mbps», «канал нужен для повседневной работы» ⇒ по сети месяцы ⇒ offline.",
-  "why_not": "DataSync и S3 multipart upload идут через тот же узкий канал; Transfer Family — обмен файлами с партнёрами по SFTP, не разовая миграция сотен ТБ.",
+  "concept": "Snow Family: offline transfer of hundreds of TB over a thin link",
+  "tests": "Estimating network transfer time and choosing an offline device for a large data volume.",
+  "expected": "AWS Snowball Edge — physical shipment of an encrypted device. Triggers: \"500 TB\", \"100 Mbps\", \"the link is needed for daily operations\" ⇒ months over the network ⇒ offline.",
+  "why_not": "DataSync and S3 multipart upload go over the same thin link; Transfer Family is SFTP file exchange with partners, not a one-time migration of hundreds of TB.",
   "keywords": [
     "Snowball Edge",
     "offline transfer",
     "500 TB",
     "100 Mbps",
     "bandwidth",
-    "узкий канал",
-    "месяцы передачи"
+    "limited bandwidth",
+    "months to transfer"
   ],
   "services": [
     "snow-family",

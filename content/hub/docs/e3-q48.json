@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "DMS: непрерывная репликация (CDC) при миграции БД",
-  "tests": "Выбор сервиса для миграции Oracle on-premises в Aurora с непрерывной репликацией и минимальным простоем.",
-  "expected": "AWS DMS с ongoing replication (CDC) + SCT для гетерогенной конвертации схемы. Триггеры: «continuously replicate», «on-premises Oracle to Aurora», «minimal downtime».",
-  "why_not": "DataSync — файлы/объекты; Snowball — офлайн bulk; Transfer Acceleration — ускорение загрузки в S3.",
+  "concept": "DMS: continuous replication (CDC) during DB migration",
+  "tests": "Choosing a service to migrate on-premises Oracle to Aurora with continuous replication and minimal downtime.",
+  "expected": "AWS DMS with ongoing replication (CDC) + SCT for heterogeneous schema conversion. Triggers: \"continuously replicate\", \"on-premises Oracle to Aurora\", \"minimal downtime\".",
+  "why_not": "DataSync — files/objects; Snowball — offline bulk; Transfer Acceleration — faster uploads to S3.",
   "keywords": [
     "DMS",
     "CDC",
     "ongoing replication",
     "Schema Conversion Tool",
     "heterogeneous migration",
-    "минимальный простой"
+    "minimal downtime"
   ],
   "services": [
     "dms",

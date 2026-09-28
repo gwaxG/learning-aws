@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "Auto Scaling: target tracking по средней CPU",
-  "tests": "Выбор политики масштабирования для непредсказуемых пиков с поддержанием средней CPU около цели.",
-  "expected": "ASG с target tracking policy (ASGAverageCPUUtilization = 50%). Триггеры: «unpredictable traffic spikes», «maintain average CPU near 50%».",
-  "why_not": "Scheduled scaling — только для предсказуемых паттернов; ручное масштабирование не реагирует вовремя; один большой инстанс — нет эластичности и HA.",
+  "concept": "Auto Scaling: target tracking on average CPU",
+  "tests": "Choosing a scaling policy for unpredictable spikes that keeps average CPU near a target.",
+  "expected": "ASG with a target tracking policy (ASGAverageCPUUtilization = 50%). Triggers: \"unpredictable traffic spikes\", \"maintain average CPU near 50%\".",
+  "why_not": "Scheduled scaling — only for predictable patterns; manual scaling does not react in time; one large instance — no elasticity or HA.",
   "keywords": [
     "target tracking",
     "Auto Scaling group",
     "average CPU",
     "unpredictable spikes",
     "ALB",
-    "автоматическое масштабирование"
+    "automatic scaling"
   ],
   "services": [
     "auto-scaling",

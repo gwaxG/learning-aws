@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "EBS io2: Provisioned IOPS для latency-sensitive БД",
-  "tests": "Выбор типа EBS для транзакционной БД с постоянно высоким IOPS и низкой задержкой.",
-  "expected": "Provisioned IOPS SSD (io2 / io2 Block Express) — гарантированные высокие IOPS и низкая латентность. Триггеры: «consistent high IOPS», «latency-sensitive transactional workload», database.",
-  "why_not": "gp2 — baseline с burst, без гарантии устойчиво высоких IOPS; st1/sc1 — HDD для throughput/холодных данных, не для low-latency I/O.",
+  "concept": "EBS io2: Provisioned IOPS for latency-sensitive databases",
+  "tests": "Choosing an EBS type for a transactional DB with consistently high IOPS and low latency.",
+  "expected": "Provisioned IOPS SSD (io2 / io2 Block Express): guaranteed high IOPS and low latency. Triggers: \"consistent high IOPS\", \"latency-sensitive transactional workload\", database.",
+  "why_not": "gp2 is baseline with burst, no guarantee of sustained high IOPS; st1/sc1 are HDD for throughput/cold data, not low-latency I/O.",
   "keywords": [
     "Provisioned IOPS SSD",
     "io2",

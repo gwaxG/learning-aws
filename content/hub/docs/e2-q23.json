@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "AWS Config: непрерывная оценка конфигурации (публичные S3 бакеты)",
-  "tests": "Выбор managed-сервиса, который непрерывно оценивает конфигурацию ресурсов и оповещает об изменении бакета на публичный.",
-  "expected": "AWS Config с managed rule s3-bucket-public-read-prohibited — непрерывная оценка, уведомления и auto-remediation (SSM). Триггеры: «continuously evaluates configuration», «detect and alert when changed», «public access».",
-  "why_not": "Inspector — уязвимости workloads; Macie — поиск чувствительных данных; Trusted Advisor — периодические проверки без непрерывной оценки и remediation.",
+  "concept": "AWS Config: continuous configuration evaluation (public S3 buckets)",
+  "tests": "Choosing a managed service that continuously evaluates resource configuration and alerts when a bucket becomes public.",
+  "expected": "AWS Config with the managed rule s3-bucket-public-read-prohibited — continuous evaluation, notifications and auto-remediation (SSM). Triggers: \"continuously evaluates configuration\", \"detect and alert when changed\", \"public access\".",
+  "why_not": "Inspector — workload vulnerabilities; Macie — finding sensitive data; Trusted Advisor — periodic checks without continuous evaluation or remediation.",
   "keywords": [
     "AWS Config",
     "managed rule",

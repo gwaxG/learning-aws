@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "Redshift: колоночный DWH для аналитики на петабайтах",
-  "tests": "Выбор сервиса для сложных аналитических SQL-запросов по петабайтам структурированных данных.",
-  "expected": "Amazon Redshift — колоночный MPP data warehouse для OLAP. Триггеры: «complex analytical SQL», «petabytes», «aggregated from many sources», «scan large amounts of data».",
-  "why_not": "RDS PostgreSQL — OLTP, не для петабайтной аналитики; DynamoDB — key-value; ElastiCache — in-memory кэш.",
+  "concept": "Redshift: columnar DWH for petabyte-scale analytics",
+  "tests": "Choosing a service for complex analytical SQL queries over petabytes of structured data.",
+  "expected": "Amazon Redshift — a columnar MPP data warehouse for OLAP. Triggers: \"complex analytical SQL\", \"petabytes\", \"aggregated from many sources\", \"scan large amounts of data\".",
+  "why_not": "RDS PostgreSQL — OLTP, not for petabyte analytics; DynamoDB — key-value; ElastiCache — in-memory cache.",
   "keywords": [
     "Redshift",
     "data warehouse",

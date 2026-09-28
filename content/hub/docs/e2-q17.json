@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "EC2 Purchasing: Compute Savings Plans — скидка с гибкостью семейства",
-  "tests": "Выбор ценовой модели для стабильной 24/7 нагрузки на 3 года с гибкостью менять семейство инстансов.",
-  "expected": "Compute Savings Plans на 3 года — скидка уровня RI с гибкостью по family, size, region, OS, а также Fargate и Lambda. Триггеры: «steady 24/7», «three years», «flexibility to change instance family».",
-  "why_not": "Standard RI — глубокая скидка, но привязка к атрибутам инстанса; On-Demand — самый дорогой; Spot — прерывания, не для стабильного продакшена.",
+  "concept": "EC2 purchasing: Compute Savings Plans — discount with family flexibility",
+  "tests": "Choosing a pricing model for a steady 24/7 workload over 3 years with the flexibility to change instance family.",
+  "expected": "3-year Compute Savings Plans — RI-level discount with flexibility across family, size, Region, OS, plus Fargate and Lambda. Triggers: \"steady 24/7\", \"three years\", \"flexibility to change instance family\".",
+  "why_not": "Standard RIs — deep discount but locked to instance attributes; On-Demand — the most expensive; Spot — interruptions, not for stable production.",
   "keywords": [
     "Compute Savings Plans",
     "Standard Reserved Instances",

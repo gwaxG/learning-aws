@@ -1,0 +1,51 @@
+{
+  "id": "u-20260927-rds-multi-az-failover-triggers",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "An online events registration system is hosted in AWS and uses ECS to host its front-end tier and an RDS configured with Multi-AZ for its database tier. What are the events that will make Amazon RDS automatically perform a failover to the standby replica? (Select TWO.)",
+    "options": [
+      "Loss of availability in primary Availability Zone",
+      "Storage failure on secondary DB instance",
+      "Storage failure on primary",
+      "In the event of Read Replica failure",
+      "Compute unit failure on secondary DB instance"
+    ],
+    "answer": [
+      0,
+      2
+    ],
+    "explanation": "RDS Multi-AZ fails over automatically when the PRIMARY becomes unavailable: loss of availability in the primary AZ, loss of network connectivity to the primary, compute unit failure on the primary, storage failure on the primary. Failover also happens during planned events (OS patching / instance class change on the primary, manual reboot with failover). Failures on the secondary (standby) don't trigger failover — RDS simply replaces the standby, the primary keeps serving. Read Replicas are separate, asynchronously replicated instances; their failure has nothing to do with Multi-AZ failover."
+  },
+  "concept": "RDS Multi-AZ: what triggers automatic failover (primary-side failures only)",
+  "tests": "Knowing which events make RDS Multi-AZ fail over to the standby: failures of the primary, not of the standby or read replicas.",
+  "expected": "Loss of availability in the primary AZ and storage failure on the primary. Rule: anything wrong with the PRIMARY (AZ outage, network loss, compute failure, storage failure, patching/instance type change, reboot with failover) → failover.",
+  "why_not": "Storage/compute failure on the secondary → RDS just replaces the standby, no failover; Read Replica failure is unrelated to Multi-AZ.",
+  "keywords": [
+    "RDS Multi-AZ",
+    "automatic failover",
+    "primary",
+    "standby",
+    "storage failure",
+    "AZ outage",
+    "compute failure",
+    "Read Replica"
+  ],
+  "services": [
+    "rds-multi-az",
+    "read-replicas",
+    "rds"
+  ],
+  "topics": [
+    "databases",
+    "ha-dr"
+  ],
+  "domain": 2,
+  "related": [
+    "e3-q24",
+    "db-q1",
+    "e1-q44"
+  ]
+}

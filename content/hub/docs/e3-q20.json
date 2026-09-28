@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "ECS: инъекция секретов из Secrets Manager в task definition",
-  "tests": "Как передать пароль БД в контейнер Fargate без вызовов API из кода приложения.",
-  "expected": "Поле secrets в ECS task definition со ссылкой на Secrets Manager (или SSM Parameter) — значение подставляется как env var при старте задачи. Триггеры: «injected without the application code calling any API», «least effort».",
-  "why_not": "Plaintext env var, секрет в образе или в незашифрованном S3 — утечка credentials.",
+  "concept": "ECS: inject Secrets Manager secrets via task definition",
+  "tests": "How to pass a DB password into a Fargate container without API calls from application code.",
+  "expected": "The secrets field in the ECS task definition referencing Secrets Manager (or an SSM Parameter) — the value is injected as an env var at task start. Triggers: \"injected without the application code calling any API\", \"least effort\".",
+  "why_not": "Plaintext env var, secret baked into the image, or in an unencrypted S3 bucket — credential leak.",
   "keywords": [
     "task definition",
     "secrets field",
     "Secrets Manager",
     "Fargate",
     "environment variable",
-    "без вызова API"
+    "no API call"
   ],
   "services": [
     "ecs",

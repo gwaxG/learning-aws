@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "GuardDuty: управляемое обнаружение угроз",
-  "tests": "Выбор сервиса непрерывного интеллектуального обнаружения угроз без агентов.",
-  "expected": "Amazon GuardDuty — анализирует CloudTrail, VPC Flow Logs, DNS logs с ML, без агентов. Триггеры: «threat detection», «unusual API activity», «no agents», перечисление этих логов.",
-  "why_not": "Config — compliance конфигураций; Inspector — уязвимости ПО; Trusted Advisor — best-practice проверки.",
+  "concept": "GuardDuty: managed threat detection",
+  "tests": "Choosing a service for continuous, intelligent, agentless threat detection.",
+  "expected": "Amazon GuardDuty analyzes CloudTrail, VPC Flow Logs and DNS logs with ML, no agents. Triggers: \"threat detection\", \"unusual API activity\", \"no agents\", a list of these logs.",
+  "why_not": "Config is configuration compliance; Inspector is software vulnerabilities; Trusted Advisor is best-practice checks.",
   "keywords": [
     "GuardDuty",
     "threat detection",

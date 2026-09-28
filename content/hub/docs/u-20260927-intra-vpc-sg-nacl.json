@@ -1,0 +1,49 @@
+{
+  "id": "u-20260927-intra-vpc-sg-nacl",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "A company has two On-Demand EC2 instances inside the Virtual Private Cloud in the same Availability Zone but are deployed to different subnets. One EC2 instance is running a database and the other EC2 instance a web application that connects with the database. You need to ensure that these two instances can communicate with each other for the system to work properly.\nWhat are the things you have to check so that these EC2 instances can communicate inside the VPC? (Select TWO.)",
+    "options": [
+      "Check if both instances are the same instance class.",
+      "Check the Network ACL if it allows communication between the two subnets.",
+      "Check if all security groups are set to allow the application host to communicate to the database on the right port and protocol.",
+      "Ensure that the EC2 instances are in the same Placement Group.",
+      "Check if the default route is set to a NAT instance or Internet Gateway (IGW) for them to communicate."
+    ],
+    "answer": [
+      1,
+      2
+    ],
+    "explanation": "Every VPC route table has an implicit local route, so subnets in the same VPC can already reach each other — routing isn't the problem. Traffic between subnets is filtered by two layers: the Network ACLs of both subnets (stateless — allow the DB port inbound and ephemeral ports for replies) and the security groups (the DB instance's SG must allow the DB port from the app instance or its SG). Instance class and placement groups don't affect connectivity; NAT/IGW routes are only for traffic leaving the VPC."
+  },
+  "concept": "VPC: intra-VPC connectivity = local route + SG + NACL",
+  "tests": "Knowing what controls traffic between subnets of the same VPC: security groups and network ACLs, not routing to NAT/IGW.",
+  "expected": "Check the NACLs between the two subnets and the security groups (DB SG allows the app on the DB port/protocol). Triggers: \"same VPC\", \"different subnets\", \"can communicate\" → SG + NACL; the local route already exists.",
+  "why_not": "Instance class and placement groups have nothing to do with reachability; NAT/IGW are only for traffic to the internet — the implicit local route handles intra-VPC traffic.",
+  "keywords": [
+    "security group",
+    "network ACL",
+    "local route",
+    "subnets",
+    "intra-VPC communication",
+    "ephemeral ports",
+    "database port"
+  ],
+  "services": [
+    "security-groups",
+    "nacl",
+    "subnets",
+    "vpc"
+  ],
+  "topics": [
+    "vpc-networking"
+  ],
+  "domain": 1,
+  "related": [
+    "e1-q38",
+    "vpc-q1"
+  ]
+}

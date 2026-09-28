@@ -4,17 +4,16 @@
     "type": "topic",
     "ref": "cost"
   },
-  "concept": "Compute Optimizer: rightsizing по фактической утилизации",
-  "tests": "Знание сервиса, дающего основанные на метриках рекомендации по уменьшению типа инстансов.",
-  "expected": "AWS Compute Optimizer — ML-анализ метрик CloudWatch и рекомендации оптимальных типов инстансов. Триггеры: «низкая утилизация CPU/памяти», «рекомендации по resize», «на основе наблюдаемого использования», «right-sizing».",
-  "why_not": "Trusted Advisor service limits — про квоты, не rightsizing; CUR — детальные billing-строки без рекомендаций; CloudWatch alarms реагируют на пороги, но не предлагают типы.",
+  "concept": "Compute Optimizer: rightsizing by actual utilization",
+  "tests": "Knowing the service that gives metric-based recommendations for downsizing instance types.",
+  "expected": "AWS Compute Optimizer — ML analysis of CloudWatch metrics and optimal instance type recommendations. Triggers: \"low CPU/memory utilization\", \"resize recommendations\", \"based on observed usage\", \"right-sizing\".",
+  "why_not": "Trusted Advisor service limits are about quotas, not rightsizing; CUR gives detailed billing lines with no recommendations; CloudWatch alarms react to thresholds but do not suggest types.",
   "keywords": [
     "Compute Optimizer",
     "right-sizing",
     "over-provisioned",
     "low utilization",
-    "рекомендации по типу инстанса",
-    "низкая утилизация"
+    "instance type recommendations"
   ],
   "services": [
     "compute-optimizer",

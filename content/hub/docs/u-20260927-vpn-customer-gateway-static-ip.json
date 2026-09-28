@@ -1,0 +1,44 @@
+{
+  "id": "u-20260927-vpn-customer-gateway-static-ip",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "An insurance company utilizes SAP HANA for its day-to-day ERP operations. Since it can’t migrate this database due to customer preferences, it needs to integrate it with the current AWS workload in the VPC, in which it is required to establish a site-to-site VPN connection.\nWhat needs to be configured outside of the VPC for an AWS Virtual Private Network connection to succeed?",
+    "options": [
+      "An Internet-routable IP address (static) of the customer gateway's external interface for the on-premises network",
+      "The main route table in your VPC to route traffic through a NAT instance",
+      "A dedicated NAT instance in a public subnet",
+      "An EIP to the Virtual Private Gateway"
+    ],
+    "answer": 0,
+    "explanation": "Outside the VPC, on the on-premises side, you need a customer gateway device whose external interface has a static, Internet-routable public IP (a device behind NAT can also work with NAT-T, but the classic exam answer is the static public IP). You register that IP as the Customer Gateway resource in AWS, and the IPsec tunnels are built between it and the two AWS tunnel endpoints of the Virtual Private Gateway. NAT instances and routing through them are inside the VPC and unrelated to VPN — VPN traffic uses a route to the VGW (or route propagation). The VGW's public tunnel endpoints are managed by AWS; you don't attach an Elastic IP to it."
+  },
+  "concept": "Site-to-Site VPN: customer gateway needs a static public IP on-premises",
+  "tests": "Knowing the on-premises requirement for Site-to-Site VPN (customer gateway with an Internet-routable static IP) versus AWS-side components.",
+  "expected": "A static, Internet-routable public IP on the customer gateway's external interface. Triggers: \"configured outside of the VPC\", \"site-to-site VPN\" → customer gateway device with static public IP.",
+  "why_not": "NAT instance / main route table via NAT are inside the VPC and not part of VPN; the VGW's tunnel endpoints are AWS-managed — no Elastic IP is attached to it.",
+  "keywords": [
+    "Site-to-Site VPN",
+    "customer gateway",
+    "static public IP",
+    "internet-routable IP",
+    "Virtual Private Gateway",
+    "IPsec",
+    "NAT-T",
+    "route propagation"
+  ],
+  "services": [
+    "site-to-site-vpn",
+    "nat-gateway",
+    "vpc"
+  ],
+  "topics": [
+    "vpc-networking"
+  ],
+  "domain": 1,
+  "related": [
+    "u-20260927-dx-resilience-peering"
+  ]
+}

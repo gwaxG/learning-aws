@@ -4,18 +4,18 @@
     "type": "topic",
     "ref": "data-migration"
   },
-  "concept": "Transfer Family: managed SFTP для партнёров в S3",
-  "tests": "Выбор управляемого SFTP-endpoint для загрузки файлов партнёрами прямо в S3.",
-  "expected": "AWS Transfer Family — managed SFTP/FTPS/FTP/AS2 с доставкой в S3 или EFS. Триггеры: «внешние партнёры», «standard SFTP», «файлы попадают в S3», «без серверов SFTP и патчинга».",
-  "why_not": "DataSync — агентная массовая синхронизация, не партнёрский SFTP; Firehose принимает стриминговые записи; Snowcone — офлайн-устройство.",
+  "concept": "Transfer Family: managed SFTP for partners into S3",
+  "tests": "Choosing a managed SFTP endpoint for partners to upload files directly into S3.",
+  "expected": "AWS Transfer Family — managed SFTP/FTPS/FTP/AS2 with delivery to S3 or EFS. Triggers: \"external partners\", \"standard SFTP\", \"files land in S3\", \"no SFTP servers or patching\".",
+  "why_not": "DataSync is agent-based bulk sync, not partner SFTP; Firehose ingests streaming records; Snowcone is an offline device.",
   "keywords": [
     "Transfer Family",
     "SFTP",
     "partners",
     "managed endpoint",
     "S3",
-    "внешние партнёры",
-    "без патчинга серверов"
+    "external partners",
+    "no server patching"
   ],
   "services": [
     "transfer-family",

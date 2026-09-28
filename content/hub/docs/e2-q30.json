@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "Secrets Manager: автоматическая ротация паролей БД",
-  "tests": "Выбор сервиса для безопасного получения пароля БД в рантайме с автоматической ротацией без изменений кода.",
-  "expected": "AWS Secrets Manager — хранение в зашифрованном виде + встроенная ротация (Lambda) для поддерживаемых БД, приложение всегда читает актуальное значение. Триггеры: «rotated automatically every 30 days», «database password», «without code changes».",
-  "why_not": "Parameter Store standard parameters — нет встроенной ротации; env vars и зашифрованный объект S3 требуют своей логики ротации.",
+  "concept": "Secrets Manager: automatic DB password rotation",
+  "tests": "Choosing a service to securely retrieve a DB password at runtime with automatic rotation and no code changes.",
+  "expected": "AWS Secrets Manager — encrypted storage + built-in rotation (Lambda) for supported DBs; the app always reads the current value. Triggers: \"rotated automatically every 30 days\", \"database password\", \"without code changes\".",
+  "why_not": "Parameter Store standard parameters — no built-in rotation; env vars and an encrypted S3 object need custom rotation logic.",
   "keywords": [
     "Secrets Manager",
     "automatic rotation",

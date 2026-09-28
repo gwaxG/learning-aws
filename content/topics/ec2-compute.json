@@ -1,97 +1,97 @@
 {
   "slug": "ec2-compute",
-  "title": "EC2 и вычисления",
+  "title": "EC2 & Compute",
   "domains": [
     2,
     3
   ],
   "essentials": [
     {
-      "heading": "Семейства instance и выбор размера",
-      "body": "**Что.** EC2 **instance families** сопоставляют профиль нагрузки (упор в CPU, RAM, IO или GPU) с конфигурацией железа; имя строится как `семейство + поколение + размер`, например `m6g.large`.\n\n**Зачем.** Правильное семейство избавляет от оплаты ненужных ресурсов, и рычагом становится ресурс-узкое место, а не просто больший размер.\n\n**Как.** **General purpose** (`t`, `m`): сбалансированные; `t` — **burstable** за счёт CPU credits, для приложений с пиками и низкой базовой нагрузкой. **Compute optimized** (`c`): batch, HPC, игры, транскодирование. **Memory optimized** (`r`, `x`, `z`): in-memory кэши и большие БД. **Storage optimized** (`i`, `d`, `h`): высокие IOPS локального NVMe. **Accelerated** (`p`, `g`, `inf`): GPU и ML-чипы. Суффикс `g` (например, `m6g`) означает **Graviton ARM** с лучшим соотношением цена/производительность.\n\n**Экзамен.** Запомните соответствие букв нагрузкам: **M — общего назначения, C — вычисления, R — память, I — хранение, P/G — GPU, T — burstable**. Подбирайте размер под узкое место; не берите `t` для постоянной нагрузки на CPU."
+      "heading": "Instance families & sizing",
+      "body": "**What.** EC2 **instance families** map a workload profile (CPU-bound, RAM-bound, IO-bound, GPU-bound) onto a hardware shape, named `family + generation + size`, e.g. `m6g.large`.\n\n**Why.** Picking the right family avoids paying for resources you do not use and keeps the bottleneck resource — not bigger size — as the lever you pull.\n\n**How.** **General purpose** (`t`, `m`): balanced; `t` is **burstable** via CPU credits for spiky low-baseline apps. **Compute optimized** (`c`): batch, HPC, gaming, transcoding. **Memory optimized** (`r`, `x`, `z`): in-memory caches and large DBs. **Storage optimized** (`i`, `d`, `h`): high local NVMe IOPS. **Accelerated** (`p`, `g`, `inf`): GPUs and ML chips. The `g` suffix (e.g. `m6g`) signals **Graviton ARM** for better price/perf.\n\n**Exam.** Memorize the letter-to-workload map: **M general, C compute, R memory, I storage, P/G GPU, T burstable**. Right-size to the bottleneck; do not pick `t` for sustained CPU."
     },
     {
-      "heading": "Варианты покупки",
-      "body": "**Что.** У EC2 пять моделей покупки, в которых обязательства, гибкость и цена уравновешивают друг друга: **On-Demand**, **Reserved Instances**, **Savings Plans**, **Spot** и **Dedicated Hosts/Instances**.\n\n**Зачем.** Нагрузки бывают разными — от непредсказуемых всплесков до стабильной базы 24/7 и отказоустойчивого batch; подходящая модель сокращает расходы на вычисления вплоть до ~90%.\n\n**Как.** **On-Demand** — посекундная оплата без обязательств (самая высокая цена). **Reserved Instances** — обязательство на 1 или 3 года на семейство/Region со скидкой до ~72%; *Standard* жёсткий, *Convertible* позволяет менять атрибуты. **Savings Plans** — обязательство по расходу в `$/hour`; *Compute SP* покрывает любое семейство/Region и даже Fargate/Lambda, *EC2 Instance SP* дешевле, но привязан к семейству и Region. **Spot** — до ~90% скидки на свободные мощности с уведомлением о прерывании за 2 минуты. **Dedicated Hosts** дают физический сервер для BYOL/compliance.\n\n**Экзамен.** Spot — только для прерываемого/stateless batch; Reserved/SP — стабильная база; Dedicated Hosts — лицензирование или compliance, а не экономия. Compute SP выигрывает у Standard RI, когда нужна гибкость.",
+      "heading": "Purchasing options",
+      "body": "**What.** EC2 offers five purchasing models that trade commitment, flexibility, and price: **On-Demand**, **Reserved Instances**, **Savings Plans**, **Spot**, and **Dedicated Hosts/Instances**.\n\n**Why.** Workloads vary from unpredictable bursts to steady 24/7 baselines to fault-tolerant batch — matching the right model can cut compute spend by up to ~90%.\n\n**How.** **On-Demand** pays per second with no commit (highest price). **Reserved Instances** commit 1y or 3y to a family/Region for up to ~72% off; *Standard* is rigid, *Convertible* lets you change attributes. **Savings Plans** commit to a `$/hour` spend; *Compute SP* covers any family/Region and even Fargate/Lambda, *EC2 Instance SP* is cheaper but family+Region locked. **Spot** is up to ~90% off spare capacity with a 2-minute interruption notice. **Dedicated Hosts** give a physical server for BYOL/compliance.\n\n**Exam.** Spot = interruptible/stateless batch only; Reserved/SP = steady baseline; Dedicated Hosts = licensing or compliance, not cost. Compute SP beats Standard RI when flexibility is required.",
       "diagram": {
         "src": "ec2-purchasing-options.svg",
-        "caption": "Сравнение вариантов покупки EC2 по обязательствам и гибкости: On-Demand (без обязательств, самая высокая цена), Savings Plans / Reserved (обязательство на 1–3 года, скидка до ~72%), Spot (скидка до ~90%, может быть прерван), Dedicated Host (BYOL/compliance)."
+        "caption": "EC2 purchasing options compared by commitment and flexibility: On-Demand (no commit, highest price), Savings Plans / Reserved (1y–3y commit, up to ~72% off), Spot (up to ~90% off, interruptible), Dedicated Host (BYOL/compliance)."
       }
     },
     {
-      "heading": "AMI, user data и метаданные instance",
-      "body": "**Что.** **AMI** — образ для запуска (ОС, предустановленное ПО, block-device mapping). **User data** — bootstrap-скрипт, который `cloud-init` выполняет при первой загрузке. **Instance Metadata Service (IMDS)** по адресу `http://169.254.169.254/latest/meta-data/` отдаёт сведения об instance и учётные данные IAM role.\n\n**Зачем.** Вместе AMI, user data и IMDS превращают типовой образ в настроенный instance со своей идентичностью — без зашитых в образ секретов.\n\n**Как.** Запекайте зависимости в **golden AMI**, чтобы загрузка была быстрее, чем с установкой при запуске. User data кодируется в base64, выполняется от root и должна быть **идемпотентной**, чтобы повторы или пересборка AMI ничего не ломали. Предпочитайте **IMDSv2** (сессионный токен: `PUT`, затем `GET`) старой модели запрос/ответ IMDSv1.\n\n**Экзамен.** По умолчанию user data выполняется только при **первой загрузке** и должна быть идемпотентной. **IMDSv2** защищает от SSRF — включайте `HttpTokens=required` в launch template. Учётные данные IAM role берутся из IMDS и никогда не хардкодятся."
+      "heading": "AMIs, user data & instance metadata",
+      "body": "**What.** An **AMI** is the launch image (OS, pre-installed software, block-device mapping). **User data** is a bootstrap script `cloud-init` runs at first boot. The **Instance Metadata Service (IMDS)** at `http://169.254.169.254/latest/meta-data/` exposes instance facts and IAM role credentials.\n\n**Why.** AMIs, user data, and IMDS together turn a generic image into a configured, identity-bearing instance without baking secrets in.\n\n**How.** Bake dependencies into a **golden AMI** to shrink boot time vs. installing at launch. User data is base64-encoded, runs as root, and should be **idempotent** so retries or AMI rebuilds do not break. Prefer **IMDSv2** (session token: `PUT` then `GET`) over the older IMDSv1 request/response model.\n\n**Exam.** User data runs only on **first boot** by default and must be idempotent. **IMDSv2** mitigates SSRF — enforce `HttpTokens=required` in the launch template. IAM role creds are fetched from IMDS, never hard-coded. **ENIs:** an elastic network interface is a separate resource. A **secondary ENI** keeps its private IP, MAC and security groups when detached and can be attached to another instance **in the same AZ** — a classic low-budget failover for apps addressed by private IP. The **primary ENI (eth0) can't be detached**; an Elastic IP is public and doesn't help private-IP endpoints."
     },
     {
-      "heading": "Placement groups: размещение instances",
-      "body": "**Что.** **Placement group** — логическая подсказка EC2, как физически размещать instances относительно друг друга: **Cluster**, **Spread** или **Partition**.\n\n**Зачем.** В зависимости от нагрузки можно оптимизировать либо минимальную сетевую задержку (плотная упаковка), либо изоляцию отказов (разнесение по железу).\n\n**Как.** **Cluster** упаковывает instances в одну стойку в одной AZ ради минимальной задержки и максимального throughput (HPC, сильно связанные вычисления) — но отказ стойки может положить их все. **Spread** размещает каждый instance на **отдельном железе** (лимит — **7 на AZ** в группе) для небольшого числа критичных instances. **Partition** делит instances на **до 7 partitions на AZ**, каждая на отдельной стойке, так что отказ стойки затрагивает только одну partition — так делают **HDFS, Cassandra, Kafka**.\n\n**Экзамен.** Cluster — минимальная задержка, радиус поражения — одна AZ. Spread — максимум 7 на AZ для критичных приложений. Partition — крупные распределённые/реплицируемые системы."
+      "heading": "Placement groups",
+      "body": "**What.** A **placement group** is a logical hint telling EC2 how to physically place instances relative to each other: **Cluster**, **Spread**, or **Partition**.\n\n**Why.** It lets you optimize either for lowest network latency (pack tightly) or for fault isolation (spread across hardware) depending on the workload.\n\n**How.** **Cluster** packs instances on the same rack in one AZ for the lowest latency and highest throughput (HPC, tightly coupled compute) — but a rack failure can take them all out. **Spread** places each instance on **distinct hardware** (limit **7 per AZ** per group) for small numbers of critical instances. **Partition** divides instances into up to **7 partitions per AZ**, each on a separate rack, so one rack failure hits only one partition — used by **HDFS, Cassandra, Kafka**.\n\n**Exam.** Cluster = lowest latency, single-AZ blast radius. Spread = max 7/AZ for critical apps. Partition = large distributed/replicated systems."
     },
     {
-      "heading": "Elastic Load Balancing — ALB, NLB и GWLB",
-      "body": "**Что.** У ELB три современных варианта: **ALB** (Application LB, L7), **NLB** (Network LB, L4) и **GWLB** (Gateway LB, L3/4 с GENEVE на порту `6081`).\n\n**Зачем.** Каждый работает на своём уровне OSI и решает свою задачу — HTTP-маршрутизация, чистая производительность TCP/UDP или прозрачная вставка сетевых appliances.\n\n**Как.** **ALB** умеет **host-based и path-based** маршрутизацию, правила по заголовкам/query, редиректы, WebSockets и динамические порты контейнеров — но даёт только DNS-имя. **NLB** работает на уровне 4 (TCP/UDP/TLS) со сверхнизкой задержкой, миллионами запросов в секунду и **статическим IP / Elastic IP на каждую AZ**. **GWLB** прозрачно встраивает сторонние firewall/IDS/IPS в путь трафика через GENEVE. Все ELB охватывают несколько AZ и выполняют health checks перед маршрутизацией.\n\n**Экзамен.** L7-маршрутизация или порты контейнеров → **ALB**. Статический IP или экстремальная производительность TCP → **NLB**. Вставка виртуальных appliances → **GWLB**. Classic LB — legacy, в новых архитектурах не используйте."
+      "heading": "Elastic Load Balancing — ALB vs NLB vs GWLB",
+      "body": "**What.** ELB has three modern flavours: **ALB** (Application LB, L7), **NLB** (Network LB, L4), and **GWLB** (Gateway LB, L3/4 with GENEVE on port `6081`).\n\n**Why.** Each operates at a different OSI layer and solves a different problem — HTTP routing, raw TCP/UDP performance, or transparent appliance insertion.\n\n**How.** **ALB** does **host-based and path-based** routing, header/query rules, redirects, WebSockets, and dynamic container ports — but exposes only a DNS name. **NLB** is Layer 4 (TCP/UDP/TLS) with ultra-low latency, millions of req/s, and a **static IP / Elastic IP per AZ**. **GWLB** transparently inserts third-party firewalls/IDS/IPS into the traffic path via GENEVE. All ELBs span multiple AZs and run health checks before routing.\n\n**Exam.** L7 routing or container ports → **ALB**. Static IP or extreme TCP perf → **NLB**. Insert virtual appliances → **GWLB**. Classic LB is legacy — avoid in new designs. **Whitelisting:** when clients can only reach whitelisted IPs, use an **NLB with one Elastic IP per AZ** (subnet mapping). An ALB can't take an Elastic IP and its IPs change as it scales — if you need L7, put the ALB behind an NLB (ALB-type target group) or behind **Global Accelerator** (2 static anycast IPs)."
     },
     {
       "heading": "Auto Scaling Groups",
-      "body": "**Что.** **Auto Scaling Group (ASG)** поддерживает ёмкость `min`/`desired`/`max` в нескольких AZ, заменяет нездоровые instances и масштабируется in/out по политикам.\n\n**Зачем.** Она даёт эластичность и самовосстановление без ручного вмешательства — в связке с ELB это базовый паттерн multi-AZ отказоустойчивости.\n\n**Как.** Ёмкость задаётся **launch template** (предпочтительнее устаревших launch configs; поддерживает версии и смешанные Spot/On-Demand). Политики масштабирования: **target tracking** держит метрику на целевом значении (например, средний CPU 50%), **step/simple** реагирует на пороги CloudWatch alarm, **scheduled** срабатывает в заданное время. **Health checks** бывают на уровне EC2 или **ELB health checks** (рекомендуется, чтобы сбои на уровне приложения приводили к замене). **Cooldown** и периоды warm-up приостанавливают дальнейшее масштабирование, пока метрики не устоятся, и предотвращают «дребезг».\n\n**Экзамен.** Для HA охватывайте ≥2 AZ. Используйте **ELB health checks**, чтобы ловить сбои на уровне HTTP. **Target tracking** — самый простой выбор по умолчанию. Cooldown защищает от избыточного масштабирования; scale-in protection спасает долгие задачи.",
+      "body": "**What.** An **Auto Scaling Group (ASG)** maintains `min`/`desired`/`max` capacity across multiple AZs, replaces unhealthy instances, and scales in/out based on policies.\n\n**Why.** It delivers elasticity and self-healing without manual intervention — the core multi-AZ resilience pattern when paired with an ELB.\n\n**How.** Capacity is defined by a **launch template** (preferred over legacy launch configs; supports versions and mixed Spot/On-Demand). Scaling policies: **target tracking** holds a metric at a target (e.g. avg CPU 50%), **step/simple** reacts to CloudWatch alarm thresholds, **scheduled** fires at fixed times. **Health checks** can be EC2-level or **ELB health checks** (recommended so app-layer failures trigger replacement). **Cooldown** and warm-up periods stop further scaling actions until metrics settle and avoid flapping.\n\n**Exam.** Span ≥2 AZs for HA. Use **ELB health checks** to catch HTTP-level failures. **Target tracking** is the default-easy choice. Cooldown prevents over-scaling; scale-in protection saves long-running tasks.",
       "diagram": {
         "src": "ec2-asg-alb.svg",
-        "caption": "ALB в двух AZ перенаправляет трафик в target group, которую наполняет ASG; ELB health checks и политика target tracking в CloudWatch управляют scale-out/in."
+        "caption": "ALB across two AZs forwarding to a target group fed by an ASG, with ELB health checks and a CloudWatch target-tracking policy driving scale-out/in."
       }
     },
     {
-      "heading": "Connection draining / deregistration delay: плавный вывод target",
-      "body": "**Что.** **Deregistration delay** (термин ALB/NLB; на Classic LB — *connection draining*) — время, в течение которого target находится в состоянии `draining`: новые запросы не принимает, но завершает текущие, — прежде чем будет удалён.\n\n**Зачем.** Это не даёт обрывать пользователей посреди запроса, когда instance снимается с регистрации, помечается нездоровым или удаляется при scale-in.\n\n**Как.** По умолчанию **300 секунд**, настраивается в диапазоне **0–3600**. Target в состоянии draining завершает существующие соединения (или обрывает их по таймауту) и перестаёт получать новые. Для коротких stateless HTTP-запросов уменьшайте значение, чтобы scale-in шёл быстрее. Для **долгоживущих соединений** — загрузки, стриминг, WebSockets — увеличивайте, чтобы пользователей не обрывало.\n\n**Экзамен.** Если при scale-in у пользователей рвутся запросы, **увеличьте deregistration delay** и/или включите **scale-in protection**. Не переключайте health check ASG с ELB на EC2 ради draining — это лишь скроет сбои приложения."
+      "heading": "Connection draining / deregistration delay",
+      "body": "**What.** **Deregistration delay** (ALB/NLB term; *connection draining* on Classic LB) is the time a target stays in `draining` state — accepting no new requests but finishing in-flight ones — before it is removed.\n\n**Why.** It prevents dropping users mid-request whenever an instance is deregistered, marked unhealthy, or scaled in.\n\n**How.** Default is **300 seconds**, configurable **0–3600**. A draining target completes existing connections (or is cut at timeout) and stops receiving new ones. Lower the value for short, stateless HTTP requests to scale in faster. Raise it for **long-lived connections** — uploads, streaming, WebSockets — so users are not cut off.\n\n**Exam.** If users see dropped requests during scale-in, **increase deregistration delay** and/or enable **scale-in protection**. Do not switch the ASG health check from ELB to EC2 to fix draining — that hides app failures."
     }
   ],
   "labs": [
     {
       "id": "ec2-launch-template",
-      "title": "Запуск EC2 из launch template с user data",
-      "intro": "Создайте **launch template**, который поднимает веб-сервер через *user data*, и запустите из него один instance. Bootstrap при первой загрузке избавляет от ручной настройки серверов.",
+      "title": "Launch an EC2 from a launch template with user data",
+      "intro": "Create a **launch template** that bootstraps a web server via *user data*, then launch one instance from it. Bootstrapping at first boot avoids hand-configuring servers.",
       "cli": "# Base64-encode user data that installs and starts nginx\nUSER_DATA=$(printf '#!/bin/bash\\ndnf install -y nginx\\nsystemctl enable --now nginx\\necho \"hello from $(hostname -f)\" > /usr/share/nginx/html/index.html\\n' | base64 -w0)\n\naws ec2 create-launch-template \\\n  --launch-template-name web-lt \\\n  --version-description v1 \\\n  --launch-template-data '{\n    \"ImageId\": \"ami-0abcdef1234567890\",\n    \"InstanceType\": \"t3.micro\",\n    \"SecurityGroupIds\": [\"sg-0123456789abcdef0\"],\n    \"MetadataOptions\": {\"HttpTokens\": \"required\"},\n    \"UserData\": \"'\"$USER_DATA\"'\"\n  }'\n\naws ec2 run-instances \\\n  --launch-template LaunchTemplateName=web-lt,Version=1 \\\n  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=lab-web}]'",
       "pulumi": "import pulumi\nimport pulumi_aws as aws\nimport base64\n\nuser_data = base64.b64encode(\n    b\"#!/bin/bash\\n\"\n    b\"dnf install -y nginx\\n\"\n    b\"systemctl enable --now nginx\\n\"\n).decode()\n\nlt = aws.ec2.LaunchTemplate(\n    \"web-lt\",\n    name=\"web-lt\",\n    image_id=\"ami-0abcdef1234567890\",\n    instance_type=\"t3.micro\",\n    vpc_security_group_ids=[\"sg-0123456789abcdef0\"],\n    user_data=user_data,\n    metadata_options=aws.ec2.LaunchTemplateMetadataOptionsArgs(\n        http_tokens=\"required\",  # IMDSv2\n    ),\n)\n\ninstance = aws.ec2.Instance(\n    \"lab-web\",\n    launch_template=aws.ec2.InstanceLaunchTemplateArgs(\n        id=lt.id, version=\"$Latest\"\n    ),\n    tags={\"Name\": \"lab-web\"},\n)\npulumi.export(\"instance_id\", instance.id)",
-      "note": "**Очистка**: `aws ec2 terminate-instances --instance-ids <id>`, затем `aws ec2 delete-launch-template --launch-template-name web-lt`. В Pulumi достаточно `pulumi destroy`. Замените AMI ID-заглушку на актуальный из `aws ssm get-parameter --name /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64`."
+      "note": "**Cleanup**: `aws ec2 terminate-instances --instance-ids <id>` then `aws ec2 delete-launch-template --launch-template-name web-lt`. With Pulumi just `pulumi destroy`. Replace the placeholder AMI ID with a current one from `aws ssm get-parameter --name /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64`."
     },
     {
       "id": "ec2-asg-alb",
-      "title": "ASG за ALB в двух AZ",
-      "intro": "Соберите отказоустойчивый уровень: **ALB** в 2 subnets/AZ перенаправляет трафик в **target group**, которую наполняет **Auto Scaling Group** на основе launch template, с *target tracking* по CPU.",
+      "title": "ASG behind an ALB across two AZs",
+      "intro": "Build a resilient tier: an **ALB** spanning 2 subnets/AZs forwarding to a **target group**, fed by an **Auto Scaling Group** using the launch template, with *target-tracking* on CPU.",
       "cli": "# Target group + ALB (assumes 2 public subnets in different AZs)\nTG_ARN=$(aws elbv2 create-target-group --name web-tg --protocol HTTP --port 80 \\\n  --vpc-id vpc-0123456789abcdef0 --target-type instance \\\n  --health-check-path / --query 'TargetGroups[0].TargetGroupArn' --output text)\n\nLB_ARN=$(aws elbv2 create-load-balancer --name web-alb --type application \\\n  --subnets subnet-aaa subnet-bbb --security-groups sg-0123456789abcdef0 \\\n  --query 'LoadBalancers[0].LoadBalancerArn' --output text)\n\naws elbv2 create-listener --load-balancer-arn $LB_ARN --protocol HTTP --port 80 \\\n  --default-actions Type=forward,TargetGroupArn=$TG_ARN\n\n# ASG across both AZs, ELB health checks, target tracking on CPU\naws autoscaling create-auto-scaling-group --auto-scaling-group-name web-asg \\\n  --launch-template LaunchTemplateName=web-lt,Version='$Latest' \\\n  --min-size 2 --max-size 4 --desired-capacity 2 \\\n  --vpc-zone-identifier 'subnet-aaa,subnet-bbb' \\\n  --target-group-arns $TG_ARN --health-check-type ELB --health-check-grace-period 60\n\naws autoscaling put-scaling-policy --auto-scaling-group-name web-asg \\\n  --policy-name cpu-tt --policy-type TargetTrackingScaling \\\n  --target-tracking-configuration '{\"PredefinedMetricSpecification\":{\"PredefinedMetricType\":\"ASGAverageCPUUtilization\"},\"TargetValue\":50.0}'",
       "pulumi": "import pulumi_aws as aws\n\ntg = aws.lb.TargetGroup(\n    \"web-tg\", port=80, protocol=\"HTTP\", target_type=\"instance\",\n    vpc_id=\"vpc-0123456789abcdef0\",\n    health_check=aws.lb.TargetGroupHealthCheckArgs(path=\"/\"),\n)\nalb = aws.lb.LoadBalancer(\n    \"web-alb\", load_balancer_type=\"application\",\n    subnets=[\"subnet-aaa\", \"subnet-bbb\"],\n    security_groups=[\"sg-0123456789abcdef0\"],\n)\nlistener = aws.lb.Listener(\n    \"http\", load_balancer_arn=alb.arn, port=80, protocol=\"HTTP\",\n    default_actions=[aws.lb.ListenerDefaultActionArgs(\n        type=\"forward\", target_group_arn=tg.arn)],\n)\nasg = aws.autoscaling.Group(\n    \"web-asg\", min_size=2, max_size=4, desired_capacity=2,\n    vpc_zone_identifiers=[\"subnet-aaa\", \"subnet-bbb\"],\n    target_group_arns=[tg.arn],\n    health_check_type=\"ELB\", health_check_grace_period=60,\n    launch_template=aws.autoscaling.GroupLaunchTemplateArgs(\n        name=\"web-lt\", version=\"$Latest\"),\n)\naws.autoscaling.Policy(\n    \"cpu-tt\", autoscaling_group_name=asg.name,\n    policy_type=\"TargetTrackingScaling\",\n    target_tracking_configuration=aws.autoscaling.PolicyTargetTrackingConfigurationArgs(\n        predefined_metric_specification=aws.autoscaling.PolicyTargetTrackingConfigurationPredefinedMetricSpecificationArgs(\n            predefined_metric_type=\"ASGAverageCPUUtilization\"),\n        target_value=50.0,\n    ),\n)",
-      "note": "**Порядок очистки важен**: сначала удалите ASG (`aws autoscaling delete-auto-scaling-group --auto-scaling-group-name web-asg --force-delete`), затем listener, ALB и target group. `pulumi destroy` соблюдает порядок автоматически. Размещение в 2 AZ — базовый паттерн отказоустойчивости: если одна AZ упадёт, ASG сохранит `min-size` здоровых instances в другой."
+      "note": "**Cleanup order matters**: delete the ASG first (`aws autoscaling delete-auto-scaling-group --auto-scaling-group-name web-asg --force-delete`), then the listener, ALB, and target group. `pulumi destroy` handles ordering automatically. Spanning 2 AZs is the core resilience pattern — if one AZ fails the ASG keeps `min-size` healthy in the other."
     }
   ],
   "questions": [
     {
       "id": "ec2-q1",
       "domain": 2,
-      "stem": "Веб-приложение должно оставаться доступным даже при отказе целой Availability Zone. Какая архитектура лучше всего отвечает этому требованию?",
+      "stem": "A web application must stay available even if an entire Availability Zone goes down. Which architecture best meets this requirement?",
       "options": [
-        "Один большой EC2 instance с Elastic IP и detailed monitoring",
-        "Auto Scaling Group с min size 2, распределённая по двум AZ, за Application Load Balancer",
-        "Два EC2 instance в одной AZ в cluster placement group за ALB",
-        "Один instance с lifecycle policy для EBS snapshots для быстрого восстановления"
+        "A single large EC2 instance with an Elastic IP and detailed monitoring",
+        "An Auto Scaling Group with min size 2 spread across two AZs behind an Application Load Balancer",
+        "Two EC2 instances in the same AZ in a cluster placement group behind an ALB",
+        "A single instance with an EBS snapshot lifecycle policy for fast recovery"
       ],
       "answer": 1,
-      "explanation": "Верно: ASG в двух AZ за ALB сохраняет здоровую ёмкость в уцелевшей AZ и автоматически заменяет отказавшие instances — это канонический паттерн multi-AZ отказоустойчивости. Один instance (варианты A и D) — единая точка отказа, независимо от EIP или snapshots. Cluster placement group держит instances в одной AZ ради низкой задержки, поэтому отказ AZ кладёт их все."
+      "explanation": "Correct: an ASG spanning two AZs behind an ALB keeps healthy capacity in the surviving AZ and auto-replaces failed instances — this is the canonical multi-AZ resilience pattern. A single instance (options A and D) is a single point of failure regardless of EIP or snapshots. A cluster placement group keeps instances in one AZ for low latency, so an AZ failure takes them all down."
     },
     {
       "id": "ec2-q2",
       "domain": 3,
-      "stem": "Ночной batch-job обрабатывает данные 3 часа, его можно безопасно прерывать и перезапускать, и стоимость нужно минимизировать. Какой вариант покупки подходит больше всего?",
+      "stem": "A nightly batch job processes data for 3 hours, can be interrupted and restarted safely, and must minimize cost. Which purchasing option is most appropriate?",
       "options": [
         "Dedicated Hosts",
-        "Standard Reserved Instances на 3 года",
+        "Standard Reserved Instances for 3 years",
         "Spot Instances",
         "On-Demand Instances"
       ],
       "answer": 2,
-      "explanation": "Верно: Spot даёт экономию до ~90% и идеально подходит для отказоустойчивой прерываемой batch-нагрузки — ровно этот профиль. Reserved Instances требуют долгого обязательства и рассчитаны на стабильную работу 24/7 — для 3-часового ночного задания это расточительно. On-Demand для прерываемой работы намного дороже Spot. Dedicated Hosts решают задачи лицензирования/изоляции для compliance, а не минимизации стоимости."
+      "explanation": "Correct: Spot offers up to ~90% savings and is ideal for fault-tolerant, interruptible batch work — exactly this profile. Reserved Instances require a long commitment and suit steady 24/7 usage, wasteful for a 3-hour nightly job. On-Demand is far more expensive than Spot for interruptible work. Dedicated Hosts address licensing/compliance isolation, not cost minimization."
     },
     {
       "id": "ec2-q3",
       "domain": 3,
-      "stem": "Приложению нужен load balancer со статическим IP-адресом и сверхнизкой задержкой для миллионов TCP-соединений в секунду. Какой вариант подходит лучше всего?",
+      "stem": "An application needs a load balancer that provides a static IP address and ultra-low latency for millions of TCP connections per second. Which option fits best?",
       "options": [
         "Classic Load Balancer",
         "Network Load Balancer",
@@ -99,75 +99,75 @@
         "Gateway Load Balancer"
       ],
       "answer": 1,
-      "explanation": "Верно: NLB работает на уровне 4, обрабатывает миллионы запросов в секунду со сверхнизкой задержкой и даёт статический IP / Elastic IP на каждую AZ. ALB работает на уровне 7 (HTTP) и не имеет статического IP. Gateway Load Balancer предназначен для вставки сторонних сетевых appliances. Classic Load Balancer — legacy и не рекомендуется для новых архитектур."
+      "explanation": "Correct: the NLB operates at Layer 4, handles millions of req/s at ultra-low latency, and provides a static IP / Elastic IP per AZ. The ALB is Layer 7 (HTTP) with no static IP. The Gateway Load Balancer is for inserting third-party network appliances. The Classic Load Balancer is legacy and not recommended for new designs."
     },
     {
       "id": "ec2-q4",
       "domain": 2,
-      "stem": "Одно приложение должно направлять запросы в разные target groups в зависимости от URL-пути (/api и /images). Какая функция load balancer это обеспечивает?",
+      "stem": "A single application must route requests to different target groups based on the URL path (/api vs /images). Which load balancer feature provides this?",
       "options": [
-        "NLB с TCP listeners",
-        "Weighted-записи Route 53",
-        "Gateway Load Balancer с GENEVE",
-        "ALB с правилами path-based routing"
+        "NLB with TCP listeners",
+        "Route 53 weighted records",
+        "Gateway Load Balancer with GENEVE",
+        "ALB with path-based routing rules"
       ],
       "answer": 3,
-      "explanation": "Верно: path-based (и host-based) routing — функция ALB уровня 7: правила listener перенаправляют запросы в разные target groups по URL-пути. NLB работает на уровне 4 и не видит URL. GWLB вставляет appliances и не занимается маршрутизацией приложений. Weighted-записи Route 53 делят DNS-трафик по процентам, а не по URL-пути."
+      "explanation": "Correct: path-based (and host-based) routing is a Layer 7 ALB feature, letting listener rules forward by URL path to different target groups. The NLB is Layer 4 and cannot inspect URLs. GWLB inserts appliances and does not do app routing. Route 53 weighted records split DNS traffic by percentage, not by URL path."
     },
     {
       "id": "ec2-q5",
       "domain": 3,
-      "stem": "In-memory аналитической нагрузке нужно максимально возможное соотношение RAM к vCPU при минимальной стоимости для такого профиля. Какое семейство instance выбрать?",
+      "stem": "An in-memory analytics workload needs the highest possible RAM-to-vCPU ratio at the lowest cost for that profile. Which instance family should you choose?",
       "options": [
-        "Compute optimized (семейство C)",
-        "General purpose (burstable семейство T)",
-        "Memory optimized (семейство R/X)",
-        "Storage optimized (семейство I)"
+        "Compute optimized (C family)",
+        "General purpose (T family burstable)",
+        "Memory optimized (R/X family)",
+        "Storage optimized (I family)"
       ],
       "answer": 2,
-      "explanation": "Верно: memory-optimized семейства (R, X) дают максимальное соотношение памяти к vCPU для in-memory баз данных и аналитики. Compute-optimized (C) делает упор на CPU, а не на RAM. Storage-optimized (I) нацелены на высокие IOPS локального NVMe. Burstable instances T имеют низкий базовый CPU и скромную память — не подходят для постоянной нагрузки с большим объёмом памяти."
+      "explanation": "Correct: memory-optimized (R, X) families give the highest memory-to-vCPU ratio for in-memory databases and analytics. Compute-optimized (C) favors CPU, not RAM. Storage-optimized (I) targets high local NVMe IOPS. Burstable T instances have low baseline CPU and modest memory — unsuitable for sustained memory-heavy work."
     },
     {
       "id": "ec2-q6",
       "domain": 2,
-      "stem": "Распределённый кластер в стиле HDFS должен переживать отказ нижележащего железа, теряя не более одной группы реплик, и при этом выигрывать от группового размещения. Какой тип placement group подходит?",
+      "stem": "A distributed HDFS-style cluster must tolerate the failure of underlying hardware without losing more than one replica group, while still benefiting from grouped placement. Which placement group type fits?",
       "options": [
-        "Без placement group (размещение по умолчанию)",
+        "No placement group (default spread)",
         "Cluster placement group",
         "Spread placement group",
         "Partition placement group"
       ],
       "answer": 3,
-      "explanation": "Верно: partition placement groups делят instances на partitions на отдельных стойках, так что отказ железа затрагивает только одну partition — именно так проектируют HDFS, Cassandra и Kafka. Cluster group упаковывает всё в одну стойку (общий домен отказа). Spread group ограничена 7 instances на AZ — слишком мало для больших кластеров. Размещение по умолчанию не гарантирует изоляцию по стойкам."
+      "explanation": "Correct: partition placement groups split instances into partitions on separate racks, so a hardware failure affects only one partition — the design pattern for HDFS, Cassandra, and Kafka. A cluster group packs everything on one rack (shared failure domain). A spread group caps at 7 instances per AZ, too small for large clusters. Default placement gives no rack-isolation guarantees."
     },
     {
       "id": "ec2-q7",
       "domain": 2,
-      "stem": "Пользователи жалуются на оборванные загрузки каждый раз, когда Auto Scaling Group выполняет scale-in. У приложения долгоживущие соединения. Какие два изменения уменьшат число оборванных запросов? (Выберите два)",
+      "stem": "Users report dropped uploads whenever the Auto Scaling Group scales in. The application has long-running connections. Which two changes reduce dropped requests? (Choose two)",
       "options": [
-        "Включить scale-in protection для instances или увеличить cooldown, чтобы избежать преждевременного завершения",
-        "Переключить тип health check ASG с ELB на EC2",
-        "Увеличить deregistration delay (connection draining) у target group",
-        "Заменить ALB на Classic Load Balancer"
+        "Enable instance scale-in protection or use a longer cooldown to avoid premature termination",
+        "Switch the ASG health check type from ELB to EC2",
+        "Increase the target group deregistration delay (connection draining)",
+        "Replace the ALB with a Classic Load Balancer"
       ],
       "answer": [
         0,
         2
       ],
-      "explanation": "Верно: увеличенный deregistration delay позволяет текущим долгоживущим соединениям завершиться до удаления target, а scale-in protection / более долгий cooldown не дают завершать instances, которые ещё обслуживают трафик. Переключение health checks с ELB на EC2 — ошибка: оно убирает обнаружение сбоев на уровне приложения и никак не влияет на draining. Замена ALB на Classic LB не решает проблему draining и является шагом назад к legacy."
+      "explanation": "Correct: raising the deregistration delay lets in-flight long-lived connections finish before the target is removed, and scale-in protection / longer cooldowns prevent terminating instances that still serve traffic. Switching ELB health checks to EC2 is wrong — it removes app-level failure detection and does nothing for draining. Replacing the ALB with a Classic LB does not address draining behavior and is a legacy step backward."
     },
     {
       "id": "ec2-q8",
       "domain": 3,
-      "stem": "У компании стабильная, предсказуемая базовая вычислительная нагрузка 24/7 на нескольких семействах instance и в нескольких регионах, плюс немного Fargate. Нужна максимальная экономия при максимальной гибкости. Какое обязательство подходит лучше всего?",
+      "stem": "A company has a steady, predictable baseline of compute running 24/7 across several instance families and regions, plus some Fargate usage. They want the deepest savings with maximum flexibility. Which commitment best fits?",
       "options": [
-        "Standard Reserved Instances, привязанные к одному типу instance и региону",
+        "Standard Reserved Instances locked to one instance type and region",
         "Compute Savings Plan",
         "On-Demand Capacity Reservations",
-        "Spot Instances с максимальной ценой"
+        "Spot Instances with a maximum price"
       ],
       "answer": 1,
-      "explanation": "Верно: Compute Savings Plan — это обязательство по расходу в $/hour, которое применяется к любому семейству, размеру, региону и даже к Fargate/Lambda — лучший выбор для стабильной нагрузки, где нужна гибкость. Standard RI хорошо экономят, но привязаны к типу/региону, и нужной гибкости нет. Spot — для прерываемой работы, а не для стабильной базы 24/7. On-Demand Capacity Reservations гарантируют ёмкость, но не дают скидки."
+      "explanation": "Correct: a Compute Savings Plan commits to a $/hour spend and applies across any instance family, size, region, and even Fargate/Lambda — best for steady usage needing flexibility. Standard RIs save well but are locked to a type/region, lacking the requested flexibility. Spot is for interruptible work, not steady 24/7 baselines. On-Demand Capacity Reservations guarantee capacity but provide no discount."
     }
   ]
 }

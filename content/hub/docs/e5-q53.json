@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "Keyspaces: serverless Cassandra-совместимая БД",
-  "tests": "Выбор managed-сервиса для Apache Cassandra-совместимой нагрузки без серверов.",
-  "expected": "Amazon Keyspaces (for Apache Cassandra) — serverless, автоматическое масштабирование throughput. Триггеры: «Apache Cassandra-compatible», «without operating servers».",
-  "why_not": "RDS — реляционная; Neptune — графовая; DocumentDB — MongoDB-совместимая.",
+  "concept": "Keyspaces: serverless Cassandra-compatible database",
+  "tests": "Choosing a managed service for an Apache Cassandra-compatible workload without servers.",
+  "expected": "Amazon Keyspaces (for Apache Cassandra) — serverless, automatic throughput scaling. Triggers: \"Apache Cassandra-compatible\", \"without operating servers\".",
+  "why_not": "RDS — relational; Neptune — graph; DocumentDB — MongoDB-compatible.",
   "keywords": [
     "Keyspaces",
     "Cassandra",
     "CQL",
     "serverless",
     "wide-column",
-    "без серверов"
+    "no servers"
   ],
   "services": [
     "keyspaces",

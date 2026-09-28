@@ -4,17 +4,17 @@
     "type": "topic",
     "ref": "monitoring"
   },
-  "concept": "AWS Config: автоматическая remediation через SSM Automation",
-  "tests": "Знание, как автоматически исправлять ресурсы, помеченные Config rule как non-compliant.",
-  "expected": "Config remediation action с SSM Automation document (например, включить шифрование bucket). Триггеры: «non-compliant», «fixed automatically», «Config rule».",
-  "why_not": "Composite alarm лишь агрегирует alarms; CloudTrail data events логируют доступ к объектам; high-resolution metrics — гранулярность метрик.",
+  "concept": "AWS Config: automatic remediation via SSM Automation",
+  "tests": "Knowing how to automatically fix resources flagged non-compliant by a Config rule.",
+  "expected": "A Config remediation action with an SSM Automation document (e.g., enable bucket encryption). Triggers: \"non-compliant\", \"fixed automatically\", \"Config rule\".",
+  "why_not": "A composite alarm only aggregates alarms; CloudTrail data events log object access; high-resolution metrics are about metric granularity.",
   "keywords": [
     "AWS Config",
     "remediation",
     "SSM Automation",
     "non-compliant",
     "Config rule",
-    "автоисправление"
+    "auto-remediation"
   ],
   "services": [
     "config",

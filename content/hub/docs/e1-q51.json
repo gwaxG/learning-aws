@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "ELB: ALB для path-based routing на L7",
-  "tests": "Какой балансировщик маршрутизирует запросы в разные target groups по URL path.",
-  "expected": "Application Load Balancer с path-based listener rules (/api → одна target group, /images → другая). Триггеры: «route based on URL path», «different target groups».",
-  "why_not": "NLB работает на L4 без понимания path; Classic LB без content-based routing; Route 53 weighted делит трафик по весам, не по path.",
+  "concept": "ELB: ALB for L7 path-based routing",
+  "tests": "Which load balancer routes requests to different target groups by URL path.",
+  "expected": "Application Load Balancer with path-based listener rules (/api → one target group, /images → another). Triggers: \"route based on URL path\", \"different target groups\".",
+  "why_not": "NLB works at L4 with no notion of path; Classic LB has no content-based routing; Route 53 weighted splits traffic by weight, not path.",
   "keywords": [
     "ALB",
     "path-based routing",

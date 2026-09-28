@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "CloudHSM: выделенный single-tenant HSM",
-  "tests": "Выбор сервиса, когда нужен HSM под исключительным контролем компании на выделенном оборудовании.",
-  "expected": "AWS CloudHSM — dedicated single-tenant FIPS 140-2 Level 3 HSM, ключами управляет только клиент. Триггеры: «hardware security modules the company controls exclusively», «single-tenant dedicated hardware».",
-  "why_not": "KMS — multi-tenant managed сервис; Secrets Manager хранит секреты; ACM — TLS-сертификаты.",
+  "concept": "CloudHSM: dedicated single-tenant HSM",
+  "tests": "Choosing a service when an HSM under the company's exclusive control on dedicated hardware is required.",
+  "expected": "AWS CloudHSM — dedicated single-tenant FIPS 140-2 Level 3 HSM; only the customer manages the keys. Triggers: \"hardware security modules the company controls exclusively\", \"single-tenant dedicated hardware\".",
+  "why_not": "KMS — multi-tenant managed service; Secrets Manager stores secrets; ACM — TLS certificates.",
   "keywords": [
     "CloudHSM",
     "single-tenant",
     "dedicated HSM",
     "FIPS 140-2 Level 3",
     "exclusive control",
-    "выделенное оборудование"
+    "dedicated hardware"
   ],
   "services": [
     "cloudhsm",

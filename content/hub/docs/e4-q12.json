@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "DynamoDB: fine-grained access через condition keys (dynamodb:Attributes)",
-  "tests": "Как ограничить, какие атрибуты (поля) таблицы может читать каждый микросервис.",
-  "expected": "IAM policies с condition keys dynamodb:Attributes (и dynamodb:Select / projection) — attribute-level контроль. Триггеры: «which fields each microservice can read», «fine-grained», PII.",
-  "why_not": "KMS-шифрование всей таблицы — at rest, не авторизация по полям; Streams — захват изменений; VPC endpoint — сетевой путь.",
+  "concept": "DynamoDB: fine-grained access via condition keys (dynamodb:Attributes)",
+  "tests": "How to restrict which table attributes (fields) each microservice can read.",
+  "expected": "IAM policies with dynamodb:Attributes condition keys (plus dynamodb:Select / projection) for attribute-level control. Triggers: \"which fields each microservice can read\", \"fine-grained\", PII.",
+  "why_not": "KMS encryption of the whole table is at rest, not per-field authorization; Streams is change capture; a VPC endpoint is a network path.",
   "keywords": [
     "dynamodb:Attributes",
     "fine-grained access control",

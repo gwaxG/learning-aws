@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "Auto Scaling: scheduled scaling + target tracking для предсказуемых пиков",
-  "tests": "Как совместить заблаговременное наращивание под предсказуемый утренний пик и сокращение мощности ночью (выбрать два).",
-  "expected": "Scheduled scaling — добавить мощность до утреннего пика; target tracking — убрать мощность при падении утилизации ночью. Триггеры: «predictable daily traffic», «spikes every morning», «control cost».",
-  "why_not": "Постоянный overprovisioning под пик — переплата вне пика; ручное управление без Auto Scaling — ошибки и операционная нагрузка.",
+  "concept": "Auto Scaling: scheduled scaling + target tracking for predictable peaks",
+  "tests": "How to combine scaling out ahead of a predictable morning peak with scaling in at night (choose two).",
+  "expected": "Scheduled scaling — add capacity before the morning peak; target tracking — remove capacity as utilization drops at night. Triggers: \"predictable daily traffic\", \"spikes every morning\", \"control cost\".",
+  "why_not": "Permanent overprovisioning for the peak — overpaying off-peak; manual management without Auto Scaling — errors and operational burden.",
   "keywords": [
     "scheduled scaling",
     "target tracking",
     "predictable traffic",
     "Auto Scaling group",
-    "пик по утрам",
-    "оптимизация затрат"
+    "morning peak",
+    "cost optimization"
   ],
   "services": [
     "auto-scaling",

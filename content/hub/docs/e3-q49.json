@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "Global Accelerator: статические anycast IP для TCP/UDP",
-  "tests": "Выбор сервиса для TCP-игры со статическими anycast IP, ускорением по глобальной сети и быстрым региональным failover.",
-  "expected": "AWS Global Accelerator — 2 статических anycast IP, трафик по AWS backbone, failover за секунды. Триггеры: «TCP/UDP», «static anycast IP», «gaming», «fast regional failover».",
-  "why_not": "CloudFront кэширует HTTP-контент; Route 53 — только DNS (TTL-зависимый failover); NLB в одном регионе без глобального ускорения.",
+  "concept": "Global Accelerator: static anycast IPs for TCP/UDP",
+  "tests": "Choosing a service for a TCP game with static anycast IPs, global network acceleration and fast regional failover.",
+  "expected": "AWS Global Accelerator — 2 static anycast IPs, traffic over the AWS backbone, failover within seconds. Triggers: \"TCP/UDP\", \"static anycast IP\", \"gaming\", \"fast regional failover\".",
+  "why_not": "CloudFront caches HTTP content; Route 53 — DNS only (TTL-dependent failover); NLB in one region with no global acceleration.",
   "keywords": [
     "Global Accelerator",
     "anycast IP",

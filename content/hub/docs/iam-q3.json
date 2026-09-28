@@ -4,17 +4,17 @@
     "type": "topic",
     "ref": "iam-security"
   },
-  "concept": "IAM: cross-account role с ExternalId против confused deputy",
-  "tests": "Знание паттерна доступа третьей стороны (SaaS) к аккаунту: cross-account role + условие ExternalId.",
-  "expected": "Cross-account IAM role с trust policy на аккаунт провайдера и обязательным условием sts:ExternalId в trust policy. Триггеры: «third party / SaaS», «on your behalf», «confused deputy».",
-  "why_not": "IAM user с переданными access keys — долгоживущие утекаемые credentials; публичные ресурсы полностью снимают контроль доступа.",
+  "concept": "IAM: cross-account role with ExternalId against confused deputy",
+  "tests": "Knowing the pattern for third-party (SaaS) access to an account: cross-account role + ExternalId condition.",
+  "expected": "A cross-account IAM role with a trust policy for the provider's account and a mandatory sts:ExternalId condition in the trust policy. Triggers: \"third party / SaaS\", \"on your behalf\", \"confused deputy\".",
+  "why_not": "An IAM user with handed-over access keys means long-lived, leakable credentials; public resources remove access control entirely.",
   "keywords": [
     "cross-account role",
     "ExternalId",
     "confused deputy",
     "trust policy",
     "AssumeRole",
-    "третья сторона",
+    "third party",
     "SaaS"
   ],
   "services": [

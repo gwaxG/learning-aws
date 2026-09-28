@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "SQS: буфер между web tier и обработчиками + Auto Scaling по глубине очереди",
-  "tests": "Как поглощать непредсказуемые пики нагрузки и развязать обработку заказов от веб-уровня.",
-  "expected": "SQS queue между web tier и order processors + EC2 Auto Scaling по глубине очереди (ApproximateNumberOfMessages / backlog per instance). Триггеры: «unpredictable spikes», «flash sales», «decouple order processing».",
-  "why_not": "Фиксированный флот и синхронная обработка в одном RDS не выдерживают всплесков; хранение заказов в памяти инстанса — потеря данных.",
+  "concept": "SQS: buffer between web tier and workers + Auto Scaling on queue depth",
+  "tests": "How to absorb unpredictable load spikes and decouple order processing from the web tier.",
+  "expected": "SQS queue between the web tier and order processors + EC2 Auto Scaling on queue depth (ApproximateNumberOfMessages / backlog per instance). Triggers: \"unpredictable spikes\", \"flash sales\", \"decouple order processing\".",
+  "why_not": "A fixed fleet and synchronous processing in a single RDS can't handle bursts; keeping orders in instance memory means data loss.",
   "keywords": [
     "SQS",
     "queue depth",
     "ApproximateNumberOfMessages",
     "Auto Scaling",
     "decouple",
-    "пики трафика",
+    "traffic spikes",
     "flash sale"
   ],
   "services": [

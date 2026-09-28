@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "SQS: буферизация и развязка producer/consumer",
-  "tests": "Выбор сервиса, который развязывает производителей и потребителей и не теряет сообщения при медленном consumer.",
-  "expected": "SQS очередь между producer и consumer — буфер, consumer обрабатывает в своём темпе. Триггеры: «decouple», «slow consumer», «not lose messages during spikes».",
-  "why_not": "SNS без подписанной очереди — push без буфера; синхронные HTTP-вызовы связывают компоненты; Firehose — доставка стрима в хранилища, не очередь задач.",
+  "concept": "SQS: buffering and producer/consumer decoupling",
+  "tests": "Choosing a service that decouples producers and consumers and does not lose messages when the consumer is slow.",
+  "expected": "An SQS queue between producer and consumer — a buffer; the consumer processes at its own pace. Triggers: \"decouple\", \"slow consumer\", \"not lose messages during spikes\".",
+  "why_not": "SNS without a subscribed queue — push with no buffer; synchronous HTTP calls couple components; Firehose — stream delivery to storage, not a task queue.",
   "keywords": [
     "SQS",
     "decoupling",
     "buffer",
     "slow consumer",
     "traffic spikes",
-    "развязка компонентов"
+    "component decoupling"
   ],
   "services": [
     "sqs",

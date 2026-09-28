@@ -1,6 +1,6 @@
 {
   "slug": "storage",
-  "title": "S3 и хранилища",
+  "title": "S3 & Storage",
   "domains": [
     1,
     3,
@@ -8,135 +8,129 @@
   ],
   "essentials": [
     {
-      "heading": "Storage classes в S3 и компромиссы при извлечении",
-      "body": "**Что.** S3 предлагает спектр storage classes для объектов, в которых цена хранения разменивается на задержку извлечения и плату за извлечение за GB. «Горячий» край — `Standard`, «холодный» — `Glacier Deep Archive`.\n\n**Зачем.** Подбирать для каждого объекта самый дешёвый класс под его паттерн доступа, который всё ещё укладывается в требования по задержке и SLA, вместо того чтобы платить цену Standard за холодные данные.\n\n**Как.** **Standard** (частый доступ, мс, без платы за извлечение), **Intelligent-Tiering** (перемещает автоматически, небольшая плата за мониторинг, без платы за извлечение), **Standard-IA** (дешевле хранение + плата за извлечение, multi-AZ), **One Zone-IA** (~на 20% дешевле, одна AZ), **Glacier Instant** (мс, но по архивной цене), **Glacier Flexible** (минуты–часы: Expedited 1–5 мин, Standard 3–5 ч, Bulk 5–12 ч), **Glacier Deep Archive** (12–48 ч, самый дешёвый).\n\n**Экзамен.** Все классы дают **durability 11 девяток**; только у One Zone-IA нет multi-AZ. Минимальные сроки хранения: **IA 30 дн.**, **Glacier Instant/Flexible 90 дн.**, **Deep Archive 180 дн.** — при более раннем удалении всё равно платите за минимум. Intelligent-Tiering — когда паттерн доступа неизвестен; не используйте для мелких объектов (< 128 KB не перемещаются между уровнями).",
+      "heading": "S3 storage classes & retrieval trade-offs",
+      "body": "**What.** S3 exposes a spectrum of object storage classes that trade storage price against retrieval latency and per-GB retrieval fees. The hot end is `Standard`; the cold end is `Glacier Deep Archive`.\n\n**Why.** Match each object's access pattern to the cheapest class that still meets latency and SLA needs, instead of paying Standard prices for cold data.\n\n**How.** **Standard** (frequent, ms, no retrieval fee), **Intelligent-Tiering** (auto-moves, small monitoring fee, no retrieval charges), **Standard-IA** (cheaper storage + retrieval fee, multi-AZ), **One Zone-IA** (~20% cheaper, single AZ), **Glacier Instant** (ms but archive-priced), **Glacier Flexible** (min–hrs: Expedited 1–5 min, Standard 3–5 h, Bulk 5–12 h), **Glacier Deep Archive** (12–48 h, cheapest).\n\n**Exam.** All classes give **11 9s durability**; only One Zone-IA lacks multi-AZ. Minimum storage durations: **IA 30 d**, **Glacier Instant/Flexible 90 d**, **Deep Archive 180 d** — deleting earlier still bills the floor. Intelligent-Tiering when access is unknown; avoid it for tiny objects (< 128 KB are not tiered).",
       "diagram": {
         "src": "s3-storage-classes.svg",
-        "caption": "Storage classes в S3 по шкале частоты доступа: более «горячие» классы дороже в хранении и дают мгновенный доступ; более «холодные» дешевле, но берут плату за извлечение и отдают данные дольше."
+        "caption": "S3 storage classes along the access-frequency spectrum: hotter classes cost more to store with instant access; colder classes are cheaper but charge retrieval fees and take longer."
       },
       "links": [
-        {
-          "label": "Использование storage classes в Amazon S3",
-          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"
-        },
-        {
-          "label": "Управление жизненным циклом хранения",
-          "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html"
-        }
+        {"label": "Using Amazon S3 storage classes", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/storage-class-intro.html"},
+        {"label": "Managing your storage lifecycle", "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html"}
       ]
     },
     {
-      "heading": "Lifecycle policies и оптимизация затрат",
-      "body": "**Что.** Lifecycle configuration — набор правил на уровне bucket, который автоматически перемещает объекты между storage classes (`Transition`) и удаляет их (`Expiration`) по возрасту, префиксу или тегу.\n\n**Зачем.** Не нужны самописные cron-задачи, и вы перестаёте платить цену Standard за остывшие данные, осиротевшие версии и части multipart.\n\n**Как.** Типичное правило каскадом переводит **Standard → Standard-IA через 30 дн. → Glacier через 90 дн. → Deep Archive через 365 дн.**, затем удаляет noncurrent versions. `NoncurrentVersionExpiration` ограничивает стоимость versioning, а `AbortIncompleteMultipartUpload` чистит осиротевшие части. **Storage Lens** и **S3 Inventory** показывают, что стоит переводить.\n\n**Экзамен.** Переходы не могут обойти **минимальные сроки хранения** (IA 30 дн., Glacier 90 дн., Deep Archive 180 дн.) — и при раннем удалении вы всё равно платите за минимум. При неизвестных/меняющихся паттернах доступа лучше **Intelligent-Tiering**, чем ручные правила; мелкие объекты дешевле переводить, пропустив шаг IA."
+      "heading": "Lifecycle policies & cost optimization",
+      "body": "**What.** Lifecycle configuration is a bucket-level rule set that automates moving objects between storage classes (`Transition`) and deleting them (`Expiration`) based on age, prefix, or tag.\n\n**Why.** It removes the need for hand-rolled cron jobs and stops paying Standard prices for data that has gone cold or for orphaned versions and multipart parts.\n\n**How.** A typical rule cascades **Standard → Standard-IA at 30 d → Glacier at 90 d → Deep Archive at 365 d**, then expires noncurrent versions. Use `NoncurrentVersionExpiration` to bound versioning cost and `AbortIncompleteMultipartUpload` to clean orphaned parts. **Storage Lens** and **S3 Inventory** identify what to transition.\n\n**Exam.** Transitions cannot bypass the **minimum-duration floors** (IA 30 d, Glacier 90 d, Deep Archive 180 d) — and you still pay the floor if you delete early. For unknown/changing access patterns prefer **Intelligent-Tiering** over hand-tuned rules; small objects move cheaper if you skip the IA step."
     },
     {
-      "heading": "Durability, availability, versioning и MFA delete",
-      "body": "**Что.** S3 хранит объекты избыточно на множестве устройств и в нескольких AZ и может сохранять все предыдущие версии ключа. Versioning вместе с MFA Delete — базовый уровень защиты данных.\n\n**Зачем.** Защищает от случайной перезаписи, багов в приложениях и злонамеренного удаления — включая уничтожение старых копий в стиле ransomware.\n\n**Как.** Standard, IA, Glacier и Intelligent-Tiering реплицируются минимум в 3 AZ; только **One Zone-IA** живёт в одной AZ. **Versioning** включается на весь bucket: `DELETE` добавляет delete marker вместо стирания данных; после включения его можно только **приостановить (suspend)**, но не выключить. **MFA Delete** переключается только **root-аккаунтом через CLI** и требует MFA-код для безвозвратного удаления версий или приостановки versioning.\n\n**Экзамен.** Запомните **durability 11 девяток (99.999999999%)** и **SLA availability 99.99%** у Standard. Versioning — обязательное условие для **CRR/SRR**. MFA Delete — только для root, через консоль не включается."
+      "heading": "Durability, availability, versioning & MFA delete",
+      "body": "**What.** S3 stores objects redundantly across multiple devices and AZs and can keep every prior version of a key. Versioning plus MFA Delete forms the data-protection baseline.\n\n**Why.** Defends against accidental overwrites, application bugs, and malicious deletes — including ransomware-style destruction of older copies.\n\n**How.** Standard, IA, Glacier and Intelligent-Tiering replicate across ≥3 AZs; only **One Zone-IA** lives in a single AZ. **Versioning** is bucket-wide: a `DELETE` adds a delete marker instead of erasing data; once enabled it can only be **suspended**, never disabled. **MFA Delete** can only be toggled by the **root account via CLI** and requires an MFA code to permanently delete versions or suspend versioning.\n\n**Exam.** Memorize **11 9s durability (99.999999999%)** and Standard's **99.99% availability SLA**. Versioning is a prerequisite for **CRR/SRR**. MFA Delete is root-only and cannot be enabled via the console. **Object Lock (WORM)** requires versioning: **compliance mode** — no one, not even root, can delete a version or shorten retention (\"strict regulatory\", \"immutable\"); **governance mode** — users with `s3:BypassGovernanceRetention` can override (testing, internal policy); **legal hold** — no expiry until removed. Classic combo: versioning + Object Lock compliance + lifecycle to Glacier Deep Archive."
     },
     {
-      "heading": "Безопасность S3: политики, BPA, шифрование, presigned URLs",
-      "body": "**Что.** В S3 несколько слоёв: контроль доступа (BPA, bucket policies, IAM, ACLs), шифрование at rest (варианты SSE и client-side) и кратковременный подписанный доступ (presigned URLs).\n\n**Зачем.** Предотвращает случайную публичную экспозицию, закрывает регуляторные требования к шифрованию и аудиту и позволяет делиться приватными объектами без раздачи учётных данных AWS.\n\n**Как.** **Block Public Access (BPA)** включён по умолчанию и имеет приоритет над политиками/ACL. Шифрование: **SSE-S3** (AES-256, по умолчанию), **SSE-KMS** (KMS CMK, аудит в CloudTrail + cross-account через key policy; включите **S3 Bucket Keys**, чтобы снизить стоимость запросов к KMS), **DSSE-KMS** (двухслойное) или **SSE-C** (ключ клиента в каждом запросе). **Presigned URLs** дают временный доступ на `GET`/`PUT`.\n\n**Экзамен.** **BPA включён по умолчанию** — его отключение — частая ловушка. Presigned URL ограничен **правами подписавшего** и сроком действия; отзыв IAM-прав делает его недействительным. SSE-KMS обязателен, когда вопрос требует аудита каждой расшифровки в CloudTrail.",
+      "heading": "S3 security: policies, BPA, encryption, presigned URLs",
+      "body": "**What.** S3 layers access control (BPA, bucket policies, IAM, ACLs), encryption at rest (SSE variants and client-side), and short-lived signed access (presigned URLs).\n\n**Why.** Prevents accidental public exposure, satisfies regulatory encryption and audit requirements, and lets you share private objects without distributing AWS credentials.\n\n**How.** **Block Public Access (BPA)** is on by default and overrides policies/ACLs. Encrypt with **SSE-S3** (AES-256, default), **SSE-KMS** (KMS CMK, CloudTrail audit + cross-account via key policy; enable **S3 Bucket Keys** to cut KMS request cost), **DSSE-KMS** (dual-layer), or **SSE-C** (customer-supplied key on every request). **Presigned URLs** grant temporary `GET`/`PUT` access.\n\n**Exam.** **BPA is on by default** — disabling it is a frequent trap. A presigned URL is bounded by the **signer's permissions** and its expiry; revoking IAM perms invalidates it. SSE-KMS is required when the question demands a per-decrypt CloudTrail audit trail. Request headers: SSE-S3 → `x-amz-server-side-encryption: AES256`; SSE-KMS → same header with `aws:kms` (+ `x-amz-server-side-encryption-aws-kms-key-id`); **SSE-C** → `x-amz-server-side-encryption-customer-algorithm`, `-customer-key`, `-customer-key-MD5` on every PUT/GET. A bucket policy can deny `PutObject` without the expected header.",
       "diagram": {
         "src": "s3-encryption-options.svg",
-        "caption": "Сравнение вариантов шифрования S3: SSE-KMS и DSSE-KMS дают аудит в CloudTrail и cross-account доступ через key policy; SSE-C и client-side encryption держат ключи вне AWS."
+        "caption": "S3 encryption options compared: SSE-KMS and DSSE-KMS provide CloudTrail audit and cross-account access via the key policy; SSE-C and client-side encryption keep keys outside AWS."
       }
     },
     {
-      "heading": "Репликация, Transfer Acceleration и multipart upload",
-      "body": "**Что.** S3 асинхронно копирует объекты между bucket (CRR/SRR), ускоряет загрузку на больших расстояниях (Transfer Acceleration) и разбивает большие объекты на части (multipart upload) ради throughput и возобновления загрузки.\n\n**Зачем.** Решает задачи disaster recovery, требований к резидентности данных, агрегации логов, быстрого глобального приёма данных и надёжной загрузки многогигабайтных объектов по нестабильным сетям.\n\n**Как.** **CRR** (между регионами: DR, задержка, compliance) и **SRR** (в одном регионе: агрегация логов, изоляция аккаунтов) требуют **versioning на source и destination** плюс **IAM role**. **Transfer Acceleration** направляет загрузки через edge locations **CloudFront**. **Multipart upload** рекомендуется для объектов > 100 MB и обязателен > 5 GB; незавершённые части удаляйте через lifecycle.\n\n**Экзамен.** Репликация **не ретроактивна** — для существующих объектов нужен **S3 Batch Replication**. Каждый префикс масштабируется до **3,500 PUT / 5,500 GET req/s**, так что для высокого throughput шардируйте ключи. Используйте **Gateway Endpoint для S3**, чтобы не платить за трафик через NAT из приватной subnet."
+      "heading": "Replication, Transfer Acceleration & multipart upload",
+      "body": "**What.** S3 ships objects between buckets asynchronously (CRR/SRR), speeds long-distance uploads (Transfer Acceleration), and chunks big objects (multipart upload) for throughput and resume.\n\n**Why.** Solves disaster recovery, compliance residency, log aggregation, fast global ingest, and reliable upload of multi-gigabyte objects over flaky networks.\n\n**How.** **CRR** (cross-region: DR, latency, compliance) and **SRR** (same-region: log aggregation, account isolation) both require **versioning on source and destination** plus an **IAM role**. **Transfer Acceleration** routes uploads through **CloudFront edge** locations. **Multipart upload** is recommended for objects > 100 MB and required > 5 GB; abort incomplete parts via lifecycle.\n\n**Exam.** Replication is **not retroactive** — existing objects need **S3 Batch Replication**. Prefixes scale to **3,500 PUT / 5,500 GET req/s each**, so shard keys for high throughput. Use a **Gateway Endpoint for S3** to avoid NAT data charges from a private subnet. **Transfer Acceleration vs CloudFront:** TA speeds up each individual transfer over the AWS backbone (best for long-distance *uploads*) but caches nothing; when many clients worldwide repeatedly *download* the same objects, put **CloudFront** in front of the bucket (edge cache + signed URLs)."
     },
     {
-      "heading": "Типы томов EBS и snapshots",
-      "body": "**Что.** EBS — сетевое блочное хранилище, живущее в **одной AZ** и подключаемое к одному EC2 instance (Multi-Attach — только io1/io2, в той же AZ). Тома бывают SSD и HDD.\n\n**Зачем.** Даёт постоянные блочные устройства с низкой задержкой для загрузочных томов, баз данных и нагрузок с высоким throughput (логи/batch) — и позволяет дёшево бэкапить их через snapshots.\n\n**Как.** **gp3** (SSD общего назначения, базово 3,000 IOPS / 125 MB/s, можно выделить до 16,000 IOPS / 1,000 MB/s независимо от размера). **io2 / io2 Block Express** (максимум IOPS, задержка < 1 мс, durability 99.999%, Multi-Attach). **st1** (HDD под throughput, последовательная обработка больших данных). **sc1** (cold HDD, самый дешёвый). **Snapshots** инкрементальные, хранятся в S3 и **привязаны к региону** — для DR копируйте их между регионами.\n\n**Экзамен.** EBS — **single-AZ**: отказ AZ означает восстановление из snapshot. Тома с KMS-шифрованием дают зашифрованные snapshots; snapshots можно шарить, но для зашифрованных нужен общий CMK. gp3 обычно выигрывает у gp2 по цене/производительности.",
+      "heading": "EBS volume types & snapshots",
+      "body": "**What.** EBS is network-attached block storage that lives in a **single AZ** and attaches to one EC2 instance (Multi-Attach is io1/io2 only, same-AZ). Volumes come in SSD and HDD families.\n\n**Why.** Provides persistent, low-latency block devices for boot volumes, databases, and throughput-heavy log/batch workloads — and lets you back them up cheaply via snapshots.\n\n**How.** **gp3** (general SSD, baseline 3,000 IOPS / 125 MB/s, provision up to 16,000 IOPS / 1,000 MB/s independent of size). **io2 / io2 Block Express** (highest IOPS, sub-ms, 99.999% durability, Multi-Attach). **st1** (throughput HDD, sequential big data). **sc1** (cold HDD, cheapest). **Snapshots** are incremental, stored in S3, **region-scoped** — copy across regions for DR.\n\n**Exam.** EBS is **single-AZ**: AZ failure means restore from snapshot. KMS-encrypted volumes produce encrypted snapshots; snapshots can be shared but encrypted ones need a shared CMK. gp3 usually beats gp2 on price/perf. **Automating snapshots:** **Amazon Data Lifecycle Manager (DLM)** — free, tag-based policies that create, retain and delete EBS snapshots/AMIs on a schedule — is the fastest, cheapest answer for \"automated EBS backups\"; choose **AWS Backup** when the stem spans many services/accounts or needs Vault Lock/compliance; a cron job calling `create-snapshot` is never the \"simple to maintain\" answer.",
       "diagram": {
         "src": "ebs-volume-types.svg",
-        "caption": "Типы томов EBS по осям стоимости и производительности: HDD st1/sc1 для последовательных/холодных нагрузок, gp3 — SSD по умолчанию, io2 Block Express — для максимальных IOPS, durability и Multi-Attach."
+        "caption": "EBS volume types plotted against cost and performance: HDD st1/sc1 for sequential/cold workloads, gp3 as the default SSD, io2 Block Express for highest IOPS, durability and Multi-Attach."
       }
     },
     {
-      "heading": "EFS, FSx или instance store",
-      "body": "**Что.** Семейство общих и локальных файловых/блочных вариантов помимо EBS: **EFS** (управляемый NFS), **FSx** (управляемые файловые системы Windows/Lustre/ONTAP/OpenZFS) и **instance store** (эфемерные локальные диски хоста).\n\n**Зачем.** EBS подключается к одному instance в одной AZ; реальным нагрузкам также нужны общие файловые системы для многих instance, SMB-шары Windows, throughput для HPC/ML и сверхбыстрое scratch-пространство.\n\n**Как.** **EFS** = Linux NFS, multi-AZ, эластичный, POSIX, монтируется множеством EC2/контейнеров; lifecycle переводит холодные файлы в **EFS-IA**. **FSx for Windows** = SMB + AD. **FSx for Lustre** = HPC/ML, сотни GB/s, умеет лениво подгружать данные из S3. **FSx for NetApp ONTAP / OpenZFS** — для мультипротокольного доступа и миграций. **Instance store** = NVMe, подключённый к хосту, эфемерный.\n\n**Экзамен.** **EFS = Linux NFS**; FSx for Windows = SMB. **FSx Lustre** — ответ для HPC/ML (обучающие данные, связанные с S3). **Данные instance store теряются при stop/terminate** и отказе хоста — только для кэшей/scratch."
+      "heading": "EFS vs FSx vs instance store",
+      "body": "**What.** A family of shared and local file/block options beyond EBS: **EFS** (managed NFS), **FSx** (managed Windows/Lustre/ONTAP/OpenZFS file systems), and **instance store** (host-local ephemeral disks).\n\n**Why.** EBS attaches to one instance in one AZ; real workloads also need multi-instance shared file systems, Windows SMB shares, HPC/ML throughput, and ultra-fast scratch space.\n\n**How.** **EFS** = Linux NFS, multi-AZ, elastic, POSIX, mountable by many EC2/containers; lifecycle tiers cold files to **EFS-IA**. **FSx for Windows** = SMB + AD. **FSx for Lustre** = HPC/ML, hundreds of GB/s, can lazy-load from S3. **FSx for NetApp ONTAP / OpenZFS** for multi-protocol and migration. **Instance store** = NVMe attached to the host, ephemeral.\n\n**Exam.** **EFS = Linux NFS**; FSx for Windows = SMB. **FSx Lustre** is the HPC/ML answer (S3-linked training data). **Instance store data is lost on stop/terminate** and host failure — caches/scratch only."
     },
     {
-      "heading": "Типы Storage Gateway",
-      "body": "**Что.** AWS Storage Gateway — гибридный appliance (VM или железо), который предоставляет хранилище AWS серверам on-prem по стандартным протоколам: NFS/SMB, iSCSI или iSCSI-VTL.\n\n**Зачем.** Позволяет существующим on-prem приложениям, ПО резервного копирования и ленточным библиотекам использовать S3/Glacier/FSx без переписывания — полезно для миграции в облако, многоуровневого хранения и DR.\n\n**Как.** **S3 File Gateway** отдаёт S3 bucket как шары NFS/SMB. **FSx File Gateway** локально кэширует FSx for Windows для доступа с низкой задержкой из филиалов. **Volume Gateway** предоставляет блочные тома iSCSI: *Cached* держит горячие данные on-prem, а основную копию — в S3, *Stored* держит всё локально и бэкапит в S3 как EBS snapshots. **Tape Gateway** — VTL с бэкендом в S3/Glacier/Deep Archive.\n\n**Экзамен.** Сопоставляйте по протоколу: **NFS/SMB → File Gateway**, **блочный iSCSI → Volume Gateway**, **iSCSI VTL → Tape Gateway**. Tape Gateway — стандартный ответ для замены физических ленточных библиотек и отправки данных в Deep Archive."
+      "heading": "Storage Gateway types",
+      "body": "**What.** AWS Storage Gateway is a hybrid appliance (VM or hardware) that presents AWS storage to on-prem servers via standard protocols: NFS/SMB, iSCSI, or iSCSI-VTL.\n\n**Why.** Lets existing on-prem applications, backup software, and tape libraries consume S3/Glacier/FSx without rewriting — useful for cloud migration, tiered storage, and DR.\n\n**How.** **S3 File Gateway** exposes S3 buckets as NFS/SMB shares. **FSx File Gateway** caches FSx for Windows locally for low-latency branch access. **Volume Gateway** serves iSCSI block volumes: *Cached* keeps hot data on-prem with primary in S3, *Stored* keeps everything local and backs up to S3 as EBS snapshots. **Tape Gateway** is a VTL backing to S3/Glacier/Deep Archive.\n\n**Exam.** Map by protocol: **NFS/SMB → File Gateway**, **iSCSI block → Volume Gateway**, **iSCSI VTL → Tape Gateway**. Tape Gateway is the standard answer for replacing physical tape libraries and shipping to Deep Archive."
     }
   ],
   "labs": [
     {
       "id": "sto-versioning-lifecycle",
-      "title": "Bucket с versioning + lifecycle в Glacier",
-      "intro": "Создайте bucket, включите **versioning** и добавьте **lifecycle rule**, которое переводит объекты в Glacier и удаляет старые noncurrent versions ради экономии.",
+      "title": "Bucket with versioning + lifecycle to Glacier",
+      "intro": "Create a bucket, enable **versioning**, and add a **lifecycle rule** transitioning objects to Glacier and expiring old noncurrent versions for cost savings.",
       "cli": "aws s3api create-bucket --bucket my-saa-lab-bucket --region eu-west-1 --create-bucket-configuration LocationConstraint=eu-west-1\n\naws s3api put-bucket-versioning --bucket my-saa-lab-bucket --versioning-configuration Status=Enabled\n\naws s3api put-bucket-lifecycle-configuration --bucket my-saa-lab-bucket --lifecycle-configuration '{\n  \"Rules\": [{\n    \"ID\": \"archive-then-expire\",\n    \"Status\": \"Enabled\",\n    \"Filter\": {\"Prefix\": \"\"},\n    \"Transitions\": [\n      {\"Days\": 30, \"StorageClass\": \"STANDARD_IA\"},\n      {\"Days\": 90, \"StorageClass\": \"GLACIER\"}\n    ],\n    \"NoncurrentVersionExpiration\": {\"NoncurrentDays\": 60},\n    \"AbortIncompleteMultipartUpload\": {\"DaysAfterInitiation\": 7}\n  }]\n}'",
       "pulumi": "import pulumi\nimport pulumi_aws as aws\n\nbucket = aws.s3.BucketV2(\"saa-lab\", bucket=\"my-saa-lab-bucket\")\n\naws.s3.BucketVersioningV2(\n    \"saa-lab-versioning\",\n    bucket=bucket.id,\n    versioning_configuration={\"status\": \"Enabled\"},\n)\n\naws.s3.BucketLifecycleConfigurationV2(\n    \"saa-lab-lifecycle\",\n    bucket=bucket.id,\n    rules=[{\n        \"id\": \"archive-then-expire\",\n        \"status\": \"Enabled\",\n        \"filter\": {\"prefix\": \"\"},\n        \"transitions\": [\n            {\"days\": 30, \"storage_class\": \"STANDARD_IA\"},\n            {\"days\": 90, \"storage_class\": \"GLACIER\"},\n        ],\n        \"noncurrent_version_expiration\": {\"noncurrent_days\": 60},\n        \"abort_incomplete_multipart_upload\": {\"days_after_initiation\": 7},\n    }],\n)\n\npulumi.export(\"bucket_name\", bucket.bucket)",
-      "note": "**Очистка**: сначала удалите все версии объектов и delete markers (`aws s3api delete-objects` для каждой версии), затем `aws s3api delete-bucket --bucket my-saa-lab-bucket`, либо `pulumi destroy`. Bucket с versioning нельзя удалить, пока в нём есть версии."
+      "note": "**Cleanup**: delete all object versions and delete markers first (`aws s3api delete-objects` per version) then `aws s3api delete-bucket --bucket my-saa-lab-bucket`, or `pulumi destroy`. A versioned bucket cannot be deleted while it contains versions."
     },
     {
       "id": "sto-default-kms",
-      "title": "Включить шифрование SSE-KMS по умолчанию + Block Public Access",
-      "intro": "Настройте **шифрование по умолчанию через SSE-KMS** (с Bucket Key для снижения затрат на KMS) и убедитесь, что **Block Public Access** полностью включён.",
+      "title": "Enable default SSE-KMS encryption + Block Public Access",
+      "intro": "Set **default encryption with SSE-KMS** (using a Bucket Key to reduce KMS costs) and confirm **Block Public Access** is fully on.",
       "cli": "aws s3api put-bucket-encryption --bucket my-saa-lab-bucket --server-side-encryption-configuration '{\n  \"Rules\": [{\n    \"ApplyServerSideEncryptionByDefault\": {\n      \"SSEAlgorithm\": \"aws:kms\",\n      \"KMSMasterKeyID\": \"alias/aws/s3\"\n    },\n    \"BucketKeyEnabled\": true\n  }]\n}'\n\naws s3api put-public-access-block --bucket my-saa-lab-bucket --public-access-block-configuration BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true",
       "pulumi": "import pulumi_aws as aws\n\naws.s3.BucketServerSideEncryptionConfigurationV2(\n    \"saa-lab-sse\",\n    bucket=\"my-saa-lab-bucket\",\n    rules=[{\n        \"apply_server_side_encryption_by_default\": {\n            \"sse_algorithm\": \"aws:kms\",\n            \"kms_master_key_id\": \"alias/aws/s3\",\n        },\n        \"bucket_key_enabled\": True,\n    }],\n)\n\naws.s3.BucketPublicAccessBlock(\n    \"saa-lab-bpa\",\n    bucket=\"my-saa-lab-bucket\",\n    block_public_acls=True,\n    ignore_public_acls=True,\n    block_public_policy=True,\n    restrict_public_buckets=True,\n)",
-      "note": "**Очистка**: настройки шифрования/BPA удаляются автоматически вместе с bucket, либо выполните `pulumi destroy`. Ключ под управлением AWS `alias/aws/s3` не требует дополнительной платы за KMS-ключ; customer-managed key — требует."
+      "note": "**Cleanup**: encryption/BPA config is removed automatically when the bucket is deleted, or run `pulumi destroy`. Using the AWS-managed `alias/aws/s3` key incurs no extra KMS key charge; a customer-managed key would."
     }
   ],
   "questions": [
     {
       "id": "sto-q1",
       "domain": 4,
-      "stem": "Компания хранит лог-файлы в S3. Первые 30 дней логи читают активно, следующие 60 дней — изредка, а потом почти никогда, но по требованиям compliance их нужно хранить 7 лет с возможностью извлечения в течение 12 часов. Какой lifecycle минимизирует затраты?",
+      "stem": "A company stores log files in S3. Logs are read heavily for 30 days, occasionally for the next 60 days, and almost never afterward but must be kept 7 years for compliance with retrieval allowed within 12 hours. Which lifecycle minimizes cost?",
       "options": [
-        "Standard на 30 дней, переход в Standard-IA через 30 дней, затем в Glacier Deep Archive через 90 дней",
-        "Intelligent-Tiering на все 7 лет",
-        "Сразу Standard-IA, затем One Zone-IA через 90 дней",
-        "Хранить всё в S3 Standard 7 лет"
+        "Standard for 30 days, transition to Standard-IA at 30 days, then to Glacier Deep Archive at 90 days",
+        "Intelligent-Tiering for the full 7 years",
+        "Standard-IA immediately, then One Zone-IA after 90 days",
+        "Keep everything in S3 Standard for 7 years"
       ],
       "answer": 0,
-      "explanation": "Верно: горячие чтения остаются в Standard, редкий доступ подходит для Standard-IA, а редко запрашиваемые долгосрочные данные с допустимым извлечением за 12 часов дешевле всего хранить в Glacier Deep Archive. Хранение всего в Standard — переплата за холодные данные. One Zone-IA рискует потерей данных при отказе AZ и не подходит для хранения по compliance; к тому же для архива он не дешевле Deep Archive. Intelligent-Tiering избавляет от платы за извлечение, но его архивные уровни и плата за мониторинг обходятся дороже явного перехода в Deep Archive, когда паттерн доступа известен."
+      "explanation": "Correct: hot reads stay in Standard, occasional access fits Standard-IA, and rarely-accessed long-term data with a 12-hour retrieval tolerance is cheapest in Glacier Deep Archive. Keeping all in Standard wastes money on cold data. One Zone-IA risks data loss on AZ failure and is unsuitable for compliance retention; it also is not cheaper than Deep Archive for archival. Intelligent-Tiering avoids retrieval fees but its archive tiers and monitoring fee cost more than an explicit transition to Deep Archive when the access pattern is known."
     },
     {
       "id": "sto-q2",
       "domain": 1,
-      "stem": "Веб-приложение должно позволять пользователям скачивать приватные объекты S3 в течение ограниченного времени, не открывая bucket публично и не раздавая учётные данные AWS. Что использовать?",
+      "stem": "A web app must let users download private S3 objects for a limited time without exposing the bucket publicly and without distributing AWS credentials. What should you use?",
       "options": [
-        "Генерировать presigned URLs с коротким сроком действия",
-        "Отключить Block Public Access и добавить bucket policy с public-read",
-        "Передать клиентскому приложению access keys IAM-пользователя",
-        "Включить static website hosting на bucket"
+        "Generate presigned URLs with a short expiration",
+        "Disable Block Public Access and add a public-read bucket policy",
+        "Share an IAM user's access keys with the client app",
+        "Enable static website hosting on the bucket"
       ],
       "answer": 0,
-      "explanation": "Верно: presigned URLs дают ограниченный по времени доступ с правами подписавшего, при этом bucket остаётся приватным, а учётные данные — секретными. Отключение BPA с public-read открывает все объекты публично. Передача IAM access keys — серьёзный риск безопасности и нарушение least privilege. Static website hosting тоже требует публичного доступа и не даёт ограниченного по времени приватного доступа."
+      "explanation": "Correct: presigned URLs grant time-limited access using the signer's permissions, keeping the bucket private and credentials secret. Disabling BPA with public-read exposes all objects publicly. Sharing IAM access keys is a major security risk and violates least privilege. Static website hosting also requires public access and does not provide time-limited private access."
     },
     {
       "id": "sto-q3",
       "domain": 3,
-      "stem": "Несколько сотен Linux EC2 instances в разных AZ должны одновременно читать и писать один и тот же набор файлов с семантикой POSIX. Какой сервис хранения подходит лучше всего?",
+      "stem": "Several hundred Linux EC2 instances across multiple AZs need to read and write the same set of files concurrently with POSIX semantics. Which storage service fits best?",
       "options": [
         "EC2 instance store",
         "Amazon EFS",
-        "Том Amazon EBS gp3, подключённый к каждому instance",
+        "Amazon EBS gp3 volume attached to each instance",
         "Amazon FSx for Windows File Server"
       ],
       "answer": 1,
-      "explanation": "Верно: EFS — управляемая multi-AZ файловая система NFS, которую многие Linux instances могут одновременно монтировать и использовать совместно с семантикой POSIX. EBS — single-AZ и (кроме Multi-Attach для io1/io2 в пределах одной AZ) подключается к одному instance, поэтому его нельзя разделить между AZ. FSx for Windows использует SMB и ориентирован на Windows-нагрузки. Instance store эфемерный, локальный для хоста и не разделяется."
+      "explanation": "Correct: EFS is a managed, multi-AZ NFS file system that many Linux instances can mount and share simultaneously with POSIX semantics. EBS is single-AZ and (except io1/io2 Multi-Attach within one AZ) attaches to one instance, so it can't be shared across AZs. FSx for Windows uses SMB and targets Windows workloads. Instance store is ephemeral, host-local, and not shareable."
     },
     {
       "id": "sto-q4",
       "domain": 3,
-      "stem": "Задаче обучения ML в режиме HPC нужна файловая система с throughput в сотни GB/s и задержкой меньше миллисекунды, с возможностью загружать обучающие данные напрямую из S3 bucket. Какой сервис выбрать?",
+      "stem": "A high-performance computing ML training job needs a file system delivering hundreds of GB/s throughput and sub-millisecond latency, with the ability to load training data directly from an S3 bucket. Which service should you choose?",
       "options": [
-        "Amazon EFS в режиме Max I/O",
+        "Amazon EFS with Max I/O mode",
         "Amazon FSx for Windows File Server",
-        "Amazon FSx for Lustre, связанный с S3 bucket",
-        "S3 с Transfer Acceleration"
+        "Amazon FSx for Lustre linked to the S3 bucket",
+        "S3 with Transfer Acceleration"
       ],
       "answer": 2,
-      "explanation": "Верно: FSx for Lustre создан специально для HPC/ML: очень высокий throughput и низкая задержка, плюс связь с S3 bucket для ленивой подгрузки и обратной записи данных. EFS хорошо масштабируется, но не дотягивает до throughput/задержки Lustre для HPC. FSx for Windows — файловый сервер Windows на SMB, а не HPC-файловая система. Transfer Acceleration лишь ускоряет загрузку в S3 на больших расстояниях; это не монтируемая высокопроизводительная файловая система."
+      "explanation": "Correct: FSx for Lustre is purpose-built for HPC/ML with very high throughput and low latency, and can be linked to an S3 bucket to lazily load and write back data. EFS scales well but does not match Lustre's throughput/latency for HPC. FSx for Windows is an SMB Windows file server, not an HPC file system. Transfer Acceleration only speeds S3 uploads over distance; it is not a mountable high-performance file system."
     },
     {
       "id": "sto-q5",
       "domain": 4,
-      "stem": "Паттерн доступа приложения к S3 непредсказуем: одни объекты читаются часто, другие остывают на месяцы, и паттерн со временем меняется. Команда хочет избежать анализа по каждому объекту и сюрпризов с платой за извлечение. Какой storage class подходит лучше всего?",
+      "stem": "An application's S3 access pattern is unpredictable: some objects are read often, others go cold for months, and the pattern changes over time. The team wants to avoid per-object analysis and retrieval-fee surprises. Which storage class is most appropriate?",
       "options": [
         "S3 Glacier Flexible Retrieval",
         "S3 Standard-IA",
@@ -144,52 +138,52 @@
         "S3 One Zone-IA"
       ],
       "answer": 2,
-      "explanation": "Верно: Intelligent-Tiering автоматически перемещает объекты между уровнями доступа по фактическому использованию без платы за извлечение — идеально для неизвестных или меняющихся паттернов. Standard-IA и One Zone-IA берут плату за извлечение и имеют минимум 30 дней, что наказывает за частое повторное чтение, а One Zone-IA к тому же жертвует избыточностью по AZ. Glacier Flexible Retrieval требует restore от минут до часов — неприемлемо для объектов, которые могут читаться часто."
+      "explanation": "Correct: Intelligent-Tiering automatically moves objects between access tiers based on usage with no retrieval fees, ideal for unknown or changing patterns. Standard-IA and One Zone-IA charge retrieval fees and have 30-day minimums, penalizing frequently re-read objects, and One Zone-IA also sacrifices AZ redundancy. Glacier Flexible Retrieval requires restore operations of minutes to hours, unacceptable for objects that may be read often."
     },
     {
       "id": "sto-q6",
       "domain": 1,
-      "stem": "Регулируемая нагрузка требует шифрования at rest с аудируемым журналом каждого использования ключа и тонким контролем над тем, кто может расшифровывать объекты, включая cross-account доступ. Какой вариант шифрования S3 подходит лучше всего?",
+      "stem": "A regulated workload requires encryption at rest with an auditable trail of every key use and fine-grained control over who can decrypt objects, including cross-account access. Which S3 encryption option meets this best?",
       "options": [
-        "Client-side encryption с ключом, зашитым в код приложения",
-        "SSE-KMS с customer-managed key",
-        "SSE-S3 (ключи под управлением Amazon S3)",
-        "SSE-C (ключи, предоставляемые клиентом)"
+        "Client-side encryption with a hardcoded application key",
+        "SSE-KMS with a customer-managed key",
+        "SSE-S3 (Amazon S3-managed keys)",
+        "SSE-C (customer-provided keys)"
       ],
       "answer": 1,
-      "explanation": "Верно: SSE-KMS с customer-managed key логирует каждый вызов расшифровки в CloudTrail и позволяет управлять доступом через key policy, включая cross-account grants. SSE-S3 не даёт аудита по запросам и контроля доступа на уровне ключа. SSE-C требует управлять ключами и передавать их в каждом запросе, без аудита в KMS. Зашитый в код ключ небезопасен и никак не управляется. Включите S3 Bucket Keys, чтобы снизить затраты на KMS."
+      "explanation": "Correct: SSE-KMS with a customer-managed key logs every decrypt call in CloudTrail and lets you control access via the key policy, including cross-account grants. SSE-S3 gives no per-request audit trail or key-level access control. SSE-C requires you to manage and transmit keys on every request with no KMS audit. A hardcoded application key is insecure and unmanaged. Enable S3 Bucket Keys to reduce KMS costs."
     },
     {
       "id": "sto-q7",
       "domain": 3,
-      "stem": "Приложению на EC2 нужен один блочный том со стабильными 16,000 IOPS и throughput 500 MB/s для самостоятельно управляемой базы данных при минимально возможной стоимости. Какая конфигурация EBS лучше всего? (Выберите два)",
+      "stem": "An application running on EC2 needs a single block volume providing a consistent 16,000 IOPS and 500 MB/s throughput for a self-managed database, while keeping cost as low as possible. Which EBS configuration is best? (Choose two)",
       "options": [
-        "Использовать том gp3 и выделить нужные IOPS и throughput",
-        "Использовать том sc1 (cold HDD) ради минимальной стоимости",
-        "Выделять IOPS/throughput независимо от размера тома",
-        "Использовать том st1 (throughput-optimized HDD)"
+        "Use a gp3 volume and provision the required IOPS and throughput",
+        "Use an sc1 (cold HDD) volume for lowest cost",
+        "Provision IOPS/throughput independently of the volume's storage size",
+        "Use an st1 (throughput-optimized HDD) volume"
       ],
       "answer": [
         0,
         2
       ],
-      "explanation": "Верно: gp3 позволяет выделять IOPS (до 16,000) и throughput (до 1,000 MB/s) независимо от ёмкости, поэтому вы платите только за нужную производительность, а не за раздутый том — здесь это cost-effective выбор. st1 и sc1 — HDD, оптимизированные под последовательный throughput, а не под стабильные случайные IOPS, нужные базе данных; sc1 к тому же рассчитан на редко используемые холодные данные. io2 тоже обеспечил бы нужные IOPS, но дороже gp3 при таком умеренном требовании."
+      "explanation": "Correct: gp3 lets you provision IOPS (up to 16,000) and throughput (up to 1,000 MB/s) independently from capacity, so you pay only for the performance you need rather than over-sizing the volume — the cost-effective choice here. st1 and sc1 are HDD types optimized for sequential throughput, not the steady random IOPS a database needs, and sc1 in particular targets infrequently accessed cold data. io2 would also meet the IOPS but at higher cost than gp3 for this moderate requirement."
     },
     {
       "id": "sto-q8",
       "domain": 1,
-      "stem": "Для выполнения требования disaster recovery объекты, записанные в основной S3 bucket в eu-west-1, должны автоматически копироваться в bucket в us-east-1. Какая конфигурация необходима? (Выберите два)",
+      "stem": "To satisfy a disaster-recovery requirement, objects written to a primary S3 bucket in eu-west-1 must be automatically copied to a bucket in us-east-1. What configuration is required? (Choose two)",
       "options": [
-        "Использовать Same-Region Replication (SRR) между двумя bucket",
-        "Настроить Cross-Region Replication (CRR) с IAM role",
-        "Включить versioning на bucket источника и назначения",
-        "Включить S3 Transfer Acceleration на bucket источника"
+        "Use Same-Region Replication (SRR) between the two buckets",
+        "Configure Cross-Region Replication (CRR) with an IAM role",
+        "Enable versioning on both the source and destination buckets",
+        "Enable S3 Transfer Acceleration on the source bucket"
       ],
       "answer": [
         1,
         2
       ],
-      "explanation": "Верно: Cross-Region Replication копирует объекты в bucket в другом регионе и требует включённого versioning на источнике и назначении плюс IAM role с правами на репликацию S3. Transfer Acceleration лишь ускоряет клиентские загрузки через edge locations и не копирует объекты между bucket. SRR реплицирует в пределах одного региона, что не отвечает требованию межрегионального DR. Учтите: существующие объекты не реплицируются, если не запустить S3 Batch Replication."
+      "explanation": "Correct: Cross-Region Replication copies objects to a bucket in a different region and requires versioning enabled on both source and destination plus an IAM role granting S3 replication permissions. Transfer Acceleration only speeds client uploads via edge locations and does not copy objects between buckets. SRR replicates within the same region, which does not meet a cross-region DR requirement. Note existing objects are not replicated unless you run S3 Batch Replication."
     }
   ]
 }

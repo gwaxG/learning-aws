@@ -1,0 +1,43 @@
+{
+  "id": "u-20260927-sns-filter-policy-sqs",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "An insurance company plans to implement a message filtering feature in its web application. To implement this solution, it needs to create separate Amazon SQS queues for each type of quote request. The entire message processing should not exceed 24 hours.\nAs the Solutions Architect for the company, which of the following solutions should be implemented to meet the above requirement?",
+    "options": [
+      "Create a data stream in Amazon Kinesis Data Streams. Use the Kinesis Client Library to deliver all the records to the designated SQS queues based on the quote request type.",
+      "Create one Amazon SNS topic and configure the SQS queues to subscribe to the SNS topic. Set the filter policies in the SNS subscriptions to publish the message to the designated SQS queue based on its quote request type.",
+      "Create one Amazon SNS topic and configure the SQS queues to subscribe to the SNS topic. Publish the same messages to all SQS queues. Filter the messages in each queue based on the quote request type.",
+      "Create multiple Amazon SNS topics and configure the SQS queues to subscribe to the SNS topics. Publish the message to the designated SQS queue based on the quote request type."
+    ],
+    "answer": 1,
+    "explanation": "SNS fan-out with subscription filter policies: the publisher sends every quote request to one topic with a message attribute (or body field) like quote_type; each SQS subscription has a filter policy (e.g. {\"quote_type\":[\"auto\"]}) so SNS delivers only matching messages to that queue. No custom routing code, and SQS retention (default 4 days, up to 14) easily covers the 24-hour window. Kinesis + KCL means writing and running consumer code to route records — more overhead, and Kinesis isn't needed for simple routing. Publishing everything to all queues and filtering in each queue is impossible — SQS has no server-side filtering, so consumers would read and discard unwanted messages. Multiple topics push the routing logic back into the publisher and multiply resources to manage."
+  },
+  "concept": "SNS: subscription filter policies route messages to specific SQS queues",
+  "tests": "Knowing that SNS subscription filter policies deliver only matching messages to each subscribed SQS queue, without custom routing code.",
+  "expected": "One SNS topic, SQS queues subscribed, a filter policy per subscription on the quote-type attribute. Triggers: \"message filtering\", \"separate queue per type\", fan-out → SNS + SQS with filter policies.",
+  "why_not": "Kinesis + KCL = custom routing code; SQS can't filter messages itself (consumers would discard); multiple topics push routing to the publisher and add resources.",
+  "keywords": [
+    "SNS",
+    "filter policy",
+    "message filtering",
+    "message attributes",
+    "fan-out",
+    "SQS",
+    "subscription",
+    "Kinesis Client Library"
+  ],
+  "services": [
+    "sns",
+    "sqs",
+    "kinesis-data-streams",
+    "eventbridge"
+  ],
+  "topics": [
+    "integration"
+  ],
+  "domain": 3,
+  "related": []
+}

@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "Amazon MQ: managed брокер для JMS/AMQP без переписывания",
-  "tests": "Выбор сервиса для переноса legacy-приложения на стандартных протоколах обмена сообщениями без изменения кода.",
-  "expected": "Amazon MQ (ActiveMQ/RabbitMQ) — поддержка JMS, AMQP, MQTT, STOMP, OpenWire; lift-and-shift. Триггеры: «legacy», «JMS / AMQP», «without rewriting», «managed message broker».",
-  "why_not": "SQS и EventBridge — собственные API AWS, нужны изменения кода; Kinesis — streaming, не стандартные брокерные протоколы.",
+  "concept": "Amazon MQ: managed JMS/AMQP broker without a rewrite",
+  "tests": "Choosing a service to migrate a legacy app using standard messaging protocols without code changes.",
+  "expected": "Amazon MQ (ActiveMQ/RabbitMQ) — supports JMS, AMQP, MQTT, STOMP, OpenWire; lift-and-shift. Triggers: \"legacy\", \"JMS / AMQP\", \"without rewriting\", \"managed message broker\".",
+  "why_not": "SQS and EventBridge — proprietary AWS APIs, code changes needed; Kinesis — streaming, not standard broker protocols.",
   "keywords": [
     "Amazon MQ",
     "JMS",

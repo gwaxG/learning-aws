@@ -4,17 +4,17 @@
     "type": "topic",
     "ref": "databases"
   },
-  "concept": "DynamoDB on-demand: непредсказуемый пиковый трафик",
-  "tests": "Выбор БД и режима ёмкости для key-value доступа с непредсказуемыми пиками без планирования ёмкости.",
-  "expected": "DynamoDB с on-demand capacity. Триггеры: «highly unpredictable, spiky traffic», «single-digit-millisecond», «key-value», «no capacity planning».",
-  "why_not": "Provisioned без auto scaling — throttling на пиках; RDS — реляционная OLTP, требует планирования; Redshift — OLAP-хранилище.",
+  "concept": "DynamoDB on-demand: unpredictable spiky traffic",
+  "tests": "Choosing a DB and capacity mode for key-value access with unpredictable spikes and no capacity planning.",
+  "expected": "DynamoDB with on-demand capacity. Triggers: \"highly unpredictable, spiky traffic\", \"single-digit-millisecond\", \"key-value\", \"no capacity planning\".",
+  "why_not": "Provisioned without auto scaling throttles at peaks; RDS is relational OLTP and requires planning; Redshift is an OLAP warehouse.",
   "keywords": [
     "DynamoDB",
     "on-demand capacity",
     "spiky traffic",
     "single-digit millisecond",
     "key-value",
-    "без планирования ёмкости"
+    "no capacity planning"
   ],
   "services": [
     "dynamodb",

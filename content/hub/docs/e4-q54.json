@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "CloudWatch alarms: алерт по порогу метрики (CPUUtilization)",
-  "tests": "Какой сервис автоматически оповещает, когда средний CPU EC2 выше 80% в течение 5 минут.",
-  "expected": "Amazon CloudWatch alarm на метрике CPUUtilization (threshold 80%, period 5 min) → SNS-уведомление или action. Триггеры: «alerted automatically», «CPU utilization exceeds 80% for five minutes».",
-  "why_not": "CloudTrail — API-вызовы, не метрики; Config — compliance конфигурации; X-Ray — трассировка запросов.",
+  "concept": "CloudWatch alarms: alert on a metric threshold (CPUUtilization)",
+  "tests": "Which service automatically alerts when average EC2 CPU stays above 80% for 5 minutes.",
+  "expected": "Amazon CloudWatch alarm on the CPUUtilization metric (threshold 80%, period 5 min) → SNS notification or action. Triggers: \"alerted automatically\", \"CPU utilization exceeds 80% for five minutes\".",
+  "why_not": "CloudTrail is API calls, not metrics; Config is configuration compliance; X-Ray is request tracing.",
   "keywords": [
     "CloudWatch alarm",
     "CPUUtilization",
     "threshold",
     "metric",
     "SNS",
-    "алерт по порогу"
+    "threshold alert"
   ],
   "services": [
     "cloudwatch",

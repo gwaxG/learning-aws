@@ -4,16 +4,16 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "HA: Auto Scaling group в нескольких AZ за ALB",
-  "tests": "Как повысить доступность веб-приложения на EC2 за ALB, чтобы оно пережило отказ целой AZ.",
-  "expected": "Развернуть инстансы в Auto Scaling group, охватывающей несколько AZ, ALB направляет трафик во все AZ. Триггеры: «single AZ», «survive the loss of an AZ».",
-  "why_not": "Termination protection — только от случайного удаления; более крупный инстанс не спасает от отказа AZ; placement group концентрирует инстансы и снижает устойчивость к отказу AZ.",
+  "concept": "HA: Auto Scaling group across multiple AZs behind an ALB",
+  "tests": "How to raise the availability of a web app on EC2 behind an ALB so it survives the loss of an entire AZ.",
+  "expected": "Run instances in an Auto Scaling group spanning multiple AZs; the ALB routes traffic to all AZs. Triggers: \"single AZ\", \"survive the loss of an AZ\".",
+  "why_not": "Termination protection — only guards against accidental deletion; a bigger instance doesn't help with AZ failure; a placement group concentrates instances and reduces AZ-failure resilience.",
   "keywords": [
     "Auto Scaling group",
     "Multi-AZ",
     "Application Load Balancer",
-    "отказ AZ",
-    "высокая доступность"
+    "AZ failure",
+    "high availability"
   ],
   "services": [
     "auto-scaling",

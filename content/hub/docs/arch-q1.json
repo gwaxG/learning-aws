@@ -4,18 +4,18 @@
     "type": "topic",
     "ref": "architecture"
   },
-  "concept": "RDS Read Replicas: разгрузка чтения с primary",
-  "tests": "Умение масштабировать чтение отдельно от транзакционной нагрузки, когда допустима небольшая задержка репликации.",
-  "expected": "Добавить RDS read replicas и направить отчётные запросы на их endpoint. Триггеры: «read-heavy», «отчёты тормозят транзакции», «допустимы данные с отставанием в несколько секунд» ⇒ асинхронные реплики.",
-  "why_not": "Multi-AZ standby не обслуживает чтение (только failover); scale up упирается в потолок и не изолирует аналитику; strongly-consistent чтение с primary сохраняет конкуренцию за ресурсы.",
+  "concept": "RDS Read Replicas: offload reads from the primary",
+  "tests": "Scaling reads separately from the transactional load when a small replication lag is acceptable.",
+  "expected": "Add RDS read replicas and point reporting queries at their endpoint. Triggers: \"read-heavy\", \"reports slow down transactions\", \"data a few seconds stale is acceptable\" ⇒ asynchronous replicas.",
+  "why_not": "Multi-AZ standby does not serve reads (failover only); scaling up hits a ceiling and does not isolate analytics; strongly consistent reads from the primary keep the resource contention.",
   "keywords": [
     "read replicas",
     "asynchronous replication",
     "replication lag",
     "Multi-AZ standby",
     "read-heavy",
-    "несколько секунд устаревания",
-    "разгрузить primary"
+    "a few seconds stale",
+    "offload the primary"
   ],
   "services": [
     "read-replicas",

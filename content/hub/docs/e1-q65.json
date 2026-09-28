@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "Instance Scheduler / EventBridge: остановка dev-инстансов вне рабочих часов",
-  "tests": "Как с минимальными операционными затратами автоматически останавливать и запускать dev EC2 по расписанию.",
-  "expected": "AWS Instance Scheduler или EventBridge scheduled rules — stop/start инстансов по расписанию рабочих часов. Триггеры: «only needed during business hours», «safely stopped at other times», «least operational overhead».",
-  "why_not": "Ручная остановка — ошибки и труд; Reserved Instances предполагают постоянное использование; Spot рискует прерываниями для стабильной dev-среды.",
+  "concept": "Instance Scheduler / EventBridge: stopping dev instances after hours",
+  "tests": "How to automatically stop and start dev EC2 on a schedule with the LEAST operational overhead.",
+  "expected": "AWS Instance Scheduler or EventBridge scheduled rules — stop/start instances on a business-hours schedule. Triggers: \"only needed during business hours\", \"safely stopped at other times\", \"least operational overhead\".",
+  "why_not": "Manual stopping — errors and toil; Reserved Instances assume constant use; Spot risks interruptions for a stable dev environment.",
   "keywords": [
     "Instance Scheduler",
     "EventBridge scheduled rules",
     "business hours",
     "stop/start",
     "dev environment",
-    "экономия"
+    "savings"
   ],
   "services": [
     "instance-scheduler",

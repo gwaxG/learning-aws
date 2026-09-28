@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "EventBridge: content-based маршрутизация событий на несколько целей",
-  "tests": "Выбор сервиса для маршрутизации событий от многих AWS-сервисов на разные цели по содержимому.",
-  "expected": "Amazon EventBridge — event bus с rules, content-based filtering и множеством targets. Триггеры: «routed to different targets based on the content of events», «many AWS services», «flexible filtering rules».",
-  "why_not": "SQS только ставит в очередь без маршрутизации по правилам; CloudTrail — запись API; CloudWatch dashboards — визуализация.",
+  "concept": "EventBridge: content-based event routing to multiple targets",
+  "tests": "Choosing a service to route events from many AWS services to different targets by content.",
+  "expected": "Amazon EventBridge: event bus with rules, content-based filtering and many targets. Triggers: \"routed to different targets based on the content of events\", \"many AWS services\", \"flexible filtering rules\".",
+  "why_not": "SQS only queues, with no rule-based routing; CloudTrail records API calls; CloudWatch dashboards are visualization.",
   "keywords": [
     "EventBridge",
     "event bus",
@@ -15,7 +15,7 @@
     "content-based filtering",
     "event pattern",
     "targets",
-    "маршрутизация событий"
+    "event routing"
   ],
   "services": [
     "eventbridge",

@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "Macie: обнаружение чувствительных данных в S3",
-  "tests": "Выбор сервиса для поиска и классификации PII/номеров карт в сотнях бакетов.",
-  "expected": "Amazon Macie (ML + pattern matching) находит PII, номера кредитных карт в S3. Триггеры: «discover and classify sensitive data», «credit card numbers», «S3 buckets».",
-  "why_not": "GuardDuty — угрозы; Config — конфигурации; Shield — DDoS.",
+  "concept": "Macie: sensitive data discovery in S3",
+  "tests": "Choosing a service to find and classify PII/card numbers across hundreds of buckets.",
+  "expected": "Amazon Macie (ML + pattern matching) finds PII and credit card numbers in S3. Triggers: \"discover and classify sensitive data\", \"credit card numbers\", \"S3 buckets\".",
+  "why_not": "GuardDuty — threats; Config — configurations; Shield — DDoS.",
   "keywords": [
     "Macie",
     "sensitive data discovery",
     "PII",
     "credit card",
     "classification",
-    "чувствительные данные"
+    "sensitive data"
   ],
   "services": [
     "macie",

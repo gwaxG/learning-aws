@@ -1,4 +1,4 @@
-<svg viewBox="0 0 760 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Дерево решений для выбора сервиса баз данных AWS по типу нагрузки">
+<svg viewBox="0 0 760 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Decision tree for choosing the right AWS database service by workload type">
   <style>
     .panel { fill: none; stroke: #ff9900; stroke-width: 2; stroke-dasharray: 6 4; }
     .q { fill: #16263d; stroke: #ff9900; }
@@ -16,72 +16,72 @@
   </defs>
 
   <rect class="panel" x="15" y="15" width="730" height="370" rx="10"/>
-  <text x="380" y="40" class="ttl">Выбор БД по паттерну доступа</text>
+  <text x="380" y="40" class="ttl">Pick a database by access pattern</text>
 
   <!-- Root question -->
   <rect class="q" x="290" y="55" width="180" height="46" rx="8"/>
-  <text class="nodet" x="380" y="78">Какая нагрузка?</text>
-  <text class="sub" x="380" y="93">тип, масштаб, согласованность</text>
+  <text class="nodet" x="380" y="78">What's the workload?</text>
+  <text class="sub" x="380" y="93">shape, scale, consistency</text>
 
   <!-- Row 1 services -->
   <rect class="svc" x="30" y="140" width="160" height="64" rx="8"/>
   <text class="nodet" x="110" y="163">RDS / Aurora</text>
-  <text class="sub" x="110" y="180">Реляционная + ACID, SQL,</text>
-  <text class="sub" x="110" y="194">JOIN, OLTP</text>
+  <text class="sub" x="110" y="180">Relational + ACID, SQL,</text>
+  <text class="sub" x="110" y="194">joins, OLTP</text>
 
   <rect class="svc" x="210" y="140" width="160" height="64" rx="8"/>
   <text class="nodet" x="290" y="163">DynamoDB</text>
-  <text class="sub" x="290" y="180">Key-value / документы,</text>
-  <text class="sub" x="290" y="194">любой масштаб, единицы мс</text>
+  <text class="sub" x="290" y="180">Key-value / document,</text>
+  <text class="sub" x="290" y="194">any scale, single-digit ms</text>
 
   <rect class="svc" x="390" y="140" width="160" height="64" rx="8"/>
   <text class="nodet" x="470" y="163">ElastiCache</text>
-  <text class="sub" x="470" y="180">Кэш в памяти,</text>
+  <text class="sub" x="470" y="180">In-memory cache,</text>
   <text class="sub" x="470" y="194">Redis / Memcached</text>
 
   <rect class="svc" x="570" y="140" width="160" height="64" rx="8"/>
   <text class="nodet" x="650" y="163">Neptune</text>
-  <text class="sub" x="650" y="180">Граф (соцсети, фрод,</text>
-  <text class="sub" x="650" y="194">рекомендации)</text>
+  <text class="sub" x="650" y="180">Graph (social, fraud,</text>
+  <text class="sub" x="650" y="194">recommendation)</text>
 
   <!-- Row 2 services -->
   <rect class="svc" x="120" y="240" width="160" height="64" rx="8"/>
   <text class="nodet" x="200" y="263">Timestream</text>
-  <text class="sub" x="200" y="280">Временные ряды (IoT,</text>
-  <text class="sub" x="200" y="294">метрики, телеметрия)</text>
+  <text class="sub" x="200" y="280">Time-series (IoT,</text>
+  <text class="sub" x="200" y="294">metrics, telemetry)</text>
 
   <rect class="svc" x="300" y="240" width="160" height="64" rx="8"/>
   <text class="nodet" x="380" y="263">QLDB</text>
-  <text class="sub" x="380" y="280">Реестр, неизменяемый,</text>
-  <text class="sub" x="380" y="294">криптографич. история</text>
+  <text class="sub" x="380" y="280">Ledger, immutable,</text>
+  <text class="sub" x="380" y="294">cryptographic history</text>
 
   <rect class="svc" x="480" y="240" width="160" height="64" rx="8"/>
   <text class="nodet" x="560" y="263">Redshift</text>
-  <text class="sub" x="560" y="280">Хранилище / OLAP,</text>
-  <text class="sub" x="560" y="294">колоночный MPP, BI</text>
+  <text class="sub" x="560" y="280">Warehouse / OLAP,</text>
+  <text class="sub" x="560" y="294">columnar MPP, BI</text>
 
   <!-- Edges with labels -->
   <path class="edge" d="M320,101 L110,140"/>
-  <text class="lbl" x="180" y="120">реляционная + ACID</text>
+  <text class="lbl" x="180" y="120">relational + ACID</text>
 
   <path class="edge" d="M360,101 L290,140"/>
   <text class="lbl" x="340" y="125">key-value</text>
 
   <path class="edge" d="M400,101 L470,140"/>
-  <text class="lbl" x="445" y="125">кэширование</text>
+  <text class="lbl" x="445" y="125">caching</text>
 
   <path class="edge" d="M440,101 L650,140"/>
-  <text class="lbl" x="585" y="120">граф</text>
+  <text class="lbl" x="585" y="120">graph</text>
 
   <path class="edge" d="M340,101 L200,240"/>
-  <text class="lbl" x="240" y="220">врем. ряды</text>
+  <text class="lbl" x="240" y="220">time-series</text>
 
   <path class="edge" d="M380,101 L380,240"/>
-  <text class="lbl" x="410" y="220">реестр</text>
+  <text class="lbl" x="410" y="220">ledger</text>
 
   <path class="edge" d="M420,101 L560,240"/>
-  <text class="lbl" x="520" y="220">аналитика / OLAP</text>
+  <text class="lbl" x="520" y="220">analytics / OLAP</text>
 
-  <text x="380" y="340" class="sub">Также: DocumentDB (MongoDB), Keyspaces (Cassandra), Athena (serverless SQL по S3)</text>
-  <text x="380" y="360" class="lbl">Подбирайте движок под паттерн доступа + масштаб + согласованность</text>
+  <text x="380" y="340" class="sub">Also: DocumentDB (MongoDB), Keyspaces (Cassandra), Athena (serverless S3 SQL)</text>
+  <text x="380" y="360" class="lbl">Match access pattern + scale + consistency to the engine</text>
 </svg>

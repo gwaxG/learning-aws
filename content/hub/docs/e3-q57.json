@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "DR-стратегии: backup and restore — самая дешёвая",
-  "tests": "Выбор DR-стратегии при минимальной стоимости и допустимом RTO в несколько часов.",
-  "expected": "Backup and restore — инфраструктура восстанавливается из бэкапов в другом регионе. Триггеры: «lowest cost», «RTO of several hours», «restoring from backups».",
-  "why_not": "Pilot light и warm standby дороже (держат ресурсы запущенными); multi-site active-active — самый дорогой.",
+  "concept": "DR strategies: backup and restore — the cheapest",
+  "tests": "Choosing a DR strategy at minimal cost with an acceptable RTO of several hours.",
+  "expected": "Backup and restore — infrastructure is restored from backups in another region. Triggers: \"lowest cost\", \"RTO of several hours\", \"restoring from backups\".",
+  "why_not": "Pilot light and warm standby cost more (they keep resources running); multi-site active-active — the most expensive.",
   "keywords": [
     "backup and restore",
     "disaster recovery",
     "RTO",
     "hours",
     "lowest cost",
-    "восстановление из бэкапа"
+    "restore from backup"
   ],
   "services": [
     "dr-strategies",

@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "DR strategies: Backup & Restore — минимальная стоимость при RTO в часы",
-  "tests": "Выбор DR-стратегии для некритичного приложения с RTO в несколько часов и минимальным бюджетом.",
-  "expected": "Backup and restore — бэкапы хранятся, инфраструктура разворачивается по требованию; самая дешёвая. Триггеры: «non-critical», «RTO of several hours», «low budget», «simplest».",
-  "why_not": "Pilot light и warm standby держат часть ресурсов запущенными — дороже; multi-site active-active — самый дорогой, избыточно.",
+  "concept": "DR strategies: backup & restore — lowest cost with RTO in hours",
+  "tests": "Choosing a DR strategy for a non-critical app with an RTO of several hours and a minimal budget.",
+  "expected": "Backup and restore — backups are stored, infrastructure is deployed on demand; the cheapest option. Triggers: \"non-critical\", \"RTO of several hours\", \"low budget\", \"simplest\".",
+  "why_not": "Pilot light and warm standby keep some resources running — more expensive; multi-site active-active — the most expensive, overkill.",
   "keywords": [
     "backup and restore",
     "pilot light",

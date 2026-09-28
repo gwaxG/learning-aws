@@ -1,4 +1,4 @@
-<svg viewBox="0 0 760 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cross-account AssumeRole с ExternalId: пользователь аккаунта A берёт роль в аккаунте B">
+<svg viewBox="0 0 760 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cross-account AssumeRole flow with ExternalId from Account A user to Account B role">
   <style>
     .acct { fill: none; stroke: #ff9900; stroke-width: 2; stroke-dasharray: 6 4; }
     .box { fill: #1d3150; stroke: #4aa3ff; }
@@ -22,43 +22,43 @@
     </marker>
   </defs>
 
-  <text x="20" y="24" class="ttl">Cross-account AssumeRole — разрешить должны обе стороны</text>
+  <text x="20" y="24" class="ttl">Cross-account AssumeRole — both sides must allow it</text>
 
   <rect class="acct" x="20" y="50" width="320" height="240" rx="10"/>
-  <text x="34" y="72" class="lbl">Аккаунт A (source / trusted)</text>
+  <text x="34" y="72" class="lbl">Account A (source / trusted)</text>
 
   <rect class="box" x="50" y="100" width="160" height="60" rx="8"/>
   <text class="bt" x="130" y="124">IAM user / role</text>
-  <text class="sub" x="130" y="142">нужно sts:AssumeRole</text>
-  <text class="sub" x="130" y="154">на ARN роли B</text>
+  <text class="sub" x="130" y="142">needs sts:AssumeRole</text>
+  <text class="sub" x="130" y="154">on Role B ARN</text>
 
   <rect class="sts" x="50" y="200" width="260" height="60" rx="8"/>
-  <text class="bt" x="180" y="224">вызов sts:AssumeRole</text>
+  <text class="bt" x="180" y="224">sts:AssumeRole call</text>
   <text class="sub" x="180" y="242">RoleArn=B · ExternalId=shared-secret</text>
   <text class="sub" x="180" y="254">SessionName=demo</text>
 
   <rect class="acct" x="400" y="50" width="340" height="240" rx="10"/>
-  <text x="414" y="72" class="lbl">Аккаунт B (target / trusting)</text>
+  <text x="414" y="72" class="lbl">Account B (target / trusting)</text>
 
   <rect class="trust" x="430" y="100" width="290" height="80" rx="8"/>
-  <text class="bt" x="575" y="122">Trust policy роли B</text>
+  <text class="bt" x="575" y="122">Role B trust policy</text>
   <text class="sub" x="575" y="142">Principal: arn:aws:iam::A:root</text>
   <text class="sub" x="575" y="156">Action: sts:AssumeRole</text>
   <text class="sub" x="575" y="170">Condition: sts:ExternalId = shared-secret</text>
 
   <rect class="cred" x="430" y="210" width="290" height="60" rx="8"/>
-  <text class="bt" x="575" y="234">Временные credentials</text>
+  <text class="bt" x="575" y="234">Temporary credentials</text>
   <text class="sub" x="575" y="252">AccessKey · SecretKey · SessionToken</text>
-  <text class="sub" x="575" y="264">истекают (15 мин – 12 ч)</text>
+  <text class="sub" x="575" y="264">expires (15 min – 12 h)</text>
 
   <path class="flow" d="M210,130 L430,130"/>
-  <text class="note" x="320" y="118">1. вызов STS</text>
+  <text class="note" x="320" y="118">1. caller invokes STS</text>
 
   <path class="flow" d="M575,180 L575,210"/>
-  <text class="note" x="640" y="200">2. проверка trust + ExternalId</text>
+  <text class="note" x="640" y="200">2. trust check + ExternalId</text>
 
   <path class="flowAllow" d="M430,240 L310,240"/>
-  <text class="note" x="370" y="232">3. выдача временных creds</text>
+  <text class="note" x="370" y="232">3. temp creds returned</text>
 
-  <text x="20" y="310" class="note" style="text-anchor:start">Source нужно право sts:AssumeRole И trust policy target должна указывать source · ExternalId защищает от confused deputy.</text>
+  <text x="20" y="310" class="note" style="text-anchor:start">Source needs sts:AssumeRole permission AND target trust policy must list source · ExternalId defeats confused-deputy.</text>
 </svg>

@@ -4,18 +4,18 @@
     "type": "topic",
     "ref": "integration"
   },
-  "concept": "SQS FIFO: exactly-once и порядок через message group ID",
-  "tests": "Знание гарантий SQS FIFO: exactly-once processing и строгий порядок в пределах message group.",
-  "expected": "SQS FIFO с message group ID = account ID: порядок внутри аккаунта и параллелизм между аккаунтами. Триггеры: «exactly once», «in the order received», «per account».",
-  "why_not": "SQS Standard — at-least-once и best-effort порядок; SNS Standard — pub/sub без гарантий порядка; Kinesis с одним shard упорядочивает глобально, но без exactly-once и сериализует все аккаунты.",
+  "concept": "SQS FIFO: exactly-once and ordering via message group ID",
+  "tests": "Knowing SQS FIFO guarantees: exactly-once processing and strict ordering within a message group.",
+  "expected": "SQS FIFO with message group ID = account ID: ordering within an account and parallelism across accounts. Triggers: \"exactly once\", \"in the order received\", \"per account\".",
+  "why_not": "SQS Standard is at-least-once with best-effort ordering; SNS Standard is pub/sub with no ordering guarantees; Kinesis with one shard orders globally but has no exactly-once and serializes all accounts.",
   "keywords": [
     "SQS FIFO",
     "message group ID",
     "exactly-once",
     "ordering",
     "deduplication",
-    "строгий порядок",
-    "ровно один раз"
+    "strict ordering",
+    "exactly once"
   ],
   "services": [
     "sqs-fifo",

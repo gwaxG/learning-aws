@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "IAM conditions: aws:SourceIp и aws:SecureTransport",
-  "tests": "Какие condition keys ограничивают запросы корпоративным диапазоном IP и HTTPS.",
-  "expected": "aws:SourceIp = корпоративный CIDR + aws:SecureTransport = true. Триггеры: «originates from corporate IP range», «over TLS».",
-  "why_not": "s3:x-amz-acl public-read открывает данные; aws:PrincipalOrgID со случайным значением бессмысленен; ec2:InstanceType не относится к задаче.",
+  "concept": "IAM conditions: aws:SourceIp and aws:SecureTransport",
+  "tests": "Which condition keys restrict requests to the corporate IP range and HTTPS.",
+  "expected": "aws:SourceIp = corporate CIDR + aws:SecureTransport = true. Triggers: \"originates from corporate IP range\", \"over TLS\".",
+  "why_not": "s3:x-amz-acl public-read exposes data; aws:PrincipalOrgID with a random value is meaningless; ec2:InstanceType is irrelevant here.",
   "keywords": [
     "aws:SourceIp",
     "aws:SecureTransport",

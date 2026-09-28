@@ -1,4 +1,4 @@
-<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Выбор в AWS Snow Family: Snowcone для ~8 ТБ на edge, Snowball Edge для десятков–сотен ТБ, Snowmobile для перевозки эксабайтов на грузовике">
+<svg viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AWS Snow Family decision: Snowcone for ~8 TB edge, Snowball Edge for tens to hundreds of TB, Snowmobile for exabyte-scale truck transfer">
   <style>
     .hdr { fill: #ff9900; font: 700 14px system-ui, sans-serif; text-anchor: middle; }
     .ttl { fill: #ff9900; font: 700 12px system-ui, sans-serif; text-anchor: middle; }
@@ -23,60 +23,60 @@
     </marker>
   </defs>
 
-  <text x="380" y="24" class="hdr">Snow Family — когда сеть слишком медленная, везите устройство</text>
+  <text x="380" y="24" class="hdr">Snow Family — pick the box when the wire is too slow</text>
 
   <!-- Decision box: wire transfer -->
   <rect class="wire" x="40" y="50" width="220" height="70" rx="8"/>
-  <text class="nodet" x="150" y="76">Оцените передачу по сети</text>
-  <text class="sub" x="150" y="94">время = объём / полоса</text>
-  <text class="sub" x="150" y="110">дни? OK   недели/месяцы? везите</text>
+  <text class="nodet" x="150" y="76">Estimate online transfer</text>
+  <text class="sub" x="150" y="94">time = data size / bandwidth</text>
+  <text class="sub" x="150" y="110">days? OK   weeks/months? ship it</text>
 
   <!-- Reject arrow toward Snow lane -->
   <path class="reject" d="M260,85 L330,85"/>
-  <text x="295" y="74" class="axlbl">долго</text>
+  <text x="295" y="74" class="axlbl">too slow</text>
 
   <!-- Snow choices header -->
-  <text x="540" y="68" class="ttl">Офлайн-устройство, шифрование, AWS грузит в S3</text>
+  <text x="540" y="68" class="ttl">Offline appliance — encrypted, AWS loads to S3</text>
 
   <!-- Size axis -->
   <line class="axis" x1="60" y1="290" x2="720" y2="290"/>
-  <text x="60" y="312" class="axlbl">мало (ТБ)</text>
-  <text x="380" y="312" class="axlbl">десятки–сотни ТБ</text>
-  <text x="720" y="312" class="axlbl">ПБ–ЭБ</text>
+  <text x="60" y="312" class="axlbl">small (TBs)</text>
+  <text x="380" y="312" class="axlbl">tens–hundreds of TB</text>
+  <text x="720" y="312" class="axlbl">PB–EB</text>
 
   <!-- Snowcone -->
   <rect class="small" x="60" y="140" width="180" height="120" rx="10"/>
   <text class="nodet" x="150" y="166">Snowcone</text>
-  <text class="sub" x="150" y="186">~8 ТБ полезных</text>
-  <text class="sub" x="150" y="202">портативный · прочный · edge</text>
-  <text class="sub" x="150" y="218">2 CPU · 4 ГБ RAM</text>
-  <text class="sub" x="150" y="234">везти ИЛИ DataSync онлайн</text>
-  <text class="sub" x="150" y="252">батарея / лёгкий</text>
+  <text class="sub" x="150" y="186">~8 TB usable</text>
+  <text class="sub" x="150" y="202">portable · rugged · edge</text>
+  <text class="sub" x="150" y="218">2 CPU · 4 GB RAM</text>
+  <text class="sub" x="150" y="234">ship OR DataSync online</text>
+  <text class="sub" x="150" y="252">battery / lightweight</text>
 
   <!-- Snowball Edge -->
   <rect class="med" x="280" y="130" width="200" height="140" rx="10"/>
   <text class="nodet" x="380" y="156">Snowball Edge</text>
-  <text class="sub" x="380" y="176">Storage Optimized ~80 ТБ</text>
-  <text class="sub" x="380" y="192">Compute Optimized 42 ТБ+</text>
-  <text class="sub" x="380" y="208">EC2 / Lambda локально</text>
-  <text class="sub" x="380" y="224">кластеризуется</text>
-  <text class="sub" x="380" y="242">от десятков ТБ до ПБ</text>
-  <text class="sub" x="380" y="258">самый частый выбор</text>
+  <text class="sub" x="380" y="176">Storage Optimized ~80 TB</text>
+  <text class="sub" x="380" y="192">Compute Optimized 42 TB+</text>
+  <text class="sub" x="380" y="208">runs EC2 / Lambda local</text>
+  <text class="sub" x="380" y="224">clusterable</text>
+  <text class="sub" x="380" y="242">tens of TB to PB</text>
+  <text class="sub" x="380" y="258">most common choice</text>
 
   <!-- Snowmobile -->
   <rect class="big" x="520" y="120" width="200" height="160" rx="10"/>
   <text class="nodet" x="620" y="146">Snowmobile</text>
-  <text class="sub" x="620" y="166">45-футовый контейнер-фура</text>
-  <text class="sub" x="620" y="182">до 100 ПБ на единицу</text>
-  <text class="sub" x="620" y="198">вывоз ЦОД на эксабайты</text>
-  <text class="sub" x="620" y="214">GPS · конвой · охрана</text>
-  <text class="sub" x="620" y="232">проекты на месяцы</text>
-  <text class="sub" x="620" y="252">новые заказы не принимают;</text>
-  <text class="sub" x="620" y="268">но есть на экзамене</text>
+  <text class="sub" x="620" y="166">45-ft truck container</text>
+  <text class="sub" x="620" y="182">up to 100 PB per unit</text>
+  <text class="sub" x="620" y="198">exabyte-scale DC exit</text>
+  <text class="sub" x="620" y="214">GPS · escort · security</text>
+  <text class="sub" x="620" y="232">months-long projects</text>
+  <text class="sub" x="620" y="252">retired from new orders;</text>
+  <text class="sub" x="620" y="268">still on the exam</text>
 
   <!-- Flow to AWS -->
   <path class="flow" d="M150,260 L150,330"/>
   <path class="flow" d="M380,270 L380,330"/>
   <path class="flow" d="M620,280 L620,330"/>
-  <text x="380" y="350" class="axlbl">отправьте устройство → AWS импортирует в Amazon S3</text>
+  <text x="380" y="350" class="axlbl">ship device → AWS imports into Amazon S3</text>
 </svg>

@@ -80,7 +80,7 @@ function el(tag, attrs = {}, parent) {
   return n;
 }
 
-const zoomButtons = `<div class="map-zoom"><button data-z="in" title="Приблизить">+</button><button data-z="out" title="Отдалить">−</button><button data-z="reset" title="Сбросить">⟲</button></div>`;
+const zoomButtons = `<div class="map-zoom"><button data-z="in" title="Zoom in">+</button><button data-z="out" title="Zoom out">−</button><button data-z="reset" title="Reset">⟲</button></div>`;
 function wireZoom(root, pz) {
   root.querySelectorAll("[data-z]").forEach((b) => (b.onclick = () => ({ in: pz.zoomIn, out: pz.zoomOut, reset: pz.reset })[b.dataset.z]()));
 }
@@ -114,12 +114,12 @@ export async function renderServices(view, arg, query) {
 
   view.innerHTML = `
     <div class="map-head">
-      <h1>Карта сервисов</h1>
+      <h1>Services Map</h1>
       <div class="map-tabs">
         <a href="#/services" class="${mode === "map" ? "on" : ""}">Mind map</a>
-        <a href="#/services?view=sheet" class="${mode === "sheet" ? "on" : ""}">Шпаргалка</a>
+        <a href="#/services?view=sheet" class="${mode === "sheet" ? "on" : ""}">Cheat sheet</a>
       </div>
-      <input id="svcSearch" class="map-search" type="search" placeholder="Поиск: сервис, keyword, факт… (через запятую — ИЛИ)" value="${esc(q)}">
+      <input id="svcSearch" class="map-search" type="search" placeholder="Search: service, keyword, fact… (comma = OR)" value="${esc(q)}">
       <span id="svcCount" class="map-count"></span>
     </div>
     <div class="map-body">
@@ -139,8 +139,8 @@ export async function renderServices(view, arg, query) {
   function renderPanel() {
     const s = selected && byId.get(selected);
     if (!s) {
-      panel.innerHTML = `<div class="panel-empty"><p>Нажми на сервис, чтобы открыть карточку: ключевые факты, когда выбирать, ловушки и сравнения.</p>
-        <p class="muted">${svc.categories.length} категорий · ${list.length} сервисов и концепций</p>
+      panel.innerHTML = `<div class="panel-empty"><p>Click a service to open its card: key facts, when to choose it, traps and comparisons.</p>
+        <p class="muted">${svc.categories.length} categories · ${list.length} services and concepts</p>
         <ul class="legend">${svc.categories.map((c, i) => `<li><span style="background:${PALETTE[i % PALETTE.length]}"></span>${esc(c.name)}</li>`).join("")}</ul></div>`;
       return;
     }
@@ -151,14 +151,14 @@ export async function renderServices(view, arg, query) {
         <div class="svc-cat">${esc(s.cat.name)}</div>
         <h2>${esc(s.name)}</h2>
         <p class="svc-tag">${esc(s.tagline || "")}</p>
-        ${s.facts?.length ? `<h4>Ключевые факты</h4><ul>${li(s.facts)}</ul>` : ""}
-        ${s.use_when?.length ? `<h4>Выбирай, когда…</h4><ul class="yes">${li(s.use_when)}</ul>` : ""}
-        ${s.not_for?.length ? `<h4>Не подходит / ловушки</h4><ul class="no">${li(s.not_for)}</ul>` : ""}
-        ${s.vs?.length ? `<h4>Сравнение</h4><ul class="vs">${s.vs.map((v) => `<li><a href="#/services/${esc(v.id)}" data-svc="${esc(v.id)}">${esc(byId.get(v.id)?.name || v.id)}</a> — ${esc(v.note)}</li>`).join("")}</ul>` : ""}
+        ${s.facts?.length ? `<h4>Key facts</h4><ul>${li(s.facts)}</ul>` : ""}
+        ${s.use_when?.length ? `<h4>Choose when…</h4><ul class="yes">${li(s.use_when)}</ul>` : ""}
+        ${s.not_for?.length ? `<h4>Not for / traps</h4><ul class="no">${li(s.not_for)}</ul>` : ""}
+        ${s.vs?.length ? `<h4>Compare</h4><ul class="vs">${s.vs.map((v) => `<li><a href="#/services/${esc(v.id)}" data-svc="${esc(v.id)}">${esc(byId.get(v.id)?.name || v.id)}</a> — ${esc(v.note)}</li>`).join("")}</ul>` : ""}
         <div class="chips">${(s.keywords || []).map((k) => `<button class="chip" data-kw="${esc(k)}">${esc(k)}</button>`).join("")}</div>
         <div class="svc-links">
-          ${qn ? `<a class="btn" href="#/hub?s=${esc(s.id)}">Вопросы в хабе: ${qn} →</a>` : `<span class="muted">В хабе пока нет вопросов</span>`}
-          ${s.doc ? `<a href="${esc(s.doc)}" target="_blank" rel="noopener">📖 Документация AWS</a>` : ""}
+          ${qn ? `<a class="btn" href="#/hub?s=${esc(s.id)}">Hub questions: ${qn} →</a>` : `<span class="muted">No hub questions yet</span>`}
+          ${s.doc ? `<a href="${esc(s.doc)}" target="_blank" rel="noopener">📖 AWS documentation</a>` : ""}
         </div>
       </div>`;
     panel.querySelectorAll("[data-svc]").forEach((a) => (a.onclick = (e) => { e.preventDefault(); select(a.dataset.svc, true); }));
@@ -183,7 +183,7 @@ export async function renderServices(view, arg, query) {
 
   function refresh() {
     const h = hits();
-    countEl.textContent = h ? `найдено: ${h.size}` : "";
+    countEl.textContent = h ? `found: ${h.size}` : "";
     if (mode === "map") mapApi.update();
     else drawSheet(h);
   }
@@ -298,7 +298,7 @@ export async function renderServices(view, arg, query) {
               <ul>${(s.facts || []).slice(0, 4).map((f) => `<li>${mdLite(f)}</li>`).join("")}</ul></div>`)
             .join("")}</div></section>`;
       })
-      .join("") || `<p class="muted">Ничего не найдено.</p>`;
+      .join("") || `<p class="muted">Nothing found.</p>`;
     main.querySelectorAll("[data-card]").forEach((d) => (d.onclick = () => select(d.dataset.card)));
   }
 
@@ -374,9 +374,9 @@ function docHaystack(d) {
 
 function sourceLabel(d, manifest) {
   const s = d.source || {};
-  if (s.type === "topic") return `Тема: ${manifest.topics.find((t) => t.slug === s.ref)?.title || s.ref}`;
-  if (s.type === "exam") return `Пробный экзамен ${s.ref}`;
-  return `Мой вопрос${s.added ? " · " + s.added : ""}`;
+  if (s.type === "topic") return `Topic: ${manifest.topics.find((t) => t.slug === s.ref)?.title || s.ref}`;
+  if (s.type === "exam") return `Mock Exam ${s.ref}`;
+  return `My question${s.added ? " · " + s.added : ""}`;
 }
 
 export async function renderHub(view, arg, query) {
@@ -398,16 +398,16 @@ export async function renderHub(view, arg, query) {
 
   view.innerHTML = `
     <div class="map-head">
-      <h1>Хаб вопросов</h1>
-      <input id="hubSearch" class="map-search" type="search" placeholder="Ключевое слово: Multi-AZ, «минимальные затраты», SQS… (запятая — ИЛИ)" value="${esc(state.q)}">
-      <select id="hubTopic"><option value="">Все темы</option>${manifest.topics.map((t) => `<option value="${t.slug}" ${state.topic === t.slug ? "selected" : ""}>${esc(t.title)}</option>`).join("")}</select>
-      <select id="hubSrc"><option value="">Все источники</option><option value="topic">Практика по темам</option><option value="exam">Пробные экзамены</option><option value="user">Мои вопросы</option></select>
+      <h1>Question Hub</h1>
+      <input id="hubSearch" class="map-search" type="search" placeholder="Keyword: Multi-AZ, LEAST operational overhead, SQS… (comma = OR)" value="${esc(state.q)}">
+      <select id="hubTopic"><option value="">All topics</option>${manifest.topics.map((t) => `<option value="${t.slug}" ${state.topic === t.slug ? "selected" : ""}>${esc(t.title)}</option>`).join("")}</select>
+      <select id="hubSrc"><option value="">All sources</option><option value="topic">Topic practice</option><option value="exam">Mock exams</option><option value="user">My questions</option></select>
       <span id="hubCount" class="map-count"></span>
     </div>
     <div class="chips kw-cloud">${hub.topKeywords.slice(0, 32).map((k) => `<button class="chip" data-kw="${esc(k.k)}">${esc(k.k)} <small>${k.n}</small></button>`).join("")}</div>
     <div class="map-body">
       <div class="map-main"><div class="map-canvas">${zoomButtons}<svg class="hubgraph" preserveAspectRatio="xMidYMid meet"></svg><div id="hubTip" class="map-tip"></div></div>
-        <div class="hub-legend"><span><i class="lg-svc"></i>сервис</span>${[1, 2, 3, 4].map((d) => `<span><i style="background:${DOMAIN_COLORS[d]}"></i>домен ${d}</span>`).join("")}<span><i class="lg-user"></i>мой вопрос</span></div>
+        <div class="hub-legend"><span><i class="lg-svc"></i>service</span>${[1, 2, 3, 4].map((d) => `<span><i style="background:${DOMAIN_COLORS[d]}"></i>domain ${d}</span>`).join("")}<span><i class="lg-user"></i>my question</span></div>
       </div>
       <aside id="hubPanel" class="map-panel"></aside>
     </div>`;
@@ -489,7 +489,7 @@ export async function renderHub(view, arg, query) {
     const t = el("text", { x: p.x, y: p.y - rr - 5 * k, "font-size": 13 * k }, g);
     t.textContent = s.name.replace(/^(Amazon|AWS) /, "").replace(/ \(.*\)$/, "");
     g.onclick = () => { if (!svg.dataset.justPanned) setState({ s: state.s === id ? "" : id, sel: null }); };
-    g.onmouseenter = (e) => showTip(e, `<b>${esc(s.name)}</b><br>${esc(s.tagline || "")}<br><span class="muted">вопросов: ${n} · клик — фильтр</span>`);
+    g.onmouseenter = (e) => showTip(e, `<b>${esc(s.name)}</b><br>${esc(s.tagline || "")}<br><span class="muted">questions: ${n} · click to filter</span>`);
     g.onmouseleave = hideTip;
     sEls.set(id, g);
   });
@@ -569,7 +569,7 @@ export async function renderHub(view, arg, query) {
         if (b) el("line", { x1: a.x, y1: a.y, x2: b.x, y2: b.y, class: "hub-rel-line" }, gRel);
       });
     });
-    view.querySelector("#hubCount").textContent = active ? `совпадений: ${hitIds.size}${weakIds.size ? ` (+${weakIds.size} упоминаний в тексте)` : ""} из ${docs.length}` : `${docs.length} вопросов · ${usedSvc.length} сервисов`;
+    view.querySelector("#hubCount").textContent = active ? `matches: ${hitIds.size}${weakIds.size ? ` (+${weakIds.size} text mentions)` : ""} of ${docs.length}` : `${docs.length} questions · ${usedSvc.length} services`;
     view.querySelectorAll(".kw-cloud [data-kw]").forEach((b) => b.classList.toggle("on", matchTerms(state.q).includes(norm(b.dataset.kw))));
     renderPanel(scored, active, hitIds);
   }
@@ -581,15 +581,15 @@ export async function renderHub(view, arg, query) {
   function renderPanel(scored, active, hitIds) {
     const d = state.sel && docById.get(state.sel);
     if (!d) {
-      const filt = [state.s && `сервис: <b>${esc(svcById.get(state.s)?.name)}</b>`, state.topic && `тема: <b>${esc(manifest.topics.find((t) => t.slug === state.topic)?.title)}</b>`, state.src && `источник: <b>${esc(state.src)}</b>`].filter(Boolean);
+      const filt = [state.s && `service: <b>${esc(svcById.get(state.s)?.name)}</b>`, state.topic && `topic: <b>${esc(manifest.topics.find((t) => t.slug === state.topic)?.title)}</b>`, state.src && `source: <b>${esc(state.src)}</b>`].filter(Boolean);
       panel.innerHTML = active
-        ? `<div class="hub-list"><h3>Совпадения (${hitIds.size})</h3>
-            ${filt.length ? `<p class="muted">${filt.join(" · ")} <button class="linkish" id="clearF">сбросить фильтры</button></p>` : ""}
-            <ul>${scored.filter(([x]) => hitIds.has(x.id)).slice(0, 200).map(([x]) => listItem(x)).join("") || "<li class='muted'>Ничего не найдено.</li>"}</ul>
-            ${scored.length > hitIds.size ? `<h4>Упоминается в тексте вопроса (${scored.length - hitIds.size})</h4><ul class="weak">${scored.filter(([x]) => !hitIds.has(x.id)).slice(0, 150).map(([x]) => listItem(x)).join("")}</ul>` : ""}</div>`
-        : `<div class="panel-empty"><p>Введи ключевое слово или выбери чип — связанные вопросы и сервисы подсветятся на графе.</p>
-            <p>Клик по вопросу — карточка: понятие, ожидаемый ответ, связи. Клик по сервису — фильтр.</p>
-            <h4>Понятия, которые встречаются чаще всего</h4>
+        ? `<div class="hub-list"><h3>Matches (${hitIds.size})</h3>
+            ${filt.length ? `<p class="muted">${filt.join(" · ")} <button class="linkish" id="clearF">clear filters</button></p>` : ""}
+            <ul>${scored.filter(([x]) => hitIds.has(x.id)).slice(0, 200).map(([x]) => listItem(x)).join("") || "<li class='muted'>Nothing found.</li>"}</ul>
+            ${scored.length > hitIds.size ? `<h4>Mentioned in question text (${scored.length - hitIds.size})</h4><ul class="weak">${scored.filter(([x]) => !hitIds.has(x.id)).slice(0, 150).map(([x]) => listItem(x)).join("")}</ul>` : ""}</div>`
+        : `<div class="panel-empty"><p>Type a keyword or pick a chip — related questions and services light up on the graph.</p>
+            <p>Click a question to open its card: concept, expected answer, links. Click a service to filter.</p>
+            <h4>Most frequent concepts</h4>
             <ul class="concepts">${Object.entries(hub.byConcept).filter(([, ids]) => ids.length > 1).sort((a, b) => b[1].length - a[1].length).slice(0, 25).map(([c, ids]) => `<li><button class="linkish" data-concept="${esc(c)}">${esc(c)}</button> <small>×${ids.length}</small></li>`).join("")}</ul></div>`;
       panel.querySelector("#clearF")?.addEventListener("click", () => setState({ s: "", topic: "", src: "" }));
       panel.querySelectorAll("[data-concept]").forEach((b) => (b.onclick = () => setQuery(b.dataset.concept)));
@@ -600,20 +600,20 @@ export async function renderHub(view, arg, query) {
       const srcLink = d.source?.type === "topic" ? `#/topic/${d.source.ref}` : d.source?.type === "exam" ? `#/exam/${d.source.ref}` : null;
       panel.innerHTML = `
         <div class="doc">
-          <div class="doc-top"><button class="linkish" id="back">← к списку</button><span class="muted">${esc(d.id)} · ${srcLink ? `<a href="${srcLink}">${esc(sourceLabel(d, manifest))}</a>` : esc(sourceLabel(d, manifest))} · домен ${d.domain}</span></div>
+          <div class="doc-top"><button class="linkish" id="back">← back to list</button><span class="muted">${esc(d.id)} · ${srcLink ? `<a href="${srcLink}">${esc(sourceLabel(d, manifest))}</a>` : esc(sourceLabel(d, manifest))} · domain ${d.domain}</span></div>
           <h2>${esc(d.concept)}</h2>
-          ${q ? `<p class="q-stem">${esc(q.stem)}</p>${multi ? `<p class="q-hint">(Выберите ${q.answer.length})</p>` : ""}
+          ${q ? `<p class="q-stem">${esc(q.stem)}</p>${multi ? `<p class="q-hint">(Choose ${q.answer.length})</p>` : ""}
             <div class="q-options">${q.options.map((o, i) => `<button class="q-option" data-opt="${i}">${esc(o)}</button>`).join("")}</div>
-            <button class="ghost" id="reveal">Показать ответ и разбор</button>` : `<p class="bad">Исходный вопрос не найден.</p>`}
+            <button class="ghost" id="reveal">Show answer and analysis</button>` : `<p class="bad">Source question not found.</p>`}
           <div id="analysis" class="doc-analysis" hidden>
-            <h4>Тестируемое понятие</h4><p>${mdLite(d.tests)}</p>
-            <h4>Ожидаемый ответ</h4><p>${mdLite(d.expected)}</p>
-            <h4>Почему не другие</h4><p>${mdLite(d.why_not)}</p>
-            ${q?.explanation ? `<details><summary>Объяснение из источника</summary><p>${mdLite(q.explanation)}</p></details>` : ""}
+            <h4>Tested concept</h4><p>${mdLite(d.tests)}</p>
+            <h4>Expected answer</h4><p>${mdLite(d.expected)}</p>
+            <h4>Why not the others</h4><p>${mdLite(d.why_not)}</p>
+            ${q?.explanation ? `<details><summary>Source explanation</summary><p>${mdLite(q.explanation)}</p></details>` : ""}
           </div>
-          <h4>Ключевые слова</h4><div class="chips">${d.keywords.map((k) => `<button class="chip" data-kw="${esc(k)}">${esc(k)}</button>`).join("")}</div>
-          <h4>Сервисы</h4><div class="chips">${d.services.map((s) => `<a class="chip svc" style="--c:${svcById.get(s)?.color}" href="#/services/${esc(s)}">${esc(svcById.get(s)?.name || s)}</a>`).join("")}</div>
-          ${d.related.length ? `<h4>Связанные вопросы</h4><ul class="hub-list-ul">${d.related.map((r) => docById.get(r)).filter(Boolean).map(listItem).join("")}</ul>` : ""}
+          <h4>Keywords</h4><div class="chips">${d.keywords.map((k) => `<button class="chip" data-kw="${esc(k)}">${esc(k)}</button>`).join("")}</div>
+          <h4>Services</h4><div class="chips">${d.services.map((s) => `<a class="chip svc" style="--c:${svcById.get(s)?.color}" href="#/services/${esc(s)}">${esc(svcById.get(s)?.name || s)}</a>`).join("")}</div>
+          ${d.related.length ? `<h4>Related questions</h4><ul class="hub-list-ul">${d.related.map((r) => docById.get(r)).filter(Boolean).map(listItem).join("")}</ul>` : ""}
         </div>`;
       panel.querySelector("#back").onclick = () => setState({ sel: null });
       let answered = false;

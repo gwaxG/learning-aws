@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "Global Accelerator: static anycast IP и быстрый regional failover",
-  "tests": "Выбор сервиса для глобального TCP-приложения со статическими anycast IP и мгновенным failover.",
-  "expected": "AWS Global Accelerator — static anycast IPs, трафик по backbone AWS к ближайшему здоровому regional endpoint, быстрый failover без зависимости от DNS TTL. Триггеры: «TCP», «static anycast IP», «instant failover», «nearest healthy Regional endpoint».",
-  "why_not": "CloudFront оптимизирует HTTP-контент; Route 53 failover зависит от DNS TTL; один ALB — региональный.",
+  "concept": "Global Accelerator: static anycast IPs and fast regional failover",
+  "tests": "Choosing a service for a global TCP app with static anycast IPs and instant failover.",
+  "expected": "AWS Global Accelerator: static anycast IPs, traffic over the AWS backbone to the nearest healthy regional endpoint, fast failover independent of DNS TTL. Triggers: \"TCP\", \"static anycast IP\", \"instant failover\", \"nearest healthy Regional endpoint\".",
+  "why_not": "CloudFront optimizes HTTP content; Route 53 failover depends on DNS TTL; a single ALB is regional.",
   "keywords": [
     "Global Accelerator",
     "static anycast IP",

@@ -1,0 +1,48 @@
+{
+  "id": "u-20260927-route53-failover-warm-standby",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "A company has an enterprise web application hosted on Amazon ECS Docker containers that use an Amazon FSx for Lustre filesystem for its high-performance computing workloads. The application uses AWS X-Ray to trace requests across its containerized services. A warm standby environment is running in another AWS Region for disaster recovery.\nA solutions architect was assigned to design a system that will automatically route the live traffic to the disaster recovery (DR) environment only in the event that the primary application stack experiences an outage.\nWhat should the Architect do to satisfy this requirement?",
+    "options": [
+      "Set up a failover routing policy configuration in Amazon Route 53 by adding a health check on the primary service endpoint. Configure Route 53 to direct the DNS queries to the secondary record when the primary resource is unhealthy. Configure the network access control list and the route table to allow Route 53 to send requests to the endpoints specified in the health checks. Enable the `Evaluate Target Health` option by setting it to `Yes`.",
+      "Set up an Amazon EventBridge rule to monitor the primary Amazon Route 53 DNS endpoint and create a custom AWS Lambda function. Execute the `ChangeResourceRecordSets` API call using the function to initiate the failover to the secondary DNS record.",
+      "Set up a Weighted routing policy configuration in Amazon Route 53 by adding health checks on both the primary stack and the DR environment. Configure the network access control list and the route table to allow Route 53 to send requests to the endpoints specified in the health checks. Enable the `Evaluate Target Health` option by setting it to `Yes`.",
+      "Set up an Amazon CloudWatch Alarm to monitor the primary Amazon Route 53 DNS endpoint and create a custom AWS Lambda function. Execute the `ChangeResourceRecordSets` API call using the function to initiate the failover to the secondary DNS record."
+    ],
+    "answer": 0,
+    "explanation": "Route 53 failover routing is built for active-passive DR: a primary record with a health check and a secondary record pointing to the DR Region. When the health check marks the primary unhealthy, Route 53 answers DNS queries with the secondary record automatically; when it recovers, traffic returns. The health checkers must be able to reach the endpoint (allow Route 53 health-checker IP ranges in NACLs/security groups), and with alias records to ELB 'Evaluate Target Health = Yes' makes the record inherit the target's health. Weighted routing splits traffic across both stacks all the time — it doesn't send traffic to DR 'only' on outage. EventBridge/CloudWatch + Lambda calling ChangeResourceRecordSets re-implements failover with custom code — more overhead and more failure points than the native feature."
+  },
+  "concept": "Route 53 failover routing: active/passive with health checks",
+  "tests": "Choosing native Route 53 failover routing with health checks for active-passive DR instead of weighted routing or custom Lambda automation.",
+  "expected": "Route 53 failover routing: primary record + health check, secondary record to the DR Region, allow health checkers through NACL/SG, Evaluate Target Health = Yes. Triggers: \"route to DR only when primary fails\", \"warm standby\", \"automatically\" → failover routing policy.",
+  "why_not": "Weighted sends traffic to both stacks continuously; EventBridge/CloudWatch + Lambda ChangeResourceRecordSets is custom code duplicating a native feature.",
+  "keywords": [
+    "Route 53",
+    "failover routing",
+    "health check",
+    "Evaluate Target Health",
+    "warm standby",
+    "active-passive",
+    "DR",
+    "ChangeResourceRecordSets",
+    "weighted routing"
+  ],
+  "services": [
+    "route53",
+    "dr-strategies",
+    "lambda",
+    "eventbridge"
+  ],
+  "topics": [
+    "edge-dns",
+    "ha-dr"
+  ],
+  "domain": 2,
+  "related": [
+    "edge-q5",
+    "hadr-q8"
+  ]
+}

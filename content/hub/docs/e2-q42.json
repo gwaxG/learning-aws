@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "EC2 Purchasing: Spot для прерываемых отказоустойчивых batch-задач",
-  "tests": "Выбор самой дешёвой модели покупки EC2 для прерываемой задачи с checkpoint.",
-  "expected": "Spot Instances — скидка до ~90%, идеальны для fault-tolerant, interruptible, checkpointable batch. Триггеры: «interruptible», «can be checkpointed and resumed», «lowest possible cost», «batch».",
-  "why_not": "On-Demand и RI дороже для прерываемой задачи; Dedicated Hosts — самые дорогие, для лицензий/compliance.",
+  "concept": "EC2 purchasing: Spot for interruptible, fault-tolerant batch jobs",
+  "tests": "Choosing the cheapest EC2 purchasing option for an interruptible job with checkpointing.",
+  "expected": "Spot Instances — up to ~90% discount, ideal for fault-tolerant, interruptible, checkpointable batch. Triggers: \"interruptible\", \"can be checkpointed and resumed\", \"lowest possible cost\", \"batch\".",
+  "why_not": "On-Demand and RIs cost more for an interruptible job; Dedicated Hosts — the most expensive, for licensing/compliance.",
   "keywords": [
     "Spot Instances",
     "interruptible",

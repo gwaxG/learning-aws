@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "IAM trust policy: ограничение AssumeRole по aws:SourceIp",
-  "tests": "Как ограничить cross-account AssumeRole только запросами из корпоративного диапазона IP.",
-  "expected": "Condition с aws:SourceIp в trust policy роли — роль можно assume только с корпоративных IP. Триггеры: «assume a role», «only when requests originate from corporate IP range».",
-  "why_not": "Permissions boundary ограничивает максимум прав, но не фильтрует по IP при assume; SCP ограничивает весь аккаунт и не является стандартным инструментом для этого; resource policy на CloudTrail не при чём.",
+  "concept": "IAM: restrict AssumeRole by aws:SourceIp in trust policy",
+  "tests": "How to restrict cross-account AssumeRole to requests from the corporate IP range only.",
+  "expected": "Condition with aws:SourceIp in the role's trust policy — the role can be assumed only from corporate IPs. Triggers: \"assume a role\", \"only when requests originate from corporate IP range\".",
+  "why_not": "A permissions boundary caps maximum permissions but does not filter by IP on assume; an SCP restricts the whole account and is not the standard tool for this; a resource policy on CloudTrail is irrelevant.",
   "keywords": [
     "aws:SourceIp",
     "trust policy",
     "AssumeRole",
     "cross-account",
     "Condition",
-    "корпоративный IP"
+    "corporate IP"
   ],
   "services": [
     "iam",

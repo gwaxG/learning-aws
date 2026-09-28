@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "Organizations: consolidated billing — единый счёт, объёмные скидки, шеринг RI/SP",
-  "tests": "Какая функция даёт единый счёт по многим аккаунтам, объёмные скидки и общий доступ к выгодам RI и Savings Plans.",
-  "expected": "AWS Organizations с consolidated billing — агрегированное использование, volume tiering, sharing RI/Savings Plans между аккаунтами. Триггеры: «many accounts», «single consolidated bill», «volume pricing», «shared RI and Savings Plan benefits».",
-  "why_not": "Раздельный биллинг теряет агрегацию и шеринг; Cost Explorer только отчитывает; теги лишь категоризируют расходы.",
+  "concept": "Organizations: consolidated billing — one bill, volume discounts, RI/SP sharing",
+  "tests": "Which feature provides a single bill across many accounts, volume discounts and shared RI and Savings Plans benefits.",
+  "expected": "AWS Organizations with consolidated billing — aggregated usage, volume tiering, RI/Savings Plans sharing across accounts. Triggers: \"many accounts\", \"single consolidated bill\", \"volume pricing\", \"shared RI and Savings Plan benefits\".",
+  "why_not": "Separate billing loses aggregation and sharing; Cost Explorer only reports; tags merely categorize spend.",
   "keywords": [
     "consolidated billing",
     "AWS Organizations",

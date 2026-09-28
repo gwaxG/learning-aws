@@ -1,0 +1,44 @@
+{
+  "id": "u-20260928-eni-failover-secondary-interface",
+  "source": {
+    "type": "user",
+    "added": "2026-09-28"
+  },
+  "question": {
+    "stem": "A company is running a dashboard application on a Spot EC2 instance inside a private subnet. The dashboard is reachable via a domain name that maps to the private IPv4 address of the instance’s network interface. A solutions architect needs to increase network availability by allowing the traffic flow to resume in another instance if the primary instance is terminated.\nWhich solution accomplishes these requirements?",
+    "options": [
+      "Attach an elastic IP address to the instance’s primary network interface and point its IP address to the application’s domain name. Automatically move the EIP to a secondary instance if the primary instance becomes unavailable using the AWS Transit Gateway.",
+      "Create a secondary elastic network interface and point its private IPv4 address to the application’s domain name. Attach the new network interface to the primary instance. If the instance goes down, move the secondary network interface to another instance.",
+      "Use the AWS Network Firewall to detach the instance’s primary elastic network interface and move it to a new instance upon failure.",
+      "Set up AWS Transfer for FTPS service in Implicit FTPS mode to automatically disable the `source/destination` checks on the instance’s primary elastic network interface and reassociate it to another instance."
+    ],
+    "answer": 1,
+    "explanation": "A secondary elastic network interface (ENI) is an independent resource: it keeps its private IPv4 address, MAC and security groups when detached, and can be attached to another instance in the same AZ. Pointing the domain name at the secondary ENI's private IP and moving that ENI to a standby instance on failure lets traffic resume without changing DNS. The primary ENI (eth0) can never be detached from an instance. An Elastic IP is a public address — useless for a private-IP domain in a private subnet — and Transit Gateway doesn't move EIPs. Network Firewall inspects traffic; it doesn't manage ENIs. AWS Transfer Family (FTPS) is a file-transfer service and has nothing to do with source/destination checks or ENIs."
+  },
+  "concept": "EC2 ENI: move a secondary network interface to a standby instance for failover",
+  "tests": "Knowing that a secondary ENI keeps its private IP and can be moved between instances (same AZ) for failover, while the primary ENI can't be detached.",
+  "expected": "Create a secondary ENI, map the domain to its private IP, attach it to the primary instance, move it to another instance on failure. Triggers: \"private IP in DNS\", \"resume traffic on another instance\", \"network availability\" → movable secondary ENI.",
+  "why_not": "EIP is public and Transit Gateway doesn't move EIPs; primary ENI can't be detached (and Network Firewall doesn't manage ENIs); Transfer Family FTPS is unrelated to ENIs/source-dest checks.",
+  "keywords": [
+    "elastic network interface",
+    "ENI",
+    "secondary network interface",
+    "private IP",
+    "failover",
+    "Spot instance",
+    "Elastic IP",
+    "same AZ"
+  ],
+  "services": [
+    "ec2",
+    "subnets",
+    "ha"
+  ],
+  "topics": [
+    "ec2-compute",
+    "vpc-networking",
+    "ha-dr"
+  ],
+  "domain": 2,
+  "related": []
+}

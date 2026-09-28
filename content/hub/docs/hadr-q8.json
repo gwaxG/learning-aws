@@ -4,18 +4,18 @@
     "type": "topic",
     "ref": "ha-dr"
   },
-  "concept": "Route 53 failover routing: active/passive с health check",
-  "tests": "Настройка автоматического DNS-переключения на DR-endpoint с быстрым cutover.",
-  "expected": "Failover routing + health check на primary + низкий TTL записи. Триггеры: «active/passive», «автоматически только при unhealthy primary», «fast cutover».",
-  "why_not": "Weighted 50/50 отправляет половину трафика в DR при здоровом primary; Simple без health awareness; Geolocation — по местоположению, не по здоровью.",
+  "concept": "Route 53 failover routing: active/passive with health checks",
+  "tests": "Configuring automatic DNS switchover to a DR endpoint with fast cutover.",
+  "expected": "Failover routing + a health check on the primary + a low record TTL. Triggers: \"active/passive\", \"automatically only when the primary is unhealthy\", \"fast cutover\".",
+  "why_not": "Weighted 50/50 sends half the traffic to DR while the primary is healthy; Simple has no health awareness; Geolocation routes by location, not health.",
   "keywords": [
     "failover routing",
     "health check",
     "low TTL",
     "active/passive",
     "DR endpoint",
-    "автоматическое переключение",
-    "быстрый cutover"
+    "automatic switchover",
+    "fast cutover"
   ],
   "services": [
     "route53",

@@ -4,16 +4,16 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "Secrets Manager: автоматическая ротация credentials БД",
-  "tests": "Выбор сервиса для хранения credentials БД с автоматической ротацией и безопасным получением в runtime.",
-  "expected": "AWS Secrets Manager с включённой ротацией (Lambda-ротация, встроенная для RDS). Триггеры: «automatic rotation», «database credentials», «minimal operational overhead».",
-  "why_not": "Parameter Store standard parameters — нет встроенной ротации; зашифрованный S3-объект и KMS data keys — никакой ротации, нужен свой код.",
+  "concept": "Secrets Manager: automatic rotation of DB credentials",
+  "tests": "Choosing a service to store DB credentials with automatic rotation and secure retrieval at runtime.",
+  "expected": "AWS Secrets Manager with rotation enabled (Lambda rotation, built in for RDS). Triggers: \"automatic rotation\", \"database credentials\", \"minimal operational overhead\".",
+  "why_not": "Parameter Store standard parameters — no built-in rotation; an encrypted S3 object and KMS data keys — no rotation at all, custom code needed.",
   "keywords": [
     "Secrets Manager",
     "automatic rotation",
     "database credentials",
     "Parameter Store",
-    "ротация",
+    "rotation",
     "hardcoded credentials"
   ],
   "services": [

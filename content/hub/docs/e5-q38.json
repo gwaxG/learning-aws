@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "Athena: serverless SQL по данным в S3 (Parquet)",
-  "tests": "Выбор сервиса для ad hoc SQL-запросов к большим Parquet-файлам в S3 без управления серверами.",
-  "expected": "Amazon Athena — serverless SQL прямо по S3, оплата за просканированные данные. Триггеры: «ad hoc SQL», «Parquet in S3», «without managing servers».",
-  "why_not": "Redshift — кластер для постоянного хранилища данных; RDS — транзакционная БД; persistent EMR — операционные накладные расходы.",
+  "concept": "Athena: serverless SQL over data in S3 (Parquet)",
+  "tests": "Choosing a service for ad hoc SQL queries on large Parquet files in S3 without managing servers.",
+  "expected": "Amazon Athena — serverless SQL directly over S3, pay per data scanned. Triggers: \"ad hoc SQL\", \"Parquet in S3\", \"without managing servers\".",
+  "why_not": "Redshift — a cluster for a persistent data warehouse; RDS — transactional DB; persistent EMR — operational overhead.",
   "keywords": [
     "Athena",
     "ad hoc SQL",
     "Parquet",
     "S3",
     "serverless",
-    "без серверов"
+    "no servers to manage"
   ],
   "services": [
     "athena",

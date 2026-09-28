@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "Redshift Serverless: оплата только за время выполнения запросов",
-  "tests": "Как избежать оплаты простаивающего кластера Redshift при эпизодической ежеквартальной отчётности.",
-  "expected": "Amazon Redshift Serverless — авто-провижининг и масштабирование, оплата (RPU-часы) только когда идут запросы. Триггеры: «few days per quarter», «mostly idle», «avoid paying for idle provisioned capacity».",
-  "why_not": "Постоянно работающий provisioned кластер и Reserved Nodes платят за простой; RDS не потянет аналитику такого масштаба.",
+  "concept": "Redshift Serverless: pay only while queries run",
+  "tests": "How to avoid paying for an idle Redshift cluster with occasional quarterly reporting.",
+  "expected": "Amazon Redshift Serverless — auto-provisioning and scaling, billed (RPU-hours) only while queries run. Triggers: \"few days per quarter\", \"mostly idle\", \"avoid paying for idle provisioned capacity\".",
+  "why_not": "An always-on provisioned cluster and Reserved Nodes pay for idle time; RDS can't handle analytics at this scale.",
   "keywords": [
     "Redshift Serverless",
     "intermittent workload",

@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "edge-dns"
   },
-  "concept": "Global Accelerator: static anycast IP, TCP/UDP и быстрый failover",
-  "tests": "Выбор сервиса для UDP-трафика с минимальной задержкой, быстрым региональным failover и фиксированными IP.",
-  "expected": "AWS Global Accelerator — 2 static anycast IP, TCP/UDP, AWS backbone, failover без задержек DNS TTL. Триггеры: «UDP», «fixed IP для allow-list», «near-instant regional failover», «lowest latency».",
-  "why_not": "CloudFront — только HTTP/HTTPS кэширование без фиксированных IP для UDP; Route 53 latency зависит от DNS TTL; API Gateway — HTTP/REST/WebSocket.",
+  "concept": "Global Accelerator: static anycast IPs, TCP/UDP and fast failover",
+  "tests": "Choosing a service for UDP traffic with minimal latency, fast regional failover, and fixed IPs.",
+  "expected": "AWS Global Accelerator — 2 static anycast IPs, TCP/UDP, AWS backbone, failover without DNS TTL delays. Triggers: \"UDP\", \"fixed IPs for an allow-list\", \"near-instant regional failover\", \"lowest latency\".",
+  "why_not": "CloudFront is HTTP/HTTPS caching only, no fixed IPs for UDP; Route 53 latency routing depends on DNS TTL; API Gateway is HTTP/REST/WebSocket.",
   "keywords": [
     "Global Accelerator",
     "anycast",
@@ -15,7 +15,7 @@
     "UDP",
     "allow-list",
     "AWS backbone",
-    "мгновенный failover"
+    "instant failover"
   ],
   "services": [
     "global-accelerator",

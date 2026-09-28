@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "integration"
   },
-  "concept": "Step Functions: Standard vs Express для долгих оркестраций",
-  "tests": "Выбор сервиса оркестрации многошагового процесса с ретраями, ветвлением и аудитом, длящегося часы.",
-  "expected": "Step Functions Standard workflow: retries, error handling, branching, exactly-once, выполнение до 1 года, полная визуальная история каждого выполнения. Триггеры: «coordinate several steps», «audit trail», «run for hours».",
-  "why_not": "Express — до 5 минут, at-least-once, ограниченная история; цепочка SNS→Lambda без централизованного состояния и аудита; одна большая Lambda ограничена 15 минутами и хрупка.",
+  "concept": "Step Functions: Standard vs Express for long-running orchestration",
+  "tests": "Choosing a service to orchestrate a multi-step process with retries, branching, and auditing that runs for hours.",
+  "expected": "Step Functions Standard workflow: retries, error handling, branching, exactly-once, executions up to 1 year, full visual history of every execution. Triggers: \"coordinate several steps\", \"audit trail\", \"run for hours\".",
+  "why_not": "Express runs up to 5 minutes, at-least-once, limited history; an SNS→Lambda chain has no centralized state or audit; one big Lambda is limited to 15 minutes and fragile.",
   "keywords": [
     "Step Functions",
     "Standard workflow",
@@ -15,8 +15,7 @@
     "orchestration",
     "retries",
     "audit trail",
-    "оркестрация",
-    "часы выполнения"
+    "hours-long execution"
   ],
   "services": [
     "step-functions",

@@ -4,17 +4,17 @@
     "type": "topic",
     "ref": "storage"
   },
-  "concept": "S3 Intelligent-Tiering: неизвестный или меняющийся паттерн доступа",
-  "tests": "Выбор storage class при непредсказуемом и меняющемся доступе без анализа по объектам.",
-  "expected": "S3 Intelligent-Tiering — автоматически перемещает объекты между tiers по использованию, без retrieval fees. Триггеры: «unpredictable», «pattern changes over time», «avoid per-object analysis», «retrieval-fee surprises».",
-  "why_not": "Standard-IA и One Zone-IA берут retrieval fee и имеют минимум 30 дней (One Zone-IA ещё и без резерва AZ); Glacier Flexible Retrieval требует restore от минут до часов.",
+  "concept": "S3 Intelligent-Tiering: unknown or changing access pattern",
+  "tests": "Choosing a storage class for unpredictable, changing access without per-object analysis.",
+  "expected": "S3 Intelligent-Tiering — automatically moves objects between tiers based on usage, no retrieval fees. Triggers: \"unpredictable\", \"pattern changes over time\", \"avoid per-object analysis\", \"retrieval-fee surprises\".",
+  "why_not": "Standard-IA and One Zone-IA charge retrieval fees and have a 30-day minimum (One Zone-IA also lacks AZ redundancy); Glacier Flexible Retrieval requires a restore taking minutes to hours.",
   "keywords": [
     "Intelligent-Tiering",
     "access pattern",
     "retrieval fee",
     "Standard-IA",
     "storage class",
-    "непредсказуемый доступ"
+    "unpredictable access"
   ],
   "services": [
     "s3-storage-classes",

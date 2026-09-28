@@ -4,17 +4,16 @@
     "type": "topic",
     "ref": "serverless-containers"
   },
-  "concept": "Lambda: provisioned concurrency против cold start",
-  "tests": "Умение распознать cold start и выбрать прямое средство устранения задержки первого запроса.",
-  "expected": "Provisioned concurrency держит заранее инициализированные окружения — первый запрос без init-задержки. Триггеры: «first request after idle», «high p99 latency», «warm requests are fast», «large dependency package».",
-  "why_not": "Уменьшение timeout не сокращает инициализацию; reserved concurrency = 0 отключает функцию; больше памяти немного ускоряет, но не прогревает окружения.",
+  "concept": "Lambda: provisioned concurrency vs cold starts",
+  "tests": "Recognizing a cold start and choosing the direct fix for first-request latency.",
+  "expected": "Provisioned concurrency keeps pre-initialized environments — the first request has no init delay. Triggers: \"first request after idle\", \"high p99 latency\", \"warm requests are fast\", \"large dependency package\".",
+  "why_not": "Lowering the timeout does not shorten initialization; reserved concurrency = 0 disables the function; more memory speeds things up slightly but does not pre-warm environments.",
   "keywords": [
     "provisioned concurrency",
     "cold start",
     "p99 latency",
     "Lambda",
-    "init",
-    "холодный старт"
+    "init"
   ],
   "services": [
     "lambda",

@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "Kinesis Data Streams: real-time ingest, несколько consumers, replay",
-  "tests": "Выбор сервиса для непрерывного высокообъёмного clickstream с несколькими потребителями одного потока.",
-  "expected": "Kinesis Data Streams — высокая пропускная способность в реальном времени, несколько consumers независимо читают те же записи. Триггеры: «high-volume continuous stream», «real time», «multiple consumers reading the same stream», clickstream.",
-  "why_not": "SQS — сообщение обычно потребляется один раз; SNS — pub/sub; Glue — batch ETL, не real-time ingestion.",
+  "concept": "Kinesis Data Streams: real-time ingest, multiple consumers, replay",
+  "tests": "Choosing a service for a continuous high-volume clickstream with multiple consumers of the same stream.",
+  "expected": "Kinesis Data Streams: high real-time throughput, multiple consumers independently read the same records. Triggers: \"high-volume continuous stream\", \"real time\", \"multiple consumers reading the same stream\", clickstream.",
+  "why_not": "SQS messages are typically consumed once; SNS is pub/sub; Glue is batch ETL, not real-time ingestion.",
   "keywords": [
     "Kinesis Data Streams",
     "clickstream",
     "real-time",
     "multiple consumers",
     "streaming",
-    "поток данных"
+    "data stream"
   ],
   "services": [
     "kinesis-data-streams",

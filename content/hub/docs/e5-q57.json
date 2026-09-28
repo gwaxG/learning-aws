@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "CloudFormation: нативный infrastructure as code",
-  "tests": "Выбор нативного сервиса AWS для IaC с повторяемыми шаблонами под контролем версий.",
-  "expected": "AWS CloudFormation — декларативные шаблоны (stacks). Триггеры: «infrastructure as code», «repeatable, version-controlled templates», «native to AWS».",
-  "why_not": "Systems Manager Run Command — выполнение команд на инстансах; Trusted Advisor — рекомендации; CloudWatch — мониторинг.",
+  "concept": "CloudFormation: native infrastructure as code",
+  "tests": "Choosing a native AWS IaC service with repeatable, version-controlled templates.",
+  "expected": "AWS CloudFormation — declarative templates (stacks). Triggers: \"infrastructure as code\", \"repeatable, version-controlled templates\", \"native to AWS\".",
+  "why_not": "Systems Manager Run Command — runs commands on instances; Trusted Advisor — recommendations; CloudWatch — monitoring.",
   "keywords": [
     "CloudFormation",
     "infrastructure as code",

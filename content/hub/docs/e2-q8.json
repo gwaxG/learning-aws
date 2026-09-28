@@ -4,15 +4,15 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "DynamoDB DAX: in-memory кэш для повторных чтений",
-  "tests": "Как снизить латентность до микросекунд и стоимость повторных чтений одних и тех же элементов DynamoDB.",
-  "expected": "Добавить DAX-кластер — write-through кэш перед DynamoDB, микросекундная латентность, разгружает RCU. Триггеры: «sub-millisecond / microsecond», «repeated reads of the same items», «read costs high».",
-  "why_not": "Global tables — мультирегиональная репликация, не кэш; on-demand меняет модель оплаты, не латентность; GSI — новый паттерн доступа, не кэширование.",
+  "concept": "DynamoDB DAX: in-memory cache for repeated reads",
+  "tests": "How to cut latency to microseconds and reduce the cost of repeated reads of the same DynamoDB items.",
+  "expected": "Add a DAX cluster — a write-through cache in front of DynamoDB, microsecond latency, offloads RCUs. Triggers: \"sub-millisecond / microsecond\", \"repeated reads of the same items\", \"read costs high\".",
+  "why_not": "Global tables — multi-Region replication, not a cache; on-demand changes the billing model, not latency; a GSI — a new access pattern, not caching.",
   "keywords": [
     "DAX",
     "DynamoDB",
     "microsecond",
-    "кэш",
+    "cache",
     "repeated reads",
     "read costs"
   ],

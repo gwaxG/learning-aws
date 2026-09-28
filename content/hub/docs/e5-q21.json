@@ -4,16 +4,16 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "HA: Auto Scaling group в нескольких AZ за ALB",
-  "tests": "Как спроектировать stateless веб-уровень, переживающий отказ целой AZ.",
-  "expected": "Auto Scaling group минимум в 2 AZ + ALB в тех же AZ. Триггеры: «entire Availability Zone fails», «stateless web tier», «MOST highly available».",
-  "why_not": "Один инстанс (даже большой или с Elastic IP) или два в одной AZ падают вместе с AZ.",
+  "concept": "HA: Auto Scaling group across multiple AZs behind an ALB",
+  "tests": "How to design a stateless web tier that survives the failure of an entire AZ.",
+  "expected": "Auto Scaling group across at least 2 AZs + ALB in the same AZs. Triggers: \"entire Availability Zone fails\", \"stateless web tier\", \"MOST highly available\".",
+  "why_not": "A single instance (even large or with an Elastic IP) or two in one AZ go down with the AZ.",
   "keywords": [
     "Auto Scaling group",
     "multi-AZ",
     "ALB",
     "stateless",
-    "отказ AZ",
+    "AZ failure",
     "high availability"
   ],
   "services": [

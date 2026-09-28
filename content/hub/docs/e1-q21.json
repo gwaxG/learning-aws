@@ -4,14 +4,14 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "S3 безопасность: Block Public Access + AWS Config rules",
-  "tests": "Как предотвращать и непрерывно обнаруживать публичные S3 buckets и оценивать конфигурации по best practices (выбрать два).",
-  "expected": "S3 Block Public Access на уровне аккаунта (предотвращение) + AWS Config rules (непрерывная оценка и выявление non-compliant buckets). Триггеры: «publicly accessible buckets», «continuously evaluate configurations».",
-  "why_not": "Cost Explorer — биллинг; CloudFront access logs — аналитика доставки, не контроль безопасности.",
+  "concept": "S3 security: Block Public Access + AWS Config rules",
+  "tests": "How to prevent and continuously detect public S3 buckets and evaluate configurations against best practices (choose two).",
+  "expected": "Account-level S3 Block Public Access (prevention) + AWS Config rules (continuous evaluation and detection of non-compliant buckets). Triggers: \"publicly accessible buckets\", \"continuously evaluate configurations\".",
+  "why_not": "Cost Explorer — billing; CloudFront access logs — delivery analytics, not a security control.",
   "keywords": [
     "Block Public Access",
     "AWS Config rules",
-    "публичный bucket",
+    "public bucket",
     "compliance",
     "continuous evaluation"
   ],

@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "EFS: общая POSIX-файловая система для многих EC2 в разных AZ",
-  "tests": "Выбор хранилища с одновременным доступом многих EC2 из нескольких AZ и автоматическим ростом.",
-  "expected": "Amazon EFS — managed NFS, multi-AZ, эластичный. Триггеры: «shared POSIX file storage», «concurrently from many EC2», «multiple AZs», «scaling automatically».",
-  "why_not": "EBS Multi-Attach — одна AZ и io1/io2; instance store — эфемерный и локальный; S3 — объектное, не POSIX.",
+  "concept": "EFS: shared POSIX file system for many EC2 instances across AZs",
+  "tests": "Choosing storage with concurrent access from many EC2 instances across multiple AZs and automatic growth.",
+  "expected": "Amazon EFS — managed NFS, multi-AZ, elastic. Triggers: \"shared POSIX file storage\", \"concurrently from many EC2\", \"multiple AZs\", \"scaling automatically\".",
+  "why_not": "EBS Multi-Attach — single AZ and io1/io2 only; instance store — ephemeral and local; S3 — object storage, not POSIX.",
   "keywords": [
     "EFS",
     "NFS",
@@ -15,7 +15,7 @@
     "POSIX",
     "multi-AZ",
     "elastic",
-    "общий доступ"
+    "shared access"
   ],
   "services": [
     "efs",

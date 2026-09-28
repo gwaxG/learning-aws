@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "iam-security"
   },
-  "concept": "KMS: customer-managed key — key policy, ротация, cross-account",
-  "tests": "Различие типов ключей KMS: только customer-managed key даёт редактируемую key policy, управление ротацией и cross-account доступ.",
-  "expected": "Customer-managed key с key policy, указывающей другой аккаунт как principal (плюс IAM-права у вызывающего). Триггеры: «custom key policy», «control rotation», «another account decrypt».",
-  "why_not": "AWS-managed (aws/s3) и AWS-owned ключи без редактируемой key policy и не шарятся cross-account; SSE-S3 — ключи полностью у S3, никакого контроля.",
+  "concept": "KMS: customer managed key — key policy, rotation, cross-account",
+  "tests": "Distinguishing KMS key types: only a customer managed key offers an editable key policy, rotation control, and cross-account access.",
+  "expected": "A customer managed key with a key policy naming the other account as a principal (plus IAM permissions for the caller). Triggers: \"custom key policy\", \"control rotation\", \"another account decrypt\".",
+  "why_not": "AWS managed (aws/s3) and AWS owned keys have no editable key policy and cannot be shared cross-account; with SSE-S3 the keys are fully held by S3, no control at all.",
   "keywords": [
     "customer managed key",
     "key policy",
@@ -15,7 +15,7 @@
     "cross-account",
     "AWS managed key",
     "SSE-S3",
-    "другой аккаунт"
+    "another account"
   ],
   "services": [
     "kms",

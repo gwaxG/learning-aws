@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "VPC Endpoints: Gateway endpoint для S3 без NAT и интернета",
-  "tests": "Выбор приватного доступа к S3 из VPC, избегая интернета и платы NAT за данные.",
-  "expected": "Gateway VPC endpoint для S3 — запись в route table, бесплатен, трафик внутри сети AWS. Триггеры: «without traversing public internet», «avoid NAT gateway data charges», «S3/DynamoDB».",
-  "why_not": "Interface endpoint для S3 платный (час + GB), нужен в основном для on-prem доступа; NAT идёт в интернет и тарифицирует данные; VPC peering не применяется к AWS-сервисам.",
+  "concept": "VPC endpoints: S3 gateway endpoint with no NAT or internet",
+  "tests": "Choosing private access to S3 from a VPC, avoiding the internet and NAT data charges.",
+  "expected": "Gateway VPC endpoint for S3 — a route table entry, free, traffic stays within the AWS network. Triggers: \"without traversing public internet\", \"avoid NAT gateway data charges\", \"S3/DynamoDB\".",
+  "why_not": "An S3 interface endpoint is paid (hourly + per GB), mainly needed for on-prem access; NAT goes to the internet and charges for data; VPC peering doesn't apply to AWS services.",
   "keywords": [
     "gateway endpoint",
     "S3",

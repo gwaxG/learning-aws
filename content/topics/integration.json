@@ -1,114 +1,114 @@
 {
   "slug": "integration",
-  "title": "Decoupling и интеграция",
+  "title": "Decoupling & Integration",
   "domains": [
     2,
     3
   ],
   "essentials": [
     {
-      "heading": "Зачем развязка (decoupling)?",
-      "body": "**Что.** **Слабая связанность (loose coupling)** вставляет асинхронную границу (очередь, топик или event bus) между producers и consumers, чтобы каждая сторона работала независимо.\n\n**Зачем.** Это решает проблему каскадных отказов и перегрузки на пиках в синхронных цепочках запросов, где медленный или упавший downstream ломает upstream.\n\n**Как.** Producer пишет в буфер (например, `SQS`); consumer забирает сообщения в своём темпе и масштабируется по **глубине очереди (queue depth)**. Каждая сторона может падать, деплоиться и масштабироваться независимо — это сглаживает всплески трафика и ограничивает blast radius.\n\n**Экзамен.** Если в условии сказано «заказы теряются на пиках» или «поглотить всплески», выбирайте ответ с **очередью**, а не более крупный инстанс или больший таймаут. Асинхронный обмен сообщениями требует **идемпотентных** consumers, поскольку большая часть messaging в AWS — at-least-once.",
+      "heading": "Why decouple?",
+      "body": "**What.** **Loose coupling** inserts an asynchronous boundary (queue, topic, or event bus) between producers and consumers so each side runs independently.\n\n**Why.** It solves the cascading-failure and spike-overload problem of synchronous request chains where a slow or down downstream breaks the upstream.\n\n**How.** Producer writes to a buffer (e.g. `SQS`); consumer pulls at its own pace and scales on **queue depth**. Each side can fail, deploy, and scale independently, smoothing bursty traffic and isolating blast radius.\n\n**Exam.** When the stem says \"orders are lost during spikes\" or \"absorb bursts\" choose the **queue** answer, not a bigger instance or longer timeout. Async messaging requires **idempotent** consumers since most AWS messaging is at-least-once. **Hybrid:** SQS (and SWF) are public HTTPS endpoints, so producers/consumers can run on EC2 *and* on-premises servers — \"decoupled architecture using both AWS and on-prem resources\" → **SQS / SWF**, not a database (RDS/DynamoDB) or networking (VPC peering).",
       "diagram": {
         "src": "sqs-vs-sns-vs-eventbridge.svg",
-        "caption": "Три базовых примитива decoupling: SQS (pull-очередь точка-точка), SNS (push pub/sub fan-out) и EventBridge (event bus с маршрутизацией по содержимому и источниками из SaaS и AWS)."
+        "caption": "Three core decoupling primitives: SQS (point-to-point pull queue), SNS (push pub/sub fanout), and EventBridge (content-routed event bus with SaaS and AWS sources)."
       }
     },
     {
-      "heading": "SQS — Standard и FIFO",
-      "body": "**Что.** Полностью управляемая очередь сообщений на основе **pull**. **Standard** = практически неограниченный TPS, **at-least-once**, порядок best-effort. **FIFO** (суффикс `.fifo`) = строгий порядок в пределах `MessageGroupId`, **exactly-once** через `MessageDeduplicationId`, 300 TPS (3000 с батчингом).\n\n**Зачем.** Буферизует producers от consumers, изолирует poison messages и даёт гарантии порядка для транзакционных потоков.\n\n**Как.** Ключевые настройки: **visibility timeout** (скрывает полученное сообщение; продлевайте через `ChangeMessageVisibility`, если обработка затягивается), **DLQ** через `RedrivePolicy` + `maxReceiveCount` для poison messages, **long polling** (`WaitTimeSeconds`=20), чтобы сократить стоимость пустых receive. Максимальное хранение — 14 дней, максимальный размер сообщения — 256 KB.\n\n**Экзамен.** «Одно и то же сообщение обработано дважды» → увеличьте **visibility timeout** или вызывайте `ChangeMessageVisibility`. «Exactly-once + порядок в пределах аккаунта» → **FIFO с ID аккаунта в качестве MessageGroupId**. Poison messages → **DLQ**.",
+      "heading": "SQS — Standard vs FIFO",
+      "body": "**What.** Fully managed **pull-based** message queue. **Standard** = near-unlimited TPS, **at-least-once**, best-effort order. **FIFO** (`.fifo` suffix) = strict order per `MessageGroupId`, **exactly-once** via `MessageDeduplicationId`, 300 TPS (3000 with batching).\n\n**Why.** Buffers producers from consumers, isolates poison messages, and gives ordering guarantees for transactional flows.\n\n**How.** Key knobs: **visibility timeout** (hides a received message; extend with `ChangeMessageVisibility` if processing runs long), **DLQ** via `RedrivePolicy` + `maxReceiveCount` for poison messages, **long polling** (`WaitTimeSeconds`=20) to cut empty-receive cost. Max retention 14 days, max payload 256 KB.\n\n**Exam.** \"Same message processed twice\" → raise **visibility timeout** or call `ChangeMessageVisibility`. \"Exactly-once + ordered per account\" → **FIFO with account ID as MessageGroupId**. Poison messages → **DLQ**.",
       "diagram": {
         "src": "sqs-fifo-vs-standard.svg",
-        "caption": "SQS Standard (неограниченный TPS, at-least-once, порядок best-effort) против FIFO (300/3000 TPS, exactly-once через dedup ID, строгий порядок в пределах MessageGroupId, имя оканчивается на .fifo)."
+        "caption": "SQS Standard (unlimited TPS, at-least-once, best-effort order) versus FIFO (300/3000 TPS, exactly-once via dedup ID, strict order per MessageGroupId, name ends .fifo)."
       }
     },
     {
-      "heading": "SNS — pub/sub и fan-out",
-      "body": "**Что.** Pub/sub на основе **push**. Publishers отправляют в **topic**; SNS доставляет каждое сообщение всем **subscriptions** (SQS, Lambda, HTTP/S, email, SMS, Kinesis Firehose, mobile push).\n\n**Зачем.** Отвязывает одного producer от множества consumers так, что producer не знает, кто они, — подписчиков можно добавлять и удалять без изменения кода.\n\n**Как.** **Standard** topics: высокий throughput, порядок best-effort. **FIFO** topics: порядок + дедупликация, но fan-out только в **SQS FIFO**. **Subscription filter policies** отбрасывают ненужные сообщения на стороне сервера; поддерживаются шифрование SSE и cross-account доставка.\n\n**Экзамен.** SNS — это **push**; SQS — **pull**. Сам по себе SNS не даёт надёжного буфера для каждого consumer — если он нужен, подпишите на topic **очередь SQS**. SNS FIFO доставляет только в очереди SQS FIFO, но не в Lambda/HTTP."
+      "heading": "SNS — pub/sub fan-out",
+      "body": "**What.** **Push-based** pub/sub. Publishers send to a **topic**; SNS delivers each message to every **subscription** (SQS, Lambda, HTTP/S, email, SMS, Kinesis Firehose, mobile push).\n\n**Why.** Decouples one producer from many consumers without the producer knowing who they are — add or remove subscribers without code changes.\n\n**How.** **Standard** topics: high throughput, best-effort order. **FIFO** topics: ordered + dedup, but only fan out to **SQS FIFO**. **Subscription filter policies** drop unwanted messages server-side; supports SSE encryption and cross-account delivery.\n\n**Exam.** SNS is **push**; SQS is **pull**. SNS alone gives no durable buffer per consumer — if you need that, subscribe an **SQS queue** to the topic. SNS FIFO delivers only to SQS FIFO queues, not Lambda/HTTP."
     },
     {
-      "heading": "Паттерн fan-out SNS + SQS",
-      "body": "**Что.** Публикуете **один раз** в SNS topic, который пушит в **отдельную очередь SQS для каждого consumer**, — у каждого подписчика свой надёжный буферизованный backlog.\n\n**Зачем.** Решает задачу «одно событие, N независимых consumers, у каждого свои повторы и свой темп» (например, загрузка в S3 → генератор миниатюр + индексатор + аудит-логгер).\n\n**Как.** Каждой очереди нужна resource policy, разрешающая `sns.amazonaws.com` `sqs:SendMessage` с ограничением по ARN топика. Включите **raw message delivery**, чтобы consumers получали исходный payload, а не JSON-обёртку SNS. Привяжите **DLQ к каждой очереди**, чтобы изолировать сбои отдельных consumers.\n\n**Экзамен.** «Трём consumers нужна надёжная буферизованная копия каждого события» → **fan-out SNS + SQS**; никогда не одна общая очередь (каждое сообщение достаётся только одному consumer) и никогда не только SNS-to-Lambda (нет буфера для каждого consumer)."
+      "heading": "SNS + SQS fan-out pattern",
+      "body": "**What.** Publish **once** to an SNS topic that pushes to **one SQS queue per consumer**, giving each subscriber its own durable, buffered backlog.\n\n**Why.** Solves the \"one event, N independent consumers, each with its own retry and pace\" problem (e.g. S3 upload → thumbnailer + indexer + audit logger).\n\n**How.** Each queue gets a resource policy allowing `sns.amazonaws.com` `sqs:SendMessage` scoped to the topic ARN. Enable **raw message delivery** so consumers see the original payload instead of the SNS JSON envelope. Attach a **DLQ per queue** to isolate per-consumer failures.\n\n**Exam.** \"Three consumers each need a durable buffered copy of every event\" → **SNS + SQS fanout**, never a single shared queue (only one consumer wins each message) and never SNS-to-Lambda alone (no per-consumer buffer). **Filtering:** when each queue should get only *some* messages (\"separate queue per request type\"), keep **one topic** and add a **subscription filter policy** per SQS subscription, e.g. `{\"quote_type\": [\"auto\"]}` on a message attribute. SQS itself can't filter, so \"send everything to every queue and filter in the queue\" is wrong; multiple topics or Kinesis + KCL routing add code and resources."
     },
     {
-      "heading": "Amazon MQ и SQS/SNS",
-      "body": "**Что.** **Amazon MQ** — управляемый **ActiveMQ / RabbitMQ**, работающий по открытым протоколам: `JMS`, `AMQP`, `MQTT`, `STOMP`, `OpenWire`, `WSS`.\n\n**Зачем.** Позволяет перенести legacy-приложение на брокере в AWS по модели lift-and-shift с **минимальными изменениями кода** — SQS/SNS потребовали бы переписать слой messaging на проприетарные API AWS.\n\n**Как.** Работает на выделенных инстансах брокера в VPC (single-instance или active/standby HA). Потолок масштабирования ниже, чем у SQS/SNS, и больше операционной нагрузки, зато сохраняется совместимость по протоколу с существующими клиентами.\n\n**Экзамен.** В условии упоминаются **JMS / AMQP / MQTT / STOMP** или «миграция legacy-приложения на брокере» → **Amazon MQ**. В условии «новое cloud-native, бесконечное масштабирование, без ops» → **SQS / SNS**."
+      "heading": "Amazon MQ vs SQS/SNS",
+      "body": "**What.** **Amazon MQ** is managed **ActiveMQ / RabbitMQ** speaking open protocols: `JMS`, `AMQP`, `MQTT`, `STOMP`, `OpenWire`, `WSS`.\n\n**Why.** Lets a legacy broker-based app lift-and-shift to AWS with **minimal code changes** — SQS/SNS would require rewriting the messaging layer to AWS proprietary APIs.\n\n**How.** Runs on dedicated broker instances in a VPC (single-instance or active/standby HA). Lower scale ceiling than SQS/SNS and more ops overhead, but preserves wire compatibility with existing clients.\n\n**Exam.** Stem mentions **JMS / AMQP / MQTT / STOMP** or \"migrating a legacy broker app\" → **Amazon MQ**. Stem says \"new cloud-native, infinite scale, no ops\" → **SQS / SNS**."
     },
     {
-      "heading": "EventBridge — шина событий (event bus)",
-      "body": "**Что.** Serverless **event bus**, который маршрутизирует JSON-события от **сервисов AWS, собственных приложений и SaaS-партнёров** (Datadog, Zendesk, …) к targets с помощью **rules**.\n\n**Зачем.** Решает задачу маршрутизации по содержимому между множеством источников и targets — то, чего фильтрация SNS и SQS нативно не умеют.\n\n**Как.** Rules сопоставляют JSON события (pattern matching по любому полю) и пересылают в targets: Lambda, SQS, SNS, Step Functions, Kinesis. Дополнительно: **schema registry**, **archive & replay**, **EventBridge Scheduler** (cron/rate вместо расписаний CloudWatch Events), **несколько шин** (default, custom, partner).\n\n**Экзамен.** Ключевые слова **SaaS partner**, **archive/replay**, **schema registry** или «маршрутизировать по содержимому события в разные targets» → **EventBridge**. Простой высоконагруженный fan-out без логики маршрутизации → **SNS**."
+      "heading": "EventBridge — event bus",
+      "body": "**What.** Serverless **event bus** that routes JSON events from **AWS services, custom apps, and SaaS partners** (Datadog, Zendesk, …) to targets via **rules**.\n\n**Why.** Solves content-based routing across many sources and targets — something SNS filtering and SQS cannot do natively.\n\n**How.** Rules match on event JSON (pattern matching on any field) and forward to targets: Lambda, SQS, SNS, Step Functions, Kinesis. Extras: **schema registry**, **archive & replay**, **EventBridge Scheduler** (cron/rate replacing CloudWatch Events schedules), **multiple buses** (default, custom, partner).\n\n**Exam.** Keywords **SaaS partner**, **archive/replay**, **schema registry**, or \"route by event content to different targets\" → **EventBridge**. Simple high-throughput fanout with no routing logic → **SNS**."
     },
     {
-      "heading": "Step Functions — оркестрация workflow",
-      "body": "**Что.** Serverless **state machine**, оркеструющая многошаговые workflow через Lambda, ECS, SNS, SQS, DynamoDB и 200+ сервисов AWS со встроенными retries и состояниями parallel, choice и map.\n\n**Зачем.** Заменяет хрупкие цепочки Lambda / glue-код централизованным, визуализируемым и аудируемым движком workflow.\n\n**Как.** **Standard** workflows: до **1 года**, **exactly-once**, полная история выполнения, оплата за каждый переход состояния — для долгих аудируемых бизнес-процессов. **Express** workflows: до **5 минут**, **at-least-once**, оплата за запросы и длительность — для высоконагруженных streaming/IoT/коротких задач.\n\n**Экзамен.** «Многошаговый, на часы, аудируемый, повторы при сбоях» → **Standard**. «Высокая частота событий, меньше 5 минут, важна стоимость» → **Express**. «Одна Lambda с try/except» или «цепочка SNS» — неверно: нет центрального состояния, лимит Lambda 15 минут."
+      "heading": "Step Functions — workflow orchestration",
+      "body": "**What.** Serverless **state machine** orchestrating multi-step workflows across Lambda, ECS, SNS, SQS, DynamoDB, and 200+ AWS services with built-in retries, parallel, choice, and map states.\n\n**Why.** Replaces fragile chained Lambdas / glue code with a centralized, visualizable, auditable workflow engine.\n\n**How.** **Standard** workflows: up to **1 year**, **exactly-once**, full execution history, priced per state transition — for long-running auditable business processes. **Express** workflows: up to **5 minutes**, **at-least-once**, billed by request+duration — for high-volume streaming/IoT/short tasks.\n\n**Exam.** \"Multi-step, hours-long, auditable, retries on failure\" → **Standard**. \"High event rate, sub-5-minute, cost-sensitive\" → **Express**. \"Single Lambda with try/except\" or \"chained SNS\" are wrong: no central state, 15-min Lambda cap. **SWF** (Simple Workflow Service) is the legacy predecessor: you write deciders and activity workers that poll SWF and can run anywhere (EC2 or on-prem); for new designs prefer Step Functions, but SWF can still appear as a correct answer for hybrid workflows."
     },
     {
-      "heading": "API Gateway — REST и HTTP",
-      "body": "**Что.** Управляемая «входная дверь» для REST, HTTP и WebSocket API перед Lambda, ALB или любым HTTP-бэкендом.\n\n**Зачем.** Снимает с бэкендов аутентификацию, throttling, кэширование и трансформацию; защищает их от пиков.\n\n**Как.** **HTTP APIs**: дешевле, ниже задержка, JWT/OIDC + Lambda proxy — хороший вариант по умолчанию. **REST APIs**: полный набор функций — **API keys + usage plans**, **валидация request/response и VTL mapping**, **response caching**, **WAF**, endpoints **edge-optimized / private**. Общие функции: **throttling** (rate + burst), **authorizers** (Cognito, Lambda, IAM).\n\n**Экзамен.** «Ограничить частоту запросов без изменения кода + кэшировать повторяющиеся вызовы» → включите **throttling** + **response caching** на REST API. «API keys + usage plans + WAF» → **REST API**, а не HTTP API. WebSocket нужен для двунаправленного realtime, а не для rate limiting REST."
+      "heading": "API Gateway — REST vs HTTP",
+      "body": "**What.** Managed front door for REST, HTTP, and WebSocket APIs in front of Lambda, ALB, or any HTTP backend.\n\n**Why.** Offloads auth, throttling, caching, and transformation from backends; protects them from spikes.\n\n**How.** **HTTP APIs**: cheaper, lower latency, JWT/OIDC + Lambda proxy — good default. **REST APIs**: full feature set — **API keys + usage plans**, **request/response validation & VTL mapping**, **response caching**, **WAF**, **edge-optimized / private** endpoints. Cross-cutting: **throttling** (rate + burst), **authorizers** (Cognito, Lambda, IAM).\n\n**Exam.** \"Cap request rate without code changes + cache repeated calls\" → enable **throttling** + **response caching** on the REST API. \"API keys + usage plans + WAF\" → **REST API**, not HTTP API. WebSocket is for bidirectional realtime, not rate-limiting REST."
     }
   ],
   "labs": [
     {
       "id": "int-sqs-dlq",
-      "title": "Очередь SQS с dead-letter queue",
-      "intro": "Создайте **основную очередь** и **DLQ**. Сообщения, обработка которых не удалась `maxReceiveCount` раз, переносятся в DLQ для разбора — так poison messages изолируются и не блокируют очередь.",
+      "title": "SQS queue with a dead-letter queue",
+      "intro": "Create a **main queue** and a **DLQ**. Messages that fail processing `maxReceiveCount` times are moved to the DLQ for inspection — isolating poison messages so they don't block the queue.",
       "cli": "# 1. Create the DLQ first and grab its ARN\nDLQ_URL=$(aws sqs create-queue --queue-name orders-dlq --query QueueUrl --output text)\nDLQ_ARN=$(aws sqs get-queue-attributes --queue-url \"$DLQ_URL\" \\\n  --attribute-names QueueArn --query Attributes.QueueArn --output text)\n\n# 2. Create the main queue with a redrive policy + long polling\naws sqs create-queue --queue-name orders --attributes \"{\n  \\\"RedrivePolicy\\\": \\\"{\\\\\\\"deadLetterTargetArn\\\\\\\":\\\\\\\"$DLQ_ARN\\\\\\\",\\\\\\\"maxReceiveCount\\\\\\\":\\\\\\\"3\\\\\\\"}\\\",\n  \\\"VisibilityTimeout\\\": \\\"60\\\",\n  \\\"ReceiveMessageWaitTimeSeconds\\\": \\\"20\\\"\n}\"\n\n# 3. Send & long-poll receive\nQ_URL=$(aws sqs get-queue-url --queue-name orders --query QueueUrl --output text)\naws sqs send-message --queue-url \"$Q_URL\" --message-body '{\"orderId\":1}'\naws sqs receive-message --queue-url \"$Q_URL\" --wait-time-seconds 20",
       "pulumi": "import json\nimport pulumi_aws as aws\n\ndlq = aws.sqs.Queue(\"orders-dlq\", name=\"orders-dlq\")\n\nmain = aws.sqs.Queue(\n    \"orders\",\n    name=\"orders\",\n    visibility_timeout_seconds=60,\n    receive_wait_time_seconds=20,  # long polling\n    redrive_policy=dlq.arn.apply(\n        lambda arn: json.dumps(\n            {\"deadLetterTargetArn\": arn, \"maxReceiveCount\": 3}\n        )\n    ),\n)",
-      "note": "**Очистка:** `aws sqs delete-queue --queue-url \"$Q_URL\"` и то же для DLQ (или `pulumi destroy`). Имена удалённых очередей нельзя использовать повторно примерно 60 с."
+      "note": "**Cleanup:** `aws sqs delete-queue --queue-url \"$Q_URL\"` and the same for the DLQ (or `pulumi destroy`). Deleted queue names cannot be recreated for ~60s."
     },
     {
       "id": "int-sns-fanout",
-      "title": "SNS topic с fan-out в очередь SQS",
-      "intro": "Соберите паттерн **fan-out SNS + SQS**: SNS topic пушит каждое опубликованное сообщение в подписанную очередь SQS. Очереди нужна **политика, разрешающая SNS отправлять в неё сообщения**.",
+      "title": "SNS topic fanning out to an SQS queue",
+      "intro": "Build the **SNS + SQS fan-out** pattern: an SNS topic pushes each published message to a subscribed SQS queue. The queue needs a **policy allowing SNS to send messages** to it.",
       "cli": "# 1. Topic + queue\nTOPIC_ARN=$(aws sns create-topic --name events --query TopicArn --output text)\nQ_URL=$(aws sqs create-queue --queue-name events-consumer --query QueueUrl --output text)\nQ_ARN=$(aws sqs get-queue-attributes --queue-url \"$Q_URL\" \\\n  --attribute-names QueueArn --query Attributes.QueueArn --output text)\n\n# 2. Allow SNS to send to the queue\naws sqs set-queue-attributes --queue-url \"$Q_URL\" --attributes \"{\n  \\\"Policy\\\": \\\"{\\\\\\\"Version\\\\\\\":\\\\\\\"2012-10-17\\\\\\\",\\\\\\\"Statement\\\\\\\":[{\\\\\\\"Effect\\\\\\\":\\\\\\\"Allow\\\\\\\",\\\\\\\"Principal\\\\\\\":{\\\\\\\"Service\\\\\\\":\\\\\\\"sns.amazonaws.com\\\\\\\"},\\\\\\\"Action\\\\\\\":\\\\\\\"sqs:SendMessage\\\\\\\",\\\\\\\"Resource\\\\\\\":\\\\\\\"$Q_ARN\\\\\\\",\\\\\\\"Condition\\\\\\\":{\\\\\\\"ArnEquals\\\\\\\":{\\\\\\\"aws:SourceArn\\\\\\\":\\\\\\\"$TOPIC_ARN\\\\\\\"}}}]}\\\"\n}\"\n\n# 3. Subscribe queue to topic with raw delivery, then publish\naws sns subscribe --topic-arn \"$TOPIC_ARN\" --protocol sqs --notification-endpoint \"$Q_ARN\" \\\n  --attributes '{\"RawMessageDelivery\":\"true\"}'\naws sns publish --topic-arn \"$TOPIC_ARN\" --message 'hello fan-out'\naws sqs receive-message --queue-url \"$Q_URL\" --wait-time-seconds 20",
       "pulumi": "import json\nimport pulumi_aws as aws\n\ntopic = aws.sns.Topic(\"events\", name=\"events\")\nqueue = aws.sqs.Queue(\"events-consumer\", name=\"events-consumer\")\n\n# Allow this topic to send to the queue\naws.sqs.QueuePolicy(\n    \"events-consumer-policy\",\n    queue_url=queue.id,\n    policy=pulumi.Output.all(queue.arn, topic.arn).apply(\n        lambda args: json.dumps(\n            {\n                \"Version\": \"2012-10-17\",\n                \"Statement\": [\n                    {\n                        \"Effect\": \"Allow\",\n                        \"Principal\": {\"Service\": \"sns.amazonaws.com\"},\n                        \"Action\": \"sqs:SendMessage\",\n                        \"Resource\": args[0],\n                        \"Condition\": {\"ArnEquals\": {\"aws:SourceArn\": args[1]}},\n                    }\n                ],\n            }\n        )\n    ),\n)\n\naws.sns.TopicSubscription(\n    \"events-to-queue\",\n    topic=topic.arn,\n    protocol=\"sqs\",\n    endpoint=queue.arn,\n    raw_message_delivery=True,\n)",
-      "note": "**Очистка:** `aws sns delete-topic --topic-arn \"$TOPIC_ARN\"` (удаляет подписки) и `aws sqs delete-queue --queue-url \"$Q_URL\"`, либо `pulumi destroy`. Добавьте в тот же topic больше очередей, чтобы раздавать сообщения большему числу consumers."
+      "note": "**Cleanup:** `aws sns delete-topic --topic-arn \"$TOPIC_ARN\"` (removes subscriptions) and `aws sqs delete-queue --queue-url \"$Q_URL\"`, or `pulumi destroy`. Add more queues to the same topic to fan out to more consumers."
     }
   ],
   "questions": [
     {
       "id": "int-q1",
       "domain": 2,
-      "stem": "Сервис оформления заказов в интернет-магазине пишет заказы напрямую в сервис обработки заказов по HTTP. Во время флеш-распродаж сервис обработки перегружается, и заказы теряются. Какое изменение лучше всего развяжет сервисы и поглотит пики?",
+      "stem": "An e-commerce checkout service writes orders directly to an order-processing service over HTTP. During flash sales the processing service is overwhelmed and orders are lost. Which change best decouples the two and absorbs the spikes?",
       "options": [
-        "Увеличить HTTP-таймаут запросов сервиса обработки до 5 минут",
-        "Поставить сервис оформления за Application Load Balancer с большим числом targets",
-        "Сделать так, чтобы сервис оформления писал заказы в очередь SQS, которую сервис обработки опрашивает и по которой масштабируется",
-        "Перенести сервис обработки на более крупный тип инстанса"
+        "Increase the processing service's HTTP request timeout to 5 minutes",
+        "Put the checkout service behind an Application Load Balancer with more targets",
+        "Have checkout write orders to an SQS queue that the processing service polls and scales on",
+        "Move the processing service to a larger instance type"
       ],
       "answer": 2,
-      "explanation": "Верно: очередь SQS буферизует всплеск — сервис оформления быстро пишет, а сервис обработки потребляет в своём темпе, масштабируясь по глубине очереди, поэтому заказы не теряются. ALB (A) лишь распределяет нагрузку и ничего не буферизует, когда все targets перегружены. Больший таймаут (C) всё равно приводит к отбрасыванию запросов при превышении мощности и держит producer занятым. Более крупный инстанс (D) — вертикальное масштабирование с фиксированным потолком, при котором сохраняется жёсткая синхронная связанность."
+      "explanation": "Correct: an SQS queue buffers the burst — checkout writes quickly and the processing service consumes at its own pace, scaling on queue depth, so no orders are lost. An ALB (A) only distributes load, it doesn't buffer when all targets are saturated. A longer timeout (C) still drops requests once capacity is exceeded and ties up the producer. A bigger instance (D) is vertical scaling that still has a fixed ceiling and keeps the tight synchronous coupling."
     },
     {
       "id": "int-q2",
       "domain": 3,
-      "stem": "Платёжный конвейер требует, чтобы каждая транзакция обрабатывалась ровно один раз, а транзакции одного аккаунта — в порядке поступления. Какой вариант messaging это обеспечивает?",
+      "stem": "A payments pipeline requires that each transaction is processed exactly once and that transactions for a given account are processed in the order received. Which messaging option meets this?",
       "options": [
-        "Очередь SQS FIFO с ID аккаунта в качестве message group ID",
-        "Топик SNS Standard",
-        "Очередь SQS Standard",
-        "Amazon Kinesis Data Streams с одним shard"
+        "SQS FIFO queue using the account ID as the message group ID",
+        "SNS Standard topic",
+        "SQS Standard queue",
+        "Amazon Kinesis Data Streams with a single shard"
       ],
       "answer": 0,
-      "explanation": "Верно: SQS FIFO обеспечивает exactly-once обработку и строгий порядок в пределах message group; ID аккаунта как group ID даёт порядок по каждому аккаунту и параллелизм между аккаунтами. SQS Standard (A) — at-least-once с порядком best-effort. SNS Standard topic (B) — pub/sub, а не очередь, и тоже best-effort. Kinesis stream с одним shard (D) упорядочивает глобально, но не гарантирует exactly-once обработку и сериализует все аккаунты."
+      "explanation": "Correct: SQS FIFO provides exactly-once processing and strict ordering within a message group; using account ID as the group ID orders per-account while allowing parallelism across accounts. SQS Standard (A) is at-least-once with best-effort ordering. An SNS Standard topic (B) is pub/sub, not a queue, and is best-effort. A single-shard Kinesis stream (D) orders globally but does not guarantee exactly-once processing and serializes all accounts."
     },
     {
       "id": "int-q3",
       "domain": 2,
-      "stem": "При загрузке нового изображения в S3 компании нужно, чтобы три независимых consumer — генератор миниатюр, индексатор метаданных и аудит-логгер — каждый получал и обрабатывал событие, имея собственный буферизованный надёжный backlog. Какая архитектура подходит лучше всего?",
+      "stem": "When a new image is uploaded to S3, the company needs three independent consumers — a thumbnail generator, a metadata indexer, and an audit logger — to each receive and process the event with its own buffered, durable backlog. What is the most appropriate architecture?",
       "options": [
-        "Синхронно вызывать все три Lambda functions из сервиса загрузки",
-        "Публиковать в SNS topic с тремя подписанными очередями SQS, по одной на consumer",
-        "Использовать один SNS topic с тремя подписками Lambda без очередей",
-        "Писать напрямую в одну очередь SQS, которую читают все три consumer"
+        "Invoke all three Lambda functions synchronously from the upload service",
+        "Publish to an SNS topic with three SQS queues subscribed, one per consumer",
+        "Use one SNS topic with three Lambda subscriptions and no queues",
+        "Write directly to a single SQS queue read by all three consumers"
       ],
       "answer": 1,
-      "explanation": "Верно: паттерн fan-out SNS + SQS публикует один раз и доставляет копию в собственную очередь каждого consumer, давая независимые, надёжные буферизованные backlogs и простое добавление новых consumers. Одна общая очередь (B) означает, что каждое сообщение получит только один consumer, а не все три. Синхронный вызов (C) жёстко связывает producer со всеми тремя и лишает буферизации. Только SNS-to-Lambda (D) даёт fan-out, но без надёжного буфера для каждого consumer — при сбое Lambda события могут потеряться, так как нет очереди, которая бы их сохранила."
+      "explanation": "Correct: the SNS + SQS fan-out pattern publishes once and delivers a copy to each consumer's own queue, giving independent, durable, buffered backlogs and easy addition of new consumers. A single shared queue (B) means each message is consumed by only one consumer, not all three. Synchronous invocation (C) tightly couples the producer to all three and loses buffering. SNS-to-Lambda only (D) provides fan-out but no per-consumer durable buffer — a Lambda outage risks dropped events without a queue to retain them."
     },
     {
       "id": "int-q4",
       "domain": 3,
-      "stem": "Команда мигрирует legacy Java-приложение из on-premises в AWS. Компоненты приложения общаются по JMS и AMQP, и команда хочет минимальных изменений кода. Какой сервис использовать?",
+      "stem": "A team is migrating a legacy on-premises Java application to AWS. The app communicates between components using JMS and AMQP and the team wants minimal code changes. Which service should they use?",
       "options": [
         "Amazon SQS",
         "Amazon SNS",
@@ -116,57 +116,57 @@
         "Amazon MQ"
       ],
       "answer": 3,
-      "explanation": "Верно: Amazon MQ — управляемый брокер ActiveMQ/RabbitMQ с поддержкой открытых протоколов JMS, AMQP, MQTT и STOMP, поэтому существующее приложение на этих протоколах мигрирует с минимальными изменениями кода. SQS (A) и SNS (B) используют проприетарные API AWS и потребовали бы переписать слой messaging. EventBridge (D) — event bus для маршрутизации и фильтрации событий, а не прямая замена брокера для клиентов JMS/AMQP."
+      "explanation": "Correct: Amazon MQ is a managed ActiveMQ/RabbitMQ broker that supports open protocols like JMS, AMQP, MQTT, and STOMP, so an existing protocol-based app migrates with minimal code change. SQS (A) and SNS (B) use AWS-proprietary APIs and would require rewriting the messaging layer. EventBridge (D) is an event bus for routing/filtering events, not a drop-in broker for JMS/AMQP clients."
     },
     {
       "id": "int-q5",
       "domain": 2,
-      "stem": "Consumers иногда обрабатывают сообщение SQS дольше ожидаемого, и то же сообщение забирает и обрабатывает второй consumer до того, как закончит первый. Какие настройки решают проблему? (Выберите два)",
+      "stem": "Consumers occasionally take longer than expected to process an SQS message, and the same message is being picked up and processed by a second consumer before the first finishes. Which settings address this? (Choose two)",
       "options": [
-        "Увеличить visibility timeout очереди (или продлевать его для конкретного сообщения во время обработки)",
-        "Перейти с long polling на short polling",
-        "Вызывать из consumer ChangeMessageVisibility, чтобы продлить таймаут, пока работа ещё идёт",
-        "Уменьшить период хранения сообщений"
+        "Increase the queue's visibility timeout (or extend it per-message during processing)",
+        "Switch from long polling to short polling",
+        "Have the consumer call ChangeMessageVisibility to extend the timeout while still working",
+        "Reduce the message retention period"
       ],
       "answer": [
         0,
         2
       ],
-      "explanation": "Верно: увеличение visibility timeout (A) скрывает сообщение достаточно долго, чтобы обработка завершилась, а вызов ChangeMessageVisibility (D) позволяет consumer динамически продлевать таймаут, если работа затягивается, — оба варианта предотвращают повторный захват. Short polling (B) меняет только способ выборки при receive, а не видимость, и не поможет. Уменьшение retention (C) определяет, сколько непотреблённые сообщения живут в очереди, и не связано с проблемой двойной обработки."
+      "explanation": "Correct: increasing the visibility timeout (A) keeps the message hidden long enough for processing to finish, and calling ChangeMessageVisibility (D) lets a consumer extend the timeout dynamically when work runs long — both prevent duplicate pickup. Short polling (B) only changes how receives are sampled, not visibility, and would not help. Reducing retention (C) controls how long unconsumed messages live in the queue and is unrelated to the double-processing problem."
     },
     {
       "id": "int-q6",
       "domain": 3,
-      "stem": "Процесс исполнения заказа должен координировать несколько шагов — проверку платежа, резервирование товара, планирование доставки — с повторами, ветвлением при сбоях и полным аудитом каждого выполнения, которое может длиться часами. Какой сервис подходит лучше всего?",
+      "stem": "An order-fulfillment process must coordinate several steps — validate payment, reserve inventory, schedule shipping — with retries, branching on failures, and a full audit trail of each execution that may run for hours. Which service is the best fit?",
       "options": [
-        "Цепочка SNS topics, запускающих Lambda",
-        "Express workflow в AWS Step Functions",
-        "Standard workflow в AWS Step Functions",
-        "Одна большая Lambda function с блоками try/except"
+        "A chain of SNS topics triggering Lambdas",
+        "AWS Step Functions Express workflow",
+        "AWS Step Functions Standard workflow",
+        "A single large Lambda function with try/except blocks"
       ],
       "answer": 2,
-      "explanation": "Верно: Step Functions Standard workflows оркеструют многошаговые процессы со встроенными повторами, обработкой ошибок, ветвлением, exactly-once выполнением и полной визуальной историей аудита до года — идеально для долгих аудируемых бизнес-процессов. Express workflows (B) ограничены 5 минутами, работают at-least-once с ограниченной историей и подходят для высоконагруженных коротких задач. Lambda, связанные цепочкой SNS (C), лишены централизованной оркестрации, состояния и аудита. Одна большая Lambda (D) ограничена 15 минутами и переносит всю логику оркестрации в хрупкий собственный код."
+      "explanation": "Correct: Step Functions Standard workflows orchestrate multi-step processes with built-in retries, error handling, branching, exactly-once execution, and a full visual audit history for up to a year — ideal for long-running, auditable business processes. Express workflows (B) cap at 5 minutes and are at-least-once with limited history, suited to high-volume short tasks. SNS-chained Lambdas (C) lack centralized orchestration, state, and an audit trail. One big Lambda (D) maxes out at 15 minutes and pushes all orchestration logic into fragile custom code."
     },
     {
       "id": "int-q7",
       "domain": 2,
-      "stem": "Публичный REST API на Lambda испытывает всплески трафика, которые перегружают downstream-базу данных. Команда хочет ограничить частоту запросов, доходящих до бэкенда, и сократить повторяющиеся одинаковые вызовы, не меняя код Lambda. Какие функции API Gateway использовать? (Выберите два)",
+      "stem": "A public REST API backed by Lambda experiences traffic spikes that overwhelm a downstream database. The team wants to cap the request rate reaching the backend and reduce repeated identical calls without changing the Lambda code. Which API Gateway features should they use? (Choose two)",
       "options": [
-        "Включить response caching на REST API",
-        "Включить throttling (лимиты rate и burst) на stage/method API",
-        "Отключить логирование API в CloudWatch",
-        "Перевести API с REST на WebSocket"
+        "Enable response caching on the REST API",
+        "Enable throttling (rate and burst limits) on the API stage/method",
+        "Disable the API's CloudWatch logging",
+        "Switch the API from REST to WebSocket"
       ],
       "answer": [
         0,
         1
       ],
-      "explanation": "Верно: throttling (A) вводит лимиты rate и burst, защищая бэкенд от пиков, а response caching (B) отдаёт повторяющиеся одинаковые запросы из кэша, снижая нагрузку на бэкенд и БД, — и всё это без изменения Lambda. WebSocket API (C) предназначен для двунаправленного обмена сообщениями в реальном времени и не решает задачу защиты от частоты запросов для этой REST-нагрузки. Отключение логирования (D) лишь ухудшает наблюдаемость и никак не влияет на нагрузку на бэкенд."
+      "explanation": "Correct: throttling (A) enforces rate and burst limits so the backend is shielded from spikes, and response caching (B) serves repeated identical requests from the cache, cutting backend/database load — both without touching Lambda. A WebSocket API (C) is for bidirectional real-time messaging and doesn't address request-rate protection for this REST workload. Disabling logging (D) only reduces observability and has no effect on backend load."
     },
     {
       "id": "int-q8",
       "domain": 3,
-      "stem": "Компания хочет маршрутизировать события из нескольких источников — события сервисов AWS, собственного приложения и стороннего SaaS-продукта для мониторинга (Datadog) — в разные targets в зависимости от содержимого события, а также иметь возможность архивировать и воспроизводить события. Какой сервис создан именно для этого?",
+      "stem": "A company wants to route events from multiple sources — AWS service events, a custom application, and a third-party SaaS monitoring product (Datadog) — to different targets based on the event content, and to be able to archive and replay events. Which service is purpose-built for this?",
       "options": [
         "Amazon SQS",
         "AWS Step Functions",
@@ -174,7 +174,7 @@
         "Amazon EventBridge"
       ],
       "answer": 3,
-      "explanation": "Верно: EventBridge — event bus, созданный для маршрутизации по содержимому через rules, нативных интеграций с SaaS-партнёрами (например, Datadog), приёма событий сервисов AWS и archive/replay. SNS (A) делает fan-out, но не имеет богатого сопоставления правил по содержимому, источников событий SaaS-партнёров и archive/replay. SQS (C) — очередь точка-точка, а не шина маршрутизации. Step Functions (D) оркеструет workflow, а не маршрутизирует события от множества источников ко множеству targets."
+      "explanation": "Correct: EventBridge is the event bus designed for content-based routing via rules, native SaaS partner integrations (e.g., Datadog), AWS-service event ingestion, and archive/replay. SNS (A) does fan-out but lacks rich content-based rule matching, SaaS partner event sources, and archive/replay. SQS (C) is a point-to-point queue, not a routing bus. Step Functions (D) orchestrates workflows rather than routing events from many sources to many targets."
     }
   ]
 }

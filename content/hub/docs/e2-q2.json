@@ -4,16 +4,16 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "Auto Scaling: target tracking по CPU для эластичного web-tier",
-  "tests": "Понимание, как автоматически масштабировать EC2 за ALB под нагрузку без ручного вмешательства.",
-  "expected": "Auto Scaling group с target tracking policy по среднему CPU — добавляет/удаляет инстансы сама. Триггеры: «scale automatically based on demand», «no manual intervention», «instances overwhelmed».",
-  "why_not": "Cross-zone load balancing лишь выравнивает трафик; CloudFront кэширует, но не масштабирует compute; вертикальное масштабирование имеет потолок и требует ручных действий.",
+  "concept": "Auto Scaling: CPU target tracking for an elastic web tier",
+  "tests": "Understanding how to scale EC2 behind an ALB with load automatically, without manual intervention.",
+  "expected": "Auto Scaling group with a target tracking policy on average CPU — adds/removes instances on its own. Triggers: \"scale automatically based on demand\", \"no manual intervention\", \"instances overwhelmed\".",
+  "why_not": "Cross-zone load balancing only evens out traffic; CloudFront caches but doesn't scale compute; vertical scaling has a ceiling and requires manual action.",
   "keywords": [
     "Auto Scaling group",
     "target tracking",
     "CPU utilization",
     "ALB",
-    "эластичность",
+    "elasticity",
     "traffic spikes"
   ],
   "services": [

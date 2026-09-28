@@ -1,0 +1,47 @@
+{
+  "id": "u-20260927-bastion-host-rdp-corporate-ip",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "A company is running a multi-tier web application farm in a virtual private cloud (VPC) that is not connected to their corporate network. They are connecting to the VPC over the Internet to manage the fleet of Amazon EC2 instances running in both the public and private subnets. The Solutions Architect has added a bastion host with Microsoft Remote Desktop Protocol (RDP) access to the application instance security groups, but the company wants to further limit administrative access to all of the instances in the VPC.\nWhich of the following bastion host deployment options will meet this requirement?",
+    "options": [
+      "Deploy a Windows Bastion host on the corporate network that has RDP access to all EC2 instances in the VPC.",
+      "Deploy a Windows Bastion host with an Elastic IP address in the public subnet and allow RDP access to bastion only from the corporate IP addresses.",
+      "Deploy a Windows Bastion host with an Elastic IP address in the public subnet and allow SSH access to the bastion from anywhere.",
+      "Deploy a Windows Bastion host with an Elastic IP address in the private subnet, and restrict RDP access to the bastion from only the corporate public IP addresses."
+    ],
+    "answer": 1,
+    "explanation": "A bastion host must sit in a public subnet with a public/Elastic IP so admins can reach it over the Internet; its security group should allow RDP (3389) only from the corporate public IP range, and the application instances' security groups allow RDP only from the bastion's security group. A bastion on the corporate network can't reach the instances — the VPC is not connected to the corporate network. SSH from anywhere is both the wrong protocol for Windows RDP and opens access to 0.0.0.0/0. A private subnet has no route from the Internet, so an EIP there is unreachable."
+  },
+  "concept": "Bastion host: public subnet + EIP, RDP/SSH only from corporate IPs",
+  "tests": "Correct placement and security-group restriction of a bastion host for administrative access to instances in public and private subnets.",
+  "expected": "Windows bastion with an Elastic IP in the public subnet; bastion SG allows RDP only from corporate public IPs; instance SGs allow RDP only from the bastion SG. Triggers: \"bastion host\", \"limit administrative access\", \"over the Internet\", VPC not connected to corporate network. (Modern alternative with no bastion: SSM Session Manager.)",
+  "why_not": "Bastion on corporate network — no connectivity to the VPC; SSH from anywhere — wrong protocol for RDP and open to 0.0.0.0/0; private subnet — not reachable from the Internet even with an EIP.",
+  "keywords": [
+    "bastion host",
+    "jump box",
+    "RDP",
+    "port 3389",
+    "Elastic IP",
+    "public subnet",
+    "security group",
+    "corporate IP",
+    "administrative access",
+    "Session Manager"
+  ],
+  "services": [
+    "bastion-host",
+    "security-groups",
+    "subnets",
+    "ec2",
+    "systems-manager"
+  ],
+  "topics": [
+    "vpc-networking",
+    "iam-security"
+  ],
+  "domain": 1,
+  "related": []
+}

@@ -4,17 +4,17 @@
     "type": "topic",
     "ref": "architecture"
   },
-  "concept": "ElastiCache: кэш для горячих чтений перед БД",
-  "tests": "Выбор отдельного масштабируемого слоя чтения для часто запрашиваемых, редко меняющихся данных.",
-  "expected": "ElastiCache (in-memory cache) перед реляционной БД. Триггеры: «sub-millisecond reads», «часто запрашиваемые, редко меняющиеся данные», «reference data», «высокая нагрузка на чтение».",
-  "why_not": "Доп. индексы ускоряют отдельные запросы, но не дают масштабируемого слоя и замедляют запись; strong consistency добавляет стоимость/latency без роста throughput; scale up БД упирается в потолок.",
+  "concept": "ElastiCache: cache for hot reads in front of the DB",
+  "tests": "Choosing a separate scalable read layer for frequently requested, rarely changing data.",
+  "expected": "ElastiCache (in-memory cache) in front of the relational DB. Triggers: \"sub-millisecond reads\", \"frequently requested, rarely changing data\", \"reference data\", \"high read load\".",
+  "why_not": "Extra indexes speed up individual queries but do not provide a scalable layer and slow down writes; strong consistency adds cost/latency without more throughput; scaling up the DB hits a ceiling.",
   "keywords": [
     "ElastiCache",
     "in-memory cache",
     "sub-millisecond",
     "reference data",
     "hot reads",
-    "редко меняющиеся данные"
+    "rarely changing data"
   ],
   "services": [
     "elasticache",

@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "Aurora: 6 копий в 3 AZ и быстрый failover",
-  "tests": "Выбор управляемой реляционной БД с автоматической репликацией в три AZ, быстрым failover и производительностью выше стандартного MySQL.",
-  "expected": "Amazon Aurora MySQL-compatible: 6 копий данных в 3 AZ, автоматический быстрый failover, throughput выше MySQL. Триггеры: «three AZs», «better than standard MySQL», «relational».",
-  "why_not": "RDS Single-AZ — без failover; DynamoDB — NoSQL; Redshift — хранилище для аналитики, не OLTP.",
+  "concept": "Aurora: 6 copies across 3 AZs and fast failover",
+  "tests": "Choosing a managed relational DB with automatic replication across three AZs, fast failover and better performance than standard MySQL.",
+  "expected": "Amazon Aurora MySQL-compatible: 6 copies of data across 3 AZs, automatic fast failover, higher throughput than MySQL. Triggers: \"three AZs\", \"better than standard MySQL\", \"relational\".",
+  "why_not": "RDS Single-AZ — no failover; DynamoDB — NoSQL; Redshift — analytics warehouse, not OLTP.",
   "keywords": [
     "Aurora",
     "three AZs",
     "six copies",
     "failover",
     "MySQL-compatible",
-    "реляционная"
+    "relational"
   ],
   "services": [
     "aurora",

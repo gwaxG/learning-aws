@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "IAM Identity Center: федерация с Active Directory и permission sets",
-  "tests": "Как дать корпоративным пользователям вход в AWS по учёткам Active Directory без отдельных IAM users и централизованно назначать доступ (выбрать два).",
-  "expected": "IAM Identity Center, федеративно связанный с корпоративным AD, + permission sets, назначенные группам каталога. Триггеры: «existing Active Directory credentials», «without per-user IAM accounts», «centrally assign access».",
-  "why_not": "IAM users, дублирующие AD-учётки, противоречат SSO; общий IAM user лишает персональной ответственности и небезопасен.",
+  "concept": "IAM Identity Center: Active Directory federation and permission sets",
+  "tests": "How to let corporate users sign in to AWS with Active Directory credentials without separate IAM users and assign access centrally (choose two).",
+  "expected": "IAM Identity Center federated with the corporate AD + permission sets assigned to directory groups. Triggers: \"existing Active Directory credentials\", \"without per-user IAM accounts\", \"centrally assign access\".",
+  "why_not": "IAM users duplicating AD accounts defeat SSO; a shared IAM user removes individual accountability and is insecure.",
   "keywords": [
     "IAM Identity Center",
     "SSO",
     "Active Directory",
     "permission sets",
-    "федерация",
-    "группы каталога"
+    "federation",
+    "directory groups"
   ],
   "services": [
     "identity-center",

@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "DynamoDB TTL: автоудаление устаревших записей time-series",
-  "tests": "Выбор хранилища для IoT time-series с высокой скоростью записи и автоматическим удалением записей старше 90 дней.",
-  "expected": "DynamoDB + TTL на timestamp-атрибуте — масштабируемая запись, бесплатное автоудаление просроченных элементов. Триггеры: «very high write throughput», «automatic expiration», «older than 90 days», «IoT», «keep costs low».",
-  "why_not": "RDS + cron — лишняя нагрузка и управление; S3 с ручным удалением — операционный overhead; Redshift — аналитика, не для частых одиночных записей.",
+  "concept": "DynamoDB TTL: auto-deleting stale time-series records",
+  "tests": "Choosing a store for IoT time-series with high write rates and automatic deletion of records older than 90 days.",
+  "expected": "DynamoDB + TTL on a timestamp attribute — scalable writes, free automatic deletion of expired items. Triggers: \"very high write throughput\", \"automatic expiration\", \"older than 90 days\", \"IoT\", \"keep costs low\".",
+  "why_not": "RDS + cron — extra load and management; S3 with manual deletion — operational overhead; Redshift — analytics, not for frequent single-row writes.",
   "keywords": [
     "DynamoDB",
     "TTL",

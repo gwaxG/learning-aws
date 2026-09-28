@@ -4,18 +4,18 @@
     "type": "topic",
     "ref": "databases"
   },
-  "concept": "DynamoDB: GSI vs LSI для нового паттерна доступа",
-  "tests": "Знание различий GSI и LSI, в том числе что LSI создаётся только вместе с таблицей.",
-  "expected": "Добавить Global Secondary Index — свой partition/sort key, можно создать на существующей таблице. Триггеры: «запрос по атрибуту вне ключа», «таблица уже в production».",
-  "why_not": "LSI создаётся только при создании таблицы и даёт лишь альтернативный sort key при том же partition key; Streams — поток изменений, не индекс; DAX — кэш, не новый паттерн доступа.",
+  "concept": "DynamoDB: GSI vs LSI for a new access pattern",
+  "tests": "Knowing the differences between GSI and LSI, including that an LSI can only be created with the table.",
+  "expected": "Add a Global Secondary Index — its own partition/sort key, can be created on an existing table. Triggers: \"query by a non-key attribute\", \"table already in production\".",
+  "why_not": "An LSI is created only at table creation and gives just an alternate sort key with the same partition key; Streams is a change stream, not an index; DAX is a cache, not a new access pattern.",
   "keywords": [
     "GSI",
     "LSI",
     "secondary index",
     "access pattern",
     "DynamoDB Streams",
-    "таблица уже в production",
-    "атрибут вне ключа"
+    "table already in production",
+    "non-key attribute"
   ],
   "services": [
     "dynamodb",

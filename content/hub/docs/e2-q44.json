@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "ACM: бесплатные публичные TLS-сертификаты с автопродлением для ALB",
-  "tests": "Как автоматизировать бесплатное управление TLS-сертификатами для публичного ALB.",
-  "expected": "AWS Certificate Manager — выдаёт публичные сертификаты бесплатно и автоматически продлевает (DNS validation), интеграция с ALB/CloudFront. Триггеры: «automated and free», «renew without manual effort», «ALB TLS».",
-  "why_not": "Покупка у стороннего CA — ручная ротация и риск истечения; отключение TLS убирает шифрование in transit; self-signed + своя Lambda — огромный overhead.",
+  "concept": "ACM: free public TLS certificates with auto-renewal for ALB",
+  "tests": "How to automate free TLS certificate management for a public ALB.",
+  "expected": "AWS Certificate Manager — issues public certificates for free and renews them automatically (DNS validation), integrates with ALB/CloudFront. Triggers: \"automated and free\", \"renew without manual effort\", \"ALB TLS\".",
+  "why_not": "Buying from a third-party CA — manual rotation and expiry risk; disabling TLS removes encryption in transit; self-signed + custom Lambda — huge overhead.",
   "keywords": [
     "ACM",
     "TLS certificate",

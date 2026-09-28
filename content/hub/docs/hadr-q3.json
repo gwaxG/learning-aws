@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "ha-dr"
   },
-  "concept": "DR-стратегии: Multi-Site Active/Active (Global Tables + Route 53)",
-  "tests": "Построение multi-Region active/active с почти нулевыми RTO/RPO (выбрать два).",
-  "expected": "DynamoDB Global Tables (multi-active репликация) + Route 53 latency/failover routing с health checks. Триггеры: «два региона одновременно», «near-zero RTO и RPO», «автоматический региональный failover».",
-  "why_not": "RDS Single-AZ с ручными cross-Region снапшотами — высокие RPO/RTO, не active/active; один EC2 с EIP — нет multi-Region устойчивости.",
+  "concept": "DR strategies: Multi-Site Active/Active (Global Tables + Route 53)",
+  "tests": "Building a multi-Region active/active setup with near-zero RTO/RPO (choose two).",
+  "expected": "DynamoDB Global Tables (multi-active replication) + Route 53 latency/failover routing with health checks. Triggers: \"two Regions simultaneously\", \"near-zero RTO and RPO\", \"automatic regional failover\".",
+  "why_not": "RDS Single-AZ with manual cross-Region snapshots has high RPO/RTO, not active/active; a single EC2 with an EIP has no multi-Region resilience.",
   "keywords": [
     "DynamoDB Global Tables",
     "active/active",
@@ -15,7 +15,7 @@
     "near-zero RTO",
     "Route 53",
     "health checks",
-    "два региона одновременно"
+    "two Regions simultaneously"
   ],
   "services": [
     "dynamodb-global",

@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "HA: запас ёмкости в каждой AZ (static stability, N+1 по AZ)",
-  "tests": "Принцип проектирования, при котором отказ целой AZ не ухудшает обслуживание.",
-  "expected": "Распределить по нескольким AZ и держать такой запас, чтобы оставшиеся AZ приняли нагрузку упавшей (N+1 across AZs, static stability). Триггеры: «entire AZ fails», «without degradation», «three AZs».",
-  "why_not": "Всё в одной AZ или вертикальное масштабирование — SPOF; один общий NAT gateway — сам по себе SPOF уровня AZ.",
+  "concept": "HA: spare capacity in every AZ (static stability, N+1 across AZs)",
+  "tests": "The design principle whereby losing an entire AZ doesn't degrade service.",
+  "expected": "Spread across multiple AZs and keep enough headroom that the remaining AZs absorb the failed AZ's load (N+1 across AZs, static stability). Triggers: \"entire AZ fails\", \"without degradation\", \"three AZs\".",
+  "why_not": "Everything in one AZ or vertical scaling — a SPOF; a single shared NAT gateway — itself an AZ-level SPOF.",
   "keywords": [
     "AZ failure",
     "N+1",
     "static stability",
     "multi-AZ",
     "headroom",
-    "без деградации"
+    "no degradation"
   ],
   "services": [
     "ha",

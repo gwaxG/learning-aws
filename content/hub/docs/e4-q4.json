@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "SCP: запрет отключения CloudTrail во всех аккаунтах Organizations",
-  "tests": "Как гарантировать, что никто в аккаунтах OU (включая админов) не отключит CloudTrail.",
-  "expected": "SCP на OU с Deny cloudtrail:StopLogging — задаёт максимум прав для всех principal в member-аккаунтах. Триггеры: «regardless of IAM permissions», AWS Organizations, OU.",
-  "why_not": "Permissions boundary вешается на каждого principal и может быть обойдён админом аккаунта; resource policy на trail и Config rules не предотвращают действие.",
+  "concept": "SCP: deny disabling CloudTrail in all Organizations accounts",
+  "tests": "How to guarantee nobody in the OU's accounts (admins included) can disable CloudTrail.",
+  "expected": "An SCP on the OU with Deny cloudtrail:StopLogging sets the maximum permissions for every principal in member accounts. Triggers: \"regardless of IAM permissions\", AWS Organizations, OU.",
+  "why_not": "A permissions boundary is attached per principal and can be bypassed by the account admin; a trail resource policy and Config rules don't prevent the action.",
   "keywords": [
     "SCP",
     "OU",

@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "STS: SAML 2.0 федерация (AssumeRoleWithSAML)",
-  "tests": "Какой сервис выдаёт временные credentials пользователям, аутентифицированным корпоративным SAML IdP.",
-  "expected": "AWS STS через SAML-федерацию — AssumeRoleWithSAML. Триггеры: «temporary credentials», «corporate SAML 2.0 identity provider».",
-  "why_not": "Cognito user pools — для конечных пользователей приложений; Identity Center — вариант, но выдачу credentials всё равно делает STS; Directory Service — управляемый каталог, не брокер credentials.",
+  "concept": "STS: SAML 2.0 federation (AssumeRoleWithSAML)",
+  "tests": "Which service issues temporary credentials to users authenticated by a corporate SAML IdP.",
+  "expected": "AWS STS via SAML federation — AssumeRoleWithSAML. Triggers: \"temporary credentials\", \"corporate SAML 2.0 identity provider\".",
+  "why_not": "Cognito user pools — for application end users; Identity Center is an option, but STS still issues the credentials; Directory Service — a managed directory, not a credential broker.",
   "keywords": [
     "STS",
     "SAML 2.0",
     "AssumeRoleWithSAML",
     "federation",
     "temporary credentials",
-    "корпоративный IdP"
+    "corporate IdP"
   ],
   "services": [
     "sts",

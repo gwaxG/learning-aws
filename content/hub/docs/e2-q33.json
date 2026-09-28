@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "Instance Scheduler / EventBridge: остановка EC2 вне рабочих часов",
-  "tests": "Как автоматически останавливать dev-инстансы вне рабочего времени для экономии с минимумом усилий.",
-  "expected": "AWS Instance Scheduler или EventBridge scheduled rules (+ Lambda/SSM) для stop/start по расписанию. Триггеры: «only during business hours», «Mon–Fri 8–18», «automatically stop outside hours», «minimal effort».",
-  "why_not": "Spot и RI — модели оплаты, инстансы не выключают; ручная остановка — ненадёжно и не автоматически.",
+  "concept": "Instance Scheduler / EventBridge: stopping EC2 outside business hours",
+  "tests": "How to automatically stop dev instances outside working hours to save money with minimal effort.",
+  "expected": "AWS Instance Scheduler or EventBridge scheduled rules (+ Lambda/SSM) to stop/start on a schedule. Triggers: \"only during business hours\", \"Mon–Fri 8–18\", \"automatically stop outside hours\", \"minimal effort\".",
+  "why_not": "Spot and RIs are pricing models, they don't turn instances off; manual stopping — unreliable and not automatic.",
   "keywords": [
     "Instance Scheduler",
     "EventBridge scheduled rules",

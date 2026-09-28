@@ -1,0 +1,42 @@
+{
+  "id": "u-20260927-route53-geoproximity-bias",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "A company runs a messaging application in the `ap-northeast-1` and `ap-southeast-2` region. A Solutions Architect needs to create a routing policy wherein a larger portion of traffic from the Philippines and North India will be routed to the resource in the `ap-northeast-1` region.\nWhich Route 53 routing policy should the Solutions Architect use?",
+    "options": [
+      "Geolocation Routing",
+      "Geoproximity Routing",
+      "Weighted Routing",
+      "Latency Routing"
+    ],
+    "answer": 1,
+    "explanation": "Geoproximity routing sends users to the geographically nearest resource and lets you apply a bias (+1..+99 expands a region's area, -1..-99 shrinks it). Raising the bias on ap-northeast-1 grows its catchment so that a larger portion of users in borderline areas like the Philippines and North India are routed there. Geolocation maps whole countries/continents to a resource (all-or-nothing per location, no 'larger portion'); Weighted splits all traffic by percentage regardless of where users are; Latency picks the lowest-latency Region and can't be tuned to shift a portion of traffic."
+  },
+  "concept": "Route 53 geoproximity: bias to shift a larger share of traffic to a Region",
+  "tests": "Telling geoproximity (distance + adjustable bias) apart from geolocation (fixed mapping by country/continent), weighted and latency routing.",
+  "expected": "Geoproximity routing with a positive bias on ap-northeast-1. Triggers: \"larger portion of traffic\" from certain areas → shift the boundary → geoproximity + bias. \"Users from country X must go to Y\" would be geolocation.",
+  "why_not": "Geolocation — fixed country/continent → endpoint mapping, no proportional shift; Weighted — percentages for all users, ignores location; Latency — lowest latency only, not adjustable.",
+  "keywords": [
+    "Route 53",
+    "geoproximity",
+    "bias",
+    "geolocation",
+    "routing policy",
+    "larger portion of traffic",
+    "Traffic Flow"
+  ],
+  "services": [
+    "route53"
+  ],
+  "topics": [
+    "edge-dns"
+  ],
+  "domain": 3,
+  "related": [
+    "e2-q60",
+    "edge-q3"
+  ]
+}

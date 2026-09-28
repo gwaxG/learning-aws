@@ -1,0 +1,48 @@
+{
+  "id": "u-20260927-guardduty-s3-protection",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "A company has an application that continually sends encrypted documents to Amazon S3. The company requires that the configuration for data access is in line with its strict compliance standards. It should also be alerted if there is any risk of unauthorized access or suspicious access patterns.\nWhich step is needed to meet the requirements?",
+    "options": [
+      "Use Amazon GuardDuty to monitor malicious activity on S3.",
+      "Use AWS CloudTrail to monitor and detect access patterns on S3.",
+      "Use Amazon Rekognition to monitor and recognize patterns on S3.",
+      "Use Amazon Inspector to alert whenever a security violation is detected on S3."
+    ],
+    "answer": 0,
+    "explanation": "GuardDuty S3 Protection analyzes CloudTrail management and S3 data events to detect suspicious and malicious access patterns (unusual API calls, access from malicious IPs, disabling of Block Public Access, exfiltration patterns) and raises findings you can alert on via EventBridge/SNS. CloudTrail only records API calls — it doesn't analyze them or alert on threats by itself. Rekognition is image/video analysis. Inspector scans EC2, ECR images and Lambda for software vulnerabilities, not S3 access."
+  },
+  "concept": "GuardDuty S3 Protection: detect suspicious access patterns on S3",
+  "tests": "Picking the service that detects and alerts on unauthorized/suspicious access to S3 data, versus log recording or vulnerability scanning.",
+  "expected": "Amazon GuardDuty (S3 Protection). Triggers: \"alerted\" + \"risk of unauthorized access\" / \"suspicious access patterns\" / \"malicious activity\" → GuardDuty. (\"sensitive data / PII in S3\" would be Macie.)",
+  "why_not": "CloudTrail records API calls but doesn't detect threats; Rekognition analyzes images/video; Inspector scans workloads for CVEs, not S3 access.",
+  "keywords": [
+    "GuardDuty",
+    "S3 Protection",
+    "suspicious access patterns",
+    "unauthorized access",
+    "malicious activity",
+    "threat detection",
+    "alert",
+    "CloudTrail data events"
+  ],
+  "services": [
+    "guardduty",
+    "s3-security",
+    "cloudtrail",
+    "inspector"
+  ],
+  "topics": [
+    "iam-security",
+    "monitoring"
+  ],
+  "domain": 1,
+  "related": [
+    "e1-q59",
+    "e3-q13",
+    "e5-q14"
+  ]
+}

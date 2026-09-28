@@ -1,0 +1,46 @@
+{
+  "id": "u-20260928-kinesis-lambda-consumer-s3",
+  "source": {
+    "type": "user",
+    "added": "2026-09-28"
+  },
+  "question": {
+    "stem": "A company is building an internal application that allows users to upload images. Each upload request must be sent to Amazon Kinesis Data Streams for processing before the pictures are stored in an Amazon S3 bucket.\nThe application should immediately return a success message to the user after the upload, while the downstream processing is handled asynchronously. The processing typically takes about 5 minutes to complete.\nWhich solution will enable asynchronous processing from Kinesis to S3 in the most cost-effective way?",
+    "options": [
+      "Send data from Kinesis Data Streams to Amazon Data Firehose and configure it to deliver directly to S3.",
+      "Use a combination of AWS Lambda and Step Functions to orchestrate service components and asynchronously process the requests.",
+      "Use a combination of Amazon SQS to queue the requests and then asynchronously process them using On-Demand Amazon EC2 Instances.",
+      "Use Kinesis Data Streams with AWS Lambda consumers to asynchronously process records and write them to S3."
+    ],
+    "answer": 3,
+    "explanation": "The stream already exists; the app returns success as soon as the record is written to Kinesis. A Lambda function with the stream as an event source mapping polls the shards, processes each batch (5 minutes fits well within Lambda's 15-minute limit) and writes the result to S3 — serverless, pay per invocation, no idle cost. Firehose delivers (buffers and batches) data to S3 but isn't built for custom multi-minute processing — its optional transform Lambda is for light record transformation — so the required processing step isn't met. Step Functions adds an orchestration layer (and state-transition cost) that a single processing step doesn't need. SQS + On-Demand EC2 ignores the mandated Kinesis stream and pays for always-on instances."
+  },
+  "concept": "Kinesis Data Streams + Lambda consumer: serverless async processing to S3",
+  "tests": "Choosing Lambda as a Kinesis consumer for asynchronous processing within 15 minutes, versus Firehose delivery, Step Functions or EC2.",
+  "expected": "Kinesis Data Streams with a Lambda consumer (event source mapping) that processes records and writes to S3. Triggers: \"Kinesis already used\", \"asynchronous processing ~5 min\" (< 15 min), \"most cost-effective\" → Lambda consumer.",
+  "why_not": "Firehose delivers/batches, not for custom 5-minute processing; Step Functions is unnecessary orchestration cost; SQS + On-Demand EC2 drops Kinesis and pays for idle servers.",
+  "keywords": [
+    "Kinesis Data Streams",
+    "Lambda consumer",
+    "event source mapping",
+    "asynchronous processing",
+    "Data Firehose",
+    "15-minute limit",
+    "S3",
+    "cost-effective"
+  ],
+  "services": [
+    "kinesis-data-streams",
+    "lambda",
+    "firehose",
+    "step-functions",
+    "sqs"
+  ],
+  "topics": [
+    "data-migration",
+    "serverless-containers",
+    "integration"
+  ],
+  "domain": 4,
+  "related": []
+}

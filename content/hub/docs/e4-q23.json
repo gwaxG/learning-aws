@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "DynamoDB Global Tables: multi-Region active-active запись",
-  "tests": "Выбор глобальной multi-Region БД с миллисекундными локальными чтением и записью в каждом регионе.",
-  "expected": "DynamoDB Global Tables — active-active репликация, low-latency read/write в каждом регионе. Триггеры: «globally distributed», «multi-Region», «single-digit millisecond reads and writes in each Region», leaderboard.",
-  "why_not": "RDS Multi-AZ — один регион; Redshift — аналитический DWH; одиночный узел ElastiCache не durable и не multi-Region.",
+  "concept": "DynamoDB Global Tables: multi-Region active-active writes",
+  "tests": "Choosing a global multi-Region DB with millisecond local reads and writes in every Region.",
+  "expected": "DynamoDB Global Tables: active-active replication, low-latency read/write in every Region. Triggers: \"globally distributed\", \"multi-Region\", \"single-digit millisecond reads and writes in each Region\", leaderboard.",
+  "why_not": "RDS Multi-AZ is single-Region; Redshift is an analytics DWH; a single ElastiCache node is neither durable nor multi-Region.",
   "keywords": [
     "DynamoDB Global Tables",
     "multi-Region",
     "active-active",
     "single-digit millisecond",
     "leaderboard",
-    "глобальная БД"
+    "global database"
   ],
   "services": [
     "dynamodb-global",

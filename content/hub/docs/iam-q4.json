@@ -4,17 +4,17 @@
     "type": "topic",
     "ref": "iam-security"
   },
-  "concept": "IAM: permission boundary как потолок делегированных прав",
-  "tests": "Умение ограничить максимальные права ролей, которые создают сами разработчики.",
-  "expected": "Permission boundary на создаваемые роли: эффективные права = пересечение boundary и прикреплённых политик. Триггеры: «делегировать создание ролей», «никогда не превысят набор прав».",
-  "why_not": "SCP не действует на management account; resource-based policy управляет доступом к ресурсу, а не потолком прав роли; IAM group лишь объединяет пользователей.",
+  "concept": "IAM: permission boundary as a ceiling on delegated permissions",
+  "tests": "Limiting the maximum permissions of roles that developers create themselves.",
+  "expected": "A permission boundary on created roles: effective permissions = intersection of the boundary and attached policies. Triggers: \"delegate role creation\", \"never exceed a set of permissions\".",
+  "why_not": "SCPs do not apply to the management account; a resource-based policy controls access to a resource, not a role's permission ceiling; an IAM group only groups users.",
   "keywords": [
     "permission boundary",
     "delegation",
     "maximum permissions",
     "IAM roles",
-    "пересечение политик",
-    "делегировать создание ролей"
+    "policy intersection",
+    "delegate role creation"
   ],
   "services": [
     "iam",

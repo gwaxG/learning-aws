@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "ec2-compute"
   },
-  "concept": "Placement groups: partition для HDFS/Cassandra/Kafka",
-  "tests": "Различение cluster, spread и partition placement groups по изоляции отказов оборудования.",
-  "expected": "Partition placement group — партиции на отдельных стойках, отказ железа затрагивает одну партицию. Триггеры: «HDFS / Cassandra / Kafka», «не терять больше одной replica group», «grouped placement».",
-  "why_not": "Cluster — всё на одной стойке (общий failure domain); spread — максимум 7 инстансов на AZ, мало для больших кластеров; без placement group нет гарантий изоляции.",
+  "concept": "Placement groups: partition for HDFS/Cassandra/Kafka",
+  "tests": "Distinguishing cluster, spread, and partition placement groups by hardware failure isolation.",
+  "expected": "Partition placement group — partitions on separate racks, a hardware failure affects one partition. Triggers: \"HDFS / Cassandra / Kafka\", \"don't lose more than one replica group\", \"grouped placement\".",
+  "why_not": "Cluster puts everything on one rack (shared failure domain); spread allows max 7 instances per AZ, too few for large clusters; no placement group gives no isolation guarantees.",
   "keywords": [
     "partition placement group",
     "spread",
@@ -15,7 +15,7 @@
     "racks",
     "HDFS",
     "failure domain",
-    "отказ оборудования"
+    "hardware failure"
   ],
   "services": [
     "placement-groups",

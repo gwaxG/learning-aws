@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "Cognito identity pools: временные credentials для мобильных пользователей",
-  "tests": "Как выдать временные ограниченные AWS credentials пользователям мобильного приложения, вошедшим через social IdP, без встраивания ключей.",
-  "expected": "Amazon Cognito identity pools обменивают токены IdP на временные credentials через STS. Триггеры: «mobile app», «social identity provider», «temporary, limited-privilege credentials».",
-  "why_not": "IAM users с access keys — долгоживущие секреты в приложении; KMS grants — доступ к ключам; Directory Service — управляемые каталоги.",
+  "concept": "Cognito identity pools: temporary credentials for mobile users",
+  "tests": "How to give mobile app users signed in via a social IdP temporary, limited AWS credentials without embedding keys.",
+  "expected": "Amazon Cognito identity pools exchange IdP tokens for temporary credentials via STS. Triggers: \"mobile app\", \"social identity provider\", \"temporary, limited-privilege credentials\".",
+  "why_not": "IAM users with access keys — long-lived secrets in the app; KMS grants — access to keys; Directory Service — managed directories.",
   "keywords": [
     "Cognito",
     "identity pools",

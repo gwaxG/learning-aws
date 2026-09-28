@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "Cost allocation tags + tag policies: стандартизация тегов и отчёты по cost-center",
-  "tests": "Как обеспечить единообразное тегирование cost-center и отчётность по затратам в разрезе тегов.",
-  "expected": "AWS Organizations tag policies — стандарт тегов по аккаунтам; активировать cost allocation tags в Billing console — отчёты по cost-center. Триггеры: «cost-center tag», «cost allocation», «untagged resources».",
-  "why_not": "Отключение Cost Explorer убирает отчётность; таблица в spreadsheet не принудительна и не интегрирована; Route 53 health checks не относятся к делу.",
+  "concept": "Cost allocation tags + tag policies: standardize tags, cost-center reports",
+  "tests": "How to enforce consistent cost-center tagging and cost reporting by tag.",
+  "expected": "AWS Organizations tag policies — tag standard across accounts; activate cost allocation tags in the Billing console — cost-center reports. Triggers: \"cost-center tag\", \"cost allocation\", \"untagged resources\".",
+  "why_not": "Disabling Cost Explorer removes reporting; a spreadsheet isn't enforced or integrated; Route 53 health checks are irrelevant.",
   "keywords": [
     "cost allocation tags",
     "tag policies",
     "cost-center",
     "tagging",
     "Billing console",
-    "теги"
+    "tags"
   ],
   "services": [
     "cost-allocation-tags",

@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "IAM: роль EC2 через instance profile вместо долгоживущих ключей",
-  "tests": "Самый безопасный способ дать приложению на EC2 доступ к AWS API (Secrets Manager) без хранения постоянных credentials.",
-  "expected": "IAM role через instance profile: временные, автоматически ротируемые credentials из IMDS. Триггеры: «EC2 needs to access», «without storing long-term credentials».",
-  "why_not": "Ключи в user data/env или в AMI — утечка секретов; root access keys приложениям нельзя никогда.",
+  "concept": "IAM: EC2 role via instance profile instead of long-term keys",
+  "tests": "The most secure way to give an EC2 application access to AWS APIs (Secrets Manager) without storing permanent credentials.",
+  "expected": "IAM role via instance profile: temporary, automatically rotated credentials from IMDS. Triggers: \"EC2 needs to access\", \"without storing long-term credentials\".",
+  "why_not": "Keys in user data/env or in the AMI — secret leakage; root access keys must never be given to applications.",
   "keywords": [
     "instance profile",
     "IAM role",
     "temporary credentials",
     "instance metadata",
     "long-term credentials",
-    "без долгоживущих ключей"
+    "no long-term keys"
   ],
   "services": [
     "iam",

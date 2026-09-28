@@ -4,16 +4,16 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "Auto Scaling: self-healing по health checks и desired capacity",
-  "tests": "Какая конфигурация автоматически заменяет EC2, не прошедший health check.",
-  "expected": "Auto Scaling group с health checks (EC2/ELB) — сам terminate и launch замену нездорового инстанса. Триггеры: «failing its health check», «replacing it without human intervention», «self-healing».",
-  "why_not": "Dashboard только визуализирует; ручной мониторинг не автоматичен; termination protection мешает замене.",
+  "concept": "Auto Scaling: self-healing via health checks and desired capacity",
+  "tests": "Which configuration automatically replaces an EC2 instance that fails its health check.",
+  "expected": "Auto Scaling group with health checks (EC2/ELB) terminates an unhealthy instance and launches a replacement on its own. Triggers: \"failing its health check\", \"replacing it without human intervention\", \"self-healing\".",
+  "why_not": "A dashboard only visualizes; manual monitoring isn't automatic; termination protection gets in the way of replacement.",
   "keywords": [
     "Auto Scaling group",
     "health checks",
     "self-healing",
     "replace unhealthy",
-    "без вмешательства человека"
+    "without human intervention"
   ],
   "services": [
     "auto-scaling",

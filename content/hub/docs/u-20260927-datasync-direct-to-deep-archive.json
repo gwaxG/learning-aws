@@ -1,0 +1,45 @@
+{
+  "id": "u-20260927-datasync-direct-to-deep-archive",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "Both historical records and frequently accessed data are stored on an on-premises storage system. The amount of current data is growing at an exponential rate. As the storage’s capacity is nearing its limit, the company’s Solutions Architect has decided to move the historical records to AWS to free up space for the active data.\nWhich of the following architectures deliver the best solution in terms of cost and operational management?",
+    "options": [
+      "Use AWS DataSync to move the historical records from on-premises to AWS. Choose Amazon S3 Glacier Deep Archive to be the destination for the data.",
+      "Use AWS Storage Gateway to move the historical records from on-premises to AWS. Choose Amazon S3 Glacier Deep Archive to be the destination for the data.",
+      "Use AWS DataSync to move the historical records from on-premises to AWS. Choose Amazon S3 Standard to be the destination for the data. Modify the S3 lifecycle configuration to move the data from the Standard tier to Amazon S3 Glacier Deep Archive after 30 days.",
+      "Use AWS Storage Gateway to move the historical records from on-premises to AWS. Choose Amazon S3 Glacier to be the destination for the data. Modify the S3 lifecycle configuration to move the data from the Standard tier to Amazon S3 Glacier Deep Archive after 30 days."
+    ],
+    "answer": 0,
+    "explanation": "This is a one-time (or scheduled) migration of cold data, so AWS DataSync is the right mover: an agent copies from NFS/SMB to S3 over the network with encryption, integrity checks and scheduling. DataSync can write directly into any S3 storage class, including Glacier Deep Archive — the cheapest class for historical records — so there is nothing more to manage. Storage Gateway is for ongoing hybrid access (on-prem apps using cloud storage via a local cache), not for moving data out once and freeing space. Landing in S3 Standard and transitioning after 30 days works, but pays 30 days of Standard pricing plus lifecycle transition requests and an extra rule to maintain — worse on cost and operations."
+  },
+  "concept": "DataSync: migrate on-prem data straight into a cold S3 storage class",
+  "tests": "Choosing DataSync (migration) over Storage Gateway (hybrid access) and writing directly to Glacier Deep Archive instead of Standard + lifecycle.",
+  "expected": "DataSync → S3 Glacier Deep Archive as the destination storage class. Triggers: \"move historical records\", \"free up on-prem space\", \"cost and operational management\" → DataSync, directly into Deep Archive.",
+  "why_not": "Storage Gateway = ongoing hybrid access with local cache, not a one-time move; Standard + lifecycle after 30 days = extra cost (30 days of Standard + transition requests) and an extra rule to manage.",
+  "keywords": [
+    "DataSync",
+    "Storage Gateway",
+    "Glacier Deep Archive",
+    "historical records",
+    "migration",
+    "storage class",
+    "lifecycle",
+    "free up on-premises storage"
+  ],
+  "services": [
+    "datasync",
+    "storage-gateway",
+    "glacier",
+    "s3-lifecycle"
+  ],
+  "topics": [
+    "data-migration",
+    "storage",
+    "cost"
+  ],
+  "domain": 4,
+  "related": []
+}

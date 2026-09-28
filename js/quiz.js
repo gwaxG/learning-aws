@@ -37,7 +37,7 @@ export function renderQuestion(container, question, { onAnswered } = {}) {
   if (multi) {
     const hint = document.createElement("p");
     hint.className = "q-hint";
-    hint.textContent = `(Выберите ${question.answer.length})`;
+    hint.textContent = `(Choose ${question.answer.length})`;
     container.append(hint);
   }
 
@@ -62,7 +62,7 @@ export function renderQuestion(container, question, { onAnswered } = {}) {
   if (multi) {
     const go = document.createElement("button");
     go.className = "q-submit";
-    go.textContent = "Ответить";
+    go.textContent = "Submit";
     go.onclick = () => submit([...selected]);
     container.append(go);
   }
@@ -80,7 +80,7 @@ export function renderQuestion(container, question, { onAnswered } = {}) {
     if (submitBtn) submitBtn.remove();
     const exp = document.createElement("div");
     exp.className = "q-explain " + (correct ? "ok" : "bad");
-    exp.textContent = (correct ? "✓ Верно. " : "✗ Неверно. ") + question.explanation;
+    exp.textContent = (correct ? "✓ Correct. " : "✗ Incorrect. ") + question.explanation;
     container.append(exp);
     onAnswered?.(correct);
   }

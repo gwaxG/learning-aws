@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "Firehose: managed доставка потоков в S3/Redshift с batching и сжатием",
-  "tests": "Выбор сервиса для доставки потоковых данных в S3 и Redshift без управления потоком.",
-  "expected": "Amazon Data Firehose (Kinesis Data Firehose) — полностью управляемая доставка с буферизацией, сжатием, преобразованием, без шардов. Триггеры: «deliver streaming data to S3 and Redshift», «automatic batching, compression», «no stream management».",
-  "why_not": "Kinesis Data Streams — нужно управлять шардами и consumers; SQS — обмен сообщениями; Glue streaming — ETL, не delivery pipeline.",
+  "concept": "Firehose: managed stream delivery to S3/Redshift with batching, compression",
+  "tests": "Choosing a service to deliver streaming data to S3 and Redshift without managing a stream.",
+  "expected": "Amazon Data Firehose (Kinesis Data Firehose) — fully managed delivery with buffering, compression, transformation, no shards. Triggers: \"deliver streaming data to S3 and Redshift\", \"automatic batching, compression\", \"no stream management\".",
+  "why_not": "Kinesis Data Streams — you manage shards and consumers; SQS — messaging; Glue streaming — ETL, not a delivery pipeline.",
   "keywords": [
     "Firehose",
     "Kinesis Data Firehose",
@@ -15,7 +15,7 @@
     "batching",
     "compression",
     "Redshift",
-    "без управления шардами"
+    "no shard management"
   ],
   "services": [
     "firehose",

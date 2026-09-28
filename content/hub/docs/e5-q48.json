@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "Redshift: колоночное MPP-хранилище для постоянной аналитики на петабайтах",
-  "tests": "Выбор сервиса для предсказуемых постоянных аналитических запросов к петабайтному хранилищу данных.",
-  "expected": "Amazon Redshift — columnar MPP data warehouse. Триггеры: «petabyte-scale», «columnar data warehouse», «predictable, sustained queries», «reporting».",
-  "why_not": "Athena — для ad hoc, дороже при постоянной тяжёлой нагрузке; DynamoDB — NoSQL; RDS for MySQL — строковая OLTP.",
+  "concept": "Redshift: columnar MPP warehouse for sustained petabyte-scale analytics",
+  "tests": "Choosing a service for predictable, sustained analytical queries on a petabyte-scale data warehouse.",
+  "expected": "Amazon Redshift — columnar MPP data warehouse. Triggers: \"petabyte-scale\", \"columnar data warehouse\", \"predictable, sustained queries\", \"reporting\".",
+  "why_not": "Athena — for ad hoc, more expensive under sustained heavy load; DynamoDB — NoSQL; RDS for MySQL — row-based OLTP.",
   "keywords": [
     "Redshift",
     "data warehouse",

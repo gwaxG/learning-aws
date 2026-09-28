@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "Organizations SCP: максимальные права для member accounts",
-  "tests": "Какая функция ограничивает сервисы, доступные member accounts организации, независимо от IAM policies внутри аккаунтов.",
-  "expected": "Service Control Policies в AWS Organizations — задают максимально допустимые права аккаунтов (guardrails), IAM не может их превысить. Триггеры: «member accounts», «regardless of IAM policies», «guardrail».",
-  "why_not": "Permission boundaries — на principal в одном аккаунте; resource-based policies — доступ к отдельным ресурсам; IAM Access Analyzer находит внешний доступ, но ничего не запрещает.",
+  "concept": "Organizations SCP: maximum permissions for member accounts",
+  "tests": "Which feature restricts the services available to an organization's member accounts regardless of IAM policies inside the accounts.",
+  "expected": "Service Control Policies in AWS Organizations — set the maximum allowed permissions for accounts (guardrails); IAM can't exceed them. Triggers: \"member accounts\", \"regardless of IAM policies\", \"guardrail\".",
+  "why_not": "Permission boundaries — on a principal within one account; resource-based policies — access to individual resources; IAM Access Analyzer finds external access but denies nothing.",
   "keywords": [
     "SCP",
     "AWS Organizations",
     "guardrails",
     "member accounts",
     "permission boundaries",
-    "максимальные права"
+    "maximum permissions"
   ],
   "services": [
     "scp",

@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "Athena: serverless SQL прямо по данным в S3",
-  "tests": "Выбор сервиса для SQL-запросов к данным в S3 без загрузки в БД и без инфраструктуры, с оплатой за запрос.",
-  "expected": "Amazon Athena — serverless, стандартный SQL (Presto/Trino) по S3, оплата за просканированные данные. Триггеры: «query data directly in S3», «standard SQL», «without loading», «pay per query».",
-  "why_not": "Redshift — нужен кластер (кроме Spectrum/Serverless); RDS — надо загружать данные; EMR — управлять big-data кластером.",
+  "concept": "Athena: serverless SQL directly on data in S3",
+  "tests": "Choosing a service for SQL queries on data in S3 without loading into a DB, with no infrastructure and pay-per-query.",
+  "expected": "Amazon Athena — serverless, standard SQL (Presto/Trino) over S3, billed per data scanned. Triggers: \"query data directly in S3\", \"standard SQL\", \"without loading\", \"pay per query\".",
+  "why_not": "Redshift — needs a cluster (except Spectrum/Serverless); RDS — data must be loaded; EMR — a big-data cluster to manage.",
   "keywords": [
     "Athena",
     "serverless",

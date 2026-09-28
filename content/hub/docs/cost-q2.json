@@ -4,18 +4,18 @@
     "type": "topic",
     "ref": "cost"
   },
-  "concept": "Compute Savings Plan: гибкая скидка на стабильный baseline",
-  "tests": "Выбор commitment-модели для 24/7 baseline при планируемой смене семейств инстансов и переходе между EC2 и Fargate.",
-  "expected": "Compute Savings Plan — commitment на $/час, действует для любых семейств, регионов, ОС, а также Fargate и Lambda. Триггеры: «стабильный baseline 24/7», «сменить instance family», «EC2 ↔ Fargate», «максимум экономии с гибкостью».",
-  "why_not": "EC2 Instance Savings Plan и Standard RI привязаны к семейству/региону (или типу); On-Demand гибок, но без скидки — самый дорогой для 24/7.",
+  "concept": "Compute Savings Plan: flexible discount for a steady baseline",
+  "tests": "Choosing a commitment model for a 24/7 baseline with planned instance family changes and moves between EC2 and Fargate.",
+  "expected": "Compute Savings Plan — a $/hour commitment that applies to any family, Region, OS, plus Fargate and Lambda. Triggers: \"steady 24/7 baseline\", \"change instance family\", \"EC2 ↔ Fargate\", \"maximum savings with flexibility\".",
+  "why_not": "EC2 Instance Savings Plan and Standard RI are tied to family/Region (or type); On-Demand is flexible but undiscounted — the most expensive for 24/7.",
   "keywords": [
     "Compute Savings Plan",
     "EC2 Instance Savings Plan",
     "Reserved Instances",
     "Fargate",
     "baseline 24/7",
-    "гибкость",
-    "смена семейства"
+    "flexibility",
+    "family change"
   ],
   "services": [
     "ec2-purchasing",

@@ -4,18 +4,18 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "S3 шифрование: SSE-KMS с customer managed key",
-  "tests": "Выбор варианта шифрования S3 at rest, который даёт полный контроль над ключами и аудит каждого использования ключа при минимальных операционных затратах.",
-  "expected": "SSE-KMS с customer managed KMS key + CloudTrail: компания управляет key policy и ротацией, каждое использование ключа логируется автоматически. Триггеры: «full control over keys» + «key usage logged/audit» + «least operational overhead».",
-  "why_not": "SSE-S3 — ключи у AWS, нет аудита использования ключа; SSE-C и client-side — компания сама строит и эксплуатирует управление ключами (высокий overhead).",
+  "concept": "S3 encryption: SSE-KMS with a customer managed key",
+  "tests": "Choosing an S3 at-rest encryption option that gives full control over keys and auditing of every key use with the LEAST operational overhead.",
+  "expected": "SSE-KMS with a customer managed KMS key + CloudTrail: the company controls the key policy and rotation, and every key use is logged automatically. Triggers: \"full control over keys\" + \"key usage logged/audit\" + \"least operational overhead\".",
+  "why_not": "SSE-S3 — AWS holds the keys, no key-usage audit; SSE-C and client-side — the company builds and operates key management itself (high overhead).",
   "keywords": [
     "SSE-KMS",
     "customer managed key",
     "CloudTrail",
     "SSE-S3",
     "SSE-C",
-    "аудит использования ключа",
-    "полный контроль над ключами"
+    "key usage audit",
+    "full control over keys"
   ],
   "services": [
     "kms",

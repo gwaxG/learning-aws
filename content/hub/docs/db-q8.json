@@ -4,18 +4,17 @@
     "type": "topic",
     "ref": "databases"
   },
-  "concept": "RDS point-in-time recovery: откат случайного удаления",
-  "tests": "Выбор способа восстановления после ошибочного удаления данных при включённых automated backups.",
-  "expected": "Point-in-time recovery на момент прямо перед удалением (любая секунда в окне retention). Триггеры: «случайно удалил строки N минут назад», «automated backups, retention 7 дней».",
-  "why_not": "Read Replica уже содержит удаление (асинхронная репликация); reboot with failover не отменяет изменений; старейший ручной snapshot теряет гораздо больше данных.",
+  "concept": "RDS point-in-time recovery: undo an accidental delete",
+  "tests": "Choosing how to recover from an erroneous data deletion with automated backups enabled.",
+  "expected": "Point-in-time recovery to the moment just before the deletion (any second within the retention window). Triggers: \"accidentally deleted rows N minutes ago\", \"automated backups, 7-day retention\".",
+  "why_not": "A Read Replica already contains the deletion (asynchronous replication); reboot with failover does not undo changes; the oldest manual snapshot loses far more data.",
   "keywords": [
     "point-in-time recovery",
     "PITR",
     "automated backups",
     "retention",
     "accidental deletion",
-    "случайное удаление",
-    "20 минут назад"
+    "20 minutes ago"
   ],
   "services": [
     "rds",

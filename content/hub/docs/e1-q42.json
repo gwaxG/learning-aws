@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "Placement groups: cluster для HPC с минимальной задержкой",
-  "tests": "Выбор стратегии размещения EC2 для тесно связанных HPC-вычислений с максимальной пропускной способностью и минимальной задержкой.",
-  "expected": "Cluster placement group — инстансы рядом в одной AZ, низкая задержка и высокий throughput. Триггеры: «tightly coupled HPC», «lowest latency», «highest network throughput».",
-  "why_not": "Spread — максимальная изоляция; partition — для больших распределённых систем (Hadoop, Cassandra); несколько AZ увеличивают задержку.",
+  "concept": "Placement groups: cluster for lowest-latency HPC",
+  "tests": "Choosing an EC2 placement strategy for tightly coupled HPC with maximum throughput and minimum latency.",
+  "expected": "Cluster placement group — instances close together in one AZ, low latency and high throughput. Triggers: \"tightly coupled HPC\", \"lowest latency\", \"highest network throughput\".",
+  "why_not": "Spread — maximum isolation; partition — for large distributed systems (Hadoop, Cassandra); multiple AZs increase latency.",
   "keywords": [
     "cluster placement group",
     "HPC",

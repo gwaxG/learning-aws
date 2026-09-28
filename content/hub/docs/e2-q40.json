@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "EKS: AWS Load Balancer Controller и Ingress → ALB",
-  "tests": "Как опубликовать несколько сервисов EKS через один балансировщик Kubernetes-нативно с TLS-терминацией.",
-  "expected": "AWS Load Balancer Controller создаёт ALB из Ingress-ресурсов: path/host-based routing на несколько сервисов, TLS через ACM. Триггеры: «EKS», «Kubernetes-native ingress», «single load balancer», «terminate TLS».",
-  "why_not": "Classic LB на каждый сервис — дорого и неуправляемо; голый NLB без ingress-контроллера — нет L7-маршрутизации; все сервисы в одном pod ломают микросервисы.",
+  "concept": "EKS: AWS Load Balancer Controller and Ingress → ALB",
+  "tests": "How to expose multiple EKS services through a single load balancer, Kubernetes-natively, with TLS termination.",
+  "expected": "The AWS Load Balancer Controller creates an ALB from Ingress resources: path/host-based routing to multiple services, TLS via ACM. Triggers: \"EKS\", \"Kubernetes-native ingress\", \"single load balancer\", \"terminate TLS\".",
+  "why_not": "A Classic LB per service — expensive and unmanageable; a bare NLB with no ingress controller — no L7 routing; all services in one pod breaks microservices.",
   "keywords": [
     "AWS Load Balancer Controller",
     "Ingress",

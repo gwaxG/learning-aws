@@ -4,16 +4,16 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "IAM: роль EC2 (instance profile) вместо access keys",
-  "tests": "Как дать приложению на EC2 доступ к S3 без хранения долгосрочных credentials на инстансе.",
-  "expected": "Прикрепить IAM role к EC2 (instance profile) с политикой доступа к S3 — временные credentials выдаются через instance metadata и ротируются автоматически. Триггер: «avoid storing long-term credentials».",
-  "why_not": "IAM user + access keys, переменные окружения, user data — все кладут статические долгоживущие ключи на инстанс.",
+  "concept": "IAM: EC2 role (instance profile) instead of access keys",
+  "tests": "How to give an application on EC2 access to S3 without storing long-term credentials on the instance.",
+  "expected": "Attach an IAM role to EC2 (instance profile) with an S3 access policy — temporary credentials are delivered via instance metadata and rotated automatically. Trigger: \"avoid storing long-term credentials\".",
+  "why_not": "IAM user + access keys, environment variables, user data — all put static long-lived keys on the instance.",
   "keywords": [
     "IAM role",
     "instance profile",
     "instance metadata",
     "temporary credentials",
-    "без долгосрочных ключей",
+    "no long-term keys",
     "access keys"
   ],
   "services": [

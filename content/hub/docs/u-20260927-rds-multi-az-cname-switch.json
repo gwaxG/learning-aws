@@ -1,0 +1,45 @@
+{
+  "id": "u-20260927-rds-multi-az-cname-switch",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "An accounting application uses an Amazon RDS database configured with RDS Multi-AZ to improve availability. What would happen to RDS if the primary database instance fails?",
+    "options": [
+      "The IP address of the primary DB instance is switched to the standby DB instance.",
+      "A new database instance is created in the standby Availability Zone.",
+      "The primary database instance will reboot.",
+      "The canonical name record (CNAME) is switched from the primary to standby instance."
+    ],
+    "answer": 3,
+    "explanation": "On primary failure, RDS Multi-AZ automatically fails over by flipping the DB endpoint's DNS CNAME record to point at the standby, which is promoted to primary (typically 60–120 s). The application keeps using the same endpoint name; it only needs to reconnect (and respect DNS TTL). IP addresses are not moved between instances — primary and standby have different IPs in different AZs. RDS doesn't create a brand-new instance to serve traffic — the already-synchronized standby takes over (a replacement standby is provisioned afterwards). A reboot of the failed primary isn't the failover mechanism."
+  },
+  "concept": "RDS Multi-AZ: failover flips the endpoint's DNS CNAME to the standby",
+  "tests": "Knowing the mechanism of RDS Multi-AZ failover: the DNS CNAME of the endpoint is switched to the standby.",
+  "expected": "The CNAME of the DB endpoint is switched from the primary to the standby (promoted to primary). Triggers: \"what happens when the primary fails\" in Multi-AZ → CNAME flip, same endpoint.",
+  "why_not": "IPs aren't moved (different AZ/subnet); the existing synchronous standby takes over — no new instance serves traffic; rebooting the primary isn't failover.",
+  "keywords": [
+    "RDS Multi-AZ",
+    "failover",
+    "CNAME",
+    "DNS",
+    "endpoint",
+    "standby promotion",
+    "60-120 seconds"
+  ],
+  "services": [
+    "rds-multi-az",
+    "rds",
+    "route53"
+  ],
+  "topics": [
+    "databases",
+    "ha-dr"
+  ],
+  "domain": 2,
+  "related": [
+    "e1-q44",
+    "u-20260927-rds-multi-az-failover-triggers"
+  ]
+}

@@ -4,18 +4,18 @@
     "type": "topic",
     "ref": "ec2-compute"
   },
-  "concept": "EC2 Spot: прерываемые batch-нагрузки",
-  "tests": "Выбор модели покупки для ночной прерываемой задачи при минимизации стоимости.",
-  "expected": "Spot Instances (до ~90% экономии). Триггеры: «можно прервать и перезапустить», «batch 3 часа ночью», «minimize cost».",
-  "why_not": "Reserved Instances — долгий commitment под 24/7; On-Demand значительно дороже Spot; Dedicated Hosts — лицензирование/изоляция, не экономия.",
+  "concept": "EC2 Spot: interruptible batch workloads",
+  "tests": "Choosing a purchasing option for a nightly interruptible job while minimizing cost.",
+  "expected": "Spot Instances (up to ~90% savings). Triggers: \"can be interrupted and restarted\", \"3-hour nightly batch\", \"minimize cost\".",
+  "why_not": "Reserved Instances are a long commitment for 24/7; On-Demand is much more expensive than Spot; Dedicated Hosts are for licensing/isolation, not savings.",
   "keywords": [
     "Spot Instances",
     "interruptible",
     "batch",
     "restart safely",
     "Dedicated Hosts",
-    "можно прервать",
-    "минимизировать стоимость"
+    "can be interrupted",
+    "minimize cost"
   ],
   "services": [
     "ec2-purchasing",

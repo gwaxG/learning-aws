@@ -1,0 +1,43 @@
+{
+  "id": "u-20260927-ebs-dlm-automated-snapshots",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "A company is implementing its Business Continuity Plan. As part of this initiative, the IT Director instructed the IT team to set up an automated backup of all the Amazon EBS volumes attached to the company’s Amazon EC2 instances. The solution must be implemented as soon as possible and should be both cost-effective and simple to maintain.\nWhat is the fastest and most cost-effective solution to automatically back up all of the EBS volumes?",
+    "options": [
+      "Use an EBS snapshot retention rule in AWS Backup to automatically manage snapshot retention and expiration.",
+      "Set your Amazon Storage Gateway with EBS volumes as the data source and store the backups in your on-premises servers through the storage gateway.",
+      "Use Amazon Data Lifecycle Manager (Amazon DLM) to automate the creation of EBS snapshots.",
+      "For an automated solution, create a scheduled job that calls the \"create-snapshot\" command via the AWS CLI to take a snapshot of production EBS volumes periodically."
+    ],
+    "answer": 2,
+    "explanation": "Amazon Data Lifecycle Manager creates, retains and deletes EBS snapshots (and EBS-backed AMIs) on a schedule based on resource tags — built into EC2, no extra charge beyond snapshot storage, and set up in minutes. The AWS Backup option only describes a retention rule (managing expiration), not automated creation. Storage Gateway is for on-premises access to AWS storage, not for backing up EBS to on-prem. A cron job calling the CLI works but has to be built, hosted and maintained — not simple or fastest."
+  },
+  "concept": "EBS: Data Lifecycle Manager for automated snapshots",
+  "tests": "Choosing the native, free, simplest way to automate EBS snapshot creation and retention.",
+  "expected": "Amazon DLM lifecycle policy (target by tags, schedule, retention). Triggers: \"automated backup of EBS volumes\", \"as soon as possible\", \"cost-effective\", \"simple to maintain\" → DLM. If the stem spans many services/accounts or needs vault lock → AWS Backup.",
+  "why_not": "AWS Backup option describes only retention/expiration, not creation; Storage Gateway is for on-prem access to AWS storage; a CLI cron job is custom code to build and maintain.",
+  "keywords": [
+    "Data Lifecycle Manager",
+    "DLM",
+    "EBS snapshots",
+    "automated backup",
+    "lifecycle policy",
+    "tags",
+    "retention",
+    "AWS Backup"
+  ],
+  "services": [
+    "ebs",
+    "backup",
+    "storage-gateway"
+  ],
+  "topics": [
+    "storage",
+    "ha-dr"
+  ],
+  "domain": 2,
+  "related": []
+}

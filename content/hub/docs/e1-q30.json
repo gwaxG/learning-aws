@@ -4,16 +4,16 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "Secrets Manager: хранение и автоматическая ротация credentials",
-  "tests": "Какой сервис предназначен для хранения credentials БД с автоматической ротацией по расписанию и получением в runtime.",
-  "expected": "AWS Secrets Manager — нативная автоматическая ротация (интеграция с RDS), получение секрета приложением в runtime. Триггеры: «database credentials», «automatically rotate», «retrieve at runtime».",
-  "why_not": "Parameter Store standard — без встроенной автоматической ротации; S3 — не хранилище секретов; KMS управляет ключами шифрования, а не секретами приложений.",
+  "concept": "Secrets Manager: storing and auto-rotating credentials",
+  "tests": "Which service is built for storing DB credentials with scheduled automatic rotation and retrieval at runtime.",
+  "expected": "AWS Secrets Manager — native automatic rotation (RDS integration), the app retrieves the secret at runtime. Triggers: \"database credentials\", \"automatically rotate\", \"retrieve at runtime\".",
+  "why_not": "Parameter Store standard — no built-in automatic rotation; S3 — not a secrets store; KMS manages encryption keys, not application secrets.",
   "keywords": [
     "Secrets Manager",
     "automatic rotation",
     "database credentials",
     "Parameter Store",
-    "ротация секретов"
+    "secret rotation"
   ],
   "services": [
     "secrets-manager",

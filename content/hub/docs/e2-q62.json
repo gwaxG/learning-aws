@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "WAF: защита от SQLi/XSS и rate-based rules на L7",
-  "tests": "Выбор сервиса для защиты веб-приложения от SQL injection, XSS и L7-флуда перед CloudFront.",
-  "expected": "AWS WAF на CloudFront с managed rule groups (SQLi, XSS) и rate-based rules. Триггеры: «SQL injection», «cross-site scripting», «rate-based», «layer-7 attacks».",
-  "why_not": "GuardDuty обнаруживает угрозы, но не фильтрует запросы; Shield Standard — DDoS L3/L4, не эксплойты приложения; security groups — L3/L4.",
+  "concept": "WAF: SQLi/XSS protection and L7 rate-based rules",
+  "tests": "Choosing a service to protect a web app from SQL injection, XSS and L7 floods in front of CloudFront.",
+  "expected": "AWS WAF on CloudFront with managed rule groups (SQLi, XSS) and rate-based rules. Triggers: \"SQL injection\", \"cross-site scripting\", \"rate-based\", \"layer-7 attacks\".",
+  "why_not": "GuardDuty detects threats but doesn't filter requests; Shield Standard — L3/L4 DDoS, not application exploits; security groups — L3/L4.",
   "keywords": [
     "AWS WAF",
     "SQL injection",

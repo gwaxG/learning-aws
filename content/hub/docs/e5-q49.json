@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "Lambda cost: right-sizing памяти + Compute Savings Plans",
-  "tests": "Как снизить стоимость Lambda при стабильном предсказуемом объёме вызовов, сохранив serverless.",
-  "expected": "Right-sizing памяти по профилированию (например, Lambda Power Tuning / Compute Optimizer) + Compute Savings Plan, который покрывает Lambda. Триггеры: «steady, predictable invocation volume», «keeping the serverless model».",
-  "why_not": "Переход на On-Demand EC2 — отказ от serverless; максимальная память для всех функций увеличивает стоимость; отключение логов не снижает compute cost.",
+  "concept": "Lambda cost: memory right-sizing + Compute Savings Plans",
+  "tests": "How to cut Lambda cost with steady, predictable invocation volume while staying serverless.",
+  "expected": "Right-size memory based on profiling (e.g., Lambda Power Tuning / Compute Optimizer) + a Compute Savings Plan, which covers Lambda. Triggers: \"steady, predictable invocation volume\", \"keeping the serverless model\".",
+  "why_not": "Moving to On-Demand EC2 abandons serverless; max memory for all functions increases cost; disabling logs doesn't reduce compute cost.",
   "keywords": [
     "Lambda",
     "memory right-sizing",
     "Compute Savings Plans",
     "steady usage",
     "serverless",
-    "снижение затрат"
+    "cost reduction"
   ],
   "services": [
     "lambda",

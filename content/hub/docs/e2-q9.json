@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "NAT Gateway: по одному в каждой AZ для HA исходящего доступа",
-  "tests": "Как дать приватным инстансам исходящий интернет с высокой доступностью и минимальным администрированием.",
-  "expected": "Managed NAT gateway в public subnet каждой AZ, маршруты private subnets на NAT своей AZ. Триггеры: «outbound only», «must not be reachable from the internet», «private subnets», «high availability, low management».",
-  "why_not": "IGW в приватных подсетях делает их публичными; одиночный NAT instance — SPOF и самоуправляемый; VPC endpoint даёт доступ только к AWS-сервисам, не к произвольным репозиториям.",
+  "concept": "NAT Gateway: one per AZ for HA outbound access",
+  "tests": "How to give private instances highly available outbound internet access with minimal administration.",
+  "expected": "A managed NAT gateway in each AZ's public subnet, private subnet routes pointing to the NAT in their own AZ. Triggers: \"outbound only\", \"must not be reachable from the internet\", \"private subnets\", \"high availability, low management\".",
+  "why_not": "An IGW in private subnets makes them public; a single NAT instance — a SPOF and self-managed; a VPC endpoint only reaches AWS services, not arbitrary repositories.",
   "keywords": [
     "NAT gateway",
     "private subnet",

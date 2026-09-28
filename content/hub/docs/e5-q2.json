@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "S3 encryption: принудительное SSE-KMS через default encryption + bucket policy",
-  "tests": "Как гарантировать шифрование всех объектов customer managed KMS key и отклонять загрузки без SSE.",
-  "expected": "Default encryption SSE-KMS с CMK + bucket policy Deny s3:PutObject, если заголовок x-amz-server-side-encryption отсутствует/неверный. Триггеры: «customer managed KMS key», «upload without encryption is rejected».",
-  "why_not": "SSE-S3 не использует customer managed key; versioning не шифрует; Lambda, удаляющая объекты после загрузки, оставляет окно незашифрованного хранения.",
+  "concept": "S3 encryption: enforce SSE-KMS via default encryption + bucket policy",
+  "tests": "How to guarantee every object is encrypted with a customer managed KMS key and reject uploads without SSE.",
+  "expected": "Default encryption SSE-KMS with a CMK + bucket policy Deny s3:PutObject when the x-amz-server-side-encryption header is missing/wrong. Triggers: \"customer managed KMS key\", \"upload without encryption is rejected\".",
+  "why_not": "SSE-S3 doesn't use a customer managed key; versioning doesn't encrypt; a Lambda that deletes objects after upload leaves a window of unencrypted storage.",
   "keywords": [
     "SSE-KMS",
     "default encryption",
     "bucket policy",
     "x-amz-server-side-encryption",
     "customer managed key",
-    "отклонять загрузки"
+    "reject uploads"
   ],
   "services": [
     "s3-security",

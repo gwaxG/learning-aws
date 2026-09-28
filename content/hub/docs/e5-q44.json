@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "Холодные данные: выгрузка в S3 (Parquet) и запросы через Athena",
-  "tests": "Как дёшево хранить редко запрашиваемые исторические данные реляционной БД, сохранив SQL-доступ.",
-  "expected": "Экспорт холодных данных в S3 в Parquet и запросы через Athena по требованию. Триггеры: «cold historical data rarely queried», «inflating primary database cost», «queryable cheaply via SQL».",
-  "why_not": "Scale up RDS — дорого; DynamoDB — NoSQL, не подходит для ad hoc SQL; EBS snapshots не запрашиваются напрямую.",
+  "concept": "Cold data: offload to S3 (Parquet) and query with Athena",
+  "tests": "How to cheaply store rarely queried historical relational DB data while keeping SQL access.",
+  "expected": "Export cold data to S3 as Parquet and query on demand with Athena. Triggers: \"cold historical data rarely queried\", \"inflating primary database cost\", \"queryable cheaply via SQL\".",
+  "why_not": "Scaling up RDS — expensive; DynamoDB — NoSQL, unsuitable for ad hoc SQL; EBS snapshots can't be queried directly.",
   "keywords": [
     "cold data",
     "archive",
     "Parquet",
     "Athena",
     "S3",
-    "исторические данные",
+    "historical data",
     "cost-effective"
   ],
   "services": [

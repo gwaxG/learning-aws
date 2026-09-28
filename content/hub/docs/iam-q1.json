@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "iam-security"
   },
-  "concept": "IAM: роль через instance profile вместо ключей доступа на EC2",
-  "tests": "Знание безопасного способа выдать EC2-приложению доступ к S3 без долгоживущих credentials.",
-  "expected": "IAM role, подключённая через instance profile, с политикой чтения, ограниченной одним bucket. Временные credentials из IMDS ротируются автоматически. Триггеры: «EC2 должен читать S3» + «MOST secure».",
-  "why_not": "Ключи в env vars или в AMI — долгоживущие секреты, утекают и ротируются вручную; публичный bucket открывает данные всем, а security group — сетевой уровень и не управляет доступом к S3.",
+  "concept": "IAM: role via instance profile instead of access keys on EC2",
+  "tests": "Knowing the secure way to give an EC2 application access to S3 without long-lived credentials.",
+  "expected": "An IAM role attached via an instance profile, with a read policy scoped to one bucket. Temporary credentials from IMDS rotate automatically. Triggers: \"EC2 must read S3\" + \"MOST secure\".",
+  "why_not": "Keys in env vars or baked into the AMI are long-lived secrets that leak and are rotated manually; a public bucket exposes data to everyone, and a security group is a network layer that does not control S3 access.",
   "keywords": [
     "IAM role",
     "instance profile",
@@ -15,7 +15,7 @@
     "instance metadata",
     "least privilege",
     "MOST secure",
-    "без ключей доступа"
+    "no access keys"
   ],
   "services": [
     "iam",

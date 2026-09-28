@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "databases"
   },
-  "concept": "Redshift: OLAP-хранилище для аналитики и BI",
-  "tests": "Выбор базы, спроектированной для сложных аналитических запросов по историческим данным.",
-  "expected": "Amazon Redshift — колоночное MPP-хранилище для OLAP. Триггеры: «complex analytical queries», «aggregations», «years of historical data», «BI dashboards».",
-  "why_not": "DynamoDB — key-value без аналитических join/scan; RDS — строчная OLTP; ElastiCache — кэш в памяти.",
+  "concept": "Redshift: OLAP warehouse for analytics and BI",
+  "tests": "Choosing a database designed for complex analytical queries over historical data.",
+  "expected": "Amazon Redshift — columnar MPP warehouse for OLAP. Triggers: \"complex analytical queries\", \"aggregations\", \"years of historical data\", \"BI dashboards\".",
+  "why_not": "DynamoDB is key-value without analytical joins/scans; RDS is row-based OLTP; ElastiCache is an in-memory cache.",
   "keywords": [
     "Redshift",
     "OLAP",
@@ -15,7 +15,7 @@
     "MPP",
     "data warehouse",
     "BI",
-    "исторические данные"
+    "historical data"
   ],
   "services": [
     "redshift",

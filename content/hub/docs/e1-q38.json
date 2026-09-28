@@ -4,16 +4,16 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "VPC: БД в private subnet, SG ссылается на SG app-tier",
-  "tests": "Как разместить уровень БД трёхуровневого приложения, чтобы он был недоступен из интернета, но доступен app-tier.",
-  "expected": "Private subnet без маршрута к IGW + security group БД, разрешающая трафик только от security group app-tier. Триггеры: «not reachable from the internet», «accessed by the application tier».",
-  "why_not": "Public subnet, подсеть балансировщика или маршрут к internet gateway делают БД доступной из интернета.",
+  "concept": "VPC: DB in a private subnet, SG references the app-tier SG",
+  "tests": "How to place the database tier of a three-tier app so it's unreachable from the internet but reachable by the app tier.",
+  "expected": "Private subnet with no route to an IGW + a DB security group allowing traffic only from the app-tier security group. Triggers: \"not reachable from the internet\", \"accessed by the application tier\".",
+  "why_not": "A public subnet, the load balancer's subnet or a route to an internet gateway make the DB reachable from the internet.",
   "keywords": [
     "private subnet",
     "security group reference",
     "three-tier",
     "database tier",
-    "без доступа из интернета"
+    "no internet access"
   ],
   "services": [
     "subnets",

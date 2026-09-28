@@ -4,15 +4,15 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "EBS: encryption by default на уровне региона",
-  "tests": "Как гарантировать шифрование всех новых EBS-томов без участия пользователей.",
-  "expected": "Включить EBS encryption by default в настройках EC2 каждого региона — новые тома и снапшоты шифруются автоматически. Триггеры: «always encrypted», «without relying on users».",
-  "why_not": "Ручное шифрование после создания — ошибки и окно plaintext; SCP с deny RunInstances блокирует все запуски; S3 default encryption не относится к EBS.",
+  "concept": "EBS: encryption by default at the Region level",
+  "tests": "How to guarantee all new EBS volumes are encrypted without relying on users.",
+  "expected": "Enable EBS encryption by default in the EC2 settings of each Region — new volumes and snapshots are encrypted automatically. Triggers: \"always encrypted\", \"without relying on users\".",
+  "why_not": "Manual encryption after creation — errors and a plaintext window; an SCP denying RunInstances blocks all launches; S3 default encryption doesn't apply to EBS.",
   "keywords": [
     "EBS encryption by default",
     "per region",
     "EBS",
-    "автоматическое шифрование",
+    "automatic encryption",
     "snapshots",
     "KMS"
   ],

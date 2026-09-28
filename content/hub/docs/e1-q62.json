@@ -4,15 +4,15 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "DR для S3: Cross-Region Replication + Route 53 failover",
-  "tests": "Как сохранить доступность статического контента S3 при отказе целого Region (выбрать два).",
-  "expected": "S3 Cross-Region Replication в bucket во втором Region + Route 53 failover routing между primary и репликой. Триггеры: «entire Region unavailable», «static website content remains accessible».",
-  "why_not": "Versioning и смена storage class работают в пределах одного Region; Transfer Acceleration лишь ускоряет загрузку.",
+  "concept": "DR for S3: Cross-Region Replication + Route 53 failover",
+  "tests": "How to keep static S3 content available if an entire Region fails (choose two).",
+  "expected": "S3 Cross-Region Replication to a bucket in a second Region + Route 53 failover routing between the primary and the replica. Triggers: \"entire Region unavailable\", \"static website content remains accessible\".",
+  "why_not": "Versioning and changing storage class work within a single Region; Transfer Acceleration only speeds up uploads.",
   "keywords": [
     "Cross-Region Replication",
     "CRR",
     "Route 53 failover",
-    "отказ Region",
+    "Region failure",
     "static website",
     "DR"
   ],

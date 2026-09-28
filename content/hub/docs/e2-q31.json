@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "EventBridge: content-based маршрутизация событий на несколько целей",
-  "tests": "Выбор сервиса для event-driven маршрутизации одного события к нескольким целям с фильтрацией по содержимому.",
-  "expected": "Amazon EventBridge — правила с content-based filtering (event patterns), одно событие → несколько targets (Lambda, SQS). S3 умеет отправлять события в EventBridge. Триггеры: «filter events and route by content», «multiple independent downstream», «event-driven».",
-  "why_not": "SNS делает fan-out, но фильтрация беднее; SQS — очередь, не роутер; Step Functions оркестрирует шаги workflow, а не маршрутизирует события.",
+  "concept": "EventBridge: content-based event routing to multiple targets",
+  "tests": "Choosing a service for event-driven routing of one event to multiple targets with content-based filtering.",
+  "expected": "Amazon EventBridge — rules with content-based filtering (event patterns), one event → multiple targets (Lambda, SQS). S3 can send events to EventBridge. Triggers: \"filter events and route by content\", \"multiple independent downstream\", \"event-driven\".",
+  "why_not": "SNS does fan-out but with weaker filtering; SQS — a queue, not a router; Step Functions orchestrates workflow steps rather than routing events.",
   "keywords": [
     "EventBridge",
     "event pattern",

@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "CloudFront: глобальная раздача статики из S3 origin",
-  "tests": "Как обеспечить низкую задержку и высокую доступность статического сайта для глобальных пользователей и защитить origin от перегрузки.",
-  "expected": "CloudFront с S3 origin — кэширование на edge locations, разгрузка origin. Триггеры: «globally distributed users», «static website», «low latency», «protection against origin overload».",
-  "why_not": "Раздача прямо из S3 — нет edge-кэша; один EC2 — не глобально и не HA; Route 53 latency routing на один сервер не сокращает задержку.",
+  "concept": "CloudFront: global delivery of static content from an S3 origin",
+  "tests": "How to give global users low latency and high availability for a static site and protect the origin from overload.",
+  "expected": "CloudFront with an S3 origin — caching at edge locations, offloading the origin. Triggers: \"globally distributed users\", \"static website\", \"low latency\", \"protection against origin overload\".",
+  "why_not": "Serving directly from S3 — no edge cache; a single EC2 — neither global nor HA; Route 53 latency routing to one server doesn't reduce latency.",
   "keywords": [
     "CloudFront",
     "S3 origin",
     "edge locations",
     "static website",
-    "кэширование",
-    "глобальные пользователи"
+    "caching",
+    "global users"
   ],
   "services": [
     "cloudfront",

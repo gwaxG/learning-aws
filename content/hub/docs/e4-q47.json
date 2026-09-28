@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "CloudFront: кэш и сжатие на edge для снижения data transfer out",
-  "tests": "Какие два изменения снижают стоимость передачи данных и латентность при повторяющихся запросах к origin.",
-  "expected": "CloudFront кэширует контент на edge (меньше нагрузки на origin и data transfer out) + compression текстовых ответов на edge (меньше байт). Триггеры: «reduce data transfer costs», «repeated requests to origin», «global users», (Choose two).",
-  "why_not": "Отдача всего из EC2 в одном регионе повышает стоимость и латентность; больший инстанс не снижает стоимость передачи.",
+  "concept": "CloudFront: edge caching and compression to cut data transfer out",
+  "tests": "Which two changes cut data transfer cost and latency for repeated requests to the origin.",
+  "expected": "CloudFront caches content at the edge (less origin load and data transfer out) + compresses text responses at the edge (fewer bytes). Triggers: \"reduce data transfer costs\", \"repeated requests to origin\", \"global users\", (Choose two).",
+  "why_not": "Serving everything from EC2 in one Region raises cost and latency; a bigger instance doesn't cut transfer cost.",
   "keywords": [
     "CloudFront",
     "edge caching",
     "compression",
     "data transfer out",
     "origin",
-    "снижение стоимости трафика"
+    "lower data transfer cost"
   ],
   "services": [
     "cloudfront",

@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "S3 Glacier Deep Archive: минимальная стоимость архива",
-  "tests": "Выбор класса хранения для редко используемого архива с извлечением до 12 часов.",
-  "expected": "S3 Glacier Deep Archive — самый дешёвый класс, Standard retrieval до 12 ч. Триггеры: «archival», «rarely accessed», «retrieval within 12 hours», «lowest storage cost».",
-  "why_not": "Standard и Standard-IA дороже для архива; Intelligent-Tiering — плата за мониторинг, для неизвестного паттерна.",
+  "concept": "S3 Glacier Deep Archive: lowest-cost archive",
+  "tests": "Choosing a storage class for a rarely accessed archive with retrieval within 12 hours.",
+  "expected": "S3 Glacier Deep Archive — the cheapest class, Standard retrieval within 12 h. Triggers: \"archival\", \"rarely accessed\", \"retrieval within 12 hours\", \"lowest storage cost\".",
+  "why_not": "Standard and Standard-IA are more expensive for archives; Intelligent-Tiering — monitoring fee, for unknown access patterns.",
   "keywords": [
     "Glacier Deep Archive",
     "archival",
     "12 hours",
     "rarely accessed",
     "lowest cost",
-    "архив"
+    "archive"
   ],
   "services": [
     "s3-storage-classes",

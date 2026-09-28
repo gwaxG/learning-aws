@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "EC2 purchasing: Savings Plans / RI на 3 года для стабильной 24/7 нагрузки",
-  "tests": "Выбор самой дешёвой модели для предсказуемой постоянной нагрузки на 3 года.",
-  "expected": "Compute Savings Plans или Standard Reserved Instances на 3 года — максимальная скидка за commitment. Триггеры: «steady, predictable 24/7», «next three years».",
-  "why_not": "On-Demand и Dedicated Hosts On-Demand — без скидки; Spot могут быть отозваны — не для непрерывного production.",
+  "concept": "EC2 purchasing: 3-year Savings Plans / RIs for steady 24/7 load",
+  "tests": "Choosing the cheapest option for a predictable, constant workload over 3 years.",
+  "expected": "Compute Savings Plans or 3-year Standard Reserved Instances — the biggest discount for commitment. Triggers: \"steady, predictable 24/7\", \"next three years\".",
+  "why_not": "On-Demand and On-Demand Dedicated Hosts — no discount; Spot can be reclaimed — not for continuous production.",
   "keywords": [
     "Savings Plans",
     "Reserved Instances",
-    "3 года",
+    "3 years",
     "steady 24/7",
     "commitment",
-    "скидка"
+    "discount"
   ],
   "services": [
     "ec2-purchasing"

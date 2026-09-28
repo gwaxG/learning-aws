@@ -4,18 +4,18 @@
     "type": "topic",
     "ref": "cost"
   },
-  "concept": "Lambda + API Gateway: оплата за запрос вместо простаивающего EC2",
-  "tests": "Ре-архитектура редко используемого always-on API в serverless, чтобы не платить за простой.",
-  "expected": "Перенести API в Lambda за API Gateway — оплата за запросы/выполнение, scale to zero. Триггеры: «sporadic traffic», «часами простаивает», «короткие всплески», «не платить за idle», «доступен по требованию».",
-  "why_not": "3-year RI — платить 24/7 за простой; Spot дешевле, но может быть отозван (2 мин) и всё равно работает постоянно; gp2→gp3 чуть экономит на диске, но не устраняет простой инстанса.",
+  "concept": "Lambda + API Gateway: pay per request instead of an idle EC2",
+  "tests": "Re-architecting a rarely used always-on API to serverless to stop paying for idle time.",
+  "expected": "Move the API to Lambda behind API Gateway — pay per request/execution, scale to zero. Triggers: \"sporadic traffic\", \"idle for hours\", \"short bursts\", \"don't pay for idle\", \"available on demand\".",
+  "why_not": "A 3-year RI means paying 24/7 for idle time; Spot is cheaper but can be reclaimed (2 min) and still runs constantly; gp2→gp3 saves a little on disk but does not eliminate instance idle time.",
   "keywords": [
     "Lambda",
     "API Gateway",
     "scale to zero",
     "pay per request",
     "idle capacity",
-    "простой",
-    "спорадический трафик"
+    "idle time",
+    "sporadic traffic"
   ],
   "services": [
     "lambda",

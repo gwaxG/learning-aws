@@ -4,18 +4,18 @@
     "type": "topic",
     "ref": "iam-security"
   },
-  "concept": "Organizations: SCP-guardrail на регион (aws:RequestedRegion)",
-  "tests": "Знание централизованного способа запретить всем member-аккаунтам работать вне разрешённого региона.",
-  "expected": "SCP на OU с Deny, если aws:RequestedRegion ≠ eu-west-1. Триггеры: «no member account», «outside region», «MOST effective», «organization».",
-  "why_not": "IAM-политики на каждого пользователя — ошибкоопасно и обходится новыми ролями; MFA на root не ограничивает регионы; permission boundary на management account не распространяется на member-аккаунты.",
+  "concept": "Organizations: SCP guardrail on Region (aws:RequestedRegion)",
+  "tests": "Knowing the centralized way to prevent all member accounts from operating outside an allowed Region.",
+  "expected": "An SCP on the OU with Deny if aws:RequestedRegion ≠ eu-west-1. Triggers: \"no member account\", \"outside region\", \"MOST effective\", \"organization\".",
+  "why_not": "Per-user IAM policies are error-prone and bypassed by new roles; MFA on root does not restrict Regions; a permission boundary on the management account does not extend to member accounts.",
   "keywords": [
     "SCP",
     "OU",
     "aws:RequestedRegion",
     "guardrail",
     "member accounts",
-    "ограничение регионов",
-    "вся организация"
+    "Region restriction",
+    "entire organization"
   ],
   "services": [
     "scp",

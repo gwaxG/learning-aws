@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "IAM cross-account: ExternalId против confused deputy",
-  "tests": "Какой элемент trust policy защищает от проблемы confused deputy при доступе стороннего SaaS к аккаунтам клиентов.",
-  "expected": "Condition sts:ExternalId в trust policy роли клиента — общий секрет между клиентом и провайдером. Триггеры: «third party / SaaS provider», «cross-account access», «confused deputy».",
-  "why_not": "aws:SourceVpc — происхождение из VPC; aws:RequestedRegion — регион; kms:ViaService — контекст сервиса KMS; ни один не решает доверие третьей стороне.",
+  "concept": "IAM: cross-account ExternalId vs confused deputy",
+  "tests": "Which trust policy element protects against the confused deputy problem when a third-party SaaS accesses customer accounts.",
+  "expected": "Condition sts:ExternalId in the customer role's trust policy — a shared secret between customer and provider. Triggers: \"third party / SaaS provider\", \"cross-account access\", \"confused deputy\".",
+  "why_not": "aws:SourceVpc — VPC origin; aws:RequestedRegion — region; kms:ViaService — KMS service context; none addresses third-party trust.",
   "keywords": [
     "ExternalId",
     "confused deputy",

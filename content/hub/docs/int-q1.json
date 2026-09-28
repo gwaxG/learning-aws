@@ -4,19 +4,18 @@
     "type": "topic",
     "ref": "integration"
   },
-  "concept": "SQS: буферизация и развязка producer/consumer при пиках",
-  "tests": "Умение развязать синхронную связку сервисов и поглотить всплески нагрузки очередью.",
-  "expected": "Checkout пишет заказы в SQS, обработчик опрашивает очередь и масштабируется по её глубине — заказы не теряются. Триггеры: «overwhelmed», «orders are lost», «flash sales», «decouple».",
-  "why_not": "ALB распределяет нагрузку, но не буферизует при насыщении всех target; увеличенный timeout всё равно отбрасывает запросы и держит producer; крупный инстанс — вертикальный потолок и сохраняет жёсткую связь.",
+  "concept": "SQS: buffering and decoupling producer/consumer during spikes",
+  "tests": "Decoupling a synchronous service pair and absorbing load bursts with a queue.",
+  "expected": "Checkout writes orders to SQS, the processor polls the queue and scales on its depth — no orders are lost. Triggers: \"overwhelmed\", \"orders are lost\", \"flash sales\", \"decouple\".",
+  "why_not": "An ALB distributes load but does not buffer when all targets are saturated; a longer timeout still drops requests and blocks the producer; a bigger instance hits a vertical ceiling and keeps tight coupling.",
   "keywords": [
     "SQS",
     "decoupling",
     "buffer",
     "queue depth",
     "spikes",
-    "развязка",
-    "пиковая нагрузка",
-    "потеря заказов"
+    "peak load",
+    "lost orders"
   ],
   "services": [
     "sqs",

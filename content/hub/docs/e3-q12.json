@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "S3: доступ только из VPC через gateway endpoint и aws:SourceVpce",
-  "tests": "Как ограничить доступ к бакету только конкретной VPC, без пути через интернет.",
-  "expected": "Gateway VPC endpoint для S3 + bucket policy с Deny, если aws:SourceVpce ≠ id endpoint. Триггеры: «accessible only from a specific VPC», «never over the public internet».",
-  "why_not": "Публичный бакет противоречит требованию; IGW/NAT и Transfer Acceleration идут через публичный путь.",
+  "concept": "VPC endpoints: S3 access only from a VPC via gateway endpoint + aws:SourceVpce",
+  "tests": "How to restrict bucket access to one specific VPC, with no path over the internet.",
+  "expected": "Gateway VPC endpoint for S3 + bucket policy with Deny if aws:SourceVpce ≠ the endpoint ID. Triggers: \"accessible only from a specific VPC\", \"never over the public internet\".",
+  "why_not": "A public bucket contradicts the requirement; IGW/NAT and Transfer Acceleration go over the public path.",
   "keywords": [
     "gateway VPC endpoint",
     "aws:SourceVpce",
     "bucket policy",
     "private access",
-    "только из VPC",
-    "без интернета"
+    "VPC-only access",
+    "no internet"
   ],
   "services": [
     "vpc-endpoints",

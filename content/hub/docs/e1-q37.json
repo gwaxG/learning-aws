@@ -4,17 +4,16 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "AWS Budgets: алерты по прогнозу расходов",
-  "tests": "Какой сервис позволяет задать порог расходов и получать оповещения, когда фактические или прогнозные затраты его превышают.",
-  "expected": "AWS Budgets — cost/usage budgets с алертами по actual и forecasted spend. Триггеры: «custom alerts», «projected monthly costs exceed a threshold».",
-  "why_not": "Trusted Advisor даёт рекомендации, но не бюджетные алерты; CUR — сырые данные биллинга; CloudWatch billing widgets — визуализация без гибких алертов по прогнозу.",
+  "concept": "AWS Budgets: alerts on forecasted spend",
+  "tests": "Which service lets you set a spend threshold and get alerts when actual or forecasted costs exceed it.",
+  "expected": "AWS Budgets — cost/usage budgets with alerts on actual and forecasted spend. Triggers: \"custom alerts\", \"projected monthly costs exceed a threshold\".",
+  "why_not": "Trusted Advisor gives recommendations, not budget alerts; CUR — raw billing data; CloudWatch billing widgets — visualization without flexible forecast alerts.",
   "keywords": [
     "AWS Budgets",
     "forecast",
     "alert",
     "threshold",
-    "прогноз расходов",
-    "оповещение"
+    "spend forecast"
   ],
   "services": [
     "budgets",

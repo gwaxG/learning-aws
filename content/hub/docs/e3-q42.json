@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "CloudFront: CDN-кэширование на edge",
-  "tests": "Выбор сервиса для кэширования статического и динамического контента близко к пользователям и снижения нагрузки на origin.",
-  "expected": "Amazon CloudFront кэширует на edge locations по всему миру. Триггеры: «cache content close to users», «reduce origin load», «global», «static and dynamic».",
-  "why_not": "Global Accelerator ускоряет сетевой путь, но не кэширует; Route 53 только маршрутизирует; ALB в одном регионе — нет edge.",
+  "concept": "CloudFront: CDN caching at the edge",
+  "tests": "Choosing a service to cache static and dynamic content close to users and reduce origin load.",
+  "expected": "Amazon CloudFront caches at edge locations worldwide. Triggers: \"cache content close to users\", \"reduce origin load\", \"global\", \"static and dynamic\".",
+  "why_not": "Global Accelerator speeds up the network path but does not cache; Route 53 only routes; an ALB in one region — no edge.",
   "keywords": [
     "CloudFront",
     "CDN",
     "edge locations",
     "caching",
     "origin load",
-    "кэш у пользователей"
+    "cache close to users"
   ],
   "services": [
     "cloudfront",

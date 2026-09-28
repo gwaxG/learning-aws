@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "Stateless веб-слой: вынос сессий в ElastiCache/DynamoDB",
-  "tests": "Куда хранить сессии, чтобы они переживали terminate инстансов при scale-in.",
-  "expected": "Внешнее хранилище сессий — ElastiCache for Redis или DynamoDB; веб-слой остаётся stateless. Триггеры: «session data must survive instance termination», «scale-in».",
-  "why_not": "In-memory, instance store и EBS конкретного инстанса теряются (или недоступны) при его terminate.",
+  "concept": "Stateless web tier: offload sessions to ElastiCache/DynamoDB",
+  "tests": "Where to store sessions so they survive instance termination during scale-in.",
+  "expected": "External session store — ElastiCache for Redis or DynamoDB; the web tier stays stateless. Triggers: \"session data must survive instance termination\", \"scale-in\".",
+  "why_not": "In-memory, instance store and a specific instance's EBS are lost (or unavailable) when it is terminated.",
   "keywords": [
     "session state",
     "stateless",
     "ElastiCache for Redis",
     "DynamoDB",
     "scale-in",
-    "хранение сессий"
+    "session storage"
   ],
   "services": [
     "elasticache",

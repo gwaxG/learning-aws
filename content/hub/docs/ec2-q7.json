@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "ec2-compute"
   },
-  "concept": "Auto Scaling scale-in: deregistration delay и scale-in protection",
-  "tests": "Предотвращение обрыва долгих соединений при scale-in ASG (выбрать два).",
-  "expected": "Увеличить deregistration delay (connection draining) target group + scale-in protection / более долгий cooldown. Триггеры: «обрываются загрузки при scale in», «long-running connections».",
-  "why_not": "Смена health check с ELB на EC2 убирает проверку на уровне приложения и не влияет на draining; замена ALB на Classic LB — шаг назад, draining не решает.",
+  "concept": "Auto Scaling scale-in: deregistration delay and scale-in protection",
+  "tests": "Preventing long-running connections from being cut during ASG scale-in (choose two).",
+  "expected": "Increase the target group deregistration delay (connection draining) + scale-in protection / a longer cooldown. Triggers: \"uploads are cut off on scale in\", \"long-running connections\".",
+  "why_not": "Switching the health check from ELB to EC2 removes application-level checks and does not affect draining; replacing ALB with Classic LB is a step back and does not solve draining.",
   "keywords": [
     "deregistration delay",
     "connection draining",
@@ -15,7 +15,7 @@
     "cooldown",
     "scale in",
     "long-running connections",
-    "обрыв загрузок"
+    "uploads cut off"
   ],
   "services": [
     "auto-scaling",

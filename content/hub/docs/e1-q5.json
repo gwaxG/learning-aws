@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "EC2 purchasing: Spot для прерываемых batch-задач",
-  "tests": "Выбор самой дешёвой модели покупки EC2 для stateless, fault-tolerant batch-задачи, допускающей прерывание.",
-  "expected": "Spot Instances — максимальная скидка, подходит для прерываемой отказоустойчивой работы. Триггеры: «can tolerate interruption», «stateless», «fault-tolerant», «batch».",
-  "why_not": "On-Demand — без скидки; Reserved Instances — для постоянной 24/7 нагрузки, а не нескольких часов ночью; Dedicated Hosts — самые дорогие, для лицензий/compliance.",
+  "concept": "EC2 purchasing: Spot for interruptible batch jobs",
+  "tests": "Choosing the cheapest EC2 purchasing option for a stateless, fault-tolerant batch job that can tolerate interruption.",
+  "expected": "Spot Instances — the biggest discount, suited to interruptible fault-tolerant work. Triggers: \"can tolerate interruption\", \"stateless\", \"fault-tolerant\", \"batch\".",
+  "why_not": "On-Demand — no discount; Reserved Instances — for steady 24/7 load, not a few hours at night; Dedicated Hosts — most expensive, for licensing/compliance.",
   "keywords": [
     "Spot Instances",
     "interruption",
     "fault-tolerant",
     "batch",
     "stateless",
-    "самый дешёвый"
+    "cheapest"
   ],
   "services": [
     "ec2-purchasing",

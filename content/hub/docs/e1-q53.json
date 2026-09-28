@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "Inspector: непрерывное сканирование уязвимостей EC2 и контейнеров",
-  "tests": "Какой сервис автоматически и непрерывно сканирует EC2 и container images на уязвимости ПО и сетевую доступность.",
-  "expected": "Amazon Inspector — автоматическое непрерывное сканирование EC2, образов в ECR (и Lambda) на CVE и network reachability. Триггеры: «software vulnerabilities», «container images», «unintended network exposure».",
-  "why_not": "AWS Config — соответствие конфигураций; GuardDuty — обнаружение угроз по логам и поведению; Trusted Advisor — общие проверки best practices.",
+  "concept": "Inspector: continuous vulnerability scanning of EC2 and containers",
+  "tests": "Which service automatically and continuously scans EC2 and container images for software vulnerabilities and network reachability.",
+  "expected": "Amazon Inspector — automatic continuous scanning of EC2, ECR images (and Lambda) for CVEs and network reachability. Triggers: \"software vulnerabilities\", \"container images\", \"unintended network exposure\".",
+  "why_not": "AWS Config — configuration compliance; GuardDuty — threat detection from logs and behavior; Trusted Advisor — general best-practice checks.",
   "keywords": [
     "Amazon Inspector",
     "vulnerability scanning",
     "CVE",
     "container images",
     "network reachability",
-    "уязвимости"
+    "vulnerabilities"
   ],
   "services": [
     "inspector",

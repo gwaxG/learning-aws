@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "ELB: NLB — Layer 4, миллионы запросов/с, сохранение client IP",
-  "tests": "Выбор типа балансировщика для очень высокой TCP-нагрузки с ультранизкой задержкой и сохранением source IP.",
-  "expected": "Network Load Balancer — Layer 4 (TCP/UDP/TLS), миллионы rps, ультранизкая задержка, сохраняет client source IP. Триггеры: «millions of requests per second», «TCP», «ultra-low latency», «preserves client source IP».",
-  "why_not": "ALB — Layer 7 для HTTP(S); Classic — legacy; Gateway Load Balancer — для встраивания виртуальных appliances.",
+  "concept": "ELB: NLB — Layer 4, millions of requests/s, preserves client IP",
+  "tests": "Choosing a load balancer type for very high TCP load with ultra-low latency and source IP preservation.",
+  "expected": "Network Load Balancer — Layer 4 (TCP/UDP/TLS), millions of rps, ultra-low latency, preserves the client source IP. Triggers: \"millions of requests per second\", \"TCP\", \"ultra-low latency\", \"preserves client source IP\".",
+  "why_not": "ALB — Layer 7 for HTTP(S); Classic — legacy; Gateway Load Balancer — for inserting virtual appliances.",
   "keywords": [
     "Network Load Balancer",
     "NLB",

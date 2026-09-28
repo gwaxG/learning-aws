@@ -1,0 +1,48 @@
+{
+  "id": "u-20260927-control-tower-account-factory",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "A company wants to streamline the process of creating multiple AWS accounts within an AWS Organization. Each organization unit (OU) must be able to launch new accounts with preapproved configurations from the security team which will standardize the baselines and network configurations for all accounts in the organization.\nWhich solution entails the least amount of effort to implement?",
+    "options": [
+      "Configure AWS Resource Access Manager (AWS RAM) to launch new AWS accounts as well as standardize the baselines and network configurations for each organization unit",
+      "Set up an AWS Control Tower Landing Zone. Enable pre-packaged guardrails to enforce policies or detect violations.",
+      "Centralized the creation of AWS accounts using AWS Systems Manager OpsCenter. Enforce policies and detect violations to all AWS accounts using AWS Security Hub.",
+      "Set up an AWS Config aggregator on the root account of the organization to enable multi-account, multi-region data aggregation. Deploy conformance packs to standardize the baselines and network configurations for all accounts."
+    ],
+    "answer": 1,
+    "explanation": "AWS Control Tower sets up a landing zone on top of Organizations in a few clicks: Account Factory provisions new accounts per OU from preapproved baselines (including VPC/network configuration), and pre-packaged guardrails (controls) enforce policies preventively (SCPs) or detect violations (Config rules). That is the least effort. AWS RAM only shares existing resources (subnets, TGW) between accounts — it can't create accounts. Systems Manager OpsCenter manages operational issues (OpsItems) and Security Hub aggregates security findings — neither provisions accounts. A Config aggregator and conformance packs give visibility and rule deployment but do not create accounts and require far more manual setup."
+  },
+  "concept": "Control Tower: landing zone with guardrails and centralized logging",
+  "tests": "Choosing the managed service that provisions standardized new accounts per OU with preapproved baselines and guardrails with least effort.",
+  "expected": "AWS Control Tower landing zone: Account Factory for new accounts with preapproved baselines/network config + pre-packaged guardrails. Triggers: \"streamline creating multiple accounts\", \"preapproved configurations\", \"baselines\", \"least effort\" → Control Tower.",
+  "why_not": "RAM only shares resources, can't create accounts; OpsCenter handles operational issues and Security Hub aggregates findings — no account provisioning; Config aggregator + conformance packs only evaluate/deploy rules and need much more manual work.",
+  "keywords": [
+    "Control Tower",
+    "landing zone",
+    "Account Factory",
+    "guardrails",
+    "preapproved configurations",
+    "baseline",
+    "new accounts",
+    "OU",
+    "least effort"
+  ],
+  "services": [
+    "control-tower",
+    "organizations",
+    "ram",
+    "config",
+    "security-hub"
+  ],
+  "topics": [
+    "iam-security",
+    "monitoring"
+  ],
+  "domain": 1,
+  "related": [
+    "e5-q56"
+  ]
+}

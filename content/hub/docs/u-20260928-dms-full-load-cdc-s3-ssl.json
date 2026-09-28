@@ -1,0 +1,45 @@
+{
+  "id": "u-20260928-dms-full-load-cdc-s3-ssl",
+  "source": {
+    "type": "user",
+    "added": "2026-09-28"
+  },
+  "question": {
+    "stem": "A company has an on-premises MySQL database that needs to be replicated in Amazon S3 as CSV files. The database will eventually be launched on an Amazon Aurora Serverless cluster and accessed through an Amazon RDS Proxy endpoint to allow the web applications to pool and share database connections. Once data has been fully copied, the ongoing changes to the on-premises database should be continually streamed into the S3 bucket. The company wants a solution that can be implemented with little management overhead yet still highly secure.\nWhich ingestion pattern should a solutions architect take?",
+    "options": [
+      "Set up a full load replication task using AWS Database Migration Service (AWS DMS). Launch a DMS endpoint with SSL using the AWS Network Firewall service.",
+      "Use AWS Schema Conversion Tool (AWS SCT) to convert MySQL data to CSV files. Set up the AWS Transform MGN to capture ongoing changes from the on-premises MySQL database and send them to S3.",
+      "Create a full load and change data capture (CDC) replication task using AWS Database Migration Service (AWS DMS). Add a new Certificate Authority (CA) certificate and create a DMS endpoint with SSL.",
+      "Use AWS DataSync to migrate data to S3 and AWS Data Transfer Terminal for ongoing changes. Create your own custom AWS KMS envelope encryption key for the associated DataSync job."
+    ],
+    "answer": 2,
+    "explanation": "AWS DMS supports S3 as a target (CSV by default) and a 'full load + CDC' task type: it copies existing data, then continuously streams ongoing changes read from the MySQL binlog. For security, import the CA certificate into DMS and configure the source endpoint to use SSL, encrypting data in transit. 'Full load' only stops after the initial copy — no ongoing changes — and Network Firewall doesn't create SSL endpoints. SCT converts schemas between engines, it doesn't export data to CSV, and MGN replicates servers, not database changes to S3. DataSync moves files, not database changes, and Data Transfer Terminal is a physical location for uploading data from devices — neither does CDC."
+  },
+  "concept": "DMS: full load + CDC to S3 with SSL endpoint",
+  "tests": "Choosing DMS full load + CDC to continuously replicate an on-prem database into S3, secured with an SSL endpoint (CA certificate).",
+  "expected": "DMS replication task of type full load + CDC, S3 target (CSV), source endpoint with SSL using an imported CA certificate. Triggers: \"initial copy then ongoing changes continually streamed\" → full load + CDC; \"highly secure\" → SSL endpoint.",
+  "why_not": "Full load only = no ongoing changes, Network Firewall doesn't do SSL endpoints; SCT converts schemas and MGN replicates servers; DataSync moves files and Data Transfer Terminal is a physical upload site — no CDC.",
+  "keywords": [
+    "DMS",
+    "full load",
+    "CDC",
+    "change data capture",
+    "S3 target",
+    "CSV",
+    "SSL endpoint",
+    "CA certificate",
+    "binlog",
+    "SCT"
+  ],
+  "services": [
+    "dms",
+    "sct",
+    "datasync",
+    "mgn"
+  ],
+  "topics": [
+    "data-migration"
+  ],
+  "domain": 1,
+  "related": []
+}

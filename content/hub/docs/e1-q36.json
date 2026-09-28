@@ -4,16 +4,16 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "VPC endpoints: доступ к S3 только из VPC (gateway endpoint + aws:sourceVpce)",
-  "tests": "Как гарантировать доступ к S3 bucket только из VPC без выхода в публичный интернет.",
-  "expected": "Gateway VPC endpoint для S3 + bucket policy с условием aws:sourceVpce, разрешающим доступ только через этот endpoint. Триггеры: «only accessed from within its VPC», «never over the public internet».",
-  "why_not": "ACL не ограничивает доступ по VPC; NAT gateway отправляет трафик через интернет; Transfer Acceleration использует публичные edge locations.",
+  "concept": "VPC endpoints: S3 access only from the VPC (gateway endpoint + aws:sourceVpce)",
+  "tests": "How to guarantee an S3 bucket is accessed only from within the VPC, never over the public internet.",
+  "expected": "Gateway VPC endpoint for S3 + a bucket policy with an aws:sourceVpce condition allowing access only through that endpoint. Triggers: \"only accessed from within its VPC\", \"never over the public internet\".",
+  "why_not": "ACLs can't restrict access by VPC; a NAT gateway sends traffic over the internet; Transfer Acceleration uses public edge locations.",
   "keywords": [
     "gateway VPC endpoint",
     "aws:sourceVpce",
     "bucket policy",
-    "приватный доступ",
-    "без интернета"
+    "private access",
+    "no internet"
   ],
   "services": [
     "vpc-endpoints",

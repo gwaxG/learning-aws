@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "Global Accelerator: static anycast IP и быстрый failover по AWS backbone",
-  "tests": "Выбор сервиса для маршрутизации к ближайшему здоровому региональному endpoint со статическими IP.",
-  "expected": "AWS Global Accelerator — 2 static anycast IP, трафик по глобальной сети AWS к ближайшему здоровому endpoint, быстрый failover, TCP/UDP. Триггеры: «static anycast IPs», «AWS global network», «fast failover», «closest healthy endpoint».",
-  "why_not": "CloudFront — кэширование HTTP(S)-контента, не произвольные TCP/UDP endpoints; Route 53 weighted — по весам, не по близости; ALB — региональный.",
+  "concept": "Global Accelerator: static anycast IPs and fast failover over AWS backbone",
+  "tests": "Choosing a service to route to the nearest healthy regional endpoint with static IPs.",
+  "expected": "AWS Global Accelerator — 2 static anycast IPs, traffic over the AWS global network to the nearest healthy endpoint, fast failover, TCP/UDP. Triggers: \"static anycast IPs\", \"AWS global network\", \"fast failover\", \"closest healthy endpoint\".",
+  "why_not": "CloudFront — caches HTTP(S) content, not arbitrary TCP/UDP endpoints; Route 53 weighted — by weight, not proximity; ALB — regional.",
   "keywords": [
     "Global Accelerator",
     "anycast IP",
@@ -15,7 +15,7 @@
     "AWS backbone",
     "fast failover",
     "TCP/UDP",
-    "ближайший endpoint"
+    "closest endpoint"
   ],
   "services": [
     "global-accelerator",

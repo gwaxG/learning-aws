@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "Systems Manager Patch Manager: патчинг парка EC2",
-  "tests": "Выбор сервиса для планового патчинга ОС на множестве EC2 с отчётом о compliance без входа на серверы.",
-  "expected": "SSM Patch Manager: patch baselines, maintenance windows, отчёты о patch compliance. Триггеры: «apply OS patches on a schedule», «track compliance», «avoid logging into each server».",
-  "why_not": "Inspector находит уязвимости, но не патчит; Config отслеживает состояние; CloudFormation провижинит.",
+  "concept": "Systems Manager Patch Manager: patching an EC2 fleet",
+  "tests": "Choosing a service for scheduled OS patching across many EC2 instances with compliance reporting, without logging into servers.",
+  "expected": "SSM Patch Manager: patch baselines, maintenance windows, patch compliance reports. Triggers: \"apply OS patches on a schedule\", \"track compliance\", \"avoid logging into each server\".",
+  "why_not": "Inspector finds vulnerabilities but does not patch; Config tracks state; CloudFormation provisions.",
   "keywords": [
     "Patch Manager",
     "Systems Manager",
     "OS patching",
     "maintenance window",
     "patch compliance",
-    "без входа на серверы"
+    "no server login"
   ],
   "services": [
     "systems-manager",

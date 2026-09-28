@@ -1,182 +1,176 @@
 {
   "slug": "ha-dr",
-  "title": "HA, DR и отказоустойчивость",
+  "title": "HA, DR & Resilience",
   "domains": [
     2
   ],
   "essentials": [
     {
-      "heading": "AZ, Region и Edge",
-      "body": "**Что.** **Region** — географическая область с несколькими изолированными **Availability Zones**; каждая — это один или несколько отдельных дата-центров с независимым питанием, охлаждением и сетью, соединённых приватными каналами с низкой задержкой. **Edge locations** (CloudFront, Route 53, Global Accelerator) отдают контент ближе к пользователям, но не размещают уровни приложения.\n\n**Зачем.** AZ обеспечивают изоляцию отказов внутри одного Region, так что авария в одной AZ (питание, наводнение, сеть) не кладёт всю нагрузку, а Regions изолируют крупномасштабные или геополитические сбои.\n\n**Как.** Для HA распределяйте вычисления и данные минимум по **2 AZ** за ALB/ASG; репликация внутри Region **синхронная** и с низкой задержкой. Используйте **multi-Region** для DR и глобальной задержки — межрегиональная репликация **асинхронная** и идёт по магистрали AWS.\n\n**Экзамен.** Multi-AZ = HA внутри одного Region; **Multi-Region = DR** и меньшая глобальная задержка за бо́льшие деньги. Edge — только для кэширования/DNS, никогда не для состояния приложения."
+      "heading": "AZs vs Regions vs Edge",
+      "body": "**What.** A **Region** is a geographic area containing multiple isolated **Availability Zones** — each one or more discrete data centers with independent power, cooling, and networking, connected by low-latency private links. **Edge locations** (CloudFront, Route 53, Global Accelerator) serve content close to users but do not host app tiers.\n\n**Why.** AZs give fault isolation inside one Region so a single-AZ blast (power, flood, network) does not take the whole workload down, while Regions isolate large-scale or geopolitical failures.\n\n**How.** Spread compute and data across **at least 2 AZs** behind an ALB/ASG for HA; replication inside a Region is **synchronous** and low-latency. Use **multi-Region** for DR and global latency — cross-Region replication is **asynchronous** over the AWS backbone.\n\n**Exam.** Multi-AZ = HA inside one Region; **Multi-Region = DR** and lower global latency at higher cost. Edge is for caching/DNS only, never application state."
     },
     {
-      "heading": "RTO и RPO",
-      "body": "**Что.** **RTO** (Recovery Time Objective) — сколько времени система может **простаивать** до завершения восстановления. **RPO** (Recovery Point Objective) — какая **потеря данных** (измеряется во времени) допустима; задаётся частотой бэкапов или репликации. Пример: `RPO=1h` — бэкап минимум раз в час; `RTO=4h` — восстановиться за четыре часа.\n\n**Зачем.** Эти два числа — бизнес-вводные, по которым выбирают DR-стратегию и обосновывают расходы на резервную инфраструктуру.\n\n**Как.** Меньший RTO требует больше заранее подготовленной резервной ёмкости (warm/active); меньший RPO — более частой или непрерывной репликации (snapshots → async → synchronous). По мере приближения обеих целей к нулю стоимость резко растёт.\n\n**Экзамен.** RPO находится **до** инцидента (окно потерянных данных); RTO — **после** (окно простоя). Выбирайте **самый дешёвый** DR-паттерн, который всё ещё укладывается в обе цели: Backup/Restore для мягких целей, Multi-Site Active/Active — только для почти нулевых.",
+      "heading": "RTO vs RPO",
+      "body": "**What.** **RTO** (Recovery Time Objective) is how long you can be **down** before recovery completes. **RPO** (Recovery Point Objective) is how much **data loss** (measured in time) is acceptable, set by backup or replication frequency. Example: `RPO=1h` means back up at least hourly; `RTO=4h` means recover within four hours.\n\n**Why.** These two numbers are the business inputs that pick a DR strategy and justify the spend on standby infrastructure.\n\n**How.** Lower RTO needs more pre-provisioned standby capacity (warm/active); lower RPO needs more frequent or continuous replication (snapshots → async → synchronous). Cost rises sharply as both targets approach zero.\n\n**Exam.** RPO sits **before** the incident (data window lost); RTO sits **after** (downtime window). Match the **cheapest** DR pattern that still meets both targets — Backup/Restore for loose targets, Multi-Site Active/Active only for near-zero.",
       "diagram": {
         "src": "rto-rpo.svg",
-        "caption": "RPO измеряет потерю данных до инцидента; RTO — простой после него. Стратегии идут от дешёвых/медленных (Backup & Restore) к дорогим/почти мгновенным (Multi-Site Active/Active)."
+        "caption": "RPO measures data loss before the incident; RTO measures downtime after it. Strategies move from cheap/slow (Backup & Restore) to costly/near-zero (Multi-Site Active/Active)."
       }
     },
     {
-      "heading": "4 DR-стратегии",
-      "body": "**Что.** Четыре канонических DR-паттерна, упорядоченных по стоимости и скорости восстановления: **Backup & Restore**, **Pilot Light**, **Warm Standby**, **Multi-Site Active/Active**.\n\n**Зачем.** Каждый размен резервных расходов на RTO/RPO позволяет выбрать самый дешёвый вариант, который всё ещё удовлетворяет бизнес-целям.\n\n**Как.** **Backup & Restore** хранит только данные; инфраструктура пересоздаётся при аварии (минимальная стоимость, RTO/RPO — часы). **Pilot Light** реплицирует данные и держит минимальное ядро (например, БД) запущенным в DR Region; вычисления выключены (RTO — десятки минут). **Warm Standby** держит **уменьшенную, но полностью рабочую** копию, которую масштабируют при failover (RTO — минуты). **Multi-Site Active/Active** работает на полной мощности в 2+ Regions, одновременно обслуживающих трафик (RTO/RPO почти нулевые, максимальная стоимость).\n\n**Экзамен.** Порядок по стоимости фиксирован — если в вопросе щедрые RTO/RPO и жёсткий бюджет, выбирайте **более дешёвый** уровень, который всё ещё выполняет цели. Multi-Site — избыточен, если почти нулевые значения не требуются явно.",
+      "heading": "The 4 DR Strategies",
+      "body": "**What.** Four canonical DR patterns ordered by cost and recovery speed: **Backup & Restore**, **Pilot Light**, **Warm Standby**, **Multi-Site Active/Active**.\n\n**Why.** Each trades standby spend against RTO/RPO so you can pick the cheapest option that still satisfies the business targets.\n\n**How.** **Backup & Restore** keeps only data; rebuild infra on disaster (lowest cost, RTO/RPO in hours). **Pilot Light** replicates data and keeps a minimal core (e.g. DB) live in the DR Region; compute is off (RTO tens of min). **Warm Standby** runs a **scaled-down but fully functional** copy that you scale up on failover (RTO minutes). **Multi-Site Active/Active** runs full capacity in 2+ Regions serving traffic simultaneously (near-zero RTO/RPO, highest cost).\n\n**Exam.** Order is fixed by cost — when a question gives generous RTO/RPO and a tight budget, pick the **cheaper** tier that still meets the targets. Multi-Site is overkill unless near-zero is mandated.",
       "diagram": {
         "src": "dr-strategies.svg",
-        "caption": "Четыре DR-стратегии разменивают стоимость на RTO/RPO: Backup & Restore — самая дешёвая, но медленная; Multi-Site Active/Active — почти мгновенная, но самая дорогая."
+        "caption": "The four DR strategies trade cost against RTO/RPO: Backup & Restore is cheapest but slowest; Multi-Site Active/Active is near-instant but most expensive."
       },
       "links": [
-        {
-          "label": "Варианты disaster recovery в облаке",
-          "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html"
-        },
-        {
-          "label": "Reliability Pillar: планирование DR",
-          "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/plan-for-disaster-recovery-dr.html"
-        }
+        {"label": "Disaster recovery options in the cloud", "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html"},
+        {"label": "Reliability Pillar: plan for DR", "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/plan-for-disaster-recovery-dr.html"}
       ]
     },
     {
-      "heading": "Развязка (decoupling) и stateless",
-      "body": "**Что.** Отказоустойчивое приложение — **stateless** за load balancer, чтобы любой instance мог обслужить любой запрос, а компоненты **развязаны (decoupled)** через очереди/топики, чтобы отказ одного уровня не распространялся каскадом.\n\n**Зачем.** Stateless + decoupling = instances одноразовые, поэтому **самовосстановление ASG** прозрачно заменяет отказавшие, не теряя пользовательские сессии и трафик producer.\n\n**Как.** Используйте **ALB/NLB + Auto Scaling Group в ≥2 AZ** с health checks — нездоровые targets выводятся (draining) и заменяются. Выносите состояние сессий в **ElastiCache (Redis)** или **DynamoDB**, а не в локальную память. Буферизуйте работу через **SQS/SNS/EventBridge** (повторы + DLQ), чтобы медленные consumers не тормозили producers. Для общего хранилища используйте **S3/EFS**, никогда не локальный диск instance.\n\n**Экзамен.** «Сессии теряются при замене instance» → вынести состояние. «Связанность producer/consumer» → SQS. ASG самовосстанавливается, только если instances взаимозаменяемы; sticky sessions с локальным диском — ответ-ловушка."
+      "heading": "Decoupling & Statelessness",
+      "body": "**What.** A resilient app is **stateless** behind a load balancer so any instance can serve any request, and components are **decoupled** via queues/topics so failure in one tier does not cascade.\n\n**Why.** Stateless + decoupled = instances are disposable, so **ASG self-healing** replaces failures transparently without dropping user sessions or producer traffic.\n\n**How.** Use **ALB/NLB + Auto Scaling Group across ≥2 AZs** with health checks — unhealthy targets are drained and replaced. Externalize session state to **ElastiCache (Redis)** or **DynamoDB**, not local memory. Buffer work with **SQS/SNS/EventBridge** (retries + DLQs) so slow consumers cannot stall producers. Use **S3/EFS** for shared storage, never instance-local disk.\n\n**Exam.** \"Sessions lost on instance replacement\" → externalize state. \"Producer/consumer coupling\" → SQS. ASG only self-heals when instances are interchangeable; sticky-session local disk is a trap answer."
     },
     {
-      "heading": "Durability данных и бэкапы",
-      "body": "**Что.** Управляемые примитивы бэкапа, которые надёжно хранят point-in-time копии данных и могут реплицировать их между Regions и аккаунтами для DR.\n\n**Зачем.** Они дают восстанавливаемую копию, даже если рабочее хранилище, Region или аккаунт скомпрометированы, — защищают RPO и позволяют восстановиться поверх любой DR-стратегии.\n\n**Как.** **EBS snapshots** инкрементальные, хранятся в S3 (11 девяток), их можно **копировать между Regions** и шарить между аккаунтами. **AWS Backup** централизует политики для EBS, RDS, DynamoDB, EFS, FSx и S3 через **backup plans** с расписаниями, lifecycle (warm→cold) и **копированием cross-Region / cross-account**. **S3 CRR** асинхронно реплицирует объекты в bucket другого Region (versioning нужен на обеих сторонах); **SRR** реплицирует в пределах одного Region.\n\n**Экзамен.** «Централизовать бэкапы разных сервисов» → **AWS Backup**. «DR объектов с низким RPO между Regions» → **CRR + versioning**. SRR **не** защищает от отказа Region."
+      "heading": "Data Durability & Backups",
+      "body": "**What.** Managed backup primitives that durably store point-in-time copies of data and can replicate them across Regions and accounts for DR.\n\n**Why.** They give a recoverable copy even if the live storage, Region, or account is compromised — protecting RPO and enabling restore on top of any DR strategy.\n\n**How.** **EBS snapshots** are incremental, stored in S3 (11 nines), and can be **copied cross-Region** and shared cross-account. **AWS Backup** centralises policies across EBS, RDS, DynamoDB, EFS, FSx, and S3 via **backup plans** with schedules, lifecycle (warm→cold), and **cross-Region / cross-account copy**. **S3 CRR** asynchronously replicates objects to a bucket in another Region (versioning required on both ends); **SRR** replicates within one Region.\n\n**Exam.** \"Centralise backups across services\" → **AWS Backup**. \"Object DR with low RPO across Regions\" → **CRR + versioning**. SRR does **not** protect against a Region outage."
     },
     {
-      "heading": "Кратко про HA баз данных",
-      "body": "**Что.** Функции управляемых БД, обеспечивающие HA внутри одного Region и DR между Regions: **RDS Multi-AZ**, **RDS cross-Region read replicas**, **Aurora Global Database** и **DynamoDB Global Tables**.\n\n**Зачем.** Разные цели RTO/RPO требуют разных моделей репликации — синхронной для нулевой потери данных внутри Region, асинхронной для межрегионального DR, multi-active для почти нулевого глобального RTO.\n\n**Как.** **RDS Multi-AZ** держит **синхронный** standby в другой AZ с автоматическим failover через DNS (это HA, а не масштабирование чтения); **Multi-AZ DB cluster** добавляет два standby, доступных для чтения. **RDS cross-Region read replicas** — **асинхронные**, ручное повышение даёт более высокий RPO. **Aurora Global Database** реплицирует хранилище между Regions за **<1 с**, RTO ~1 мин, а secondary можно **повысить до writer**. **DynamoDB Global Tables** — **multi-active** (last-writer-wins); **PITR** даёт восстановление за 35 дней.\n\n**Экзамен.** Автоматический failover в одном Region → **Multi-AZ**. Реляционная БД в нескольких Regions с низким RPO → **Aurora Global**. Active/active key-value в нескольких Regions → **DynamoDB Global Tables**."
+      "heading": "Database HA Recap",
+      "body": "**What.** Managed database features that deliver HA inside one Region and DR across Regions: **RDS Multi-AZ**, **RDS cross-Region read replicas**, **Aurora Global Database**, and **DynamoDB Global Tables**.\n\n**Why.** Different RTO/RPO targets need different replication models — sync for zero data loss within a Region, async for cross-Region DR, multi-active for near-zero global RTO.\n\n**How.** **RDS Multi-AZ** keeps a **synchronous** standby in another AZ with automatic DNS failover (HA, not read scaling); **Multi-AZ DB cluster** adds two readable standbys. **RDS cross-Region read replicas** are **async** — manual promotion gives higher RPO. **Aurora Global Database** replicates storage cross-Region in **<1s**, RTO ~1 min, and the secondary can be **promoted to writer**. **DynamoDB Global Tables** are **multi-active** (last-writer-wins); **PITR** gives 35-day restore.\n\n**Exam.** Single-Region auto failover → **Multi-AZ**. Multi-Region low RPO relational → **Aurora Global**. Multi-Region active/active key-value → **DynamoDB Global Tables**."
     },
     {
-      "heading": "Failover и health checks в Route 53",
-      "body": "**Что.** Route 53 — глобальный DNS-сервис AWS, чьи **routing policies** и **health checks** уводят пользователей от нездоровых endpoints — стандартный способ регионального failover.\n\n**Зачем.** DNS — единственное место выше load balancer, где можно по требованию переключать целые Regions, поэтому именно он отвечает за переключение Region-to-Region в active/passive и active/active DR.\n\n**Как.** **Failover routing** связывает записи `PRIMARY` и `SECONDARY`; если **health check** primary не проходит, Route 53 возвращает secondary. Health checks могут следить за endpoint, **calculated**-комбинациями или **CloudWatch alarm**. Политики **latency**, **weighted**, **geolocation**, **geoproximity** и **multivalue** покрывают active/active и перераспределение трафика. **Низкий TTL** ускоряет переключение клиентов.\n\n**Экзамен.** «Автоматический active/passive failover между Regions» → **Failover routing + health check + низкий TTL**. Weighted/geolocation направляют трафик даже при здоровом primary — для чистого DR-переключения не подходят."
+      "heading": "Route 53 Failover & Health Checks",
+      "body": "**What.** Route 53 is AWS's global DNS service whose **routing policies** and **health checks** redirect users away from unhealthy endpoints — the standard way to do regional failover.\n\n**Why.** DNS is the only place above the load balancer where you can swap entire Regions on demand, so it owns the Region-to-Region cutover for active/passive and active/active DR.\n\n**How.** **Failover routing** pairs a `PRIMARY` and `SECONDARY` record; if the **health check** on the primary fails, Route 53 returns the secondary. Health checks can monitor an endpoint, **calculated** combinations, or a **CloudWatch alarm**. **Latency**, **weighted**, **geolocation**, **geoproximity**, and **multivalue** policies cover active/active and traffic shifting. A **low TTL** speeds client cutover.\n\n**Exam.** \"Automatic active/passive Region failover\" → **Failover routing + health check + low TTL**. Weighted/geolocation routes traffic even when primary is healthy — wrong for pure DR cutover."
     }
   ],
   "labs": [
     {
       "id": "hadr-backup-plan",
-      "title": "AWS Backup plan с копированием в другой регион",
-      "intro": "Создайте **backup vault** в основном и DR Regions, затем **backup plan**, который запускается ежедневно и **копирует** recovery points в другой Region для DR. Назначайте ресурсы по тегу.",
+      "title": "AWS Backup plan with cross-region copy",
+      "intro": "Create a **backup vault** in the primary and DR Regions, then a **backup plan** that runs daily and **copies** recovery points cross-Region for DR. Assign resources by tag.",
       "cli": "# DR-region vault (copy destination) in us-west-2\naws backup create-backup-vault --backup-vault-name dr-vault --region us-west-2\n\n# Primary vault in us-east-1\naws backup create-backup-vault --backup-vault-name primary-vault --region us-east-1\n\n# Create the plan with daily rule + cross-region copy\naws backup create-backup-plan --region us-east-1 --backup-plan '{\n  \"BackupPlanName\": \"daily-with-dr-copy\",\n  \"Rules\": [{\n    \"RuleName\": \"daily\",\n    \"TargetBackupVaultName\": \"primary-vault\",\n    \"ScheduleExpression\": \"cron(0 5 * * ? *)\",\n    \"StartWindowMinutes\": 60,\n    \"Lifecycle\": {\"DeleteAfterDays\": 30},\n    \"CopyActions\": [{\n      \"DestinationBackupVaultArn\": \"arn:aws:backup:us-west-2:111122223333:backup-vault:dr-vault\",\n      \"Lifecycle\": {\"DeleteAfterDays\": 30}\n    }]\n  }]\n}'\n\n# Assign resources tagged backup=daily (replace plan id from previous output)\naws backup create-backup-selection --region us-east-1 \\\n  --backup-plan-id <PLAN_ID> \\\n  --backup-selection '{\n    \"SelectionName\": \"tagged\",\n    \"IamRoleArn\": \"arn:aws:iam::111122223333:role/service-role/AWSBackupDefaultServiceRole\",\n    \"ListOfTags\": [{\"ConditionType\":\"STRINGEQUALS\",\"ConditionKey\":\"backup\",\"ConditionValue\":\"daily\"}]\n  }'",
       "pulumi": "import json\nimport pulumi\nimport pulumi_aws as aws\n\neast = aws.Provider(\"east\", region=\"us-east-1\")\nwest = aws.Provider(\"west\", region=\"us-west-2\")\n\ndr_vault = aws.backup.Vault(\n    \"dr-vault\", name=\"dr-vault\",\n    opts=pulumi.ResourceOptions(provider=west),\n)\nprimary_vault = aws.backup.Vault(\n    \"primary-vault\", name=\"primary-vault\",\n    opts=pulumi.ResourceOptions(provider=east),\n)\n\nbackup_role = aws.iam.Role(\n    \"backup-role\",\n    assume_role_policy=json.dumps({\n        \"Version\": \"2012-10-17\",\n        \"Statement\": [{\n            \"Action\": \"sts:AssumeRole\",\n            \"Effect\": \"Allow\",\n            \"Principal\": {\"Service\": \"backup.amazonaws.com\"},\n        }],\n    }),\n    managed_policy_arns=[\n        \"arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup\",\n    ],\n)\n\nplan = aws.backup.Plan(\n    \"daily-with-dr-copy\",\n    name=\"daily-with-dr-copy\",\n    rules=[aws.backup.PlanRuleArgs(\n        rule_name=\"daily\",\n        target_vault_name=primary_vault.name,\n        schedule=\"cron(0 5 * * ? *)\",\n        start_window=60,\n        lifecycle=aws.backup.PlanRuleLifecycleArgs(delete_after=30),\n        copy_actions=[aws.backup.PlanRuleCopyActionArgs(\n            destination_vault_arn=dr_vault.arn,\n            lifecycle=aws.backup.PlanRuleCopyActionLifecycleArgs(delete_after=30),\n        )],\n    )],\n    opts=pulumi.ResourceOptions(provider=east),\n)\n\naws.backup.Selection(\n    \"tagged\",\n    plan_id=plan.id,\n    iam_role_arn=backup_role.arn,\n    selection_tags=[aws.backup.SelectionSelectionTagArgs(\n        type=\"STRINGEQUALS\", key=\"backup\", value=\"daily\",\n    )],\n    opts=pulumi.ResourceOptions(provider=east),\n)",
-      "note": "**Очистка**: удалите backup selection, затем plan, затем все recovery points в обоих vaults (`aws backup delete-recovery-point`), затем оба vault и IAM role. Vault нельзя удалить, пока в нём есть recovery points. В Pulumi выполните `pulumi destroy`."
+      "note": "**Cleanup**: delete the backup selection, then the plan, then any recovery points in both vaults (`aws backup delete-recovery-point`), then both vaults, and the IAM role. Vaults cannot be deleted while they hold recovery points. With Pulumi run `pulumi destroy`."
     },
     {
       "id": "hadr-r53-failover",
-      "title": "Failover в Route 53 между основным и DR endpoints",
-      "intro": "Создайте **health check** для основного endpoint и две записи в hosted zone: failover-запись **PRIMARY** и запись **SECONDARY**, указывающую на DR endpoint. Route 53 отдаёт secondary, только когда health check primary не проходит.",
+      "title": "Route 53 failover between primary and DR endpoints",
+      "intro": "Create a **health check** on the primary endpoint and two records in a hosted zone: a **PRIMARY** failover record and a **SECONDARY** record pointing to the DR endpoint. Route 53 serves the secondary only when the primary health check fails.",
       "cli": "# Health check against the primary endpoint\naws route53 create-health-check \\\n  --caller-reference hadr-$(date +%s) \\\n  --health-check-config '{\n    \"Type\":\"HTTPS\",\"FullyQualifiedDomainName\":\"primary.example.com\",\n    \"Port\":443,\"ResourcePath\":\"/health\",\n    \"RequestInterval\":30,\"FailureThreshold\":3\n  }'\n\n# Primary failover record (uses the health check id from above)\naws route53 change-resource-record-sets --hosted-zone-id Z123456ABCDEFG \\\n  --change-batch '{\"Changes\":[{\"Action\":\"UPSERT\",\"ResourceRecordSet\":{\n    \"Name\":\"app.example.com\",\"Type\":\"A\",\"TTL\":60,\n    \"SetIdentifier\":\"primary\",\"Failover\":\"PRIMARY\",\n    \"HealthCheckId\":\"<HC_ID>\",\n    \"ResourceRecords\":[{\"Value\":\"203.0.113.10\"}]}}]}'\n\n# Secondary (DR) failover record\naws route53 change-resource-record-sets --hosted-zone-id Z123456ABCDEFG \\\n  --change-batch '{\"Changes\":[{\"Action\":\"UPSERT\",\"ResourceRecordSet\":{\n    \"Name\":\"app.example.com\",\"Type\":\"A\",\"TTL\":60,\n    \"SetIdentifier\":\"secondary\",\"Failover\":\"SECONDARY\",\n    \"ResourceRecords\":[{\"Value\":\"198.51.100.20\"}]}}]}'",
       "pulumi": "import pulumi_aws as aws\n\nzone_id = \"Z123456ABCDEFG\"\n\nhc = aws.route53.HealthCheck(\n    \"primary-hc\",\n    type=\"HTTPS\",\n    fqdn=\"primary.example.com\",\n    port=443,\n    resource_path=\"/health\",\n    request_interval=30,\n    failure_threshold=3,\n)\n\nprimary = aws.route53.Record(\n    \"app-primary\",\n    zone_id=zone_id,\n    name=\"app.example.com\",\n    type=\"A\",\n    ttl=60,\n    records=[\"203.0.113.10\"],\n    set_identifier=\"primary\",\n    health_check_id=hc.id,\n    failover_routing_policies=[\n        aws.route53.RecordFailoverRoutingPolicyArgs(type=\"PRIMARY\"),\n    ],\n)\n\nsecondary = aws.route53.Record(\n    \"app-secondary\",\n    zone_id=zone_id,\n    name=\"app.example.com\",\n    type=\"A\",\n    ttl=60,\n    records=[\"198.51.100.20\"],\n    set_identifier=\"secondary\",\n    failover_routing_policies=[\n        aws.route53.RecordFailoverRoutingPolicyArgs(type=\"SECONDARY\"),\n    ],\n)",
-      "note": "**Очистка**: удалите обе записи (UPSERT -> DELETE с идентичным содержимым записей), затем удалите health check. В Pulumi — `pulumi destroy`. Записи нужно удалить до health check; сама hosted zone остаётся нетронутой, если только вы не создали её для этой лабы."
+      "note": "**Cleanup**: delete both resource record sets (UPSERT -> DELETE with identical record bodies), then delete the health check. With Pulumi `pulumi destroy`. Records must be removed before the health check, and the hosted zone itself is left intact unless you created it for this lab."
     }
   ],
   "questions": [
     {
       "id": "hadr-q1",
       "domain": 2,
-      "stem": "Компании нужен DR-план для stateless веб-приложения. Бизнес допускает до 4 часов простоя и до 1 часа потери данных и хочет **минимально возможную стоимость**. Какая стратегия подходит лучше всего?",
+      "stem": "A company needs a DR plan for a stateless web app. The business accepts up to 4 hours of downtime and up to 1 hour of data loss, and wants the **lowest possible cost**. Which strategy best fits?",
       "options": [
-        "Multi-Site Active/Active в двух Regions",
-        "Warm Standby с уменьшенным стеком, постоянно работающим в DR Region",
-        "Pilot Light с реплицируемой базой данных и выключенными серверами приложения",
-        "Backup & Restore через AWS Backup с ежечасными бэкапами и копированием в другой Region"
+        "Multi-Site Active/Active across two Regions",
+        "Warm Standby with a scaled-down stack always running in the DR Region",
+        "Pilot Light with the database replicated and app servers off",
+        "Backup & Restore using AWS Backup with hourly backups and cross-Region copy"
       ],
       "answer": 3,
-      "explanation": "RTO 4 ч и RPO 1 ч — обе цели мягкие, а приоритет — стоимость, поэтому **Backup & Restore** с ежечасными бэкапами (выполняет RPO 1 ч) и копированием в другой Region — самый дешёвый вариант, который всё ещё укладывается в цели: инфраструктура пересоздаётся в пределах RTO 4 ч. Pilot Light и Warm Standby тоже выполняют цели, но дороже, так как держат резервные ресурсы запущенными. Multi-Site Active/Active — самый дорогой и избыточен для RTO 4 ч."
+      "explanation": "RTO 4h and RPO 1h are both generous, and cost is the priority, so **Backup & Restore** with hourly backups (meets RPO 1h) copied cross-Region is the cheapest option that still meets the targets — infra is rebuilt within the 4h RTO. Pilot Light and Warm Standby meet the targets too but cost more by keeping standby resources running. Multi-Site Active/Active is the most expensive and is overkill for a 4h RTO."
     },
     {
       "id": "hadr-q2",
       "domain": 2,
-      "stem": "Платформе обработки заказов нужен **RTO в несколько минут** и **RPO в секунды**; бюджет позволяет постоянно работающую резервную инфраструктуру, но не полный дубликат production. Какой DR-подход наиболее уместен?",
+      "stem": "An order-processing platform requires an **RTO of a few minutes** and an **RPO of seconds**, and the budget allows always-on standby infrastructure but not full duplicate production. Which DR approach is most appropriate?",
       "options": [
-        "Warm Standby: уменьшенная, но полностью рабочая копия в DR Region, масштабируемая при failover",
-        "Pilot Light с репликацией только базы данных",
-        "Развёртывание в одной AZ с частыми snapshots",
-        "Backup & Restore с ночными EBS snapshots"
+        "Warm Standby: a scaled-down but fully functional copy in the DR Region, scaled up on failover",
+        "Pilot Light with only the database replicated",
+        "Single-AZ deployment with frequent snapshots",
+        "Backup & Restore with nightly EBS snapshots"
       ],
       "answer": 0,
-      "explanation": "RTO в несколько минут при постоянно работающей (но не полной) резервной инфраструктуре — хрестоматийное определение **Warm Standby**: работающий стек уменьшенной ёмкости, который масштабируется при failover. Backup & Restore даёт RTO в часы. Pilot Light держит серверы приложения выключенными, поэтому запуск добавляет время и RTO выше, чем у warm standby. Single-AZ вообще не даёт DR. Active/Active подошёл бы, но выходит за рамки заявленного бюджета."
+      "explanation": "A few-minute RTO with always-on (but not full) standby infrastructure is the textbook definition of **Warm Standby** — a reduced-capacity running stack that is scaled up at failover. Backup & Restore gives hours of RTO. Pilot Light keeps app servers off, so spin-up adds time and it has higher RTO than warm standby. Single-AZ has no DR at all. Active/Active would meet it but exceeds the stated budget."
     },
     {
       "id": "hadr-q3",
       "domain": 2,
-      "stem": "Глобальное SaaS-приложение должно обслуживать пользователей из двух Regions одновременно с **почти нулевыми RTO и RPO** и автоматическим региональным failover для основного хранилища данных. Какая комбинация это обеспечивает? (Выберите два.)",
+      "stem": "A global SaaS app must serve users from two Regions simultaneously with **near-zero RTO and RPO** and automatic regional failover for its primary data store. Which combination meets this? (Choose two.)",
       "options": [
-        "DynamoDB Global Tables для multi-active данных в нескольких Regions",
-        "Latency или failover routing в Route 53 с health checks в обоих Regions",
-        "RDS Single-AZ с ручными snapshots, копируемыми в другой Region",
-        "Один EC2 instance с Elastic IP в одном Region"
+        "DynamoDB Global Tables for multi-active, multi-Region data",
+        "Route 53 latency or failover routing with health checks across both Regions",
+        "RDS Single-AZ with manual snapshots copied cross-Region",
+        "A single EC2 instance with an Elastic IP in one Region"
       ],
       "answer": [
         0,
         1
       ],
-      "explanation": "**DynamoDB Global Tables** дают multi-Region, multi-active репликацию с почти нулевыми RTO/RPO, а **Route 53** (latency/failover routing + health checks) направляет пользователей в здоровый Region и автоматически выполняет failover. RDS Single-AZ с ручными межрегиональными snapshots имеет высокие RPO/RTO и не является active/active. Один EC2 + EIP в одном Region вообще не даёт multi-Region отказоустойчивости."
+      "explanation": "**DynamoDB Global Tables** give multi-Region, multi-active replication with near-zero RTO/RPO, and **Route 53** (latency/failover routing + health checks) directs users to a healthy Region and fails over automatically. RDS Single-AZ with manual cross-Region snapshots has a high RPO/RTO and is not active/active. A single EC2 + EIP in one Region provides no multi-Region resilience at all."
     },
     {
       "id": "hadr-q4",
       "domain": 2,
-      "stem": "Реляционная нагрузка должна оставаться доступной при отказе одной Availability Zone, с **автоматическим failover** и **без потери данных приложения**, но работать ей нужно только в одном Region. Что использовать?",
+      "stem": "A relational workload must stay available if a single Availability Zone fails, with **automatic failover** and **no application data loss**, but only needs to run in one Region. What should you use?",
       "options": [
-        "RDS Single-AZ с включёнными automated backups",
-        "RDS с cross-Region read replica, которую вы повышаете вручную",
-        "Два независимых RDS instance и двойная запись на уровне приложения",
-        "Развёртывание RDS Multi-AZ"
+        "RDS Single-AZ with automated backups enabled",
+        "RDS with a cross-Region read replica that you promote manually",
+        "Two independent RDS instances and application-level dual writes",
+        "RDS Multi-AZ deployment"
       ],
       "answer": 3,
-      "explanation": "**RDS Multi-AZ** поддерживает синхронный standby в другой AZ и автоматически переключается через DNS без потери данных — ровно то, что нужно для устойчивости к отказу AZ в одном Region с автоматическим failover. Cross-Region read replica асинхронна (возможна потеря данных) и требует ручного повышения. Двойная запись на уровне приложения сложна и чревата ошибками. Single-AZ с бэкапами всё равно требует ручного восстановления и теряет данные с момента последнего бэкапа."
+      "explanation": "**RDS Multi-AZ** maintains a synchronous standby in another AZ and fails over automatically via DNS with no data loss — exactly matching single-Region, AZ-fault tolerance with automatic failover. A cross-Region read replica is asynchronous (data loss possible) and requires manual promotion. App-level dual writes are complex and error-prone. Single-AZ with backups still requires a manual restore and incurs data loss back to the last backup."
     },
     {
       "id": "hadr-q5",
       "domain": 2,
-      "stem": "Multi-Region приложение использует Aurora, и ему нужна управляемая БД с **межрегиональной репликацией с RPO около 1 секунды и восстановлением примерно за минуту** после повышения secondary Region. Какая функция подходит?",
+      "stem": "A multi-Region application uses Aurora and needs a managed database that provides **cross-Region replication with RPO of about 1 second and recovery in about a minute** after promoting the secondary Region. Which feature fits?",
       "options": [
-        "Aurora Serverless v2 в одном Region",
-        "Однорегиональный кластер Aurora с Multi-AZ",
+        "Aurora Serverless v2 in one Region",
+        "Aurora single-Region cluster with Multi-AZ",
         "Aurora Global Database",
         "RDS Multi-AZ DB cluster"
       ],
       "answer": 2,
-      "explanation": "**Aurora Global Database** реплицирует хранилище во вторичные Regions с типичным RPO ~1 с и RTO ~1 мин при повышении secondary — это и есть задуманный multi-Region паттерн с низкими RTO/RPO. Однорегиональный кластер Aurora (даже Multi-AZ) и RDS Multi-AZ DB cluster дают только HA внутри Region. Aurora Serverless v2 в одном Region решает задачу масштабирования, а не межрегионального DR."
+      "explanation": "**Aurora Global Database** replicates storage to secondary Regions with typical RPO ~1s and RTO ~1min when you promote a secondary — the intended low-RTO/RPO multi-Region pattern. A single-Region Aurora cluster (even Multi-AZ) and an RDS Multi-AZ DB cluster provide only intra-Region HA. Aurora Serverless v2 in one Region addresses scaling, not cross-Region DR."
     },
     {
       "id": "hadr-q6",
       "domain": 2,
-      "stem": "После деплоя пользователи за ALB теряют сессии входа каждый раз, когда Auto Scaling заменяет instance. Какое изменение лучше всего повысит отказоустойчивость, не меняя load balancer?",
+      "stem": "After a deployment, users behind an ALB lose their login sessions whenever Auto Scaling replaces an instance. What change best improves resilience without changing the load balancer?",
       "options": [
-        "Отключить Auto Scaling, чтобы instances никогда не заменялись",
-        "Включить sticky sessions на ALB и хранить сессии на локальном диске каждого instance",
-        "Перенести все instances в одну Availability Zone",
-        "Вынести состояние сессий в ElastiCache for Redis (или DynamoDB), чтобы любой instance мог обслужить любой запрос"
+        "Disable Auto Scaling so instances are never replaced",
+        "Enable ALB sticky sessions and store sessions on each instance's local disk",
+        "Move all instances into a single Availability Zone",
+        "Externalize session state to ElastiCache for Redis (or DynamoDB) so any instance can serve any request"
       ],
       "answer": 3,
-      "explanation": "Хранение состояния сессий в общем хранилище вроде **ElastiCache (Redis) или DynamoDB** делает instances **stateless**, и замена instance не теряет сессии — это отказоустойчивый паттерн. Sticky sessions с локальным диском всё равно теряют состояние, когда этот instance завершается. Отключение Auto Scaling убирает самовосстановление. Сведение всего в одну AZ уничтожает высокую доступность."
+      "explanation": "Storing session state in a shared store like **ElastiCache (Redis) or DynamoDB** makes instances **stateless**, so a replaced instance does not lose sessions — the resilient pattern. Sticky sessions with local disk still loses state when that instance is terminated. Disabling Auto Scaling removes self-healing. Consolidating into one AZ destroys high availability."
     },
     {
       "id": "hadr-q7",
       "domain": 2,
-      "stem": "Компания хранит критичные объекты в S3 bucket и должна гарантировать, что они переживут полный отказ Region с низким RPO, сохраняя постоянно обновляемую копию во втором Region. Что нужно настроить?",
+      "stem": "A company keeps critical objects in an S3 bucket and must ensure they survive a complete Region outage with low RPO, while keeping a continuously updated copy in a second Region. What should they configure?",
       "options": [
-        "S3 Cross-Region Replication (CRR) с включённым versioning на обоих buckets",
-        "EBS snapshots bucket, копируемые в другой Region",
-        "S3 Same-Region Replication (SRR) во второй bucket",
-        "S3 Lifecycle rules, переводящие объекты в Glacier в том же Region"
+        "S3 Cross-Region Replication (CRR) with versioning enabled on both buckets",
+        "EBS snapshots of the bucket copied cross-Region",
+        "S3 Same-Region Replication (SRR) to a second bucket",
+        "S3 Lifecycle rules transitioning objects to Glacier in the same Region"
       ],
       "answer": 0,
-      "explanation": "**S3 Cross-Region Replication (CRR)** асинхронно копирует объекты в bucket другого Region (versioning обязателен на источнике и получателе) и переживает отказ Region с низким RPO. Lifecycle в Glacier остаётся в том же Region и не защищает от отказа Region. SRR реплицирует только внутри того же Region. S3 buckets не основаны на EBS, поэтому EBS snapshots здесь ни при чём."
+      "explanation": "**S3 Cross-Region Replication (CRR)** asynchronously copies objects to a bucket in another Region (versioning required on source and destination), surviving a Region outage with low RPO. Lifecycle-to-Glacier stays in the same Region and gives no Region-failure protection. SRR replicates only within the same Region. S3 buckets are not backed by EBS, so EBS snapshots are irrelevant."
     },
     {
       "id": "hadr-q8",
       "domain": 2,
-      "stem": "В active/passive схеме основной endpoint находится в us-east-1, а DR endpoint — в us-west-2. Команда хочет, чтобы DNS **автоматически** отправлял пользователей на DR endpoint, только когда primary нездоров, и переключение было быстрым. Что настроить в Route 53?",
+      "stem": "An active/passive setup has a primary endpoint in us-east-1 and a DR endpoint in us-west-2. The team wants DNS to **automatically** send users to the DR endpoint only when the primary is unhealthy, with fast cutover. What should they configure in Route 53?",
       "options": [
-        "Failover routing с health check на primary и низким TTL записи",
-        "Geolocation routing с привязкой континентов к каждому Region",
-        "Simple routing с обоими IP в одном наборе записей",
-        "Weighted routing с разделением 50/50 между двумя endpoints"
+        "Failover routing with a health check on the primary and a low record TTL",
+        "Geolocation routing mapping continents to each Region",
+        "Simple routing with both IPs in one record set",
+        "Weighted routing splitting 50/50 between the two endpoints"
       ],
       "answer": 0,
-      "explanation": "**Failover routing** с **health check** на primary возвращает запись secondary (DR), только когда primary нездоров, — ровно автоматическое active/passive переключение; **низкий TTL** позволяет клиентам быстро подхватить изменение. Weighted 50/50 отправляет половину трафика в DR даже при здоровом primary. Simple routing возвращает все значения без учёта здоровья. Geolocation маршрутизирует по местоположению пользователя, а не по здоровью."
+      "explanation": "**Failover routing** with a **health check** on the primary returns the secondary (DR) record only when the primary is unhealthy — exactly the active/passive automatic cutover; a **low TTL** makes clients pick up the change quickly. Weighted 50/50 sends half the traffic to DR even when primary is healthy. Simple routing returns all values with no health awareness. Geolocation routes by user location, not by health."
     }
   ]
 }

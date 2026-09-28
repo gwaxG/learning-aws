@@ -4,17 +4,17 @@
     "type": "topic",
     "ref": "ec2-compute"
   },
-  "concept": "Multi-AZ: ASG за ALB против отказа AZ",
-  "tests": "Выбор канонической архитектуры, сохраняющей доступность веб-приложения при отказе целой AZ.",
-  "expected": "Auto Scaling Group (min 2) на двух AZ за Application Load Balancer — здоровая ёмкость в уцелевшей AZ, автозамена упавших. Триггеры: «доступно при отказе всей Availability Zone».",
-  "why_not": "Один инстанс (с EIP или snapshot-политикой) — single point of failure; cluster placement group держит всё в одной AZ.",
+  "concept": "Multi-AZ: ASG behind ALB against AZ failure",
+  "tests": "Choosing the canonical architecture that keeps a web app available when an entire AZ fails.",
+  "expected": "Auto Scaling Group (min 2) across two AZs behind an Application Load Balancer — healthy capacity in the surviving AZ, failed instances auto-replaced. Triggers: \"available if an entire Availability Zone fails\".",
+  "why_not": "A single instance (with an EIP or snapshot policy) is a single point of failure; a cluster placement group keeps everything in one AZ.",
   "keywords": [
     "Auto Scaling Group",
     "multi-AZ",
     "ALB",
     "single point of failure",
     "cluster placement group",
-    "отказ AZ"
+    "AZ failure"
   ],
   "services": [
     "auto-scaling",

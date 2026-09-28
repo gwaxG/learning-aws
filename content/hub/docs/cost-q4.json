@@ -4,18 +4,18 @@
     "type": "topic",
     "ref": "cost"
   },
-  "concept": "S3 Gateway VPC endpoint: обход NAT Gateway для трафика в S3",
-  "tests": "Снижение платы за обработку данных NAT Gateway при доступе приватных инстансов к S3.",
-  "expected": "Создать S3 Gateway VPC endpoint (бесплатный) и маршрутизировать S3-трафик через него — NAT не участвует, инстансы остаются приватными. Триггеры: «private subnets», «большие объёмы из S3», «высокие NAT Gateway data processing charges».",
-  "why_not": "NAT instance всё равно пропускает трафик и добавляет администрирование; публичные подсети нарушают требование приватности; Transfer Acceleration ускоряет загрузки за доплату и NAT не обходит.",
+  "concept": "S3 Gateway VPC endpoint: bypass NAT Gateway for S3 traffic",
+  "tests": "Reducing NAT Gateway data processing charges when private instances access S3.",
+  "expected": "Create an S3 Gateway VPC endpoint (free) and route S3 traffic through it — NAT is not involved, instances stay private. Triggers: \"private subnets\", \"large volumes from S3\", \"high NAT Gateway data processing charges\".",
+  "why_not": "A NAT instance still passes the traffic and adds administration; public subnets violate the privacy requirement; Transfer Acceleration speeds up uploads for an extra fee and does not bypass NAT.",
   "keywords": [
     "Gateway VPC endpoint",
     "NAT Gateway",
     "data processing charges",
     "private subnets",
     "S3",
-    "обойти NAT",
-    "остаться приватными"
+    "bypass NAT",
+    "stay private"
   ],
   "services": [
     "vpc-endpoints",

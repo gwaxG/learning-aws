@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "CloudTrail: аудит API-вызовов (кто и когда)",
-  "tests": "Какой сервис записывает все API-вызовы в аккаунте с identity вызывающего и временем.",
-  "expected": "AWS CloudTrail — журнал API-активности: кто, откуда, когда. Триггеры: «all API calls recorded», «identity», «compliance/security analysis».",
-  "why_not": "CloudWatch — метрики и логи; AWS Config — история изменений конфигурации ресурсов; Inspector — оценка уязвимостей.",
+  "concept": "CloudTrail: auditing API calls (who and when)",
+  "tests": "Which service records every API call in the account with the caller's identity and time.",
+  "expected": "AWS CloudTrail — a log of API activity: who, from where, when. Triggers: \"all API calls recorded\", \"identity\", \"compliance/security analysis\".",
+  "why_not": "CloudWatch — metrics and logs; AWS Config — resource configuration change history; Inspector — vulnerability assessment.",
   "keywords": [
     "CloudTrail",
     "API calls",
-    "аудит",
+    "audit",
     "identity",
     "compliance",
-    "кто сделал вызов"
+    "who made the call"
   ],
   "services": [
     "cloudtrail",

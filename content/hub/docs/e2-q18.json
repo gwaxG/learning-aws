@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "EFS: общий POSIX (NFS) файловый ресурс для Linux в нескольких AZ",
-  "tests": "Выбор общего файлового хранилища для Linux-кластера в нескольких AZ с автомасштабированием и POSIX.",
-  "expected": "Amazon EFS — managed NFS, эластично растёт, POSIX, одновременный доступ из многих EC2 в разных AZ. Триггеры: «shared file storage», «Linux», «multiple AZs», «POSIX», «scale automatically».",
-  "why_not": "EBS Multi-Attach — только в одной AZ и мало инстансов; FSx for Windows — SMB для Windows; S3 — объектное хранилище, не POSIX.",
+  "concept": "EFS: shared POSIX (NFS) file share for Linux across AZs",
+  "tests": "Choosing shared file storage for a Linux cluster across multiple AZs with auto-scaling and POSIX.",
+  "expected": "Amazon EFS — managed NFS, grows elastically, POSIX, concurrent access from many EC2 instances in different AZs. Triggers: \"shared file storage\", \"Linux\", \"multiple AZs\", \"POSIX\", \"scale automatically\".",
+  "why_not": "EBS Multi-Attach — single AZ and few instances only; FSx for Windows — SMB for Windows; S3 — object storage, not POSIX.",
   "keywords": [
     "EFS",
     "NFS",

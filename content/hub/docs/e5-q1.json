@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "IAM: cross-account role для третьей стороны с External ID",
-  "tests": "Как безопасно дать стороннему вендору (другой AWS-аккаунт) доступ к S3 так, чтобы роль мог assume только нужный аккаунт.",
-  "expected": "IAM role с trust policy, где principal — аккаунт вендора, + условие sts:ExternalId (защита от confused deputy). Триггеры: «third-party vendor», «assume the role from their own account», «MOST secure».",
-  "why_not": "Access keys IAM user по email — долгоживущие секреты; публичный bucket открывает данные всем; ACL не даёт управлять assume role для cross-account IAM users.",
+  "concept": "IAM: cross-account role for a third party with External ID",
+  "tests": "How to securely give a third-party vendor (another AWS account) access to S3 so that only the intended account can assume the role.",
+  "expected": "IAM role with a trust policy whose principal is the vendor's account, + an sts:ExternalId condition (confused deputy protection). Triggers: \"third-party vendor\", \"assume the role from their own account\", \"MOST secure\".",
+  "why_not": "IAM user access keys sent by email are long-lived secrets; a public bucket exposes data to everyone; ACLs can't control assume role for cross-account IAM users.",
   "keywords": [
     "cross-account role",
     "trust policy",
     "sts:ExternalId",
     "confused deputy",
     "third-party",
-    "вендор",
+    "vendor",
     "assume role"
   ],
   "services": [

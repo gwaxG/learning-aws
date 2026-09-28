@@ -1,293 +1,293 @@
 {
   "id": 2,
-  "title": "Пробный экзамен 2",
+  "title": "Mock Exam 2",
   "minutes": 130,
   "questions": [
     {
       "id": "e2-q1",
       "domain": 1,
-      "stem": "Компания хранит PII клиентов в S3 bucket и должна обеспечить шифрование данных at rest ключами, которые автоматически ротируются каждый год, при низких операционных затратах. Какой подход наиболее подходящий (MOST appropriate)?",
+      "stem": "A company stores customer PII in an S3 bucket and must ensure the data is encrypted at rest with keys that can be rotated automatically every year while keeping operational overhead low. Which approach is MOST appropriate?",
       "options": [
-        "Использовать SSE-S3 с ключами, управляемыми Amazon S3",
-        "Использовать SSE-KMS с customer managed key и включённой автоматической ротацией",
-        "Использовать шифрование на стороне клиента с ключами, хранящимися в конфигурации приложения",
-        "Использовать SSE-KMS с AWS managed key (aws/s3)"
+        "Use SSE-S3 with Amazon S3 managed keys",
+        "Use SSE-KMS with a customer managed key with automatic rotation enabled",
+        "Use client-side encryption with keys stored in the application config",
+        "Use SSE-KMS with an AWS managed key (aws/s3)"
       ],
       "answer": 1,
-      "explanation": "KMS customer managed key поддерживает автоматическую ежегодную ротацию и даёт компании контроль над key policy и аудитом через CloudTrail. Ключи SSE-S3 полностью управляются AWS без контроля над ротацией, а AWS managed key aws/s3 ротируется, но для него нельзя задать собственную key policy. Ключи на стороне клиента в конфигурации небезопасны и требуют больших затрат на сопровождение."
+      "explanation": "A KMS customer managed key supports enabling automatic annual rotation and gives the company control over the key policy and auditing via CloudTrail. SSE-S3 keys are managed entirely by AWS with no rotation control, and the AWS managed aws/s3 key rotates but cannot have a custom key policy. Client-side keys in config are insecure and high overhead."
     },
     {
       "id": "e2-q2",
       "domain": 2,
-      "stem": "Веб-приложение работает на EC2 instances за Application Load Balancer в двух Availability Zones. Во время всплесков трафика часть пользователей получает ошибки, потому что instances перегружаются. Команда хочет, чтобы архитектура автоматически масштабировалась по нагрузке без ручного вмешательства. Что нужно внедрить?",
+      "stem": "A web application runs on EC2 instances behind an Application Load Balancer in two Availability Zones. During traffic spikes some users get errors because instances become overwhelmed. The team wants the architecture to scale automatically based on demand with no manual intervention. What should they implement?",
       "options": [
-        "Включить cross-zone load balancing на ALB",
-        "Поместить instances в Auto Scaling group с target tracking по средней загрузке CPU",
-        "Добавить дистрибуцию Amazon CloudFront перед ALB",
-        "Увеличить размер instance до самого большого доступного типа"
+        "Enable cross-zone load balancing on the ALB",
+        "Place the instances in an Auto Scaling group with target tracking on average CPU utilization",
+        "Add an Amazon CloudFront distribution in front of the ALB",
+        "Increase the instance size to the largest available type"
       ],
       "answer": 1,
-      "explanation": "Auto Scaling group с политикой target tracking автоматически добавляет и удаляет instances, удерживая CPU около целевого значения, — эластичность без ручного участия. Вертикальное масштабирование имеет потолок и всё равно требует ручных изменений. CloudFront кэширует контент, но не масштабирует вычислительный уровень, а cross-zone balancing лишь равномернее распределяет трафик."
+      "explanation": "An Auto Scaling group with a target tracking policy adds and removes instances automatically to keep CPU near a target, providing hands-off elasticity. Vertical scaling has a ceiling and still requires manual changes. CloudFront caches content but does not scale the compute tier, and cross-zone balancing only distributes traffic more evenly."
     },
     {
       "id": "e2-q3",
       "domain": 3,
-      "stem": "Компании нужна реляционная база данных для приложения с непредсказуемым, всплесковым трафиком, которое ночью подолгу простаивает. Нужно минимизировать стоимость и не заниматься управлением ёмкостью. Какой вариант MOST cost-effective?",
+      "stem": "A company needs a relational database for an application with unpredictable, spiky traffic that is idle for long periods overnight. They want to minimize cost and avoid managing capacity. Which option is MOST cost-effective?",
       "options": [
         "Amazon DynamoDB on-demand",
-        "Amazon Redshift с concurrency scaling",
+        "Amazon Redshift with concurrency scaling",
         "Amazon Aurora Serverless v2",
-        "Amazon RDS for MySQL на Multi-AZ db.r5.large"
+        "Amazon RDS for MySQL on a Multi-AZ db.r5.large"
       ],
       "answer": 2,
-      "explanation": "Aurora Serverless v2 автоматически увеличивает и уменьшает ёмкость, может опускаться до низкого минимума в периоды простоя и тарифицируется за ACU-секунду — это подходит для всплесковых нагрузок с простоями. Provisioned RDS instance тарифицируется непрерывно независимо от нагрузки. DynamoDB — нереляционная БД, а Redshift — хранилище данных (data warehouse); ни то, ни другое не подходит под реляционную OLTP-задачу."
+      "explanation": "Aurora Serverless v2 scales capacity up and down automatically and can scale to a low minimum during idle periods, billing per ACU-second, which fits spiky and idle workloads. A provisioned RDS instance bills continuously regardless of load. DynamoDB is non-relational, and Redshift is a data warehouse, neither matching a relational OLTP need."
     },
     {
       "id": "e2-q4",
       "domain": 1,
-      "stem": "Организация хочет предоставить AWS-аккаунту стороннего SaaS-провайдера доступ только на чтение к конкретному S3 bucket без передачи долгосрочных учётных данных. Какой способ наиболее безопасный (MOST secure)?",
+      "stem": "An organization wants to grant a third-party SaaS provider's AWS account read-only access to a specific S3 bucket without sharing long-term credentials. What is the MOST secure way to achieve this?",
       "options": [
-        "Создать IAM user для провайдера и передать ему access keys",
-        "Создать cross-account IAM role с external ID, которую провайдер будет assume",
-        "Встроить временные учётные данные в Lambda, которую провайдер может вызывать",
-        "Сделать bucket публичным и ограничить доступ диапазоном IP провайдера"
+        "Create an IAM user for the provider and share access keys",
+        "Create a cross-account IAM role with an external ID that the provider assumes",
+        "Embed temporary credentials in a Lambda the provider can invoke",
+        "Make the bucket public and restrict by the provider's IP range"
       ],
       "answer": 1,
-      "explanation": "Cross-account role с external ID позволяет третьей стороне принять роль через STS и получить временные учётные данные, а external ID защищает от проблемы confused deputy. Access keys IAM user — долгоживущие секреты, которые приходится передавать и ротировать. Публичные buckets рискуют утечкой, а встраивать учётные данные куда-либо — плохая практика."
+      "explanation": "A cross-account role with an external ID lets the third party assume the role using STS for temporary credentials, and the external ID mitigates the confused deputy problem. IAM user access keys are long-lived secrets that must be shared and rotated. Public buckets risk exposure, and embedding credentials anywhere is poor practice."
     },
     {
       "id": "e2-q5",
       "domain": 4,
-      "stem": "Stateless-микросервис обрабатывает сообщения из очереди SQS. Команда хочет запускать его serverless, масштабировать по количеству сообщений и платить только тогда, когда сообщения обрабатываются. Какое решение имеет LEAST operational overhead?",
+      "stem": "A stateless microservice processes messages from an SQS queue. The team wants to run it serverlessly and scale based on the number of messages, paying only when messages are processed. Which solution has the LEAST operational overhead?",
       "options": [
-        "Запустить сервис на ECS on EC2 с политикой scheduled scaling",
-        "Использовать Lambda function с SQS event source mapping",
-        "Развернуть сервис на EKS с cluster autoscaler",
-        "Запустить сервис в EC2 Auto Scaling group, опрашивающей очередь"
+        "Run the service on ECS on EC2 with a scheduled scaling policy",
+        "Use a Lambda function with an SQS event source mapping",
+        "Deploy the service on EKS with the cluster autoscaler",
+        "Run the service on an EC2 Auto Scaling group polling the queue"
       ],
       "answer": 1,
-      "explanation": "Lambda с SQS event source mapping опрашивает очередь, масштабирует concurrency в зависимости от объёма сообщений и тарифицируется только за время выполнения, серверы не нужны. ECS on EC2 и EC2 ASG требуют управления instances. EKS добавляет значительные накладные расходы на управление кластером и является самым тяжёлым вариантом."
+      "explanation": "Lambda with an SQS event source mapping polls the queue, scales concurrency with message volume, and charges only for execution time, requiring no servers. ECS on EC2 and EC2 ASG require managing instances. EKS adds significant cluster management overhead and is the heaviest option."
     },
     {
       "id": "e2-q6",
       "domain": 4,
-      "stem": "Компания мигрирует 50 ТБ данных из on-premises в Amazon S3. На площадке интернет-канал 100 Мбит/с, который также нужен для ежедневной работы. Перенос нужно завершить за неделю. Какой подход наиболее подходящий (MOST appropriate)?",
+      "stem": "A company is migrating a 50 TB on-premises dataset to Amazon S3. The site has a 100 Mbps internet connection that is also needed for daily operations. They need the transfer completed within a week. What is the MOST appropriate approach?",
       "options": [
-        "Заказать устройство AWS Snowball Edge и отправить данные на нём",
-        "Использовать AWS DataSync через публичный интернет",
-        "Настроить канал AWS Direct Connect",
-        "Использовать S3 Transfer Acceleration поверх существующего канала"
+        "Order an AWS Snowball Edge device and ship the data",
+        "Use AWS DataSync over the public internet",
+        "Set up an AWS Direct Connect link",
+        "Use S3 Transfer Acceleration over the existing connection"
       ],
       "answer": 0,
-      "explanation": "На скорости 100 Мбит/с перенос 50 ТБ займёт гораздо больше недели даже при полной загрузке канала, а канал ещё и общий, поэтому физическое устройство Snowball Edge укладывается в срок, не забивая канал. Transfer Acceleration и DataSync всё равно упираются в ограниченную пропускную способность. Direct Connect подключается неделями и не является быстрым решением для разового переноса."
+      "explanation": "At 100 Mbps, 50 TB would take far longer than a week even at full utilization, and the link is shared, so a physical Snowball Edge device meets the timeline without saturating the connection. Transfer Acceleration and DataSync still depend on the limited bandwidth. Direct Connect takes weeks to provision and is not a quick one-time transfer solution."
     },
     {
       "id": "e2-q7",
       "domain": 1,
-      "stem": "Команда безопасности должна фиксировать все API-вызовы в AWS-аккаунте, включая management events, и хранить логи в неизменяемом виде для аудита соответствия требованиям. Какую комбинацию следует использовать? (Выберите два)",
+      "stem": "A security team must record all API calls made in an AWS account, including management events, and store the logs immutably for compliance auditing. Which combination should be used? (Choose two)",
       "options": [
-        "Использовать subscription filters CloudWatch Logs для оповещений",
-        "Включить AWS CloudTrail с trail, доставляющим логи в S3 bucket",
-        "Включить VPC Flow Logs на всех subnets",
-        "Включить Amazon GuardDuty во всех регионах",
-        "Применить S3 Object Lock в режиме compliance к bucket с логами"
+        "Use CloudWatch Logs subscription filters for alerting",
+        "Enable AWS CloudTrail with a trail delivering to an S3 bucket",
+        "Enable VPC Flow Logs on all subnets",
+        "Enable Amazon GuardDuty in all regions",
+        "Apply S3 Object Lock in compliance mode on the log bucket"
       ],
       "answer": [
         1,
         4
       ],
-      "explanation": "CloudTrail записывает management events и API-вызовы и может доставлять их в S3, а S3 Object Lock в режиме compliance делает эти логи неизменяемыми на период хранения. VPC Flow Logs фиксируют сетевой трафик, а не API-вызовы. GuardDuty — это обнаружение угроз, а subscription filters — для оповещений; ни то, ни другое не обеспечивает неизменяемое хранение аудита API."
+      "explanation": "CloudTrail records management and API events and can deliver them to S3, and S3 Object Lock in compliance mode makes those logs immutable for the retention period. VPC Flow Logs capture network traffic, not API calls. GuardDuty is threat detection and subscription filters are for alerting, neither providing immutable API audit storage."
     },
     {
       "id": "e2-q8",
       "domain": 3,
-      "stem": "Приложению нужна задержка чтения меньше миллисекунды для часто запрашиваемой key-value нагрузки, которая сейчас работает на DynamoDB. Затраты на чтение высоки из-за повторных чтений одних и тех же элементов. Что нужно добавить, чтобы снизить задержку и стоимость?",
+      "stem": "An application needs sub-millisecond read latency for a frequently accessed key-value workload that currently uses DynamoDB. Read costs are high due to repeated reads of the same items. What should be added to reduce latency and cost?",
       "options": [
-        "Включить DynamoDB global tables",
-        "Добавить кластер Amazon DynamoDB Accelerator (DAX)",
-        "Добавить global secondary index",
-        "Переключить таблицу в режим ёмкости on-demand"
+        "Enable DynamoDB global tables",
+        "Add an Amazon DynamoDB Accelerator (DAX) cluster",
+        "Add a global secondary index",
+        "Switch the table to on-demand capacity mode"
       ],
       "answer": 1,
-      "explanation": "DAX — in-memory кэш, созданный специально для DynamoDB: он даёт задержку чтения в микросекунды и снимает повторные чтения, снижая и задержку, и стоимость чтения. Global tables обеспечивают мультирегиональную репликацию, а не кэширование. On-demand меняет модель оплаты, но не задержку, а GSI добавляет шаблон доступа, а не кэширование."
+      "explanation": "DAX is an in-memory cache purpose-built for DynamoDB that delivers microsecond read latency and offloads repeated reads, lowering both latency and read costs. Global tables provide multi-region replication, not caching. On-demand changes the billing model but not latency, and a GSI adds an access pattern, not caching."
     },
     {
       "id": "e2-q9",
       "domain": 2,
-      "stem": "Компания использует парк EC2 instances, которым нужен выход в интернет для загрузки патчей, но которые не должны быть доступны из интернета. Instances находятся в private subnets. Что обеспечит исходящий доступ в интернет с высокой доступностью и минимальным управлением?",
+      "stem": "A company runs a fleet of EC2 instances that must reach the internet to download patches but must not be reachable from the internet. The instances are in private subnets. What provides outbound internet access with high availability and low management?",
       "options": [
-        "Internet gateway, подключённый к private subnets",
-        "NAT instance в одной public subnet",
-        "NAT gateway в public subnet каждой Availability Zone",
-        "VPC endpoint для репозитория патчей"
+        "An internet gateway attached to the private subnets",
+        "A NAT instance in one public subnet",
+        "A NAT gateway in each Availability Zone's public subnet",
+        "A VPC endpoint for the patch repository"
       ],
       "answer": 2,
-      "explanation": "Управляемый NAT gateway в каждой AZ обеспечивает высокодоступный, масштабируемый, только исходящий доступ в интернет, и instances остаются недоступными для входящих подключений. Один NAT instance — самостоятельно управляемая единая точка отказа. Internet gateway в private subnets фактически сделал бы их публичными, а VPC endpoint даёт доступ только к определённым сервисам AWS, а не к произвольным репозиториям патчей."
+      "explanation": "A managed NAT gateway in each AZ provides highly available, scalable outbound-only internet access and keeps instances unreachable inbound. A single NAT instance is a self-managed single point of failure. An internet gateway in private subnets would make them effectively public, and a VPC endpoint only reaches specific AWS services, not arbitrary patch repositories."
     },
     {
       "id": "e2-q10",
       "domain": 3,
-      "stem": "Медиакомпания хранит видеофайлы в S3. Первые 30 дней к файлам обращаются часто, затем редко, но в течение следующего года они должны оставаться доступными для немедленного получения. После этого к ним почти никогда не обращаются, но по юридическим причинам их нужно хранить 7 лет. Какая стратегия lifecycle MOST cost-effective?",
+      "stem": "A media company stores video files in S3. Files are accessed frequently for 30 days, then rarely, but must remain immediately retrievable for the next year. After that they are almost never accessed but must be kept for 7 years for legal reasons. Which lifecycle strategy is MOST cost-effective?",
       "options": [
-        "Intelligent-Tiering на все 7 лет без lifecycle rules",
-        "Сразу Standard-IA, затем Glacier Flexible Retrieval через 30 дней",
-        "Standard на 30 дней, затем Standard-IA на год, затем Glacier Deep Archive",
-        "Standard на 30 дней, затем Glacier Instant Retrieval, затем удаление через год"
+        "Intelligent-Tiering for the entire 7 years with no lifecycle rules",
+        "Standard-IA immediately, then Glacier Flexible Retrieval after 30 days",
+        "Standard for 30 days, then Standard-IA for one year, then Glacier Deep Archive",
+        "Standard for 30 days, then Glacier Instant Retrieval, then delete after one year"
       ],
       "answer": 2,
-      "explanation": "Standard покрывает горячие 30 дней, Standard-IA — редкий, но немедленный доступ в течение года, а Glacier Deep Archive даёт минимальную стоимость для долгого 7-летнего хранения, когда доступ почти не нужен. Слишком ранний переход в Glacier Flexible Retrieval нарушает требование немедленного получения. Удаление через год нарушает требование хранить 7 лет, а один лишь Intelligent-Tiering дороже Deep Archive для холодных данных долгосрочного хранения."
+      "explanation": "Standard handles the hot 30 days, Standard-IA covers infrequent but immediately retrievable access for the year, and Glacier Deep Archive offers the lowest cost for the long 7-year retention where access is almost never needed. Glacier Flexible Retrieval too early breaks immediate retrievability. Deleting after a year violates the 7-year requirement, and pure Intelligent-Tiering is more expensive than Deep Archive for cold long-term data."
     },
     {
       "id": "e2-q11",
       "domain": 2,
-      "stem": "Компания хочет развязать (decoupling) синхронную систему обработки заказов, чтобы внезапный наплыв заказов не перегружал downstream-обработчики, при этом гарантируя обработку каждого заказа ровно один раз и по порядку. Какой сервис следует использовать?",
+      "stem": "A company wants to decouple a synchronous order-processing system so that a sudden surge of orders does not overwhelm downstream workers, while guaranteeing each order is processed exactly once and in order. Which service should they use?",
       "options": [
-        "Стандартная очередь Amazon SQS",
-        "Очередь Amazon SQS FIFO",
-        "Стандартный topic Amazon SNS",
-        "Amazon Kinesis Data Streams с несколькими shards"
+        "Amazon SQS standard queue",
+        "Amazon SQS FIFO queue",
+        "Amazon SNS standard topic",
+        "Amazon Kinesis Data Streams with multiple shards"
       ],
       "answer": 1,
-      "explanation": "SQS FIFO queue сохраняет порядок сообщений и обеспечивает exactly-once обработку в пределах окна дедупликации, буферизуя всплески для downstream-обработчиков. SNS standard и SQS standard дают at-least-once доставку с возможными дубликатами и без упорядочивания. Kinesis сохраняет порядок только в пределах shard и предназначен для потоковой аналитики, а не для простой развязки заказов с семантикой exactly-once."
+      "explanation": "An SQS FIFO queue preserves message order and provides exactly-once processing within the deduplication window, buffering surges for downstream workers. SNS standard and SQS standard offer at-least-once delivery with possible duplicates and no ordering. Kinesis maintains order only per shard and is designed for streaming analytics, not simple order decoupling with exactly-once semantics."
     },
     {
       "id": "e2-q12",
       "domain": 1,
-      "stem": "Разработчику нужно, чтобы приложение на EC2 читало объекты из конкретного S3 bucket. Сейчас у instance нет учётных данных. Какой рекомендуемый способ предоставить доступ?",
+      "stem": "A developer needs an EC2 application to read objects from a specific S3 bucket. The instance currently has no credentials. What is the recommended way to grant access?",
       "options": [
-        "Добавить публичный IP instance в bucket policy",
-        "Создать bucket ACL, предоставляющий доступ instance",
-        "Хранить access keys IAM user в переменных окружения приложения",
-        "Прикрепить к EC2 instance IAM role с политикой, разрешающей s3:GetObject на этот bucket"
+        "Add the instance's public IP to the bucket policy",
+        "Create a bucket ACL granting the instance access",
+        "Store IAM user access keys in the application's environment variables",
+        "Attach an IAM role to the EC2 instance with a policy allowing s3:GetObject on the bucket"
       ],
       "answer": 3,
-      "explanation": "IAM role, прикреплённая через instance profile, выдаёт автоматически ротируемые временные учётные данные с доступом по принципу least privilege, ограниченным этим bucket. Хранение статических access keys грозит утечкой и требует ротации. Bucket policies для этой цели опираются на principals, а не на произвольные IP, а ACL — устаревший механизм и не может ссылаться на EC2 instance."
+      "explanation": "An IAM role attached via an instance profile provides automatically rotated temporary credentials with least-privilege access scoped to the bucket. Storing static access keys risks leakage and rotation burden. Bucket policies key on principals not arbitrary IPs for this purpose, and ACLs are legacy and cannot reference an EC2 instance."
     },
     {
       "id": "e2-q13",
       "domain": 2,
-      "stem": "Глобальное приложение отдаёт динамические ответы API и статические ресурсы. Пользователи по всему миру жалуются на высокую задержку. Команда хочет повысить производительность и предоставить один статический anycast IP для API endpoints. Какая комбинация решает обе задачи? (Выберите два)",
+      "stem": "A global application serves dynamic API responses and static assets. Users worldwide complain about high latency. The team wants to improve performance and provide a single static anycast IP for the API endpoints. Which combination addresses both needs? (Choose two)",
       "options": [
-        "Использовать AWS Global Accelerator для API endpoints",
-        "Использовать только Route 53 latency-based routing",
-        "Использовать S3 Transfer Acceleration для API",
-        "Использовать Amazon CloudFront для кэширования статических ресурсов",
-        "Использовать Application Load Balancer в одном регионе"
+        "Use AWS Global Accelerator for the API endpoints",
+        "Use Route 53 latency-based routing only",
+        "Use S3 Transfer Acceleration for the API",
+        "Use Amazon CloudFront for caching static assets",
+        "Use an Application Load Balancer in a single region"
       ],
       "answer": [
         0,
         3
       ],
-      "explanation": "CloudFront кэширует статические ресурсы в edge locations, снижая задержку, а Global Accelerator направляет динамический трафик API через магистральную сеть AWS и предоставляет статические anycast IP-адреса. Route 53 сам по себе лишь резолвит DNS, без ускорения через магистраль и без статических IP. ALB в одном регионе не помогает глобальным пользователям, а Transfer Acceleration предназначен для загрузок в S3, а не для API."
+      "explanation": "CloudFront caches static assets at edge locations to reduce latency, while Global Accelerator routes dynamic API traffic over the AWS backbone and provides static anycast IP addresses. Route 53 alone only resolves DNS without backbone acceleration or static IPs. A single-region ALB does not help global users, and Transfer Acceleration is for S3 uploads, not APIs."
     },
     {
       "id": "e2-q14",
       "domain": 3,
-      "stem": "Компания держит WordPress-сайт с преобладанием чтения на одном instance RDS for MySQL, который становится узким местом в пики чтения. Нужно масштабировать ёмкость чтения с минимальными изменениями в приложении. Что следует сделать?",
+      "stem": "A company runs a read-heavy WordPress site on a single RDS for MySQL instance that is becoming a bottleneck during peak reads. They want to scale read capacity with minimal application changes. What should they do?",
       "options": [
-        "Увеличить instance до самого большого instance class",
-        "Включить Multi-AZ deployment для RDS instance",
-        "Добавить RDS read replicas и направить на них трафик чтения",
-        "Мигрировать на DynamoDB"
+        "Increase the instance to the largest instance class",
+        "Enable Multi-AZ deployment on the RDS instance",
+        "Add RDS read replicas and direct read traffic to them",
+        "Migrate to DynamoDB"
       ],
       "answer": 2,
-      "explanation": "RDS read replicas снимают нагрузку чтения и добавляются с минимальными изменениями — достаточно направить запросы на чтение на endpoints реплик. Multi-AZ обеспечивает failover, а не масштабирование чтения, поскольку standby не обслуживает чтение. DynamoDB требует серьёзной переработки, а вертикальное масштабирование ограничено и не распределяет чтение горизонтально."
+      "explanation": "RDS read replicas offload read traffic and can be added with minimal change by pointing read queries at the replica endpoints. Multi-AZ provides failover, not read scaling, since the standby does not serve reads. DynamoDB requires a major rewrite, and vertical scaling has limits and does not horizontally distribute reads."
     },
     {
       "id": "e2-q15",
       "domain": 1,
-      "stem": "Приложение в VPC должно обращаться к Amazon S3 так, чтобы трафик не проходил через публичный интернет, — ради безопасности и чтобы избежать платы за данные через NAT gateway. Что нужно настроить?",
+      "stem": "An application running in a VPC must access Amazon S3 without traffic traversing the public internet, for security and to avoid NAT gateway data charges. What should be configured?",
       "options": [
-        "VPC peering connection с VPC сервиса S3",
-        "Gateway VPC endpoint для S3",
-        "NAT gateway с prefix list для S3",
-        "Interface VPC endpoint (PrivateLink) для S3"
+        "A VPC peering connection to the S3 service VPC",
+        "A gateway VPC endpoint for S3",
+        "A NAT gateway with an S3 prefix list",
+        "An interface VPC endpoint (PrivateLink) for S3"
       ],
       "answer": 1,
-      "explanation": "Gateway VPC endpoint для S3 направляет трафик приватно внутри сети AWS без платы за каждый ГБ и позволяет избежать интернета и расходов на NAT. Interface endpoints для S3 существуют, но за них взимается почасовая плата и плата за обработку данных, и обычно их используют для доступа из on-premises. NAT gateway отправляет трафик через интернет и тарифицирует данные, а VPC peering неприменим к сервисам, управляемым AWS."
+      "explanation": "A gateway VPC endpoint for S3 routes traffic privately within the AWS network at no per-GB charge and avoids the internet and NAT costs. Interface endpoints for S3 exist but incur hourly and data processing charges and are typically used for on-premises access. A NAT gateway sends traffic over the internet and incurs data charges, and VPC peering does not apply to AWS-managed services."
     },
     {
       "id": "e2-q16",
       "domain": 4,
-      "stem": "Компании нужно каждую ночь запускать контейнеризированное пакетное задание. Задание работает около 20 минут, и управлять серверами или кластерами не хочется. Какое решение имеет LEAST operational overhead?",
+      "stem": "A company needs to run a containerized batch job nightly. The job runs for about 20 minutes and they do not want to manage any servers or clusters. Which solution has the LEAST operational overhead?",
       "options": [
-        "ECS on EC2, запускаемый scheduled rule EventBridge",
-        "EKS CronJob на self-managed node group",
-        "AWS Batch на managed EC2 compute environment",
-        "ECS on Fargate, запускаемый scheduled rule EventBridge"
+        "ECS on EC2 launched by an EventBridge scheduled rule",
+        "An EKS CronJob on a self-managed node group",
+        "AWS Batch on a managed EC2 compute environment",
+        "ECS on Fargate triggered by an EventBridge scheduled rule"
       ],
       "answer": 3,
-      "explanation": "ECS on Fargate запускает контейнеры без выделения серверов или кластеров, а scheduled rule EventBridge может запускать задачу каждую ночь, минимизируя эксплуатацию. ECS on EC2, AWS Batch на EC2 и node groups EKS требуют управления базовыми instances. Serverless-модель Fargate — вариант с наименьшими накладными расходами для короткого контейнерного задания по расписанию."
+      "explanation": "ECS on Fargate runs containers without provisioning servers or clusters, and an EventBridge scheduled rule can launch the task nightly, minimizing operations. ECS on EC2, AWS Batch on EC2, and EKS node groups all require managing the underlying instances. Fargate's serverless model is the lowest-overhead fit for a short scheduled container job."
     },
     {
       "id": "e2-q17",
       "domain": 4,
-      "stem": "Команда хочет снизить стоимость EC2 instances, на которых круглосуточно работает стабильная production-нагрузка как минимум ближайшие три года. Нужна максимальная экономия с сохранением гибкости менять семейство instance в пределах региона. Какой вариант покупки MOST cost-effective?",
+      "stem": "A team wants to reduce the cost of EC2 instances that run a steady production workload 24/7 for at least the next three years. They want maximum savings while keeping flexibility to change instance family within a region. Which purchasing option is MOST cost-effective?",
       "options": [
-        "Standard Reserved Instances на 3 года",
+        "Standard Reserved Instances for 3 years",
         "Spot Instances",
         "On-Demand Instances",
-        "Compute Savings Plans на 3 года"
+        "Compute Savings Plans for 3 years"
       ],
       "answer": 3,
-      "explanation": "Compute Savings Plans дают скидки, сопоставимые с RI, и при этом позволяют менять семейство и размер instance, регион и даже распространяются на Fargate и Lambda. Standard RI дают большие скидки, но привязывают к атрибутам instance. On-Demand — самый дорогой вариант, а Spot не подходит для стабильного production из-за прерываний."
+      "explanation": "Compute Savings Plans offer discounts comparable to RIs while allowing flexibility across instance family, size, region, and even Fargate and Lambda. Standard RIs give deep discounts but lock you to instance attributes. On-Demand is the most expensive, and Spot is unsuitable for steady production due to interruptions."
     },
     {
       "id": "e2-q18",
       "domain": 3,
-      "stem": "Компании нужно общее файловое хранилище для Linux-кластера системы управления контентом, работающего на нескольких EC2 instances в нескольких Availability Zones. Хранилище должно масштабироваться автоматически и поддерживать семантику POSIX. Какой сервис следует использовать?",
+      "stem": "A company needs shared file storage for a Linux-based content management cluster running across multiple EC2 instances in multiple Availability Zones. The storage must scale automatically and support POSIX semantics. Which service should they use?",
       "options": [
-        "Amazon S3, смонтированный через gateway",
-        "Том Amazon EBS Multi-Attach",
+        "Amazon S3 mounted via the gateway",
+        "Amazon EBS Multi-Attach volume",
         "Amazon EFS",
         "Amazon FSx for Windows File Server"
       ],
       "answer": 2,
-      "explanation": "Amazon EFS — полностью управляемая, эластично масштабируемая POSIX-совместимая файловая система NFS, к которой одновременно могут обращаться многие instances из разных AZ. EBS Multi-Attach ограничен instances в одной AZ и небольшим их числом. FSx for Windows — это SMB для Windows-нагрузок, а S3 — объектное хранилище, а не POSIX-файловая система."
+      "explanation": "Amazon EFS provides a fully managed, elastically scaling POSIX-compliant NFS file system accessible concurrently from many instances across AZs. EBS Multi-Attach is limited to instances in one AZ and a small number of instances. FSx for Windows is SMB for Windows workloads, and S3 is object storage, not a POSIX file system."
     },
     {
       "id": "e2-q19",
       "domain": 1,
-      "stem": "Компания должна гарантировать, что разработчики могут запускать EC2 instances только в регионе eu-west-1 и больше нигде, во всех аккаунтах их AWS Organization. Какой способ обеспечить это наиболее эффективен (MOST effective)?",
+      "stem": "A company must ensure that developers can only launch EC2 instances in the eu-west-1 region and nowhere else, across all accounts in their AWS Organization. What is the MOST effective way to enforce this?",
       "options": [
-        "Прикрепить к каждому разработчику IAM policy с условием по региону",
-        "Использовать правила AWS Config для пометки несоответствующих instances",
-        "Задать permissions boundary для роли каждого разработчика",
-        "Применить Service Control Policy (SCP), запрещающую действия EC2 за пределами eu-west-1"
+        "Attach an IAM policy with a region condition to each developer",
+        "Use AWS Config rules to flag non-compliant instances",
+        "Set a permissions boundary on each developer role",
+        "Apply a Service Control Policy (SCP) denying EC2 actions outside eu-west-1"
       ],
       "answer": 3,
-      "explanation": "SCP, применённая на уровне организации или OU, навязывает ограничение по региону как guardrail во всех аккаунтах, и никакая IAM policy не может его переопределить. IAM policies для каждого пользователя и permissions boundaries приходится поддерживать для каждого principal, и при ошибке конфигурации их можно обойти. Config обнаруживает нарушения постфактум, но не предотвращает их."
+      "explanation": "An SCP applied at the organization or OU level enforces a region restriction as a guardrail across all accounts that no IAM policy can override. Per-user IAM policies and permissions boundaries must be maintained per principal and can be bypassed if misconfigured. Config detects violations after the fact but does not prevent them."
     },
     {
       "id": "e2-q20",
       "domain": 2,
-      "stem": "Конвейер приёма clickstream в реальном времени должен принимать миллионы событий в секунду и позволять нескольким независимым потребителям обрабатывать один и тот же поток, храня данные для повторного воспроизведения до 7 дней. Какой сервис подходит лучше всего?",
+      "stem": "A real-time clickstream ingestion pipeline must capture millions of events per second and allow multiple independent consumers to process the same stream, with data retained for replay up to 7 days. Which service best fits?",
       "options": [
         "Amazon SNS",
         "Amazon MQ",
-        "Стандартная очередь Amazon SQS",
+        "Amazon SQS standard queue",
         "Amazon Kinesis Data Streams"
       ],
       "answer": 3,
-      "explanation": "Kinesis Data Streams справляется с высоким throughput потоковых данных в реальном времени, позволяет нескольким потребителям независимо читать одни и те же данные и хранит записи до 365 дней для повторного воспроизведения. SQS удаляет сообщения после обработки и не поддерживает повторное чтение несколькими независимыми потребителями. SNS — pub/sub fan-out без хранения, а Amazon MQ ориентирован на традиционные брокеры сообщений, а не на массовую потоковую обработку."
+      "explanation": "Kinesis Data Streams handles high-throughput real-time streaming, supports multiple consumers reading the same data independently, and retains records up to 365 days for replay. SQS deletes messages after consumption and does not support replay by multiple independent consumers. SNS is pub/sub fan-out without retention, and Amazon MQ targets traditional message brokers, not massive streaming."
     },
     {
       "id": "e2-q21",
       "domain": 3,
-      "stem": "Компания использует кластер Aurora MySQL и хочет решение для disaster recovery с failover в другой регион AWS при RPO меньше секунды и RTO около минуты. Какую функцию следует использовать?",
+      "stem": "A company runs an Aurora MySQL cluster and wants a disaster recovery solution that can fail over to another AWS region with an RPO of under a second and an RTO of about a minute. Which feature should they use?",
       "options": [
-        "Вручную создать cross-region read replicas",
-        "Использовать Aurora Global Database",
-        "Включить Multi-AZ для кластера",
-        "Делать автоматические snapshots и копировать их в другой регион"
+        "Create cross-region read replicas manually",
+        "Use Aurora Global Database",
+        "Enable Multi-AZ for the cluster",
+        "Take automated snapshots and copy them cross-region"
       ],
       "answer": 1,
-      "explanation": "Aurora Global Database реплицирует данные во вторичные регионы с типичным отставанием меньше секунды и позволяет повысить вторичный регион примерно за минуту, удовлетворяя требованиям низких RPO и RTO. Ручные cross-region реплики имеют большее отставание и требуют больше управления. У копий snapshots RPO измеряется часами, а Multi-AZ защищает только в пределах одного региона."
+      "explanation": "Aurora Global Database replicates to secondary regions with typical sub-second lag and supports promoting a secondary in about a minute, meeting low RPO and RTO. Manual cross-region replicas have higher lag and more management. Snapshot copies have RPO measured in hours, and Multi-AZ protects within a single region only."
     },
     {
       "id": "e2-q22",
       "domain": 2,
-      "stem": "Веб-уровень должен распределять HTTPS-трафик между backend-микросервисами на основе URL-пути (например, /api направляется в одну target group, /images — в другую). Какой load balancer следует использовать?",
+      "stem": "A web tier must distribute HTTPS traffic to backend microservices based on the URL path (e.g., /api routes to one target group, /images to another). Which load balancer should be used?",
       "options": [
         "Application Load Balancer",
         "Classic Load Balancer",
@@ -295,25 +295,25 @@
         "Gateway Load Balancer"
       ],
       "answer": 0,
-      "explanation": "Application Load Balancer работает на уровне 7 и поддерживает маршрутизацию по пути и по хосту в разные target groups — идеально для HTTP/HTTPS-микросервисов. Network Load Balancer работает на уровне 4 и не умеет маршрутизировать по URL-пути. Gateway Load Balancer предназначен для встраиваемых (inline) appliances, а у Classic Load Balancer нет современных возможностей маршрутизации по пути."
+      "explanation": "The Application Load Balancer operates at layer 7 and supports path-based and host-based routing to different target groups, ideal for HTTP/HTTPS microservices. The Network Load Balancer is layer 4 and cannot route by URL path. The Gateway Load Balancer is for inline appliances, and the Classic Load Balancer lacks modern path-based routing features."
     },
     {
       "id": "e2-q23",
       "domain": 1,
-      "stem": "Компания хочет обнаруживать и получать оповещения, когда S3 bucket изменяют так, что он допускает публичный доступ. Нужен управляемый сервис, который непрерывно оценивает эту конфигурацию. Какой сервис следует использовать?",
+      "stem": "A company wants to detect and be alerted when an S3 bucket is changed to allow public access. They want a managed service that continuously evaluates this configuration. Which service should they use?",
       "options": [
-        "Только AWS Trusted Advisor",
+        "AWS Trusted Advisor only",
         "Amazon Macie",
-        "AWS Config с managed rule для публичных S3 buckets",
+        "AWS Config with a managed rule for public S3 buckets",
         "Amazon Inspector"
       ],
       "answer": 2,
-      "explanation": "AWS Config непрерывно оценивает конфигурации ресурсов и включает managed rule (s3-bucket-public-read-prohibited), которое помечает публичные buckets и может запускать исправление или уведомления. Inspector оценивает уязвимости рабочих нагрузок, Macie обнаруживает чувствительные данные, а Trusted Advisor выполняет периодические проверки без непрерывной оценки конфигурации и хуков для исправления."
+      "explanation": "AWS Config continuously evaluates resource configurations and includes a managed rule (s3-bucket-public-read-prohibited) that flags public buckets and can trigger remediation or notifications. Inspector assesses workload vulnerabilities, Macie discovers sensitive data, and Trusted Advisor performs periodic checks without continuous configuration evaluation and remediation hooks."
     },
     {
       "id": "e2-q24",
       "domain": 3,
-      "stem": "Приложение для отчётности выполняет сложные аналитические SQL-запросы по петабайтам структурированных данных, собранных из множества источников. Запросы сканируют большие объёмы данных и требуют высокой производительности. Какой сервис подходит лучше всего?",
+      "stem": "A reporting application runs complex analytical SQL queries over petabytes of structured data aggregated from many sources. Queries scan large amounts of data and need high performance. Which service is the best fit?",
       "options": [
         "Amazon ElastiCache for Redis",
         "Amazon DynamoDB",
@@ -321,94 +321,94 @@
         "Amazon RDS for PostgreSQL"
       ],
       "answer": 2,
-      "explanation": "Amazon Redshift — колоночное хранилище данных с массово-параллельной обработкой, оптимизированное для сложных аналитических запросов по очень большим наборам данных. RDS PostgreSQL — OLTP-база, не рассчитанная на аналитику петабайтного масштаба. DynamoDB ориентирована на key-value/документы, а ElastiCache — in-memory кэш; ни то, ни другое не подходит для крупномасштабных аналитических сканирований."
+      "explanation": "Amazon Redshift is a columnar, massively parallel data warehouse optimized for complex analytical queries over very large datasets. RDS PostgreSQL is an OLTP database not designed for petabyte analytics. DynamoDB is key-value/document oriented, and ElastiCache is an in-memory cache, neither suited to large-scale analytical scans."
     },
     {
       "id": "e2-q25",
       "domain": 4,
-      "stem": "Serverless REST API на API Gateway и Lambda под нагрузкой получает ошибки throttling, потому что достигаются лимиты concurrency Lambda. Команда хочет сглаживать всплески и не перегружать downstream-базу данных. Что следует добавить?",
+      "stem": "A serverless REST API built with API Gateway and Lambda experiences throttling errors under load because Lambda concurrency limits are reached. The team wants to smooth bursts and avoid overwhelming a downstream database. What should they introduce?",
       "options": [
-        "Добавить очередь SQS между API Gateway и Lambda для буферизации запросов",
-        "Увеличить burst limit throttling в API Gateway",
-        "Заменить API Gateway на Network Load Balancer",
-        "Включить только provisioned concurrency для Lambda"
+        "Add an SQS queue between API Gateway and Lambda to buffer requests",
+        "Increase the API Gateway throttling burst limit",
+        "Switch API Gateway to a Network Load Balancer",
+        "Enable Lambda provisioned concurrency only"
       ],
       "answer": 0,
-      "explanation": "Очередь SQS между приёмом и обработкой развязывает частоту запросов и ёмкость обработки, буферизуя всплески и защищая downstream-базу данных. Повышение burst limits в API Gateway пропускает дальше больше нагрузки, а не сглаживает её. Provisioned concurrency уменьшает cold starts, но не буферизует нагрузку, а NLB не даёт ни очередей, ни развязки."
+      "explanation": "Placing an SQS queue between ingestion and processing decouples the request rate from processing capacity, buffering bursts and protecting the downstream database. Raising API Gateway burst limits passes more load through rather than smoothing it. Provisioned concurrency reduces cold starts but does not buffer load, and a NLB does not provide queuing or decoupling."
     },
     {
       "id": "e2-q26",
       "domain": 4,
-      "stem": "У компании сотни EC2 instances во множестве аккаунтов, и она хочет получать централизованные рекомендации по right-sizing недозагруженных instances и выявлению простаивающих ресурсов для снижения затрат. Какой инструмент даёт это с минимальной настройкой?",
+      "stem": "A company has hundreds of EC2 instances across many accounts and wants centralized recommendations to right-size underutilized instances and identify idle resources to cut costs. Which tool provides this with the least setup?",
       "options": [
         "AWS Compute Optimizer",
-        "Рекомендации по rightsizing в AWS Cost Explorer и Compute Optimizer",
-        "Дашборды Amazon CloudWatch",
+        "AWS Cost Explorer rightsizing recommendations and Compute Optimizer",
+        "Amazon CloudWatch dashboards",
         "AWS Budgets"
       ],
       "answer": 1,
-      "explanation": "Рекомендации по rightsizing в Cost Explorer вместе с AWS Compute Optimizer анализируют метрики загрузки и рекомендуют right-sizing и удаление простаивающих ресурсов во всех аккаунтах. Compute Optimizer и сам по себе силён, но в паре с Cost Explorer добавляется контекст затрат. Budgets лишь отслеживают расходы относительно порогов, а дашборды CloudWatch показывают метрики без автоматических рекомендаций по rightsizing."
+      "explanation": "Cost Explorer's rightsizing recommendations together with AWS Compute Optimizer analyze utilization metrics and recommend right-sizing and idle resource removal across accounts. Compute Optimizer alone is strong but pairing with Cost Explorer surfaces cost context. Budgets only track spend against thresholds, and CloudWatch dashboards display metrics without automated rightsizing recommendations."
     },
     {
       "id": "e2-q27",
       "domain": 1,
-      "stem": "Компания шифрует тома EBS с помощью KMS customer managed key. Нужно предоставить зашифрованный EBS snapshot другому AWS-аккаунту, чтобы тот мог создавать из него тома. Что необходимо сделать? (Выберите два)",
+      "stem": "A company encrypts EBS volumes with a KMS customer managed key. They need to share an encrypted EBS snapshot with another AWS account so it can create volumes from it. What must they do? (Choose two)",
       "options": [
-        "Сделать snapshot публичным",
-        "Отключить шифрование snapshot перед предоставлением доступа",
-        "Предоставить доступ к snapshot целевому аккаунту",
-        "Скопировать snapshot в S3 bucket и предоставить доступ к bucket",
-        "Выдать целевому аккаунту kms:Decrypt и связанные разрешения на customer managed key"
+        "Make the snapshot public",
+        "Disable encryption on the snapshot before sharing",
+        "Share the snapshot with the target account",
+        "Copy the snapshot to an S3 bucket and share the bucket",
+        "Grant the target account kms:Decrypt and related permissions on the customer managed key"
       ],
       "answer": [
         2,
         4
       ],
-      "explanation": "Чтобы поделиться зашифрованным snapshot, нужно предоставить доступ к snapshot целевому аккаунту и выдать этому аккаунту разрешение на использование KMS key (decrypt, create grant и т.д.), чтобы он мог расшифровать данные. Делать зашифрованные snapshots публичными нельзя, и это небезопасно. Отключение шифрования — не механизм предоставления доступа, а snapshots не передаются через S3 buckets."
+      "explanation": "To share an encrypted snapshot you must share the snapshot with the target account and grant that account permission to use the KMS key (decrypt, create grant, etc.) so it can decrypt the data. Making it public is not allowed for encrypted snapshots and is insecure. Disabling encryption is not a sharing mechanism, and snapshots are not shared via S3 buckets."
     },
     {
       "id": "e2-q28",
       "domain": 2,
-      "stem": "Компания запускает сервис ECS на Fargate за ALB. Количество задач должно масштабироваться по числу запросов ALB на один target. Какой подход к масштабированию следует настроить?",
+      "stem": "A company runs an ECS service on Fargate behind an ALB. They need the number of tasks to scale based on the ALB request count per target. Which scaling approach should they configure?",
       "options": [
-        "ECS service auto scaling с политикой target tracking по ALBRequestCountPerTarget",
-        "Масштабирование EC2 Auto Scaling group по CPU",
-        "Scheduled scaling, удваивающий число задач в 9 утра",
-        "Вручную обновлять желаемое число задач через консоль"
+        "ECS service auto scaling with a target tracking policy on ALBRequestCountPerTarget",
+        "EC2 Auto Scaling group scaling on CPU",
+        "A scheduled scaling action that doubles tasks at 9 AM",
+        "Manually update the desired task count via the console"
       ],
       "answer": 0,
-      "explanation": "ECS service auto scaling поддерживает политику target tracking по метрике ALBRequestCountPerTarget, масштабируя задачи в зависимости от нагрузки запросами. Scheduled scaling работает по времени, а не по нагрузке. Масштабирование EC2 ASG неприменимо к задачам Fargate, у которых нет управляемых instances, а ручные обновления не автоматические."
+      "explanation": "ECS service auto scaling supports a target tracking policy using the ALBRequestCountPerTarget metric to scale tasks with request load. Scheduled scaling is time-based, not demand-based. EC2 ASG scaling does not apply to Fargate tasks which have no managed instances, and manual updates are not automatic."
     },
     {
       "id": "e2-q29",
       "domain": 3,
-      "stem": "Компании нужен полностью управляемый высокодоступный слой кэширования для хранения состояния пользовательских сессий веб-приложения, чтобы сессии переживали отказ отдельных узлов. Какой вариант наиболее подходящий (MOST appropriate)?",
+      "stem": "A company needs a fully managed, highly available caching layer to store user session state for a web application so sessions survive individual node failures. Which option is MOST appropriate?",
       "options": [
         "Amazon ElastiCache for Memcached",
-        "Amazon DynamoDB без DAX",
-        "Хранение сессий в памяти instance",
-        "Amazon ElastiCache for Redis с Multi-AZ и автоматическим failover"
+        "Amazon DynamoDB without DAX",
+        "Storing sessions in instance memory",
+        "Amazon ElastiCache for Redis with Multi-AZ and automatic failover"
       ],
       "answer": 3,
-      "explanation": "ElastiCache for Redis поддерживает репликацию, Multi-AZ и автоматический failover, поэтому данные сессий сохраняются при отказе узла. У Memcached нет репликации и персистентности, и при отказе узла данные теряются. Память instance не переживает потерю instance, и хотя DynamoDB может хранить сессии, в вопросе требуется именно высокодоступный слой кэширования."
+      "explanation": "ElastiCache for Redis supports replication, Multi-AZ, and automatic failover, so session data persists if a node fails. Memcached has no replication or persistence and loses data on node failure. Instance memory does not survive instance loss, and while DynamoDB can store sessions, the question specifically asks for a highly available caching layer."
     },
     {
       "id": "e2-q30",
       "domain": 1,
-      "stem": "Приложению нужно безопасно получать пароль базы данных во время выполнения, при этом пароль должен автоматически ротироваться каждые 30 дней без изменений кода. Какой сервис следует использовать?",
+      "stem": "An application needs to retrieve a database password securely at runtime, with the password rotated automatically every 30 days without code changes. Which service should be used?",
       "options": [
-        "Переменные окружения на EC2 instance",
-        "Standard parameters в AWS Systems Manager Parameter Store",
+        "Environment variables on the EC2 instance",
+        "AWS Systems Manager Parameter Store standard parameters",
         "AWS Secrets Manager",
-        "Захардкодить пароль в зашифрованном объекте S3"
+        "Hard-code the password in an encrypted S3 object"
       ],
       "answer": 2,
-      "explanation": "Secrets Manager хранит секреты в зашифрованном виде и поддерживает встроенную автоматическую ротацию для поддерживаемых баз данных через Lambda, так что приложения получают актуальное значение без изменений кода. У standard parameters в Parameter Store нет встроенной ротации. Зашифрованные объекты S3 и переменные окружения требуют собственной логики ротации, и безопасно управлять ими сложнее."
+      "explanation": "Secrets Manager stores secrets encrypted and supports built-in automatic rotation for supported databases via Lambda, so applications retrieve the current value without code changes. Parameter Store standard parameters lack native rotation. Encrypted S3 objects and environment variables require custom rotation logic and are harder to manage securely."
     },
     {
       "id": "e2-q31",
       "domain": 2,
-      "stem": "Компания хочет событийно-ориентированную архитектуру, в которой изменения объектов S3 запускают несколько независимых downstream-систем, включая Lambda function и очередь SQS, с возможностью фильтровать события и маршрутизировать их по содержимому. Какой сервис должен управлять маршрутизацией?",
+      "stem": "A company wants an event-driven architecture where changes to S3 objects trigger multiple independent downstream systems, including a Lambda function and an SQS queue, with the ability to filter events and route them by content. Which service should orchestrate the routing?",
       "options": [
         "Amazon EventBridge",
         "AWS Step Functions",
@@ -416,12 +416,12 @@
         "Amazon SQS"
       ],
       "answer": 0,
-      "explanation": "EventBridge поддерживает правила фильтрации по содержимому и может направлять одно событие в несколько targets, например Lambda и SQS, — идеально для гибкой событийной маршрутизации. SNS делает fan-out, но с менее развитой фильтрацией по содержимому. SQS — это очередь, а не маршрутизатор, а Step Functions оркеструет шаги workflow, а не маршрутизирует произвольные события во множество targets."
+      "explanation": "EventBridge supports content-based filtering rules and can route a single event to multiple targets such as Lambda and SQS, ideal for flexible event-driven routing. SNS fans out but with less sophisticated content filtering. SQS is a queue, not a router, and Step Functions orchestrates workflow steps rather than routing arbitrary events to many targets."
     },
     {
       "id": "e2-q32",
       "domain": 3,
-      "stem": "Приложению для высокопроизводительных вычислений (HPC) нужна общая файловая система с задержками меньше миллисекунды и throughput в сотни ГБ/с, интегрированная с S3 для входных и выходных данных. Какой сервис создан специально для этого?",
+      "stem": "A high-performance computing application needs a shared file system with sub-millisecond latencies and hundreds of GB/s throughput, integrated with S3 for input and output data. Which service is purpose-built for this?",
       "options": [
         "Amazon FSx for Lustre",
         "Amazon EFS",
@@ -429,137 +429,137 @@
         "Amazon EBS io2 Block Express"
       ],
       "answer": 0,
-      "explanation": "FSx for Lustre создан для HPC и машинного обучения: он обеспечивает очень высокий throughput и низкую задержку и нативно интегрируется с S3 как репозиторием данных. EFS масштабируется, но не достигает HPC-уровня throughput Lustre. FSx for Windows ориентирован на SMB-нагрузки, а EBS io2 — блочное хранилище, подключаемое к одному instance, а не общая параллельная файловая система."
+      "explanation": "FSx for Lustre is built for HPC and machine learning, delivering very high throughput and low latency and integrating natively with S3 for data repositories. EFS scales but does not reach Lustre-class HPC throughput. FSx for Windows targets SMB workloads, and EBS io2 is block storage attached to a single instance, not a shared parallel file system."
     },
     {
       "id": "e2-q33",
       "domain": 4,
-      "stem": "Среда разработки использует EC2 instances только в рабочее время: с понедельника по пятницу, с 8:00 до 18:00. Команда хочет автоматически останавливать их в нерабочее время, чтобы экономить с минимальными усилиями. Что следует использовать?",
+      "stem": "A development environment runs EC2 instances only during business hours, Monday to Friday, 8 AM to 6 PM. The team wants to automatically stop them outside those hours to save cost with minimal effort. What should they use?",
       "options": [
-        "AWS Instance Scheduler или scheduled rules EventBridge для остановки и запуска instances",
-        "Reserved Instances для среды разработки",
-        "Вручную останавливать instances каждый вечер",
-        "Spot Instances для среды разработки"
+        "AWS Instance Scheduler or EventBridge scheduled rules to stop and start instances",
+        "Reserved Instances for the dev environment",
+        "Manually stop the instances each evening",
+        "Spot Instances for the dev environment"
       ],
       "answer": 0,
-      "explanation": "AWS Instance Scheduler или scheduled rules EventBridge автоматизируют остановку и запуск instances по заданному расписанию, экономя в часы простоя с минимальными усилиями. Spot и Reserved Instances меняют модель оплаты, но не выключают instances по расписанию. Ручная остановка чревата ошибками и не автоматизирована."
+      "explanation": "AWS Instance Scheduler or EventBridge scheduled rules automate stopping and starting instances on a defined schedule, saving cost during idle hours with minimal effort. Spot and Reserved Instances change pricing models but do not turn instances off on a schedule. Manual stopping is error-prone and not automatic."
     },
     {
       "id": "e2-q34",
       "domain": 1,
-      "stem": "Компания хочет, чтобы пользователи входили в AWS со своими существующими корпоративными учётными данными Microsoft Active Directory и получали временный доступ к AWS, сопоставленный с ролями. Какой подход следует использовать?",
+      "stem": "A company wants to allow users to log in to AWS using their existing corporate Microsoft Active Directory credentials and receive temporary AWS access mapped to roles. Which approach should they use?",
       "options": [
-        "Использовать AWS IAM Identity Center, интегрированный с корпоративным identity provider через SAML",
-        "Создать отдельных IAM users для каждого сотрудника",
-        "Использовать IAM access keys, рассылаемые по email",
-        "Использовать общие учётные данные root-аккаунта"
+        "Use AWS IAM Identity Center integrated with the corporate identity provider via SAML",
+        "Create individual IAM users for every employee",
+        "Use IAM access keys distributed by email",
+        "Share a single root account credential"
       ],
       "answer": 0,
-      "explanation": "IAM Identity Center, федерированный с корпоративным IdP через SAML, обеспечивает single sign-on с корпоративными учётными данными и сопоставляет пользователей с permission sets, дающими временный доступ на основе ролей. Создание IAM users для каждого сотрудника дублирует identity и усложняет управление. Общие root-учётные данные и рассылка access keys по email — грубые антипаттерны безопасности."
+      "explanation": "IAM Identity Center federated with the corporate IdP via SAML enables single sign-on with corporate credentials and maps users to permission sets that grant temporary role-based access. Creating IAM users per employee duplicates identities and increases management. Sharing root credentials and emailing access keys are severe security anti-patterns."
     },
     {
       "id": "e2-q35",
       "domain": 1,
-      "stem": "Компания хочет предоставить сервис, работающий на EC2 instances в приватной VPC, потребителям в других VPC и аккаунтах без VPC peering и без открытия сервиса в интернет. Какое решение следует использовать?",
+      "stem": "A company wants to expose a service running on EC2 instances in a private VPC to consumers in other VPCs and accounts without VPC peering and without exposing the service to the internet. Which solution should they use?",
       "options": [
         "AWS Transit Gateway",
-        "AWS PrivateLink с endpoint service на базе Network Load Balancer",
-        "VPC peering со всеми VPC потребителей",
-        "Публичный Application Load Balancer"
+        "AWS PrivateLink with an endpoint service backed by a Network Load Balancer",
+        "VPC peering with all consumer VPCs",
+        "A public Application Load Balancer"
       ],
       "answer": 1,
-      "explanation": "AWS PrivateLink позволяет провайдеру опубликовать сервис через endpoint service с NLB перед ним, а потребители подключаются приватно через interface endpoints, без peering и без выхода в интернет. Transit Gateway связывает сети целиком, а не публикует отдельный сервис. Публичный ALB открывает сервис в интернет, а peering с каждой VPC не масштабируется и не позволяет избирательно открыть один сервис."
+      "explanation": "AWS PrivateLink lets a provider expose a service via an endpoint service fronted by an NLB, and consumers connect through interface endpoints privately, without peering or internet exposure. Transit Gateway connects networks broadly rather than exposing a single service. A public ALB exposes the service to the internet, and per-VPC peering does not scale and does not selectively expose one service."
     },
     {
       "id": "e2-q36",
       "domain": 3,
-      "stem": "Компания хранит в DynamoDB редко используемые записи, за хранение которых постоянно платит, хотя читают их редко. Нужно снизить стоимость хранения, сохранив возможность запрашивать данные через те же API. Какой вариант поможет?",
+      "stem": "A company stores infrequently accessed records in DynamoDB that incur ongoing storage cost but are rarely read. They want to reduce storage cost while still keeping the data queryable with the same APIs. Which option helps?",
       "options": [
-        "Включить DynamoDB Streams",
-        "Перейти на provisioned capacity",
-        "Добавить local secondary index",
-        "Включить table class DynamoDB Standard-Infrequent Access"
+        "Enable DynamoDB Streams",
+        "Switch to provisioned capacity",
+        "Add a local secondary index",
+        "Enable DynamoDB Standard-Infrequent Access table class"
       ],
       "answer": 3,
-      "explanation": "Table class DynamoDB Standard-IA снижает стоимость хранения для таблиц с редким доступом, сохраняя те же API и характеристики производительности. Смена режима ёмкости влияет на оплату throughput, а не на стоимость хранения. Streams фиксируют изменения данных и добавляют расходы, а LSI — это шаблон доступа, который не снижает стоимость хранения."
+      "explanation": "The DynamoDB Standard-IA table class lowers storage costs for tables with infrequent access while keeping the same APIs and performance characteristics. Changing capacity mode affects throughput billing, not storage cost. Streams capture change data and add cost, and a LSI is an access pattern that does not reduce storage cost."
     },
     {
       "id": "e2-q37",
       "domain": 2,
-      "stem": "Приложение должно отдавать контент пользователям с минимально возможной задержкой и при этом защищать origin от DDoS-атак и распространённых веб-эксплойтов. Какую комбинацию следует развернуть? (Выберите два)",
+      "stem": "An application must serve content to users with the lowest possible latency and also protect the origin from DDoS attacks and common web exploits. Which combination should be deployed? (Choose two)",
       "options": [
-        "Amazon Cognito для доставки контента",
-        "AWS Direct Connect к origin",
-        "Один большой EC2 instance в качестве origin",
-        "AWS WAF, связанный с дистрибуцией CloudFront",
-        "Дистрибуция Amazon CloudFront перед origin"
+        "Amazon Cognito for content delivery",
+        "AWS Direct Connect to the origin",
+        "A single large EC2 instance as the origin",
+        "AWS WAF associated with the CloudFront distribution",
+        "Amazon CloudFront distribution in front of the origin"
       ],
       "answer": [
         3,
         4
       ],
-      "explanation": "CloudFront кэширует контент в edge locations для низкой задержки и обеспечивает встроенную защиту от DDoS через AWS Shield, а AWS WAF блокирует распространённые веб-эксплойты на edge. Один EC2 origin не снижает задержку глобально и не защищает от атак. Cognito отвечает за аутентификацию, а Direct Connect — приватное подключение, не связанное с доставкой и защитой публичного контента."
+      "explanation": "CloudFront caches at edge locations for low latency and provides built-in DDoS protection via AWS Shield, while AWS WAF blocks common web exploits at the edge. A single EC2 origin neither reduces latency globally nor protects against attacks. Cognito handles authentication, and Direct Connect is private connectivity unrelated to public content delivery and protection."
     },
     {
       "id": "e2-q38",
       "domain": 3,
-      "stem": "У компании есть on-premises база данных Oracle, которую нужно мигрировать в Amazon Aurora PostgreSQL с минимальным простоем, конвертировав схему в процессе переноса. Какие сервисы AWS следует использовать? (Выберите два)",
+      "stem": "A company has an on-premises Oracle database and wants to migrate it to Amazon Aurora PostgreSQL with minimal downtime, converting the schema as part of the move. Which AWS services should they use? (Choose two)",
       "options": [
-        "AWS Database Migration Service (DMS) для непрерывной репликации",
+        "AWS Database Migration Service (DMS) for ongoing replication",
         "AWS Snowmobile",
         "Amazon Kinesis Data Firehose",
         "AWS Glue DataBrew",
-        "AWS Schema Conversion Tool (SCT) для конвертации схемы"
+        "AWS Schema Conversion Tool (SCT) to convert the schema"
       ],
       "answer": [
         0,
         4
       ],
-      "explanation": "SCT конвертирует схему и код Oracle в объекты, совместимые с PostgreSQL, а DMS выполняет миграцию данных с непрерывной репликацией для переключения с минимальным простоем. Snowmobile предназначен для физического переноса данных эксабайтного масштаба, а не для миграции баз данных. Kinesis Firehose доставляет потоки данных в такие назначения, как S3, а Glue DataBrew — для подготовки данных; ни то, ни другое не подходит для гетерогенной миграции баз данных."
+      "explanation": "SCT converts the Oracle schema and code to PostgreSQL-compatible objects, and DMS performs the data migration with continuous replication for minimal downtime cutover. Snowmobile is for exabyte-scale physical data transfer, not database migration. Kinesis Firehose streams data to destinations like S3, and Glue DataBrew is for data preparation, neither suited to heterogeneous database migration."
     },
     {
       "id": "e2-q39",
       "domain": 1,
-      "stem": "Команда хочет гарантировать, что S3 bucket policy не сможет случайно предоставить доступ principals за пределами их AWS Organization, независимо от других политик. Какая функция обеспечивает такой контроль на уровне всей организации?",
+      "stem": "A team wants to ensure that an S3 bucket policy cannot accidentally grant access to principals outside their AWS Organization, regardless of other policies. Which feature enforces this organization-wide control?",
       "options": [
         "S3 Object Lock",
         "Bucket ACLs",
-        "SCP в сочетании с условием aws:PrincipalOrgID в bucket policy",
+        "An SCP combined with a bucket policy condition on aws:PrincipalOrgID",
         "S3 Block Public Access"
       ],
       "answer": 2,
-      "explanation": "Условие aws:PrincipalOrgID в bucket policy ограничивает доступ principals внутри организации, а guardrails на основе SCP усиливают контроль на уровне всей организации. Block Public Access предотвращает публичный доступ, но не доступ произвольных внешних аккаунтов. ACL — устаревший и грубый механизм, а Object Lock управляет сроком хранения, а не тем, какие principals имеют доступ."
+      "explanation": "Using a bucket policy condition on aws:PrincipalOrgID restricts access to principals within the organization, and SCP guardrails reinforce organization-wide control. Block Public Access prevents public access but not access by arbitrary external accounts. ACLs are legacy and coarse, and Object Lock governs retention, not access principals."
     },
     {
       "id": "e2-q40",
       "domain": 2,
-      "stem": "Компания запускает микросервисное приложение на EKS и хочет открыть несколько сервисов через один load balancer с помощью Kubernetes-native ingress и терминацией TLS. Какая комбинация подходит?",
+      "stem": "A company runs a microservices application on EKS and wants to expose multiple services through a single load balancer using Kubernetes-native ingress while terminating TLS. Which combination is appropriate?",
       "options": [
-        "Использовать Network Load Balancer без ingress controller",
-        "Открыть каждый сервис через отдельный Classic Load Balancer",
-        "Использовать AWS Load Balancer Controller для создания Application Load Balancer через ресурсы Ingress",
-        "Запустить все сервисы в одном pod"
+        "Use a Network Load Balancer with no ingress controller",
+        "Expose each service with a separate Classic Load Balancer",
+        "Use the AWS Load Balancer Controller to provision an Application Load Balancer via Ingress resources",
+        "Run all services on a single pod"
       ],
       "answer": 2,
-      "explanation": "AWS Load Balancer Controller создаёт ALB на основе ресурсов Kubernetes Ingress, обеспечивая маршрутизацию по пути к нескольким сервисам через один load balancer с терминацией TLS. Отдельный Classic Load Balancer для каждого сервиса дорог и неуправляем. Голый NLB без ingress controller не умеет маршрутизировать на уровне 7, а объединение всех сервисов в один pod ломает микросервисную модель."
+      "explanation": "The AWS Load Balancer Controller provisions an ALB from Kubernetes Ingress resources, enabling path-based routing to multiple services through one load balancer with TLS termination. Separate Classic Load Balancers per service is costly and unmanageable. A bare NLB without an ingress controller lacks layer-7 routing, and combining all services into one pod breaks the microservices model."
     },
     {
       "id": "e2-q41",
       "domain": 1,
-      "stem": "Компании нужно объектное хранилище с долговечностью (durability) в одиннадцать девяток, и она хочет защитить объекты от случайного удаления и перезаписи. Какую функцию следует включить?",
+      "stem": "A company needs an object storage solution that provides eleven nines of durability and wants to ensure objects are protected against accidental deletion and overwrite. Which feature should they enable?",
       "options": [
-        "Только S3 Cross-Region Replication",
-        "S3 Versioning в сочетании с MFA Delete",
+        "S3 Cross-Region Replication only",
+        "S3 Versioning combined with MFA Delete",
         "S3 Requester Pays",
         "S3 Transfer Acceleration"
       ],
       "answer": 1,
-      "explanation": "S3 Versioning сохраняет предыдущие версии, поэтому перезаписанные и удалённые объекты можно восстановить, а MFA Delete добавляет защиту, требуя многофакторной аутентификации для безвозвратного удаления версий. Cross-Region Replication помогает для DR, но сама по себе не предотвращает случайное удаление внутри bucket. Transfer Acceleration ускоряет загрузку, а Requester Pays перекладывает оплату; ни то, ни другое не защищает от удаления."
+      "explanation": "S3 Versioning preserves previous versions so overwrites and deletes can be recovered, and MFA Delete adds protection requiring multi-factor authentication to permanently delete versions. Cross-Region Replication aids DR but does not by itself prevent accidental deletion within a bucket. Transfer Acceleration speeds uploads, and Requester Pays shifts billing, neither protecting against deletion."
     },
     {
       "id": "e2-q42",
       "domain": 4,
-      "stem": "Стартап хочет запускать отказоустойчивое, допускающее прерывания пакетное задание обработки изображений с минимально возможной стоимостью вычислений. Задание поддерживает checkpoint и возобновление. Какой вариант покупки EC2 MOST cost-effective?",
+      "stem": "A startup wants to run a fault-tolerant, interruptible batch image-processing job at the lowest possible compute cost. The job can be checkpointed and resumed. Which EC2 purchasing option is MOST cost-effective?",
       "options": [
         "Reserved Instances",
         "On-Demand Instances",
@@ -567,12 +567,12 @@
         "Spot Instances"
       ],
       "answer": 3,
-      "explanation": "Spot Instances дают самые большие скидки и идеально подходят для отказоустойчивых, прерываемых нагрузок с checkpoint, таких как пакетная обработка изображений. On-Demand и Reserved стоят дороже для прерываемого задания, а Dedicated Hosts — самый дорогой вариант, предназначенный для лицензирования или соответствия требованиям, а не для минимизации стоимости пакетных задач."
+      "explanation": "Spot Instances offer the deepest discounts and are ideal for fault-tolerant, interruptible, checkpointable workloads like batch image processing. On-Demand and Reserved cost more for an interruptible job, and Dedicated Hosts are the most expensive, intended for licensing or compliance, not cost minimization of batch work."
     },
     {
       "id": "e2-q43",
       "domain": 2,
-      "stem": "Компании нужно запускать workflow, координирующий несколько Lambda functions с ветвлением, повторными попытками и шагами ручного утверждения, при этом логика оркестрации не должна находиться в коде функций. Какой сервис следует использовать?",
+      "stem": "A company needs to run a workflow that coordinates multiple Lambda functions with branching logic, retries, and human approval steps, while keeping the orchestration logic out of the function code. Which service should they use?",
       "options": [
         "Amazon SNS",
         "Amazon SQS",
@@ -580,38 +580,38 @@
         "AWS Lambda destinations"
       ],
       "answer": 2,
-      "explanation": "Step Functions предоставляет управляемую state machine для оркестрации Lambda functions с ветвлением, повторными попытками, обработкой ошибок и шаблоном wait-for-callback для ручного утверждения, оставляя оркестрацию декларативной и отделённой от кода. SQS и SNS — примитивы обмена сообщениями без оркестрации workflow. Lambda destinations направляют результаты, но не позволяют описывать сложные многошаговые workflow."
+      "explanation": "Step Functions provides a managed state machine to orchestrate Lambda functions with branching, retries, error handling, and wait-for-callback patterns for human approval, keeping orchestration declarative and separate from code. SQS and SNS are messaging primitives without workflow orchestration. Lambda destinations route results but cannot model complex multi-step workflows."
     },
     {
       "id": "e2-q44",
       "domain": 1,
-      "stem": "Компания хочет, чтобы управление сертификатами для её публичного Application Load Balancer было автоматизированным и бесплатным, а TLS-сертификаты продлевались без ручных усилий. Какой подход следует выбрать?",
+      "stem": "A company wants certificate management for their public-facing Application Load Balancer to be automated and free, with TLS certificates that renew without manual effort. Which approach should they take?",
       "options": [
-        "Вручную покупать сертификаты у стороннего CA и менять их ежегодно",
-        "Хранить self-signed сертификат в Secrets Manager и ротировать его собственной Lambda",
-        "Отключить TLS на ALB, чтобы не заниматься сертификатами",
-        "Использовать AWS Certificate Manager (ACM) для выпуска и автоматического продления TLS-сертификата ALB"
+        "Manually purchase certificates from a third-party CA and rotate them yearly",
+        "Store a self-signed certificate in Secrets Manager and rotate it with a custom Lambda",
+        "Disable TLS on the ALB to avoid certificate management",
+        "Use AWS Certificate Manager (ACM) to provision and auto-renew the ALB's TLS certificate"
       ],
       "answer": 3,
-      "explanation": "ACM бесплатно и без ручных усилий выпускает и автоматически продлевает публичные TLS-сертификаты для ALB. Ручная покупка и замена сторонних сертификатов добавляет регулярную работу и риск истечения срока. Отключение TLS убирает шифрование in transit, а self-signed сертификаты с собственной ротацией требуют гораздо больше операционных затрат, чем управляемое продление в ACM."
+      "explanation": "ACM issues and auto-renews public TLS certificates for the ALB at no cost with no manual effort. Manually purchasing and rotating third-party certificates adds recurring overhead and risk of expiry. Disabling TLS removes encryption in transit, and self-signed certificates with custom rotation are far more operational overhead than ACM's managed renewal."
     },
     {
       "id": "e2-q45",
       "domain": 3,
-      "stem": "Компания использует критически важную базу RDS for PostgreSQL и нуждается в автоматическом failover на standby в другой Availability Zone при отказе primary, без ручного вмешательства. Какая конфигурация это обеспечивает?",
+      "stem": "A company runs a critical RDS for PostgreSQL database and needs automatic failover to a standby in another Availability Zone if the primary fails, with no manual intervention. Which configuration provides this?",
       "options": [
-        "Хранение резервных копий в S3 с versioning",
+        "Storing backups in S3 with versioning",
         "RDS Multi-AZ deployment",
-        "Single-AZ instance с ручными snapshots",
-        "Read replica в другом регионе"
+        "A single-AZ instance with manual snapshots",
+        "A read replica in another region"
       ],
       "answer": 1,
-      "explanation": "RDS Multi-AZ поддерживает синхронный standby в другой AZ и автоматически выполняет failover через DNS при отказе primary, без ручных действий. У single-AZ instance нет автоматического failover. Cross-region read replica предназначена для масштабирования чтения и DR, но не для автоматического failover в том же регионе, а резервные копии в S3 не обеспечивают failover."
+      "explanation": "RDS Multi-AZ maintains a synchronous standby in another AZ and automatically fails over via DNS if the primary fails, with no manual action. A single-AZ instance has no automatic failover. A cross-region read replica is for read scaling and DR but not automatic same-region failover, and S3 backups do not provide failover."
     },
     {
       "id": "e2-q46",
       "domain": 2,
-      "stem": "Компания использует legacy-приложение, которому нужны протоколы обмена сообщениями JMS и AMQP. Нужно перейти на управляемый брокер сообщений без переписывания приложения. Какой сервис выбрать?",
+      "stem": "A company runs a legacy application that requires the JMS and AMQP messaging protocols. They want to move to a managed message broker without rewriting the application. Which service should they choose?",
       "options": [
         "Amazon EventBridge",
         "Amazon MQ",
@@ -619,12 +619,12 @@
         "Amazon Kinesis Data Streams"
       ],
       "answer": 1,
-      "explanation": "Amazon MQ — управляемый брокер с поддержкой стандартных протоколов JMS, AMQP, MQTT и STOMP, позволяющий перенести legacy-приложения обмена сообщениями по принципу lift-and-shift без изменения кода. SQS и EventBridge используют специфичные для AWS API и требуют изменений в приложении. Kinesis предназначен для потоковых данных, а не для стандартных протоколов брокеров."
+      "explanation": "Amazon MQ is a managed broker supporting industry-standard protocols like JMS, AMQP, MQTT, and STOMP, enabling lift-and-shift of legacy messaging applications without code changes. SQS and EventBridge use AWS-specific APIs requiring application changes. Kinesis is for streaming data, not standard broker protocols."
     },
     {
       "id": "e2-q47",
       "domain": 1,
-      "stem": "Компания хочет автоматизированно и непрерывно обнаруживать чувствительные данные, такие как PII и номера кредитных карт, хранящиеся во множестве S3 buckets, с оповещениями при их обнаружении. Какой сервис следует использовать?",
+      "stem": "A company wants automated, continuous discovery of sensitive data such as PII and credit card numbers stored across many S3 buckets, with alerts when such data is found. Which service should they use?",
       "options": [
         "AWS CloudTrail",
         "Amazon GuardDuty",
@@ -632,29 +632,29 @@
         "Amazon Macie"
       ],
       "answer": 3,
-      "explanation": "Amazon Macie с помощью машинного обучения обнаруживает и классифицирует чувствительные данные, такие как PII и финансовые данные, в S3 и формирует findings. AWS Config оценивает соответствие конфигураций, GuardDuty обнаруживает угрозы по логам, а CloudTrail записывает активность API; ни один из них не классифицирует содержимое хранимых данных."
+      "explanation": "Amazon Macie uses machine learning to discover and classify sensitive data like PII and financial data in S3 and generates findings. AWS Config evaluates configuration compliance, GuardDuty detects threats from logs, and CloudTrail records API activity, none of which classify the content of stored data."
     },
     {
       "id": "e2-q48",
       "domain": 2,
-      "stem": "В VPC есть public и private subnets в двух AZ. Ресурсы в private subnets должны приватно резолвить и достигать небольшого набора сервисов AWS (S3, DynamoDB, KMS). Какая архитектура минимизирует стоимость и не пускает трафик через интернет? (Выберите два)",
+      "stem": "A VPC has public and private subnets across two AZs. Resources in the private subnets must resolve and reach a small set of AWS services (S3, DynamoDB, KMS) privately. Which design minimizes cost and keeps traffic off the internet? (Choose two)",
       "options": [
-        "Использовать interface VPC endpoints для KMS",
-        "Использовать gateway VPC endpoints для S3 и DynamoDB",
-        "Использовать Transit Gateway для доступа к сервисам AWS",
-        "Подключить internet gateway к private subnets",
-        "Направлять весь трафик к сервисам через NAT gateway"
+        "Use interface VPC endpoints for KMS",
+        "Use gateway VPC endpoints for S3 and DynamoDB",
+        "Use a Transit Gateway to reach AWS services",
+        "Attach an internet gateway to private subnets",
+        "Route all service traffic through a NAT gateway"
       ],
       "answer": [
         0,
         1
       ],
-      "explanation": "Gateway endpoints для S3 и DynamoDB бесплатны и маршрутизируют трафик приватно, а interface endpoint обеспечивает приватный доступ к KMS (у которого нет gateway endpoint). Маршрутизация через NAT gateway отправляет трафик через интернет и тарифицирует данные. Подключение internet gateway к private subnets открывает их, а Transit Gateway нативно не обеспечивает доступ к сервисам AWS."
+      "explanation": "Gateway endpoints for S3 and DynamoDB are free and route privately, and an interface endpoint provides private access to KMS (which has no gateway endpoint). Routing through a NAT gateway sends traffic over the internet and incurs data charges. Attaching an internet gateway to private subnets exposes them, and Transit Gateway does not natively reach AWS services."
     },
     {
       "id": "e2-q49",
       "domain": 1,
-      "stem": "Компания хочет выполнять запросы к данным прямо в S3 на стандартном SQL без загрузки их в базу данных и без управления инфраструктурой, оплачивая только каждый запрос. Какой сервис следует использовать?",
+      "stem": "A company wants to query data directly in S3 using standard SQL without loading it into a database or managing infrastructure, paying only per query. Which service should they use?",
       "options": [
         "Amazon RDS",
         "Amazon EMR",
@@ -662,215 +662,215 @@
         "Amazon Redshift"
       ],
       "answer": 2,
-      "explanation": "Amazon Athena — serverless-сервис запросов, выполняющий стандартный SQL непосредственно по данным в S3 с оплатой за объём просканированных данных, без управления инфраструктурой. Redshift требует provisioned кластера (если не считать Spectrum), RDS требует загрузки данных в управляемую базу, а EMR — управления big-data кластером."
+      "explanation": "Amazon Athena is a serverless query service that runs standard SQL directly against data in S3 and charges per data scanned, with no infrastructure to manage. Redshift requires a provisioned cluster (Spectrum aside), RDS requires loading data into a managed database, and EMR requires managing a big-data cluster."
     },
     {
       "id": "e2-q50",
       "domain": 1,
-      "stem": "Компания хочет автоматически исправлять ситуацию, когда security group изменяют так, что она разрешает неограниченный входящий SSH с 0.0.0.0/0. Нужны обнаружение и автоматическое исправление. Какая комбинация это обеспечивает?",
+      "stem": "A company wants to automatically remediate the situation where a security group is modified to allow unrestricted inbound SSH from 0.0.0.0/0. They want detection and automatic remediation. Which combination achieves this?",
       "options": [
-        "Ручной еженедельный аудит security groups",
-        "Только CloudTrail",
-        "Правило AWS Config с действием исправления через SSM Automation",
-        "Только анализ network reachability в Amazon Inspector"
+        "A manual weekly security group audit",
+        "CloudTrail alone",
+        "AWS Config rule with an SSM Automation remediation action",
+        "Amazon Inspector network reachability only"
       ],
       "answer": 2,
-      "explanation": "Managed rule AWS Config обнаруживает несоответствующие security groups и может запускать документ SSM Automation для автоматического исправления, например удаления проблемного правила. CloudTrail фиксирует изменение, но не исправляет его. Ручные аудиты медленные и чреваты ошибками, а анализ reachability в Inspector оценивает доступность извне без автоматического исправления security groups."
+      "explanation": "An AWS Config managed rule detects non-compliant security groups and can trigger an SSM Automation document to automatically remediate, such as removing the offending rule. CloudTrail records the change but does not remediate. Manual audits are slow and error-prone, and Inspector reachability analysis assesses exposure without auto-remediation of security groups."
     },
     {
       "id": "e2-q51",
       "domain": 4,
-      "stem": "Компания хочет настроить оповещения, когда прогноз месячных расходов AWS превышает порог, а также отслеживать расходы по проектам с помощью тегов. Какую комбинацию функций следует использовать? (Выберите два)",
+      "stem": "A company wants to set up alerts when their monthly AWS spend is forecasted to exceed a threshold, and also wants to track spend by project using tags. Which combination of features should they use? (Choose two)",
       "options": [
-        "AWS Budgets с оповещениями по прогнозируемым затратам",
-        "Cost allocation tags, активированные в консоли биллинга",
+        "AWS Budgets with forecasted cost alerts",
+        "Cost allocation tags activated in the billing console",
         "AWS Compute Optimizer",
-        "Только billing alarms Amazon CloudWatch по общим расходам",
-        "Только проверки затрат AWS Trusted Advisor"
+        "Amazon CloudWatch billing alarms only on total spend",
+        "AWS Trusted Advisor cost checks only"
       ],
       "answer": [
         0,
         1
       ],
-      "explanation": "AWS Budgets может оповещать о фактических и прогнозируемых расходах относительно порогов, а активация cost allocation tags позволяет Cost Explorer и budgets разбивать расходы по проектам. Billing alarms CloudWatch отслеживают только общие расходы, без прогнозирования и группировки по тегам. Trusted Advisor и Compute Optimizer дают рекомендации, а не оповещения по бюджету и отслеживание по тегам."
+      "explanation": "AWS Budgets can alert on actual and forecasted spend against thresholds, and activating cost allocation tags lets Cost Explorer and budgets break down spend by project. CloudWatch billing alarms track total spend only and lack forecasting and tag-based grouping. Trusted Advisor and Compute Optimizer give recommendations, not budget alerts and tag-based tracking."
     },
     {
       "id": "e2-q52",
       "domain": 2,
-      "stem": "Lambda function компании в VPC должна вызывать сторонний API в интернете, но у функции нет доступа в интернет. В VPC есть public и private subnets. Какая конфигурация правильная?",
+      "stem": "A company's Lambda function in a VPC needs to call a third-party API on the internet, but the function has no internet access. The VPC has public and private subnets. What is the correct configuration?",
       "options": [
-        "Подключить internet gateway напрямую к Lambda",
-        "Разместить Lambda в public subnet с публичным IP",
-        "Разместить Lambda в private subnets и направить исходящий трафик через NAT gateway в public subnet",
-        "Использовать gateway VPC endpoint для стороннего API"
+        "Attach an internet gateway directly to the Lambda",
+        "Place the Lambda in the public subnet with a public IP",
+        "Place the Lambda in private subnets and route outbound traffic through a NAT gateway in a public subnet",
+        "Use a gateway VPC endpoint for the third-party API"
       ],
       "answer": 2,
-      "explanation": "У Lambda functions, подключённых к VPC, нет публичного IP, поэтому в интернет они выходят, работая в private subnets с маршрутом к NAT gateway в public subnet. Размещение Lambda в public subnet не даёт ей публичного IP. Internet gateway нельзя подключить к функции, а gateway endpoints ведут только к определённым сервисам AWS, а не к произвольным сторонним API."
+      "explanation": "VPC-attached Lambda functions have no public IP, so they reach the internet by running in private subnets with a route to a NAT gateway in a public subnet. Lambda cannot be assigned a public IP by placing it in a public subnet. An internet gateway cannot attach to a function, and gateway endpoints only reach specific AWS services, not arbitrary third-party APIs."
     },
     {
       "id": "e2-q53",
       "domain": 3,
-      "stem": "Компании нужно хранить временные ряды с IoT-датчиков с очень высоким throughput записи и автоматическим удалением записей старше 90 дней, сохраняя низкую стоимость. Какой подход наиболее подходящий (MOST suitable)?",
+      "stem": "A company needs to store time-series IoT sensor data with very high write throughput and automatic expiration of records older than 90 days, while keeping costs low. Which approach is MOST suitable?",
       "options": [
-        "Amazon RDS с cron-заданием для удаления старых строк",
-        "Amazon S3 Standard с ручным удалением",
-        "Amazon DynamoDB с TTL, включённым на атрибуте с временной меткой",
-        "Amazon Redshift с vacuum по расписанию"
+        "Amazon RDS with a cron job to delete old rows",
+        "Amazon S3 Standard with manual deletion",
+        "Amazon DynamoDB with TTL enabled on a timestamp attribute",
+        "Amazon Redshift with scheduled vacuum"
       ],
       "answer": 2,
-      "explanation": "DynamoDB справляется с высоким throughput записи в масштабе, а функция TTL автоматически удаляет элементы с истёкшей временной меткой без дополнительной платы — идеально для временных рядов с окном хранения. RDS с удалением по cron добавляет нагрузку и требует управления. Ручное удаление в S3 — лишние операционные затраты, а Redshift — аналитическое хранилище, не оптимизированное для частых одиночных IoT-записей с TTL."
+      "explanation": "DynamoDB handles high write throughput at scale, and its TTL feature automatically expires and deletes items past a timestamp at no extra cost, ideal for time-series data with retention windows. RDS with cron deletes adds load and management. S3 manual deletion is operational overhead, and Redshift is an analytics warehouse not optimized for high-rate single-record IoT writes with TTL."
     },
     {
       "id": "e2-q54",
       "domain": 1,
-      "stem": "Компания хочет выдать Lambda function минимальные разрешения на запись логов в CloudWatch Logs и чтение из одной конкретной таблицы DynamoDB. Какова лучшая практика предоставления этих разрешений?",
+      "stem": "A company wants to give a Lambda function the minimum permissions to write logs to CloudWatch Logs and read from one specific DynamoDB table. What is the best practice for granting these permissions?",
       "options": [
-        "Прикрепить managed policy AdministratorAccess к роли функции",
-        "Прикрепить managed policy AmazonDynamoDBFullAccess",
-        "Использовать в функции учётные данные root-аккаунта",
-        "Создать execution role с политикой least privilege, ограниченной log group и ARN конкретной таблицы"
+        "Attach the AdministratorAccess managed policy to the function role",
+        "Attach the AmazonDynamoDBFullAccess managed policy",
+        "Use the root account credentials in the function",
+        "Create an execution role with a least-privilege policy scoped to the log group and the specific table ARN"
       ],
       "answer": 3,
-      "explanation": "По принципу least privilege execution role Lambda должна давать только разрешения на запись логов и действия чтения DynamoDB, ограниченные ARN конкретной таблицы. AdministratorAccess и DynamoDBFullAccess дают гораздо больше необходимого, нарушая least privilege. Root-учётные данные никогда нельзя встраивать в код — это серьёзный риск безопасности."
+      "explanation": "Following least privilege, the Lambda execution role should grant only logs write permissions and DynamoDB read actions scoped to the specific table ARN. AdministratorAccess and DynamoDBFullAccess grant far more than needed, violating least privilege. Root credentials must never be embedded in code and represent a severe security risk."
     },
     {
       "id": "e2-q55",
       "domain": 2,
-      "stem": "Компания запускает приложение в трёх Availability Zones и хочет, чтобы при отказе целой AZ приложение продолжало обслуживать трафик без деградации. Какой принцип проектирования следует применить?",
+      "stem": "A company runs an application across three Availability Zones and wants to ensure that if one entire AZ fails, the application continues serving traffic without degradation. Which design principle should they apply?",
       "options": [
-        "Запустить все instances в одной AZ, чтобы снизить задержку",
-        "Использовать один NAT gateway, общий для всех AZ",
-        "Полагаться на вертикальное масштабирование в одной AZ",
-        "Выделить в каждой AZ достаточно ёмкости, чтобы оставшиеся AZ могли принять нагрузку отказавшей (N+1 по AZ)"
+        "Run all instances in a single AZ to reduce latency",
+        "Use a single NAT gateway shared across AZs",
+        "Rely on vertical scaling within one AZ",
+        "Provision enough capacity in each AZ so the remaining AZs can absorb the failed AZ's load (N+1 across AZs)"
       ],
       "answer": 3,
-      "explanation": "Проектирование с учётом отказа AZ означает распределение по нескольким AZ и выделение достаточного запаса, чтобы уцелевшие AZ справились с трафиком потерянной AZ без деградации. Концентрация в одной AZ или ставка на вертикальное масштабирование создают единую точку отказа. Один общий NAT gateway сам по себе является единой точкой отказа на уровне AZ."
+      "explanation": "Designing for AZ failure means distributing across multiple AZs and provisioning enough headroom so surviving AZs can handle the lost AZ's traffic, avoiding degradation. Concentrating in one AZ or relying on vertical scaling creates a single point of failure. A single shared NAT gateway is itself an AZ-level single point of failure."
     },
     {
       "id": "e2-q56",
       "domain": 3,
-      "stem": "Компании нужны ежедневные автоматические резервные копии базы RDS со сроком хранения 35 дней и возможность восстановления на любой момент времени в пределах этого срока. Какая возможность RDS это обеспечивает?",
+      "stem": "A company wants daily automated backups of an RDS database retained for 35 days and the ability to restore to any point in time within the retention window. Which RDS capability provides this?",
       "options": [
-        "Read replicas в другой AZ",
-        "Ночное копирование файлов базы данных в S3",
-        "Автоматические резервные копии RDS с point-in-time recovery",
-        "Ручные snapshots раз в неделю"
+        "Read replicas in another AZ",
+        "Copying the database files to S3 nightly",
+        "RDS automated backups with point-in-time recovery",
+        "Manual snapshots taken weekly"
       ],
       "answer": 2,
-      "explanation": "Автоматические резервные копии RDS сохраняют ежедневные snapshots и журналы транзакций, позволяя выполнить point-in-time recovery на любую секунду в пределах настраиваемого срока хранения до 35 дней. Еженедельные ручные snapshots не позволяют восстановиться на произвольный момент. Копирование файлов в S3 не поддерживается и ведёт к потере данных, а read replicas обеспечивают масштабирование и failover, а не восстановление на момент времени."
+      "explanation": "RDS automated backups capture daily snapshots and transaction logs, enabling point-in-time recovery to any second within the configurable retention period of up to 35 days. Weekly manual snapshots cannot restore to arbitrary points. Copying files to S3 is unsupported and lossy, and read replicas provide scaling and failover, not point-in-time restore."
     },
     {
       "id": "e2-q57",
       "domain": 4,
-      "stem": "Компания размещает статическое одностраничное веб-приложение и хочет отдавать его по всему миру по HTTPS, с низкой задержкой и минимальной стоимостью, не запуская никаких серверов. Какая архитектура наиболее подходящая (MOST appropriate)?",
+      "stem": "A company hosts a static single-page web application and wants to serve it globally with HTTPS, low latency, and the lowest cost, without running any servers. Which architecture is MOST appropriate?",
       "options": [
-        "S3 bucket со static hosting, дистрибуция CloudFront и сертификат ACM",
-        "Сервис ECS Fargate в каждом регионе",
-        "EC2 instances за ALB в нескольких регионах",
-        "Lambda function, возвращающая HTML на каждый запрос"
+        "S3 bucket configured for static hosting with a CloudFront distribution and ACM certificate",
+        "An ECS Fargate service in every region",
+        "EC2 instances behind an ALB in multiple regions",
+        "A Lambda function returning the HTML on each request"
       ],
       "answer": 0,
-      "explanation": "Размещение статических ресурсов в S3 и их раздача через CloudFront с сертификатом ACM обеспечивают глобальную доставку по HTTPS с низкой задержкой при очень низкой стоимости и без серверов. EC2 с ALB и ECS Fargate запускают серверы и стоят дороже. Lambda, возвращающая HTML на каждый запрос, добавляет лишние вычислительные затраты и задержку для чисто статического контента."
+      "explanation": "Hosting the static assets in S3 and serving them through CloudFront with an ACM certificate provides global low-latency HTTPS delivery at very low cost with no servers. EC2 with ALBs and ECS Fargate run servers and cost more. A Lambda returning HTML per request adds unnecessary compute cost and latency for purely static content."
     },
     {
       "id": "e2-q58",
       "domain": 1,
-      "stem": "Компании нужно централизованно управлять ключами шифрования и проводить их аудит, контролировать, кто может их использовать, и логировать каждое событие использования ключа для соответствия требованиям. Какая комбинация сервисов удовлетворяет этим требованиям?",
+      "stem": "A company needs to centrally manage and audit encryption keys, control who can use them, and log every key usage event for compliance. Which service combination meets these needs?",
       "options": [
-        "Хранение ключей в DynamoDB с IAM policies",
-        "Secrets Manager для симметричных ключей шифрования",
-        "Только шифрование S3 по умолчанию",
-        "AWS KMS для управления ключами и CloudTrail для логирования использования ключей"
+        "Storing keys in DynamoDB with IAM policies",
+        "Secrets Manager for symmetric encryption keys",
+        "S3 default encryption only",
+        "AWS KMS for key management with CloudTrail logging key usage"
       ],
       "answer": 3,
-      "explanation": "AWS KMS централизованно управляет ключами с помощью key policies и IAM, а CloudTrail записывает каждый вызов API KMS для аудита соответствия. Шифрование S3 по умолчанию использует ключи, но само по себе не является решением для управления ключами и аудита. Хранение ключей в DynamoDB — небезопасное самодельное управление ключами, а Secrets Manager хранит секреты, но не предназначен для управления криптографическими ключами, используемыми в операциях шифрования."
+      "explanation": "AWS KMS centrally manages keys with key policies and IAM controls, and CloudTrail records every KMS API call for compliance auditing. S3 default encryption uses keys but is not a key management and audit solution by itself. Storing keys in DynamoDB is insecure custom key management, and Secrets Manager stores secrets but is not the service for managing cryptographic keys used for encryption operations."
     },
     {
       "id": "e2-q59",
       "domain": 3,
-      "stem": "Компания раз в квартал запускает задание по отчётности, которому на несколько дней нужен большой кластер Redshift, а остальную часть квартала кластер в основном простаивает. Нужно не платить за простаивающую provisioned-ёмкость. Какой вариант MOST cost-effective?",
+      "stem": "A company runs a quarterly reporting job that needs a large Redshift cluster for a few days, but the cluster sits mostly idle the rest of the quarter. They want to avoid paying for idle provisioned capacity. Which option is MOST cost-effective?",
       "options": [
-        "Запускать отчёты на одном RDS instance",
-        "Держать большой provisioned кластер Redshift постоянно запущенным",
-        "Использовать Amazon Redshift Serverless и платить за вычисления только во время выполнения запросов",
-        "Использовать Reserved Nodes для кластера"
+        "Run the reports on a single RDS instance",
+        "Keep a large provisioned Redshift cluster running continuously",
+        "Use Amazon Redshift Serverless and pay for compute only when queries run",
+        "Use Reserved Nodes for the cluster"
       ],
       "answer": 2,
-      "explanation": "Redshift Serverless автоматически выделяет и масштабирует ёмкость и берёт плату только за вычисления во время выполнения запросов — идеально для периодических задач отчётности. Постоянно работающий provisioned кластер или Reserved Nodes означают оплату простаивающей ёмкости. Один RDS instance не сравнится с аналитической производительностью Redshift на больших задачах отчётности."
+      "explanation": "Redshift Serverless automatically provisions and scales capacity and charges only for the compute used while queries run, ideal for intermittent reporting workloads. A continuously running provisioned cluster or Reserved Nodes pay for idle capacity. A single RDS instance cannot match Redshift's analytical performance for large reporting jobs."
     },
     {
       "id": "e2-q60",
       "domain": 2,
-      "stem": "Компания хочет направлять пользователей к ближайшему исправному региональному endpoint и автоматически выполнять failover в другой регион, если primary становится неисправным. Используется Route 53. Какую комбинацию следует настроить? (Выберите два)",
+      "stem": "A company wants to route users to the nearest healthy regional endpoint and automatically fail over to another region if the primary becomes unhealthy. They use Route 53. Which combination should they configure? (Choose two)",
       "options": [
-        "Simple routing с одной записью",
-        "Одна weighted-запись со статическими весами",
-        "Только Route 53 private hosted zone",
-        "Записи с latency-based или geoproximity routing",
-        "Health checks Route 53 с failover routing"
+        "Simple routing with one record",
+        "A single weighted record with static weights",
+        "Route 53 private hosted zone only",
+        "Latency-based or geoproximity routing records",
+        "Route 53 health checks with failover routing"
       ],
       "answer": [
         3,
         4
       ],
-      "explanation": "Latency-based или geoproximity routing направляет пользователей в ближайший регион, а health checks Route 53 в сочетании с failover routing обнаруживают неисправный primary и перенаправляют трафик во вторичный регион. Статические weighted-записи не реагируют ни на задержку, ни на состояние. Private hosted zone предназначена для внутреннего DNS, а simple routing не даёт failover на основе health checks."
+      "explanation": "Latency-based or geoproximity routing sends users to the nearest region, and Route 53 health checks combined with failover routing detect an unhealthy primary and redirect to a secondary region. Static weighted records do not respond to latency or health. A private hosted zone is for internal DNS, and simple routing offers no health-based failover."
     },
     {
       "id": "e2-q61",
       "domain": 4,
-      "stem": "У компании много AWS-аккаунтов, и она хочет единый консолидированный счёт, скидки за объём по всем аккаунтам и возможность совместно использовать преимущества Reserved Instances и Savings Plans. Какая функция это обеспечивает?",
+      "stem": "A company has many AWS accounts and wants a single consolidated bill, volume pricing discounts across accounts, and the ability to apply shared Reserved Instance and Savings Plan benefits. Which feature provides this?",
       "options": [
-        "Тегирование ресурсов во всех аккаунтах",
-        "AWS Organizations с consolidated billing",
-        "Отдельный биллинг для каждого аккаунта с ручной сверкой",
-        "AWS Cost Explorer в каждом аккаунте"
+        "Tagging resources across accounts",
+        "AWS Organizations with consolidated billing",
+        "Separate billing per account with manual reconciliation",
+        "AWS Cost Explorer in each account"
       ],
       "answer": 1,
-      "explanation": "AWS Organizations с consolidated billing агрегирует использование по всем аккаунтам в единый счёт, даёт скидки за объём и позволяет совместно использовать преимущества RI и Savings Plans в рамках организации. Отдельный биллинг для каждого аккаунта лишает агрегации и совместного использования. Cost Explorer показывает затраты, но не консолидирует биллинг, а теги лишь категоризируют расходы."
+      "explanation": "AWS Organizations with consolidated billing aggregates usage across accounts for a single bill, volume tiering discounts, and sharing of RI and Savings Plan benefits across the organization. Separate per-account billing forgoes aggregation and sharing. Cost Explorer reports costs but does not consolidate billing, and tagging only categorizes spend."
     },
     {
       "id": "e2-q62",
       "domain": 1,
-      "stem": "Компания должна защитить публичное веб-приложение от SQL injection и cross-site scripting и применить rate-based rules для отражения объёмных атак на уровне 7. Какой сервис следует развернуть перед дистрибуцией CloudFront?",
+      "stem": "A company must protect a public web application from SQL injection, cross-site scripting, and apply rate-based rules to mitigate volumetric layer-7 attacks. Which service should they deploy in front of the CloudFront distribution?",
       "options": [
-        "Только AWS Shield Standard",
-        "Security groups на origin",
-        "AWS WAF с managed rule groups и rate-based rules",
+        "AWS Shield Standard only",
+        "Security groups on the origin",
+        "AWS WAF with managed rule groups and rate-based rules",
         "Amazon GuardDuty"
       ],
       "answer": 2,
-      "explanation": "AWS WAF инспектирует HTTP-запросы и с помощью managed rule groups может блокировать SQL injection и XSS, а rate-based rules ограничивают флуд на уровне 7; WAF разворачивается на CloudFront. GuardDuty обнаруживает угрозы, но не фильтрует веб-запросы. Shield Standard автоматически защищает от DDoS на уровне инфраструктуры, но не от эксплойтов на уровне приложения, а security groups работают на уровнях 3/4, а не 7."
+      "explanation": "AWS WAF inspects HTTP requests and can block SQL injection and XSS using managed rule groups while rate-based rules throttle layer-7 floods, deployable on CloudFront. GuardDuty detects threats but does not filter web requests. Shield Standard covers infrastructure DDoS automatically but not application-layer exploits, and security groups operate at layer 3/4 not layer 7."
     },
     {
       "id": "e2-q63",
       "domain": 2,
-      "stem": "Компания обрабатывает загруженные изображения, создавая миниатюры. Загрузки поступают нерегулярно, и обработка должна начинаться сразу, как только файл попадает в S3. Нужно полностью serverless событийно-ориентированное решение без затрат на простой. Что следует внедрить?",
+      "stem": "A company processes uploaded images by generating thumbnails. Uploads arrive sporadically, and processing must start immediately when a file lands in S3. They want a fully serverless, event-driven solution with no idle cost. What should they implement?",
       "options": [
-        "EC2 Auto Scaling group с действием по расписанию",
-        "Cron-задание на EC2 instance, опрашивающее bucket",
-        "Постоянно работающий сервис ECS, непрерывно опрашивающий S3",
-        "S3 event notification, запускающее Lambda function"
+        "An EC2 Auto Scaling group with a scheduled action",
+        "A cron job on an EC2 instance polling the bucket",
+        "A long-running ECS service polling S3 continuously",
+        "An S3 event notification triggering a Lambda function"
       ],
       "answer": 3,
-      "explanation": "S3 event notification вызывает Lambda function сразу после создания объекта, обеспечивая полностью serverless событийный конвейер без затрат на простой, поскольку Lambda тарифицируется только за выполнение. Cron на EC2 и опрос из ECS работают непрерывно и несут затраты на простой. Действие ASG по расписанию работает по времени, а не по событиям, и не реагирует на загрузки немедленно."
+      "explanation": "An S3 event notification invokes a Lambda function immediately when an object is created, providing a fully serverless event-driven pipeline with no idle cost since Lambda bills only on execution. EC2 cron and ECS polling run continuously and incur idle cost. A scheduled ASG action is time-based, not event-driven, and does not react immediately to uploads."
     },
     {
       "id": "e2-q64",
       "domain": 3,
-      "stem": "Компании нужно блочное хранилище для базы данных, которой требуются стабильно высокие IOPS и задержка меньше миллисекунды, с возможностью выделять IOPS независимо от объёма. Какой тип тома EBS выбрать?",
+      "stem": "A company needs block storage for a database that requires consistent high IOPS and sub-millisecond latency, with the ability to provision IOPS independently of capacity. Which EBS volume type should they choose?",
       "options": [
-        "Provisioned IOPS SSD (io2 или io2 Block Express)",
+        "Provisioned IOPS SSD (io2 or io2 Block Express)",
         "General Purpose SSD (gp2)",
         "Throughput Optimized HDD (st1)",
         "Cold HDD (sc1)"
       ],
       "answer": 0,
-      "explanation": "Provisioned IOPS SSD (io2 / io2 Block Express) позволяет выделять IOPS независимо от размера тома и обеспечивает стабильно высокие IOPS с задержкой меньше миллисекунды для баз данных с интенсивным вводом-выводом. У gp2 IOPS привязаны к размеру, и при высокой нагрузке производительность менее стабильна. st1 и sc1 — HDD-типы, оптимизированные под throughput и холодное хранение, а не под базы данных с низкой задержкой и высокими IOPS."
+      "explanation": "Provisioned IOPS SSD (io2 / io2 Block Express) lets you provision IOPS independently of volume size and delivers consistent high IOPS with sub-millisecond latency for I/O-intensive databases. gp2 ties IOPS to size and is less consistent at high demand. st1 and sc1 are HDD types optimized for throughput and cold storage, not low-latency high-IOPS databases."
     },
     {
       "id": "e2-q65",
       "domain": 4,
-      "stem": "Компании нужна самая простая стратегия disaster recovery для некритичного внутреннего приложения с допустимым RTO в несколько часов и небольшим бюджетом. Затраты на DR должны быть минимальными. Какая стратегия DR подходит лучше всего?",
+      "stem": "A company wants the simplest disaster recovery strategy for a non-critical internal application with a tolerable RTO of several hours and a low budget. They want to keep DR costs minimal. Which DR strategy fits best?",
       "options": [
         "Multi-site active-active",
         "Pilot light",
@@ -878,7 +878,7 @@
         "Warm standby"
       ],
       "answer": 2,
-      "explanation": "Backup and restore — самая дешёвая стратегия DR: резервные копии хранятся, а инфраструктура восстанавливается по требованию, что подходит некритичному приложению с допустимым RTO в несколько часов. Pilot light и warm standby держат часть ресурсов запущенными, что повышает стоимость. Active-active — самый дорогой вариант, избыточный для низкоприоритетного приложения с нестрогим RTO."
+      "explanation": "Backup and restore is the lowest-cost DR strategy, storing backups and restoring infrastructure on demand, which suits a non-critical app tolerating an RTO of several hours. Pilot light and warm standby keep some resources running, raising cost. Active-active is the most expensive and is overkill for a low-priority application with a relaxed RTO."
     }
   ]
 }

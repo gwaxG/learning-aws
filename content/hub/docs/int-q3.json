@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "integration"
   },
-  "concept": "SNS + SQS fan-out: независимые потребители с буфером",
-  "tests": "Умение выбрать паттерн доставки одного события нескольким независимым потребителям с долговечным backlog.",
-  "expected": "SNS topic → три SQS-очереди (по одной на потребителя). Публикация один раз, у каждого свой durable-буфер, легко добавлять новых. Триггеры: «three independent consumers», «each receive», «own buffered, durable backlog».",
-  "why_not": "Одна общая очередь — каждое сообщение получает только один потребитель; синхронный вызов Lambda — жёсткая связь без буфера; SNS→Lambda без очередей даёт fan-out, но без durable-буфера на потребителя.",
+  "concept": "SNS + SQS fan-out: independent consumers with a buffer",
+  "tests": "Choosing a pattern to deliver one event to multiple independent consumers with a durable backlog.",
+  "expected": "SNS topic → three SQS queues (one per consumer). Publish once, each has its own durable buffer, easy to add new ones. Triggers: \"three independent consumers\", \"each receive\", \"own buffered, durable backlog\".",
+  "why_not": "One shared queue means each message goes to only one consumer; a synchronous Lambda call is tight coupling with no buffer; SNS→Lambda without queues gives fan-out but no durable per-consumer buffer.",
   "keywords": [
     "fan-out",
     "SNS",
@@ -15,7 +15,7 @@
     "pub/sub",
     "durable backlog",
     "S3 event",
-    "несколько потребителей"
+    "multiple consumers"
   ],
   "services": [
     "sns",

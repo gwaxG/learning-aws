@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "integration"
   },
-  "concept": "Amazon MQ: миграция приложения на JMS/AMQP без переписывания",
-  "tests": "Выбор managed-брокера для legacy-приложения, использующего открытые протоколы обмена сообщениями.",
-  "expected": "Amazon MQ (managed ActiveMQ/RabbitMQ) — поддерживает JMS, AMQP, MQTT, STOMP. Триггеры: «legacy on-premises», «JMS/AMQP», «minimal code changes».",
-  "why_not": "SQS и SNS — проприетарные API AWS, требуют переписать слой messaging; EventBridge — шина маршрутизации событий, не drop-in брокер.",
+  "concept": "Amazon MQ: migrate a JMS/AMQP app without rewriting",
+  "tests": "Choosing a managed broker for a legacy application that uses open messaging protocols.",
+  "expected": "Amazon MQ (managed ActiveMQ/RabbitMQ) — supports JMS, AMQP, MQTT, STOMP. Triggers: \"legacy on-premises\", \"JMS/AMQP\", \"minimal code changes\".",
+  "why_not": "SQS and SNS are proprietary AWS APIs and require rewriting the messaging layer; EventBridge is an event routing bus, not a drop-in broker.",
   "keywords": [
     "Amazon MQ",
     "JMS",
@@ -15,7 +15,7 @@
     "ActiveMQ",
     "RabbitMQ",
     "legacy migration",
-    "минимум изменений кода"
+    "minimal code changes"
   ],
   "services": [
     "mq",

@@ -4,17 +4,17 @@
     "type": "topic",
     "ref": "monitoring"
   },
-  "concept": "CloudWatch alarm → Auto Scaling policy по CPUUtilization",
-  "tests": "Знание стандартного паттерна масштабирования по метрике.",
-  "expected": "CloudWatch metric alarm на CPUUtilization с evaluation period, запускающий scaling policy Auto Scaling. Триггеры: «average CPU above 70% for several minutes», «add instances».",
-  "why_not": "CloudTrail/subscription filters — логи API, не триггер масштабирования; Config — compliance конфигурации, не real-time CPU; X-Ray трассирует запросы и не масштабирует.",
+  "concept": "CloudWatch alarm → Auto Scaling policy on CPUUtilization",
+  "tests": "Knowing the standard metric-based scaling pattern.",
+  "expected": "A CloudWatch metric alarm on CPUUtilization with an evaluation period that triggers an Auto Scaling scaling policy. Triggers: \"average CPU above 70% for several minutes\", \"add instances\".",
+  "why_not": "CloudTrail/subscription filters are API logs, not a scaling trigger; Config is configuration compliance, not real-time CPU; X-Ray traces requests and does not scale.",
   "keywords": [
     "CloudWatch alarm",
     "CPUUtilization",
     "scaling policy",
     "Auto Scaling",
     "evaluation period",
-    "масштабирование по CPU"
+    "CPU-based scaling"
   ],
   "services": [
     "cloudwatch",

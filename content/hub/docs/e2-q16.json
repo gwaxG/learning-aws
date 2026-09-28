@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "ECS на Fargate: запуск контейнера по расписанию через EventBridge",
-  "tests": "Выбор наименее трудоёмкого способа запускать короткую контейнерную задачу по расписанию без серверов и кластеров.",
-  "expected": "ECS task на Fargate + EventBridge scheduled rule (cron) — никаких инстансов. Триггеры: «containerized», «nightly», «~20 minutes», «do not want to manage servers or clusters».",
-  "why_not": "ECS on EC2, AWS Batch на managed EC2 compute environment, EKS с self-managed node group — всё требует управлять инстансами/узлами.",
+  "concept": "ECS on Fargate: scheduled container runs via EventBridge",
+  "tests": "Choosing the least labor-intensive way to run a short container task on a schedule without servers or clusters.",
+  "expected": "ECS task on Fargate + an EventBridge scheduled rule (cron) — no instances at all. Triggers: \"containerized\", \"nightly\", \"~20 minutes\", \"do not want to manage servers or clusters\".",
+  "why_not": "ECS on EC2, AWS Batch on a managed EC2 compute environment, EKS with a self-managed node group — all require managing instances/nodes.",
   "keywords": [
     "Fargate",
     "ECS",

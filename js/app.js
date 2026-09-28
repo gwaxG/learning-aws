@@ -12,7 +12,7 @@ async function route() {
   const query = parseQuery(qs);
   const wide = kind === "services" || kind === "hub";
   view.classList.toggle("wide", wide);
-  view.innerHTML = `<p class="loading">Загрузка…</p>`;
+  view.innerHTML = `<p class="loading">Loading…</p>`;
   try {
     if (kind === "services") await renderServices(view, arg, query);
     else if (kind === "hub") await renderHub(view, arg, query);
@@ -25,9 +25,9 @@ async function route() {
       a.classList.toggle("active", a.getAttribute("href") === "#" + (wide ? "/" + kind : path))
     );
   } catch (e) {
-    view.innerHTML = `<div class="card"><h1>Что-то пошло не так</h1>
+    view.innerHTML = `<div class="card"><h1>Something went wrong</h1>
       <p class="bad">${e.message}</p>
-      <p>Если файлов контента нет — создай их в <code>content/</code> и перезагрузи страницу.</p></div>`;
+      <p>If content files are missing, author them under <code>content/</code> and reload.</p></div>`;
   }
 }
 
@@ -39,5 +39,5 @@ window.addEventListener("hashchange", () => {
 });
 
 renderNav(nav).then(route).catch((e) => {
-  view.innerHTML = `<p class="bad">Не удалось загрузить: ${e.message}</p>`;
+  view.innerHTML = `<p class="bad">Failed to load: ${e.message}</p>`;
 });

@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "Step Functions: оркестрация шагов с retry и error handling",
-  "tests": "Выбор сервиса координации многошагового workflow с последовательными и параллельными шагами.",
-  "expected": "AWS Step Functions — state machine с встроенными retries, error handling, parallel branches и визуализацией. Триггеры: «sequential and parallel steps», «retries and error handling», «state machine».",
-  "why_not": "SQS только ставит сообщения в очередь; Batch — batch-вычисления; EventBridge Scheduler запускает по расписанию, но не оркестрирует.",
+  "concept": "Step Functions: orchestrating steps with retries and error handling",
+  "tests": "Choosing a service to coordinate a multi-step workflow with sequential and parallel steps.",
+  "expected": "AWS Step Functions: state machine with built-in retries, error handling, parallel branches and visualization. Triggers: \"sequential and parallel steps\", \"retries and error handling\", \"state machine\".",
+  "why_not": "SQS only queues messages; Batch is batch compute; EventBridge Scheduler runs on a schedule but doesn't orchestrate.",
   "keywords": [
     "Step Functions",
     "state machine",

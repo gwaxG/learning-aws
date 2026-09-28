@@ -1,0 +1,50 @@
+{
+  "id": "u-20260927-hybrid-decoupling-sqs-swf",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "A software company has resources hosted in AWS and on-premises servers. You have been requested to create a decoupled architecture for applications which make use of both resources.\nWhich of the following options are valid? (Select TWO.)",
+    "options": [
+      "Use SWF to utilize both on-premises servers and EC2 instances for your decoupled application",
+      "Use SQS to utilize both on-premises servers and EC2 instances for your decoupled application",
+      "Use RDS to utilize both on-premises servers and EC2 instances for your decoupled application",
+      "Use DynamoDB to utilize both on-premises servers and EC2 instances for your decoupled application",
+      "Use VPC peering to connect both on-premises servers and EC2 instances for your decoupled application"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "SQS and SWF are the AWS services built for decoupling, and both are reachable over public HTTPS APIs, so producers/consumers (SQS) or workers/deciders (SWF activity workers) can run on EC2 and on on-premises servers alike. RDS and DynamoDB are databases, not decoupling/messaging services. VPC peering connects two VPCs — it cannot connect an on-premises network (that needs VPN or Direct Connect) and is networking, not decoupling."
+  },
+  "concept": "Hybrid decoupling: SQS / SWF with workers on EC2 and on-premises",
+  "tests": "Knowing which AWS services decouple application components and can be used by both EC2 and on-premises servers.",
+  "expected": "SQS (message queue) and SWF (workflow with activity workers that can run anywhere). Triggers: \"decoupled architecture\" + \"on-premises and AWS\" → SQS / SWF — both are public API endpoints reachable from anywhere.",
+  "why_not": "RDS and DynamoDB are databases, not decoupling services; VPC peering only connects VPCs (not on-prem) and is networking, not decoupling.",
+  "keywords": [
+    "decoupling",
+    "hybrid",
+    "on-premises",
+    "SQS",
+    "SWF",
+    "Simple Workflow Service",
+    "activity workers",
+    "message queue"
+  ],
+  "services": [
+    "decoupling",
+    "sqs",
+    "swf",
+    "vpc-peering"
+  ],
+  "topics": [
+    "integration",
+    "architecture"
+  ],
+  "domain": 2,
+  "related": [
+    "int-q4"
+  ]
+}

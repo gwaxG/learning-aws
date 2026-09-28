@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "Glue: serverless ETL на Spark с crawlers и Data Catalog",
-  "tests": "Выбор serverless-сервиса для больших ETL-задач, который сам находит схемы и запускает Spark без кластеров.",
-  "expected": "AWS Glue — crawlers строят Data Catalog, управляемые Spark jobs без провижининга. Триггеры: «serverless ETL», «discovers schemas», «Spark-based transformations», «without provisioning clusters».",
-  "why_not": "EMR требует управлять кластером; Athena — интерактивные запросы, не тяжёлые трансформации; Data Pipeline — оркестрация поверх отдельных вычислений.",
+  "concept": "Glue: serverless Spark ETL with crawlers and Data Catalog",
+  "tests": "Choosing a serverless service for large ETL jobs that discovers schemas itself and runs Spark without clusters.",
+  "expected": "AWS Glue — crawlers build the Data Catalog, managed Spark jobs with no provisioning. Triggers: \"serverless ETL\", \"discovers schemas\", \"Spark-based transformations\", \"without provisioning clusters\".",
+  "why_not": "EMR requires managing a cluster; Athena — interactive queries, not heavy transformations; Data Pipeline — orchestration on top of separate compute.",
   "keywords": [
     "AWS Glue",
     "ETL",

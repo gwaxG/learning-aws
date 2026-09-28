@@ -4,17 +4,17 @@
     "type": "topic",
     "ref": "architecture"
   },
-  "concept": "DynamoDB: strongly consistent чтение для read-after-write",
-  "tests": "Понимание, когда нужно strongly-consistent чтение, чтобы сразу увидеть только что выполненную запись.",
-  "expected": "ConsistentRead=true (strongly-consistent read). Триггеры: «сразу после записи прочитать», «баланс всегда должен отражать последнюю запись», «stale недопустим».",
-  "why_not": "Eventually-consistent может вернуть значение до списания; реплика global table в другом регионе обновляется асинхронно; DAX без write-through может отдать устаревший баланс.",
+  "concept": "DynamoDB: strongly consistent reads for read-after-write",
+  "tests": "Knowing when a strongly consistent read is needed to see a just-completed write immediately.",
+  "expected": "ConsistentRead=true (strongly consistent read). Triggers: \"read immediately after the write\", \"balance must always reflect the latest write\", \"stale is unacceptable\".",
+  "why_not": "Eventually consistent may return the value before the debit; a global table replica in another Region updates asynchronously; DAX without write-through may return a stale balance.",
   "keywords": [
     "ConsistentRead",
     "strongly consistent",
     "eventually consistent",
     "read-after-write",
     "DAX",
-    "всегда актуальный баланс"
+    "always up-to-date balance"
   ],
   "services": [
     "dynamodb",

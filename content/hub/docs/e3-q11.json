@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "IAM федерация: SAML 2.0 IdP для доступа к консоли",
-  "tests": "Как дать сотрудникам временный доступ к AWS Console через корпоративный SAML 2.0 IdP.",
-  "expected": "IAM SAML 2.0 identity provider + роли (AssumeRoleWithSAML) — SSO в консоль без IAM users. Триггеры: «federated access», «Management Console», «existing corporate SAML 2.0 IdP».",
-  "why_not": "Cognito user pools — для конечных пользователей приложений, не для консоли; IAM users ломают SSO; Simple AD сам по себе не даёт SAML-федерацию.",
+  "concept": "IAM: SAML 2.0 IdP federation for console access",
+  "tests": "How to give employees temporary AWS Console access via a corporate SAML 2.0 IdP.",
+  "expected": "IAM SAML 2.0 identity provider + roles (AssumeRoleWithSAML) — SSO into the console without IAM users. Triggers: \"federated access\", \"Management Console\", \"existing corporate SAML 2.0 IdP\".",
+  "why_not": "Cognito user pools — for application end users, not the console; IAM users break SSO; Simple AD alone does not provide SAML federation.",
   "keywords": [
     "SAML 2.0",
     "federation",
     "identity provider",
     "AssumeRoleWithSAML",
     "Management Console",
-    "корпоративный IdP"
+    "corporate IdP"
   ],
   "services": [
     "iam",

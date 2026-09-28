@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "Snow Family: офлайн-перенос больших объёмов при узком канале",
-  "tests": "Как дёшево и практично перенести десятки TB в AWS за неделю при медленном интернете.",
-  "expected": "AWS Snowball Edge — физическое устройство, данные отправляются доставкой. Триггеры: «80 TB», «limited, slow internet bandwidth», «within a week».",
-  "why_not": "Загрузка по медленному каналу или через Transfer Acceleration займёт слишком долго; Direct Connect для разового переноса — дорого и долго подключать.",
+  "concept": "Snow Family: offline transfer of large data over a thin link",
+  "tests": "How to move tens of TB into AWS within a week, cheaply and practically, over slow internet.",
+  "expected": "AWS Snowball Edge — a physical device; data is shipped. Triggers: \"80 TB\", \"limited, slow internet bandwidth\", \"within a week\".",
+  "why_not": "Uploading over a slow link or via Transfer Acceleration takes too long; Direct Connect for a one-time transfer — expensive and slow to provision.",
   "keywords": [
     "Snowball Edge",
     "offline transfer",
     "limited bandwidth",
     "80 TB",
-    "миграция данных",
-    "медленный канал"
+    "data migration",
+    "slow link"
   ],
   "services": [
     "snow-family",

@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "IAM: execution role Lambda с least privilege (sns:Publish на ARN)",
-  "tests": "Как правильно дать Lambda право публиковать в конкретный SNS topic по принципу least privilege.",
-  "expected": "Execution role функции с политикой sns:Publish, ограниченной ARN конкретного topic. Триггеры: «Lambda», «publish to SNS», «least privilege».",
-  "why_not": "AdministratorAccess — избыточные права; credentials в переменных окружения не нужны и небезопасны; публичный topic открывает его всем.",
+  "concept": "IAM: least-privilege Lambda execution role (sns:Publish on an ARN)",
+  "tests": "How to correctly give Lambda permission to publish to a specific SNS topic with least privilege.",
+  "expected": "The function's execution role with an sns:Publish policy scoped to the specific topic ARN. Triggers: \"Lambda\", \"publish to SNS\", \"least privilege\".",
+  "why_not": "AdministratorAccess — excessive permissions; credentials in environment variables are unnecessary and insecure; a public topic opens it to everyone.",
   "keywords": [
     "execution role",
     "least privilege",
     "sns:Publish",
     "topic ARN",
     "Lambda",
-    "минимальные права"
+    "minimal permissions"
   ],
   "services": [
     "iam",

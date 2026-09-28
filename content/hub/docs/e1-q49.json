@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "Оптимизация затрат EC2: Trusted Advisor + Compute Optimizer (right-sizing)",
-  "tests": "Какие сервисы дают автоматические рекомендации по простаивающим ресурсам и right-sizing EC2 (выбрать два).",
-  "expected": "AWS Trusted Advisor — помечает idle/low-utilization ресурсы; AWS Compute Optimizer — рекомендации по right-sizing на основе метрик утилизации. Триггеры: «idle resources», «right-sizing», «underutilized instances», «recommendations».",
-  "why_not": "Inspector — уязвимости безопасности; AWS Config — соответствие конфигураций; ни один не даёт рекомендаций по стоимости.",
+  "concept": "EC2 cost optimization: Trusted Advisor + Compute Optimizer (right-sizing)",
+  "tests": "Which services give automated recommendations on idle resources and EC2 right-sizing (choose two).",
+  "expected": "AWS Trusted Advisor — flags idle/low-utilization resources; AWS Compute Optimizer — right-sizing recommendations based on utilization metrics. Triggers: \"idle resources\", \"right-sizing\", \"underutilized instances\", \"recommendations\".",
+  "why_not": "Inspector — security vulnerabilities; AWS Config — configuration compliance; neither gives cost recommendations.",
   "keywords": [
     "Trusted Advisor",
     "Compute Optimizer",
     "right-sizing",
     "idle resources",
     "underutilized",
-    "рекомендации по затратам"
+    "cost recommendations"
   ],
   "services": [
     "compute-optimizer",

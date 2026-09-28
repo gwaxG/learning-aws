@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 1
   },
-  "concept": "VPC endpoints: gateway endpoints S3/DynamoDB вместо NAT (экономия)",
-  "tests": "Как снизить плату NAT gateway за обработку данных, когда функции в VPC обращаются к S3 и DynamoDB.",
-  "expected": "Gateway VPC endpoints для S3 и DynamoDB — трафик идёт по приватной сети AWS без платы за GB. Триггеры: «NAT gateway data processing charges», «access S3 and DynamoDB from VPC».",
-  "why_not": "Вынос функций из VPC может сломать доступ к приватным ресурсам; память Lambda не влияет на сетевые расходы; «больших» NAT gateway с меньшей ценой за GB не бывает.",
+  "concept": "VPC endpoints: S3/DynamoDB gateway endpoints instead of NAT (savings)",
+  "tests": "How to cut NAT gateway data processing charges when functions in a VPC access S3 and DynamoDB.",
+  "expected": "Gateway VPC endpoints for S3 and DynamoDB — traffic stays on the private AWS network with no per-GB charge. Triggers: \"NAT gateway data processing charges\", \"access S3 and DynamoDB from VPC\".",
+  "why_not": "Moving functions out of the VPC can break access to private resources; Lambda memory doesn't affect network costs; there is no \"bigger\" NAT gateway with a lower per-GB price.",
   "keywords": [
     "gateway VPC endpoint",
     "NAT gateway",
     "data processing charges",
     "S3",
     "DynamoDB",
-    "снизить стоимость"
+    "reduce cost"
   ],
   "services": [
     "vpc-endpoints",

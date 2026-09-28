@@ -4,17 +4,17 @@
     "type": "topic",
     "ref": "edge-dns"
   },
-  "concept": "Route 53 Alias: запись на zone apex вместо CNAME",
-  "tests": "Знание, что CNAME нельзя создать на корне зоны, и чем его заменить.",
-  "expected": "A-запись с Alias target на CloudFront distribution (также ALB, S3 website и др., бесплатно). Триггеры: «root/apex домена (example.com)», «CNAME отклонён».",
-  "why_not": "Второй CNAME на apex также запрещён; MX — почта; TXT — текст/верификация, трафик не резолвят.",
+  "concept": "Route 53 Alias: zone apex record instead of CNAME",
+  "tests": "Knowing that a CNAME cannot be created at the zone apex, and what to use instead.",
+  "expected": "An A record with an Alias target to the CloudFront distribution (also ALB, S3 website, etc., free of charge). Triggers: \"root/apex of the domain (example.com)\", \"CNAME rejected\".",
+  "why_not": "A second CNAME at the apex is also forbidden; MX is for mail; TXT is text/verification and does not resolve traffic.",
   "keywords": [
     "Alias record",
     "zone apex",
     "CNAME",
     "A record",
     "CloudFront",
-    "корень домена"
+    "domain apex"
   ],
   "services": [
     "route53",

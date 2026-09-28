@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "AWS Budgets: оповещения о прогнозе превышения расходов",
-  "tests": "Выбор сервиса для алертов, когда прогноз месячных трат превышает порог.",
-  "expected": "AWS Budgets с alerts на actual и forecasted cost. Триггеры: «alerted», «forecast to exceed a threshold», «minimal setup».",
-  "why_not": "CloudWatch billing metric — только фактические данные, ниже уровнем; CUR — сырые данные без алертов; Trusted Advisor — рекомендации.",
+  "concept": "AWS Budgets: alerts on forecasted overspend",
+  "tests": "Choosing a service for alerts when forecasted monthly spend exceeds a threshold.",
+  "expected": "AWS Budgets with alerts on actual and forecasted cost. Triggers: \"alerted\", \"forecast to exceed a threshold\", \"minimal setup\".",
+  "why_not": "CloudWatch billing metric — actuals only, lower-level; CUR — raw data without alerts; Trusted Advisor — recommendations.",
   "keywords": [
     "AWS Budgets",
     "budget alerts",
     "forecasted spend",
     "threshold",
     "cost monitoring",
-    "прогноз расходов"
+    "spend forecast"
   ],
   "services": [
     "budgets",

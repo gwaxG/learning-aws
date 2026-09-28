@@ -4,18 +4,17 @@
     "type": "topic",
     "ref": "vpc-networking"
   },
-  "concept": "Direct Connect + IPsec VPN: выделенный канал с шифрованием",
-  "tests": "Знание, что Direct Connect не шифрует трафик, и как совместить выделенный канал с шифрованием.",
-  "expected": "AWS Direct Connect для выделенного канала со стабильной задержкой + Site-to-Site IPsec VPN поверх DX для шифрования. Триггеры: «dedicated, consistent-latency», «must also be encrypted in transit».",
-  "why_not": "Direct Connect сам по себе не шифрует; VPN только через интернет даёт шифрование, но без выделенного канала и стабильной задержки.",
+  "concept": "Direct Connect + IPsec VPN: dedicated link with encryption",
+  "tests": "Knowing that Direct Connect does not encrypt traffic, and how to combine a dedicated link with encryption.",
+  "expected": "AWS Direct Connect for a dedicated link with consistent latency + Site-to-Site IPsec VPN over DX for encryption. Triggers: \"dedicated, consistent-latency\", \"must also be encrypted in transit\".",
+  "why_not": "Direct Connect alone does not encrypt; a VPN over the internet alone provides encryption but no dedicated link or consistent latency.",
   "keywords": [
     "Direct Connect",
     "IPsec VPN",
     "VPN over DX",
     "encryption in transit",
     "dedicated connection",
-    "consistent latency",
-    "шифрование в канале"
+    "consistent latency"
   ],
   "services": [
     "direct-connect",

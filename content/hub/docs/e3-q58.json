@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 3
   },
-  "concept": "DR-стратегии: pilot light — ядро работает постоянно",
-  "tests": "Распознавание pilot light: в DR-регионе постоянно работает только минимальное ядро (БД).",
-  "expected": "Pilot light — core services (БД с репликацией) всегда запущены, остальное поднимается при failover. Триггеры: «minimal version of core services runs continuously», «rest scaled up only during failover».",
-  "why_not": "Backup and restore — ничего не запущено; active-active — полная мощность везде; cold standby без ресурсов — не pilot light.",
+  "concept": "DR strategies: pilot light — core always running",
+  "tests": "Recognizing pilot light: only a minimal core (the DB) runs continuously in the DR region.",
+  "expected": "Pilot light — core services (DB with replication) always running; the rest is spun up on failover. Triggers: \"minimal version of core services runs continuously\", \"rest scaled up only during failover\".",
+  "why_not": "Backup and restore — nothing running; active-active — full capacity everywhere; cold standby with no resources — not pilot light.",
   "keywords": [
     "pilot light",
     "disaster recovery",
     "core services",
     "database replication",
     "second region",
-    "минимальное ядро"
+    "minimal core"
   ],
   "services": [
     "dr-strategies",

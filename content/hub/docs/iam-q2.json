@@ -4,17 +4,17 @@
     "type": "topic",
     "ref": "iam-security"
   },
-  "concept": "IAM: логика оценки политик — explicit deny и SCP",
-  "tests": "Понимание порядка оценки политик: явный deny в SCP перекрывает любые allow в identity- и resource-политиках.",
-  "expected": "Нет — explicit deny в SCP побеждает всегда. Триггеры: «SCP denies», «identity policy allows», «bucket policy allows» ⇒ итог deny.",
-  "why_not": "Allow в identity policy или bucket policy не может перебить explicit deny; время создания политики на оценку не влияет.",
+  "concept": "IAM: policy evaluation logic — explicit deny and SCP",
+  "tests": "Understanding policy evaluation order: an explicit deny in an SCP overrides any allow in identity and resource policies.",
+  "expected": "No — an explicit deny in an SCP always wins. Triggers: \"SCP denies\", \"identity policy allows\", \"bucket policy allows\" ⇒ result is deny.",
+  "why_not": "An allow in an identity policy or bucket policy cannot override an explicit deny; policy creation time does not affect evaluation.",
   "keywords": [
     "explicit deny",
     "SCP",
     "identity policy",
     "bucket policy",
     "policy evaluation",
-    "явный запрет побеждает"
+    "explicit deny wins"
   ],
   "services": [
     "scp",

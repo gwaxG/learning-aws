@@ -4,18 +4,18 @@
     "type": "topic",
     "ref": "architecture"
   },
-  "concept": "DynamoDB Global Tables: multi-Region active-active запись",
-  "tests": "Выбор хранилища с локальной записью в нескольких регионах и независимой работой при недоступности другого региона.",
-  "expected": "DynamoDB global tables — multi-leader репликация, каждый регион принимает локальные записи, конфликты — last-writer-wins. Триггеры: «low-latency writes в нескольких регионах», «регион продолжает работать, если другой недоступен», «active-active».",
-  "why_not": "RDS Multi-AZ — один регион, нет локальной записи в других; Aurora cross-region read replicas принимают записи только в primary-регионе; S3 CRR JSON-файла — не конкурентная multi-writer БД.",
+  "concept": "DynamoDB Global Tables: multi-Region active-active writes",
+  "tests": "Choosing a data store with local writes in multiple Regions that keeps working independently when another Region is down.",
+  "expected": "DynamoDB global tables — multi-leader replication, each Region accepts local writes, conflicts resolved last-writer-wins. Triggers: \"low-latency writes in multiple Regions\", \"a Region keeps working if another is unavailable\", \"active-active\".",
+  "why_not": "RDS Multi-AZ is single-Region, no local writes elsewhere; Aurora cross-Region read replicas accept writes only in the primary Region; S3 CRR of a JSON file is not a concurrent multi-writer database.",
   "keywords": [
     "global tables",
     "multi-leader",
     "active-active",
     "multi-Region",
     "last-writer-wins",
-    "локальная запись",
-    "регион работает независимо"
+    "local writes",
+    "Region operates independently"
   ],
   "services": [
     "dynamodb-global",

@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "DAX: микросекундные чтения горячих ключей поверх DynamoDB",
-  "tests": "Какая связка даёт миллисекундный key-value доступ в масштабе и микросекундные чтения горячих элементов.",
-  "expected": "DynamoDB (single-digit ms) + DynamoDB Accelerator (DAX) — in-memory кэш, микросекунды для hot items. Триггеры: «key-value», «single-digit millisecond», «microsecond reads for hot items».",
-  "why_not": "RDS read replicas — реляционные и медленнее для этого паттерна; Redshift — аналитика; S3 + CloudFront — раздача объектов, не key-value БД.",
+  "concept": "DAX: microsecond reads of hot keys on top of DynamoDB",
+  "tests": "Which combination gives millisecond key-value access at scale and microsecond reads of hot items.",
+  "expected": "DynamoDB (single-digit ms) + DynamoDB Accelerator (DAX) — in-memory cache, microseconds for hot items. Triggers: \"key-value\", \"single-digit millisecond\", \"microsecond reads for hot items\".",
+  "why_not": "RDS read replicas — relational and slower for this pattern; Redshift — analytics; S3 + CloudFront — object delivery, not a key-value DB.",
   "keywords": [
     "DAX",
     "DynamoDB",
@@ -15,7 +15,7 @@
     "key-value",
     "in-memory cache",
     "hot items",
-    "микросекунды"
+    "microseconds"
   ],
   "services": [
     "dax",

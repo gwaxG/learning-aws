@@ -4,16 +4,15 @@
     "type": "exam",
     "ref": 4
   },
-  "concept": "S3 Intelligent-Tiering: непредсказуемый паттерн доступа",
-  "tests": "Выбор класса хранения для миллионов объектов с непредсказуемым доступом без ручного tiering.",
-  "expected": "S3 Intelligent-Tiering — автоматически перемещает объекты между tiers по использованию, без retrieval fee и влияния на производительность. Триггеры: «unpredictable access patterns», «without manual tiering», «no performance impact».",
-  "why_not": "Standard не оптимизирует стоимость; Deep Archive — долгое извлечение; One Zone-IA снижает устойчивость.",
+  "concept": "S3 Intelligent-Tiering: unpredictable access pattern",
+  "tests": "Choosing a storage class for millions of objects with unpredictable access and no manual tiering.",
+  "expected": "S3 Intelligent-Tiering automatically moves objects between tiers based on usage, with no retrieval fees or performance impact. Triggers: \"unpredictable access patterns\", \"without manual tiering\", \"no performance impact\".",
+  "why_not": "Standard doesn't optimize cost; Deep Archive has slow retrieval; One Zone-IA reduces resilience.",
   "keywords": [
     "Intelligent-Tiering",
     "unpredictable access",
     "automatic tiering",
-    "no retrieval fees",
-    "непредсказуемый доступ"
+    "no retrieval fees"
   ],
   "services": [
     "s3-storage-classes",

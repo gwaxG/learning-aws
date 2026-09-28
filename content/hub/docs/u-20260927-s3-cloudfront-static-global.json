@@ -1,0 +1,56 @@
+{
+  "id": "u-20260927-s3-cloudfront-static-global",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "A digital media company shares static content to its premium users around the world and also to their partners who syndicate their media files. The company is looking for ways to reduce its server costs and securely deliver their data to their customers globally with low latency.\nWhich combination of services should be used to provide the MOST suitable and cost-effective architecture? (Select TWO.)",
+    "options": [
+      "Amazon CloudFront",
+      "AWS Fargate",
+      "AWS Lambda",
+      "Amazon S3",
+      "AWS Global Accelerator"
+    ],
+    "answer": [
+      0,
+      3
+    ],
+    "explanation": "Static media files belong in Amazon S3 — durable, cheap object storage with no servers to run, which directly cuts server costs. Amazon CloudFront in front of S3 caches the files at edge locations worldwide for low latency and secures delivery with HTTPS, Origin Access Control (bucket stays private) and signed URLs/cookies for premium users and partners. Fargate and Lambda are compute — static content needs no compute. Global Accelerator speeds up TCP/UDP traffic to regional endpoints (ALB/NLB/EC2) via anycast IPs, but has no caching and can't use S3 as an endpoint."
+  },
+  "concept": "CloudFront: global delivery of static content from an S3 origin",
+  "tests": "Choosing the serverless, cheapest architecture for global, secure, low-latency delivery of static content.",
+  "expected": "Amazon S3 (origin/storage) + Amazon CloudFront (CDN, HTTPS, OAC, signed URLs/cookies). Triggers: \"static content\", \"globally\", \"low latency\", \"reduce server costs\", \"securely deliver to premium users/partners\" → S3 + CloudFront.",
+  "why_not": "Fargate/Lambda are compute — Lambda can't store content or act as a CDN, and S3 is far cheaper than Fargate for static files; Global Accelerator is for non-HTTP (UDP gaming, IoT/MQTT, VoIP) or HTTP needing static IPs / fast regional failover, has no caching and no direct S3 integration.",
+  "keywords": [
+    "CloudFront",
+    "S3 origin",
+    "static content",
+    "CDN",
+    "edge locations",
+    "signed URLs",
+    "signed cookies",
+    "OAC",
+    "reduce server costs",
+    "Global Accelerator",
+    "IoT",
+    "MQTT"
+  ],
+  "services": [
+    "cloudfront",
+    "s3",
+    "global-accelerator"
+  ],
+  "topics": [
+    "edge-dns",
+    "storage",
+    "cost"
+  ],
+  "domain": 3,
+  "related": [
+    "e5-q27",
+    "e1-q8",
+    "edge-q1"
+  ]
+}

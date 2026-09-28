@@ -4,17 +4,17 @@
     "type": "topic",
     "ref": "serverless-containers"
   },
-  "concept": "ECR: приватный реестр образов со сканированием и lifecycle policies",
-  "tests": "Выбор AWS-сервиса для хранения, сканирования и автоматической очистки Docker-образов.",
-  "expected": "Amazon ECR — managed private registry с image scanning и lifecycle policies, нативно интегрирован с ECS, EKS и Lambda. Триггеры: «private registry», «scan for vulnerabilities», «automatic expiry of old images».",
-  "why_not": "S3 с versioning хранит объекты без семантики реестра OCI; CodeArtifact — пакеты (npm, pip, Maven), не контейнерные образы; Docker Hub — сторонний сервис, не AWS.",
+  "concept": "ECR: private image registry with scanning and lifecycle policies",
+  "tests": "Choosing the AWS service to store, scan, and automatically clean up Docker images.",
+  "expected": "Amazon ECR — managed private registry with image scanning and lifecycle policies, natively integrated with ECS, EKS, and Lambda. Triggers: \"private registry\", \"scan for vulnerabilities\", \"automatic expiry of old images\".",
+  "why_not": "S3 with versioning stores objects without OCI registry semantics; CodeArtifact is for packages (npm, pip, Maven), not container images; Docker Hub is a third-party service, not AWS.",
   "keywords": [
     "ECR",
     "container registry",
     "image scanning",
     "lifecycle policy",
     "Docker images",
-    "реестр образов"
+    "image registry"
   ],
   "services": [
     "ecr",

@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 2
   },
-  "concept": "IAM: least privilege для execution role Lambda",
-  "tests": "Лучшая практика выдачи Lambda минимальных прав на логи и чтение одной таблицы DynamoDB.",
-  "expected": "Execution role с политикой, ограниченной logs:CreateLogStream/PutLogEvents на log group и dynamodb:GetItem/Query на ARN конкретной таблицы. Триггеры: «minimum permissions», «specific table», «best practice».",
-  "why_not": "AdministratorAccess и AmazonDynamoDBFullAccess — избыточно, нарушает least privilege; root-креды в коде — критический риск.",
+  "concept": "IAM: least privilege for a Lambda execution role",
+  "tests": "Best practice for giving Lambda minimal permissions for logs and reading one DynamoDB table.",
+  "expected": "An execution role with a policy limited to logs:CreateLogStream/PutLogEvents on the log group and dynamodb:GetItem/Query on the specific table ARN. Triggers: \"minimum permissions\", \"specific table\", \"best practice\".",
+  "why_not": "AdministratorAccess and AmazonDynamoDBFullAccess — excessive, violate least privilege; root credentials in code — a critical risk.",
   "keywords": [
     "least privilege",
     "execution role",

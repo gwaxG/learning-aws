@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "vpc-networking"
   },
-  "concept": "VPC endpoints: Gateway endpoint для S3 вместо NAT",
-  "tests": "Выбор самого дешёвого способа отправлять большой трафик из private subnet в S3 мимо NAT Gateway.",
-  "expected": "Gateway VPC endpoint для S3 — бесплатный, добавляет prefix-list маршрут в route table, убирает data processing charges NAT. Триггеры: «heavy data transfers to S3», «minimize cost», «avoid NAT Gateway».",
-  "why_not": "Interface endpoint для S3 существует, но тарифицируется почасово и за GB; второй NAT Gateway увеличивает стоимость; peering к «AWS S3 VPC» невозможен.",
+  "concept": "VPC endpoints: Gateway endpoint for S3 instead of NAT",
+  "tests": "Choosing the cheapest way to send heavy traffic from a private subnet to S3, bypassing the NAT Gateway.",
+  "expected": "A Gateway VPC endpoint for S3 — free, adds a prefix-list route to the route table, eliminates NAT data processing charges. Triggers: \"heavy data transfers to S3\", \"minimize cost\", \"avoid NAT Gateway\".",
+  "why_not": "An Interface endpoint for S3 exists but is billed hourly and per GB; a second NAT Gateway increases cost; peering to an \"AWS S3 VPC\" is not possible.",
   "keywords": [
     "Gateway endpoint",
     "VPC endpoint",
@@ -15,7 +15,7 @@
     "prefix list",
     "NAT Gateway",
     "Interface endpoint",
-    "снизить стоимость"
+    "reduce cost"
   ],
   "services": [
     "vpc-endpoints",

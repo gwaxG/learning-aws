@@ -1,0 +1,46 @@
+{
+  "id": "u-20260928-kvs-rekognition-sns-sms",
+  "source": {
+    "type": "user",
+    "added": "2026-09-28"
+  },
+  "question": {
+    "stem": "A business has a network of surveillance cameras installed within the premises of its data center. Management wants to leverage Artificial Intelligence to monitor and detect unauthorized personnel entering restricted areas. Should an unauthorized person be detected, the security team must be alerted via SMS.\nWhich solution satisfies the requirement?",
+    "options": [
+      "Configure Amazon Elastic Transcoder to stream live feeds from the cameras. Use Amazon Kendra to detect authorized personnel. Set the phone numbers of the security team as subscribers to an Amazon SNS topic.",
+      "Use Amazon Kinesis Video Streams to stream live feeds from the cameras. Use Amazon Rekognition to detect unauthorized personnel. Set the phone numbers of the security team as subscribers to an Amazon SNS topic.",
+      "Utilize a custom containerized video processing application on Amazon Elastic Kubernetes Service (Amazon EKS). Integrate AWS App2Container (A2C) and Amazon SageMaker Autopilot to detect unauthorized personnel. Set the phone numbers of the security team as subscribers to an Amazon SNS topic.",
+      "Set up Amazon Managed Service for Prometheus to stream live feeds from the cameras. Use Amazon Fraud Detector to detect unauthorized personnel. Set the phone numbers of the security team as subscribers to an Amazon SNS topic."
+    ],
+    "answer": 1,
+    "explanation": "Kinesis Video Streams ingests live camera feeds; Rekognition Video analyzes the stream in real time and can search faces against a collection of authorized staff, flagging unknown people; results go to SNS, whose SMS subscribers (the security team's phone numbers) get the alert. Elastic Transcoder converts media files (no live streaming) and Kendra is document search. EKS + App2Container + SageMaker Autopilot means building and operating a custom pipeline — App2Container containerizes existing apps and Autopilot is AutoML for tabular data, not video. Managed Prometheus stores metrics, not video, and Fraud Detector scores online transactions."
+  },
+  "concept": "Rekognition + Kinesis Video Streams: detect people in live video, alert via SNS",
+  "tests": "Matching live video ingestion (Kinesis Video Streams), image/video AI (Rekognition) and SMS alerting (SNS).",
+  "expected": "Kinesis Video Streams → Rekognition Video (face search vs authorized collection) → SNS topic with SMS subscribers. Triggers: \"cameras / live video\" → KVS; \"detect people/faces\" → Rekognition; \"alert via SMS\" → SNS.",
+  "why_not": "Elastic Transcoder converts files and Kendra searches documents; EKS + A2C + SageMaker Autopilot is a custom build with the wrong tools; Prometheus is metrics and Fraud Detector is transaction fraud.",
+  "keywords": [
+    "Rekognition",
+    "Kinesis Video Streams",
+    "face recognition",
+    "surveillance cameras",
+    "live video",
+    "SNS SMS",
+    "Kendra",
+    "Fraud Detector",
+    "SageMaker"
+  ],
+  "services": [
+    "rekognition",
+    "kinesis-video-streams",
+    "sns",
+    "kendra",
+    "fraud-detector"
+  ],
+  "topics": [
+    "data-migration",
+    "integration"
+  ],
+  "domain": 3,
+  "related": []
+}

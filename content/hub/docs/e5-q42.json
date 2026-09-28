@@ -4,10 +4,10 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "Glue: serverless ETL, crawlers и Data Catalog",
-  "tests": "Какой сервис даёт serverless ETL с обходом, каталогизацией и трансформацией данных в S3-озере.",
-  "expected": "AWS Glue — crawlers заполняют Glue Data Catalog, ETL jobs трансформируют данные. Триггеры: «serverless ETL», «crawl, catalog, and transform», «data lake».",
-  "why_not": "Athena — запросы, но не ETL-crawling; QuickSight — визуализация; Lambda alone — нет управляемого каталога и ETL-фреймворка.",
+  "concept": "Glue: serverless ETL, crawlers and Data Catalog",
+  "tests": "Which service provides serverless ETL that crawls, catalogs and transforms data in an S3 data lake.",
+  "expected": "AWS Glue — crawlers populate the Glue Data Catalog, ETL jobs transform the data. Triggers: \"serverless ETL\", \"crawl, catalog, and transform\", \"data lake\".",
+  "why_not": "Athena — queries, but no ETL/crawling; QuickSight — visualization; Lambda alone — no managed catalog or ETL framework.",
   "keywords": [
     "Glue",
     "ETL",

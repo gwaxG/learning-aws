@@ -4,10 +4,10 @@
     "type": "topic",
     "ref": "cost"
   },
-  "concept": "CUR: самые детальные billing-данные для Athena",
-  "tests": "Выбор инструмента с почасовыми, ресурсными строками биллинга для собственных SQL-запросов и chargeback.",
-  "expected": "AWS Cost and Usage Report (CUR) — line-item данные в S3, запросы через Athena/Redshift/QuickSight. Триггеры: «most granular», «hourly, resource-level», «custom SQL в Athena», «chargeback по бизнес-юнитам».",
-  "why_not": "Budgets — пороги и алерты; Cost Explorer — интерактивная визуализация без SQL-доступа к строкам; Trusted Advisor — best-practice проверки, не биллинг.",
+  "concept": "CUR: the most granular billing data for Athena",
+  "tests": "Choosing the tool with hourly, resource-level billing lines for custom SQL queries and chargeback.",
+  "expected": "AWS Cost and Usage Report (CUR) — line-item data in S3, queried via Athena/Redshift/QuickSight. Triggers: \"most granular\", \"hourly, resource-level\", \"custom SQL in Athena\", \"chargeback by business unit\".",
+  "why_not": "Budgets — thresholds and alerts; Cost Explorer — interactive visualization without SQL access to line items; Trusted Advisor — best-practice checks, not billing.",
   "keywords": [
     "Cost and Usage Report",
     "CUR",
@@ -15,7 +15,7 @@
     "Athena",
     "chargeback",
     "hourly resource-level",
-    "детальные данные биллинга"
+    "granular billing data"
   ],
   "services": [
     "cur",

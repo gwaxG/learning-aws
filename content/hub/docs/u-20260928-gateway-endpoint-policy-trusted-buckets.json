@@ -1,0 +1,45 @@
+{
+  "id": "u-20260928-gateway-endpoint-policy-trusted-buckets",
+  "source": {
+    "type": "user",
+    "added": "2026-09-28"
+  },
+  "question": {
+    "stem": "An organization needs to control access to several Amazon S3 buckets. The organization plans to use a gateway endpoint to allow access to trusted buckets. The organization shall not use overly broad policies like `AmazonS3FullAccess`.\nWhich of the following could help achieve this requirement?",
+    "options": [
+      "Generate a bucket policy for trusted S3 buckets.",
+      "Generate an endpoint policy for trusted S3 buckets.",
+      "Generate a bucket policy for trusted VPCs.",
+      "Generate an endpoint policy for trusted VPCs."
+    ],
+    "answer": 1,
+    "explanation": "A VPC endpoint policy is a resource policy attached to the gateway endpoint that limits what can be accessed THROUGH that endpoint. Listing only the trusted bucket ARNs in its Resource element means instances in the VPC can reach those buckets via the endpoint and nothing else — a narrow allow-list instead of AmazonS3FullAccess. A bucket policy controls who can access that one bucket; it can't stop the VPC from reaching other, untrusted buckets through the endpoint, and you'd need one per bucket. 'Bucket policy for trusted VPCs' (aws:SourceVpc/aws:SourceVpce) restricts a bucket to certain VPCs — the inverse direction. An endpoint policy scopes resources/actions/principals, not 'trusted VPCs' — the endpoint already belongs to one VPC."
+  },
+  "concept": "VPC endpoints: endpoint policy restricting which S3 buckets are reachable",
+  "tests": "Distinguishing a gateway endpoint policy (what the VPC can reach through the endpoint) from a bucket policy (who can reach the bucket).",
+  "expected": "An endpoint policy on the S3 gateway endpoint that allows only the trusted bucket ARNs. Triggers: \"gateway endpoint\" + \"allow access only to trusted buckets\" → endpoint policy with those buckets as Resource.",
+  "why_not": "Bucket policy governs access to one bucket, not what the VPC can reach elsewhere; bucket policy for trusted VPCs is the reverse direction; endpoint policies scope buckets/actions, not VPCs.",
+  "keywords": [
+    "endpoint policy",
+    "gateway endpoint",
+    "S3",
+    "trusted buckets",
+    "bucket policy",
+    "aws:SourceVpce",
+    "aws:SourceVpc",
+    "least privilege",
+    "data exfiltration"
+  ],
+  "services": [
+    "vpc-endpoints",
+    "s3-security",
+    "iam"
+  ],
+  "topics": [
+    "vpc-networking",
+    "storage",
+    "iam-security"
+  ],
+  "domain": 1,
+  "related": []
+}

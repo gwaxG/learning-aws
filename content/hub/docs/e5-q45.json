@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "EMR: Spot Instances для task nodes прерываемых Spark-задач",
-  "tests": "Как минимизировать стоимость compute для bursty Spark-задач, допускающих прерывания.",
-  "expected": "EMR с Spot Instances для task nodes (core/master — On-Demand). Триггеры: «bursty», «tolerant of interruption», «Spark», «minimize compute cost».",
-  "why_not": "On-Demand only — дороже; кластер 24/7 на Reserved Instances простаивает при всплесковой нагрузке; один большой EC2 не масштабируется горизонтально.",
+  "concept": "EMR: Spot Instances for task nodes of interruptible Spark jobs",
+  "tests": "How to minimize compute cost for bursty Spark jobs that tolerate interruptions.",
+  "expected": "EMR with Spot Instances for task nodes (core/master on On-Demand). Triggers: \"bursty\", \"tolerant of interruption\", \"Spark\", \"minimize compute cost\".",
+  "why_not": "On-Demand only — more expensive; a 24/7 cluster on Reserved Instances sits idle under bursty load; one large EC2 doesn't scale horizontally.",
   "keywords": [
     "EMR",
     "Spot Instances",
     "task nodes",
     "Spark",
     "interruption tolerant",
-    "прерываемые задачи",
+    "interruptible jobs",
     "bursty"
   ],
   "services": [

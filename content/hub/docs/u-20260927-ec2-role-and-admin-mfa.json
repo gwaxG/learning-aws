@@ -1,0 +1,49 @@
+{
+  "id": "u-20260927-ec2-role-and-admin-mfa",
+  "source": {
+    "type": "user",
+    "added": "2026-09-27"
+  },
+  "question": {
+    "stem": "A Solutions Architect is building a cloud infrastructure where Amazon EC2 instances require access to various AWS services, such as Amazon S3 and Amazon Redshift. The Architect will also need to provide access to system administrators so that the system administrators can deploy and test changes.\nWhich configuration should be used to ensure that access to the resources is secured and not compromised? (Select TWO.)",
+    "options": [
+      "Store the AWS Access Keys in the EC2 instance.",
+      "Enable Multi-Factor Authentication.",
+      "Assign an IAM role to the EC2 instance.",
+      "Assign an IAM user for each EC2 Instance.",
+      "Store the AWS Access Keys in ACM."
+    ],
+    "answer": [
+      1,
+      2
+    ],
+    "explanation": "Two kinds of principals, two controls. Machines (EC2 → S3, Redshift): attach an IAM role via an instance profile — the instance gets short-lived, automatically rotated credentials from the instance metadata service, no stored keys. Humans (system administrators): enable MFA so a leaked password alone can't compromise the account. Storing access keys on the instance (or creating an IAM user per instance to get such keys) means long-term credentials that can leak and must be rotated manually. ACM stores and manages TLS/SSL certificates, not AWS access keys."
+  },
+  "concept": "IAM: role via instance profile instead of access keys on EC2",
+  "tests": "Securing machine access with an EC2 IAM role and human admin access with MFA, avoiding long-term access keys.",
+  "expected": "IAM role on the EC2 instances (instance profile) + MFA for the administrators. Triggers: \"EC2 needs access to S3/other services\" → IAM role; \"administrators … secured, not compromised\" → MFA.",
+  "why_not": "Access keys on the instance or an IAM user per instance = long-term credentials that can leak; ACM holds TLS certificates, not access keys.",
+  "keywords": [
+    "IAM role",
+    "instance profile",
+    "MFA",
+    "access keys",
+    "temporary credentials",
+    "least privilege",
+    "ACM",
+    "system administrators"
+  ],
+  "services": [
+    "iam",
+    "sts",
+    "acm"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1,
+  "related": [
+    "iam-q1",
+    "e1-q2"
+  ]
+}

@@ -4,17 +4,17 @@
     "type": "exam",
     "ref": 5
   },
-  "concept": "Cost Explorer + Budgets: анализ расходов и оповещения по прогнозу",
-  "tests": "Какие сервисы дают визуализацию расходов, собственные бюджеты и алерты на прогнозируемое превышение.",
-  "expected": "AWS Cost Explorer — тренды и анализ расходов; AWS Budgets — бюджеты с алертами по фактическим и forecasted затратам. Триггеры: «visibility into spending», «custom budgets», «forecasted costs exceed thresholds».",
-  "why_not": "CloudWatch — операционные метрики, не бюджеты; CloudTrail — API-активность; Config — соответствие конфигураций.",
+  "concept": "Cost Explorer + Budgets: spend analysis and forecast-based alerts",
+  "tests": "Which services provide spend visualization, custom budgets and alerts on forecasted overruns.",
+  "expected": "AWS Cost Explorer — spending trends and analysis; AWS Budgets — budgets with alerts on actual and forecasted costs. Triggers: \"visibility into spending\", \"custom budgets\", \"forecasted costs exceed thresholds\".",
+  "why_not": "CloudWatch — operational metrics, not budgets; CloudTrail — API activity; Config — configuration compliance.",
   "keywords": [
     "Cost Explorer",
     "AWS Budgets",
     "forecasted costs",
     "alerts",
-    "бюджет",
-    "расходы"
+    "budget",
+    "spending"
   ],
   "services": [
     "cost-explorer",
