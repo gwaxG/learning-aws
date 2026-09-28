@@ -1,0 +1,48 @@
+{
+  "id": "u-20260928-embedded-nosql-to-dynamodb-dms",
+  "source": {
+    "type": "user",
+    "added": "2026-09-28"
+  },
+  "question": {
+    "stem": "A company hosts its web application on a set of Amazon EC2 instances in an Auto Scaling group behind an Application Load Balancer (ALB). The application has an embedded NoSQL database. As the application receives more traffic, the application becomes overloaded mainly due to database requests. The management wants to ensure that the database is eventually consistent and highly available.\nWhich of the following options can meet the company requirements with the least operational overhead?",
+    "options": [
+      "Change the ALB with a Network Load Balancer (NLB) to handle more traffic. Use the AWS Glue DynamoDB export connector to export data from Amazon DynamoDB to Amazon S3 for analytics periodically, and continue running the application’s NoSQL database on the EC2 instances.",
+      "Change the ALB with a Network Load Balancer (NLB) to handle more traffic and integrate AWS Global Accelerator to ensure high availability. Configure replication of the NoSQL database on the set of EC2 instances to spread the database load.",
+      "Configure the Auto Scaling group to spread the EC2 instances across three Availability Zones. Use the AWS Database Migration Service (AWS DMS) with a replication server and an ongoing replication task to migrate the embedded NoSQL database to Amazon DynamoDB.",
+      "Configure the Auto Scaling group to spread the EC2 instances across three Availability Zones. Configure replication of the NoSQL database on the set of EC2 instances to spread the database load."
+    ],
+    "answer": 2,
+    "explanation": "The bottleneck is the database embedded in the web instances. Moving it to DynamoDB decouples the data tier: fully managed, auto-scaling, data replicated across 3 AZs, eventually consistent reads by default — highly available with no DB servers to run. DMS with an ongoing replication task migrates the data with minimal downtime, and spreading the ASG across 3 AZs makes the web tier highly available too. Swapping ALB for NLB doesn't fix database load, and exporting DynamoDB to S3 is irrelevant while the DB still runs on EC2. Self-managed replication of the NoSQL DB on EC2 (with or without Global Accelerator) keeps all the operational burden and the coupling of DB and web tier."
+  },
+  "concept": "DynamoDB: offload an embedded NoSQL DB (DMS migration) for HA and scale",
+  "tests": "Decoupling an embedded database into managed DynamoDB (migrated with DMS ongoing replication) and multi-AZ ASG for HA with least overhead.",
+  "expected": "ASG across 3 AZs + DMS ongoing replication task to migrate the embedded NoSQL DB to DynamoDB. Triggers: \"embedded NoSQL database overloaded\", \"eventually consistent\", \"highly available\", \"least operational overhead\" → DynamoDB (via DMS).",
+  "why_not": "NLB swap doesn't reduce DB load and Glue export is irrelevant; self-managed NoSQL replication on EC2 (± Global Accelerator) keeps high ops overhead and couples DB with the web tier.",
+  "keywords": [
+    "DynamoDB",
+    "embedded database",
+    "DMS",
+    "ongoing replication",
+    "eventually consistent",
+    "highly available",
+    "three Availability Zones",
+    "NLB",
+    "Global Accelerator"
+  ],
+  "services": [
+    "dynamodb",
+    "dms",
+    "auto-scaling",
+    "decoupling"
+  ],
+  "topics": [
+    "databases",
+    "data-migration",
+    "ha-dr"
+  ],
+  "domain": 2,
+  "related": [
+    "u-20260928-dms-full-load-cdc-s3-ssl"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "id": "u-20260928-organizations-identity-center-directory-scp",
+  "source": {
+    "type": "user",
+    "added": "2026-09-28"
+  },
+  "question": {
+    "stem": "A multinational company currently operates multiple AWS accounts to support its operations across various branches and business units. The company needs a more efficient and secure approach in managing its vast AWS infrastructure to avoid costly operational overhead.\nTo address this, they plan to transition to a consolidated, multi-account architecture while integrating a centralized corporate directory service for authentication purposes.\nWhich combination of options can be used to meet the above requirements? (Select TWO.)",
+    "options": [
+      "Establish an identity pool through Amazon Cognito and adjust the AWS IAM Identity Center settings to allow Amazon Cognito authentication.",
+      "Integrate AWS IAM Identity Center with the corporate directory service for centralized authentication. Configure a service control policy (SCP) to manage the AWS accounts.",
+      "Utilize AWS CloudTrail to enable centralized logging and monitoring across all AWS accounts.",
+      "Set up a new entity in AWS Organizations and configure its authentication system to utilize AWS Directory Service directly.",
+      "Implement AWS Organizations to create a multi-account architecture that provides a consolidated view and centralized management of AWS accounts."
+    ],
+    "answer": [
+      1,
+      4
+    ],
+    "explanation": "AWS Organizations provides the consolidated multi-account structure (OUs, consolidated billing, central management). IAM Identity Center connects to the corporate directory (via AD Connector / AWS Managed Microsoft AD or an external IdP) for single sign-on into all accounts, and SCPs set guardrails on the member accounts. Cognito identity pools are for application end users, and Identity Center does not accept Cognito as an identity source. CloudTrail centralizes auditing/logging but provides neither the multi-account structure nor directory authentication. Organizations has no built-in authentication system that 'directly uses Directory Service' — sign-in is handled by Identity Center."
+  },
+  "concept": "IAM Identity Center + Organizations: multi-account SSO through existing AD (AD Connector)",
+  "tests": "Combining AWS Organizations (multi-account structure) with IAM Identity Center integrated with the corporate directory (+ SCPs) for centralized auth.",
+  "expected": "AWS Organizations for the multi-account architecture + IAM Identity Center integrated with the corporate directory and SCPs for guardrails. Triggers: \"consolidated multi-account\" → Organizations; \"centralized corporate directory for authentication\" → Identity Center.",
+  "why_not": "Cognito identity pools are for app users and aren't an Identity Center source; CloudTrail is logging, not structure/auth; Organizations has no own authentication to point at Directory Service.",
+  "keywords": [
+    "AWS Organizations",
+    "IAM Identity Center",
+    "corporate directory",
+    "SCP",
+    "multi-account",
+    "SSO",
+    "Cognito",
+    "CloudTrail"
+  ],
+  "services": [
+    "organizations",
+    "identity-center",
+    "scp",
+    "directory-service",
+    "cognito"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1,
+  "related": [
+    "u-20260927-org-sso-ad-connector"
+  ]
+}

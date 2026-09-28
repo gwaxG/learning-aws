@@ -113,7 +113,8 @@
           ],
           "not_for": [
             "On its own it doesn't give a landing zone with guardrails — that's Control Tower",
-            "No \"external authentication\" — directory sign-in is done by IAM Identity Center"
+            "No \"external authentication\" — directory sign-in is done by IAM Identity Center",
+            "Has no authentication of its own to point at Directory Service — sign-in via IAM Identity Center"
           ],
           "vs": [
             {
@@ -536,7 +537,8 @@
           ],
           "not_for": [
             "Doesn't protect NLB and doesn't filter L3/L4 traffic",
-            "For L3/L4 DDoS → Shield"
+            "For L3/L4 DDoS → Shield",
+            "Not a scaling/performance tool; attaches in front of ALB/CloudFront/API Gateway/AppSync — not directly to EC2"
           ],
           "vs": [
             {
@@ -1524,7 +1526,8 @@
             "WAF can't be attached to NLB",
             "ALB doesn't provide a static IP (put an NLB in front of ALB, or Global Accelerator)",
             "Elastic IP on an ALB — impossible; ALB IPs change as it scales",
-            "ALB host-based routing forwards by Host header — it's not threat filtering"
+            "ALB host-based routing forwards by Host header — it's not threat filtering",
+            "Swapping ALB for NLB doesn't fix a database bottleneck"
           ],
           "vs": [
             {
@@ -1570,7 +1573,8 @@
             "Route users to the lowest-latency Region",
             "Content by user's country (geolocation)",
             "Blue/green, canary via weighted",
-            "\"Route a larger portion of traffic from area X to Region Y\" → geoproximity with positive bias"
+            "\"Route a larger portion of traffic from area X to Region Y\" → geoproximity with positive bias",
+            "Spread traffic across multiple instances/endpoints at DNS level → weighted (or multivalue answer) with health checks"
           ],
           "not_for": [
             "DNS failover depends on TTL and client caching — not instant (GA is faster)",
@@ -2160,7 +2164,8 @@
             "Microservices behind an ALB"
           ],
           "not_for": [
-            "If Kubernetes API/portability is required → EKS"
+            "If Kubernetes API/portability is required → EKS",
+            "Cloud-agnostic / open-source requirement — ECS is AWS-proprietary (EC2 or Fargate launch type alike)"
           ],
           "vs": [
             {
@@ -2195,6 +2200,7 @@
             "Can run on-prem (EKS Anywhere) and on Outposts"
           ],
           "use_when": [
+            "\"Cloud-agnostic\", \"open-source\", \"same config/tools across on-prem and clouds\" → EKS (upstream Kubernetes)",
             "Already using Kubernetes, migrating k8s workloads",
             "Need portability across clouds/on-prem"
           ],
@@ -2303,7 +2309,8 @@
             "Containerized API with autoscaling and LEAST operational overhead"
           ],
           "not_for": [
-            "Need fine-grained networking/orchestration control → ECS/EKS"
+            "Need fine-grained networking/orchestration control → ECS/EKS",
+            "Not an open-source orchestration platform — proprietary, fully managed web/API runner"
           ],
           "vs": [
             {
@@ -2562,7 +2569,8 @@
           "not_for": [
             "SSE-KMS at high rps hits KMS quotas — use S3 Bucket Keys",
             "\"Strict regulatory\" immutability with governance mode — it can be bypassed; use compliance mode",
-            "Headers containing `-customer-` are SSE-C only — never the answer for SSE-S3/SSE-KMS"
+            "Headers containing `-customer-` are SSE-C only — never the answer for SSE-S3/SSE-KMS",
+            "AES-128 is never the S3 SSE answer — SSE uses AES-256"
           ],
           "vs": [
             {
@@ -3219,7 +3227,8 @@
             "Stem says \"key-value\", \"document model\" or \"provisioned/on-demand capacity mode\" → DynamoDB (capacity modes are DynamoDB terminology)",
             "Scalable key-value DB with LEAST operational overhead",
             "Sessions, shopping carts, gaming leaderboards, IoT",
-            "Unpredictable traffic → on-demand"
+            "Unpredictable traffic → on-demand",
+            "Embedded/self-managed NoSQL DB overloads the web tier → migrate to DynamoDB (DMS ongoing replication): multi-AZ, eventually consistent by default"
           ],
           "not_for": [
             "Complex joins/ad-hoc SQL → RDS/Aurora",
@@ -4375,7 +4384,8 @@
           "use_when": [
             "Migrate a database to AWS with minimal downtime",
             "Continuous replication of an on-prem database to AWS (CDC)",
-            "\"Copy the DB, then continually stream ongoing changes\" (even into S3) → DMS full load + CDC"
+            "\"Copy the DB, then continually stream ongoing changes\" (even into S3) → DMS full load + CDC",
+            "Migrate a self-managed/embedded NoSQL DB (e.g. MongoDB) into DynamoDB with ongoing replication"
           ],
           "not_for": [
             "Does not convert schemas between different engines by itself → SCT / DMS Schema Conversion"
@@ -4768,7 +4778,8 @@
           "not_for": [
             "Performance metrics — CloudWatch",
             "Doesn't show current configuration state — Config",
-            "Recording ≠ detecting: to be alerted on suspicious access patterns use GuardDuty (it analyzes CloudTrail)"
+            "Recording ≠ detecting: to be alerted on suspicious access patterns use GuardDuty (it analyzes CloudTrail)",
+            "Centralized logging ≠ multi-account structure or authentication (Organizations / Identity Center)"
           ],
           "vs": [
             {
@@ -5741,7 +5752,8 @@
           ],
           "use_when": [
             "Requirement to encrypt data at rest and in transit",
-            "Key control → customer managed key / CloudHSM"
+            "Key control → customer managed key / CloudHSM",
+            "\"AWS must never see plaintext / keys stay with us\" → client-side encryption before upload (+ HTTPS in transit)"
           ],
           "not_for": [
             "Encrypting an existing RDS instance \"in place\" is not possible"
@@ -5807,7 +5819,8 @@
           ],
           "use_when": [
             "Load varies during the day → Auto Scaling (horizontal)",
-            "Make the application stateless so it can scale"
+            "Make the application stateless so it can scale",
+            "\"Single EC2, users will grow, add elasticity\" → multiple instances behind ELB (+ ASG) or Route 53 weighted/multivalue across instances"
           ],
           "not_for": [
             "Sticky sessions hinder even scaling"

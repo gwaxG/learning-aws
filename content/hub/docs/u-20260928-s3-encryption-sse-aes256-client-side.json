@@ -1,0 +1,51 @@
+{
+  "id": "u-20260928-s3-encryption-sse-aes256-client-side",
+  "source": {
+    "type": "user",
+    "added": "2026-09-28"
+  },
+  "question": {
+    "stem": "For data privacy, a healthcare company has been asked to comply with the Health Insurance Portability and Accountability Act (HIPAA). The company stores all its backups on an Amazon S3 bucket. It is required that data stored on the S3 bucket must be encrypted.\nWhat is the best option to do this? (Select TWO.)",
+    "options": [
+      "Enable Server-Side Encryption on an S3 bucket to make use of AES-128 encryption.",
+      "Store the data in encrypted Amazon EBS snapshots.",
+      "Enable Server-Side Encryption on an S3 bucket to make use of AES-256 encryption.",
+      "Store the data on Amazon EBS volumes with encryption enabled instead of using S3.",
+      "Before sending the data to S3 over HTTPS, encrypt the data locally first using your own encryption keys."
+    ],
+    "answer": [
+      2,
+      4
+    ],
+    "explanation": "Two valid ways to have S3 data encrypted at rest: server-side encryption, where S3 encrypts objects with AES-256 (SSE-S3; SSE-KMS also uses AES-256), and client-side encryption, where the data is encrypted locally with your own keys before upload (over HTTPS for in-transit protection) so S3 only ever stores ciphertext. S3 SSE doesn't use AES-128. EBS snapshots/volumes are a different storage service — the requirement is about the backups already in the S3 bucket, and moving them to EBS is costlier and less durable."
+  },
+  "concept": "S3 encryption: SSE (AES-256) or client-side encryption",
+  "tests": "Knowing the two ways to encrypt data stored in S3 — server-side (AES-256) and client-side before upload — versus wrong key sizes or switching to EBS.",
+  "expected": "S3 server-side encryption with AES-256 (SSE-S3/SSE-KMS) and client-side encryption with your own keys before uploading over HTTPS. Triggers: \"data on S3 must be encrypted\", \"HIPAA/compliance\" → SSE (AES-256) or client-side.",
+  "why_not": "S3 SSE doesn't use AES-128; EBS snapshots/volumes change the storage service instead of encrypting the S3 backups.",
+  "keywords": [
+    "S3 encryption",
+    "SSE-S3",
+    "AES-256",
+    "client-side encryption",
+    "HIPAA",
+    "encryption at rest",
+    "HTTPS in transit",
+    "EBS encryption"
+  ],
+  "services": [
+    "s3-security",
+    "encryption",
+    "ebs",
+    "kms"
+  ],
+  "topics": [
+    "storage",
+    "iam-security"
+  ],
+  "domain": 1,
+  "related": [
+    "u-20260927-s3-sse-s3-request-header",
+    "e5-q10"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "u-20260928-eks-cloud-agnostic-kubernetes",
+  "source": {
+    "type": "user",
+    "added": "2026-09-28"
+  },
+  "question": {
+    "stem": "A company plans to migrate its suite of containerized applications running on-premises to a container service in AWS. The solution must be cloud-agnostic and use an open-source platform that can automatically manage containerized workloads and services. It should also use the same configuration and tools across various production environments.\nWhat should the Solution Architect do to properly migrate and satisfy the given requirement?",
+    "options": [
+      "Migrate the application to Amazon Elastic Kubernetes Service with Amazon EKS worker nodes.",
+      "Migrate the application to Amazon Elastic Container Service with Amazon ECS tasks that use the Amazon EC2 launch type.",
+      "Migrate the application to AWS App Runner to run containers using an open‑source orchestration platform.",
+      "Migrate the application to Amazon Elastic Container Service with Amazon ECS tasks that use the AWS Fargate launch type."
+    ],
+    "answer": 0,
+    "explanation": "'Cloud-agnostic', 'open-source platform', 'same configuration and tools across environments' all point to Kubernetes. Amazon EKS runs upstream, CNCF-conformant Kubernetes, so the same manifests, Helm charts and kubectl tooling work on-premises, in other clouds and on AWS. ECS (EC2 or Fargate launch type) is AWS's proprietary orchestrator — task definitions and the ECS API don't exist outside AWS. App Runner is a proprietary fully managed service for web apps/APIs; it does not expose an open-source orchestration platform."
+  },
+  "concept": "EKS: cloud-agnostic open-source Kubernetes vs proprietary ECS",
+  "tests": "Choosing EKS when the stem requires an open-source, cloud-agnostic orchestrator with the same tooling across environments.",
+  "expected": "Amazon EKS (with worker nodes / managed node groups or Fargate). Triggers: \"cloud-agnostic\", \"open-source\", \"same configuration and tools across environments\", \"Kubernetes\" → EKS.",
+  "why_not": "ECS (EC2 or Fargate launch type) is AWS-proprietary; App Runner is a proprietary managed service, not an open-source orchestrator.",
+  "keywords": [
+    "EKS",
+    "Kubernetes",
+    "cloud-agnostic",
+    "open-source",
+    "ECS",
+    "Fargate",
+    "App Runner",
+    "container orchestration",
+    "Helm",
+    "kubectl"
+  ],
+  "services": [
+    "eks",
+    "ecs",
+    "fargate",
+    "app-runner"
+  ],
+  "topics": [
+    "serverless-containers"
+  ],
+  "domain": 3,
+  "related": []
+}

@@ -1,0 +1,50 @@
+{
+  "id": "u-20260928-scale-out-elb-or-route53-weighted",
+  "source": {
+    "type": "user",
+    "added": "2026-09-28"
+  },
+  "question": {
+    "stem": "A start-up company has an EC2 instance that is hosting a web application. The volume of users is expected to grow in the coming months and hence, you need to add more elasticity and scalability in your AWS architecture to cope with the demand.\nWhich of the following options can satisfy the above requirement for the given scenario? (Select TWO.)",
+    "options": [
+      "Set up two EC2 instances and then put them behind an Elastic Load balancer (ELB).",
+      "Set up two EC2 instances deployed using Launch Templates and integrated with AWS Glue.",
+      "Set up an S3 Cache in front of the EC2 instance.",
+      "Set up two EC2 instances and use Route 53 to route traffic based on a Weighted Routing Policy.",
+      "Set up an AWS WAF behind your EC2 Instance."
+    ],
+    "answer": [
+      0,
+      3
+    ],
+    "explanation": "Scalability here means horizontal scaling: run more than one instance and spread traffic across them. An ELB distributes requests across the instances (and with an Auto Scaling group behind it gives real elasticity). Route 53 weighted routing also spreads traffic across multiple instances at the DNS level (e.g. 50/50), optionally with health checks. AWS Glue is an ETL service — irrelevant to web scaling. 'S3 Cache' is not an AWS feature (caching in front of a web tier is CloudFront or ElastiCache). WAF filters malicious HTTP requests in front of ALB/CloudFront/API Gateway — it's security, not scaling, and it sits in front, not behind, and not on EC2 directly."
+  },
+  "concept": "Scaling out a web tier: multiple EC2 behind ELB or Route 53 weighted",
+  "tests": "Recognizing horizontal scaling options (ELB, Route 53 weighted across instances) versus unrelated services (Glue, WAF) and non-existent features (S3 Cache).",
+  "expected": "Two+ EC2 instances behind an ELB, and two+ EC2 instances with Route 53 weighted routing. Triggers: \"single EC2\", \"users will grow\", \"elasticity and scalability\" → scale out and distribute traffic (ELB, ideally + Auto Scaling; or Route 53 weighted).",
+  "why_not": "Glue is ETL; 'S3 Cache' doesn't exist (CloudFront/ElastiCache do caching); WAF is a security filter placed in front of ALB/CloudFront/API Gateway, not a scaling tool.",
+  "keywords": [
+    "horizontal scaling",
+    "scale out",
+    "Elastic Load Balancer",
+    "Route 53 weighted routing",
+    "Auto Scaling",
+    "elasticity",
+    "WAF",
+    "AWS Glue"
+  ],
+  "services": [
+    "elb",
+    "route53",
+    "auto-scaling",
+    "scaling",
+    "waf"
+  ],
+  "topics": [
+    "ec2-compute",
+    "edge-dns",
+    "architecture"
+  ],
+  "domain": 3,
+  "related": []
+}
