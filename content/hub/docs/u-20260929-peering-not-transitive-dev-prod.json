@@ -1,0 +1,45 @@
+{
+  "id": "u-20260929-peering-not-transitive-dev-prod",
+  "source": {
+    "type": "user",
+    "added": "2026-09-29",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A large insurance company has an AWS account that contains three VPCs (DEV, UAT and PROD) in the same region. UAT is peered to both PROD and DEV using a VPC peering connection. All VPCs have non-overlapping CIDR blocks. The company wants to push minor code releases from Dev to Prod to speed up time to market.\nWhich of the following options helps the company accomplish this?",
+    "options": [
+      "Do nothing. Since these two VPCs are already connected via UAT, they already have a connection to each other.",
+      "Create a new VPC peering connection between PROD and DEV with the appropriate routes.",
+      "Create a new entry to PROD in the DEV route table using the VPC peering connection as the target.",
+      "Change the DEV and PROD VPCs to have overlapping CIDR blocks to be able to connect them."
+    ],
+    "answer": 1,
+    "explanation": "VPC peering is non-transitive: DEV↔UAT and UAT↔PROD do not give DEV↔PROD. You need a direct DEV↔PROD peering connection (CIDRs are already non-overlapping) plus routes in both route tables. A route entry alone (option 3) has no peering connection to point to. Overlapping CIDRs (option 4) make peering impossible."
+  },
+  "concept": "VPC Peering: non-transitive — VPCs that must talk need a direct peering plus routes on both sides",
+  "tests": "Whether you know VPC peering is non-transitive, so a shared middle VPC (UAT) gives no DEV↔PROD path, and what a working peering needs (connection + routes both ways + non-overlapping CIDRs).",
+  "expected": "Create a direct peering connection between DEV and PROD, accept it, and add routes to each other's CIDR in both route tables (and allow it in SGs/NACLs). Trigger words: 'UAT is peered to both', 'already connected via', 'non-overlapping CIDR'.",
+  "why_not": "'Do nothing' assumes transitive routing, which peering does not support. A route entry alone has no peering connection to use as target (and would need one on both sides). Overlapping CIDRs are forbidden for peering and would break routing rather than enable it.",
+  "keywords": [
+    "VPC peering",
+    "non-transitive",
+    "transitive routing",
+    "route table",
+    "peering connection",
+    "non-overlapping CIDR",
+    "DEV UAT PROD",
+    "Transit Gateway"
+  ],
+  "services": [
+    "vpc-peering",
+    "transit-gateway"
+  ],
+  "topics": [
+    "vpc-networking"
+  ],
+  "domain": 2,
+  "related": [
+    "vpc-q4",
+    "u-20260927-dx-resilience-peering"
+  ]
+}

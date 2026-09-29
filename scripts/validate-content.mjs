@@ -123,6 +123,17 @@ try {
   }
 }
 
+// ---- Flashcards (generated from map #1) ----
+{
+  const { buildFlashcards } = await import("./build-flashcards.mjs");
+  const { errors: fcErrors, json } = await buildFlashcards();
+  fcErrors.forEach((m) => errors.push(m));
+  if (!fcErrors.length) {
+    const cur = await readFile("content/flashcards/cards.json", "utf8").catch(() => "");
+    if (cur !== json) err("content/flashcards/cards.json", "stale — run: node scripts/build-flashcards.mjs");
+  }
+}
+
 if (errors.length) {
   console.error(`✗ ${errors.length} content errors:\n` + errors.join("\n"));
   process.exit(1);

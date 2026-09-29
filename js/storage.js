@@ -1,5 +1,5 @@
 const KEY = "aws-saa-trainer:v1";
-const empty = () => ({ questions: {}, labs: {}, exams: {} });
+const empty = () => ({ questions: {}, labs: {}, exams: {}, cards: {} });
 
 // Deterministic timestamp helper that also works in the Node test env.
 const now = () => (typeof Date !== "undefined" ? Date.now() : 0);
@@ -38,6 +38,16 @@ export function makeStore(backend = globalThis.localStorage) {
     },
     getExamAttempts(examId) {
       return load().exams[examId] ?? [];
+    },
+    // Flashcards: Leitner box 1..3. Known -> next box (max 3 = mastered); unknown -> back to box 1.
+    recordCard(id, known) {
+      const s = load();
+      const prev = s.cards[id]?.box ?? 0;
+      s.cards[id] = { box: known ? Math.min(prev + 1, 3) : 1, ts: now() };
+      save(s);
+    },
+    getCard(id) {
+      return load().cards[id] ?? null;
     },
     snapshot() {
       return load();

@@ -1,6 +1,7 @@
 import { renderNav, renderDashboard, renderTopic, renderExamList } from "./views.js";
 import { renderExam } from "./exam.js";
 import { renderServices, renderHub, parseQuery } from "./maps.js";
+import { renderFlashcards } from "./flashcards.js";
 
 const view = document.getElementById("view");
 const nav = document.getElementById("nav");
@@ -16,13 +17,14 @@ async function route() {
   try {
     if (kind === "services") await renderServices(view, arg, query);
     else if (kind === "hub") await renderHub(view, arg, query);
+    else if (kind === "flashcards") await renderFlashcards(view, arg, query);
     else if (kind === "topic") await renderTopic(view, arg);
     else if (kind === "exams") await renderExamList(view);
     else if (kind === "exam") await renderExam(view, arg);
     else await renderDashboard(view);
     if (!wide) window.scrollTo(0, 0);
     nav.querySelectorAll("a").forEach((a) =>
-      a.classList.toggle("active", a.getAttribute("href") === "#" + (wide ? "/" + kind : path))
+      a.classList.toggle("active", a.getAttribute("href") === "#" + (wide || kind === "flashcards" ? "/" + kind : path))
     );
   } catch (e) {
     view.innerHTML = `<div class="card"><h1>Something went wrong</h1>

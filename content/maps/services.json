@@ -1279,6 +1279,7 @@
           "tagline": "Direct connection of two VPCs (incl. cross-account/Region)",
           "facts": [
             "Non-transitive: A↔B and B↔C don't give A↔C",
+        "DEV↔UAT + UAT↔PROD ≠ DEV↔PROD: create a direct DEV↔PROD peering + routes both ways",
             "CIDRs must not overlap",
             "Routes needed in route tables on both sides",
             "No charge for the connection; inter-AZ/Region traffic is paid",

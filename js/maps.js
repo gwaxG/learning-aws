@@ -158,6 +158,7 @@ export async function renderServices(view, arg, query) {
         <div class="chips">${(s.keywords || []).map((k) => `<button class="chip" data-kw="${esc(k)}">${esc(k)}</button>`).join("")}</div>
         <div class="svc-links">
           ${qn ? `<a class="btn" href="#/hub?s=${esc(s.id)}">Hub questions: ${qn} →</a>` : `<span class="muted">No hub questions yet</span>`}
+          <a class="btn" href="#/flashcards?s=${esc(s.id)}&mode=all">Flashcards →</a>
           ${s.doc ? `<a href="${esc(s.doc)}" target="_blank" rel="noopener">📖 AWS documentation</a>` : ""}
         </div>
       </div>`;

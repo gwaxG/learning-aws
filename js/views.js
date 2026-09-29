@@ -20,6 +20,7 @@ export async function renderNav(nav) {
     `<span class="nav-sep">Maps</span>` +
     `<a href="#/services">Services Map</a>` +
     `<a href="#/hub">Question Hub</a>` +
+    `<a href="#/flashcards">Flashcards</a>` +
     `<span class="nav-sep">Topics</span>` +
     m.topics.map((t) => `<a href="#/topic/${t.slug}">${esc(t.title)}</a>`).join("");
 }

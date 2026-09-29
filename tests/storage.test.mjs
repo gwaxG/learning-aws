@@ -15,6 +15,19 @@ function memBackend() {
   };
 }
 
+test("flashcard Leitner boxes: known advances (max 3), unknown resets to 1", () => {
+  const store = makeStore(memBackend());
+  assert.equal(store.getCard("s3:purpose"), null);
+  store.recordCard("s3:purpose", true);
+  assert.equal(store.getCard("s3:purpose").box, 1);
+  store.recordCard("s3:purpose", true);
+  store.recordCard("s3:purpose", true);
+  store.recordCard("s3:purpose", true);
+  assert.equal(store.getCard("s3:purpose").box, 3);
+  store.recordCard("s3:purpose", false);
+  assert.equal(store.getCard("s3:purpose").box, 1);
+});
+
 test("records question answers and reports correctness", () => {
   const store = makeStore(memBackend());
   store.recordQuestion("iam-q1", true);

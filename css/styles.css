@@ -189,6 +189,21 @@ button.btn { font-family: inherit; }
 .panel-empty p { margin-top: 0; }
 .legend { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 4px; font-size: 0.82rem; }
 .legend span { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; }
+.fc-stats { margin: 4px 0 12px; font-size: 0.88rem; }
+.fc-root input[type=search] { padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border); background: #0b1422; color: var(--fg); font: inherit; font-size: 0.88rem; min-width: 160px; }
+.fc-card { position: relative; background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 18px 26px 22px; min-height: 260px; cursor: pointer; display: flex; flex-direction: column; }
+.fc-card:hover, .fc-card:focus { border-color: var(--accent-2); outline: none; }
+.fc-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.fc-box { margin-left: auto; color: var(--accent); letter-spacing: 2px; font-size: 0.8rem; }
+.fc-face { font-size: 1.25rem; line-height: 1.5; flex: 1; }
+.fc-back { display: none; border-top: 1px dashed var(--border); padding-top: 14px; font-size: 1.05rem; }
+.fc-card.flipped .fc-front .fc-hint { display: none; }
+.fc-card.flipped .fc-back { display: block; }
+.fc-hint { font-size: 0.8rem; margin-top: 14px; }
+.fc-actions { display: flex; gap: 12px; justify-content: center; margin: 16px 0 6px; }
+.fc-ok { background: var(--ok); color: #06210f; border-color: var(--ok); }
+.fc-keys { text-align: center; font-size: 0.8rem; }
+.fc-empty { text-align: center; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px; }
 .chip { border: 1px solid var(--border); background: var(--panel-2); color: var(--fg); border-radius: 999px; padding: 3px 10px; font-size: 0.78rem; cursor: pointer; font-family: inherit; }
 .chip:hover { border-color: var(--accent-2); text-decoration: none; }
