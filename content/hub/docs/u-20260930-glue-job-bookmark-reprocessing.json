@@ -1,0 +1,47 @@
+{
+  "id": "u-20260930-glue-job-bookmark-reprocessing",
+  "source": {
+    "type": "user",
+    "added": "2026-09-30",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A Data Analyst in a financial company is tasked to provide insights on stock market trends to the company’s clients. The company uses AWS Glue extract, transform, and load (ETL) jobs in daily report generation, which involves fetching data from an Amazon S3 bucket. The analyst discovered that old data from previous runs were being reprocessed, causing the jobs to take longer to complete.\nWhich solution would resolve the issue in the most operationally efficient way?",
+    "options": [
+      "Enable job bookmark for the ETL job.",
+      "Parallelize the job by splitting the dataset into smaller partitions and processing them simultaneously using multiple EC2 instances.",
+      "Increase the size of the dataset used in the job to speed up the extraction and analysis process.",
+      "Create a Lambda function that removes any data already processed. Then, use Amazon EventBridge (Amazon CloudWatch Events) to trigger this function whenever the ETL job’s status switches to `SUCCEEDED`."
+    ],
+    "answer": 0,
+    "explanation": "AWS Glue job bookmarks persist state between runs so the job processes only new or changed data, which stops the reprocessing of old data with a single setting and no extra code. Splitting the data across EC2 instances adds operational work and doesn't avoid processing old data. A bigger dataset makes the job slower. A Lambda that deletes processed data plus an EventBridge rule is custom machinery, risks deleting source data, and is less operationally efficient than a built-in feature."
+  },
+  "concept": "Glue: job bookmarks to process only new data and avoid reprocessing",
+  "tests": "Knowing the built-in Glue feature that tracks already-processed data between runs: job bookmarks, instead of building custom cleanup or parallelization.",
+  "expected": "Enable job bookmark on the Glue ETL job so each run processes only new data. Triggers: 'old data from previous runs reprocessed', 'jobs take longer', 'operationally efficient'.",
+  "why_not": "Parallelizing on EC2 adds infrastructure and still reprocesses old data. A larger dataset only makes it slower. A Lambda + EventBridge cleanup is custom code that deletes source data and is higher overhead than the built-in bookmark.",
+  "keywords": [
+    "AWS Glue",
+    "job bookmark",
+    "ETL",
+    "incremental processing",
+    "reprocessing",
+    "S3",
+    "operational efficiency",
+    "Glue job",
+    "state between runs",
+    "new data only"
+  ],
+  "services": [
+    "glue",
+    "s3"
+  ],
+  "topics": [
+    "architecture"
+  ],
+  "domain": 3,
+  "related": [
+    "e1-q39",
+    "u-20260927-glue-csv-to-parquet"
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "id": "u-20261004-ebs-volume-types-usage",
+  "source": {
+    "type": "user",
+    "added": "2026-10-04",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A technical lead of the Cloud Infrastructure team was consulted by a software developer regarding the required AWS resources of the web application that he is building. The developer knows that an Instance Store only provides ephemeral storage where the data is automatically deleted when the instance is terminated. To ensure that the data of the web application persists, the app should be launched in an EC2 instance that has a durable, block-level storage volume attached. The developer knows that they need to use an EBS volume, but they are not sure what type they need to use.\nIn this scenario, which of the following is true about Amazon EBS volume types and their respective usage? (Select TWO.)",
+    "options": [
+      "Provisioned IOPS volumes offer storage with consistent and low-latency performance, and are designed for I/O intensive applications such as large relational or NoSQL databases.",
+      "Spot volumes provide the lowest cost per gigabyte of all EBS volume types and are ideal for workloads where data is accessed infrequently, and applications where the lowest storage cost is important.",
+      "Magnetic volumes provide the lowest cost per gigabyte of all EBS volume types and are ideal for workloads where data is accessed infrequently, and applications where the lowest storage cost is important.",
+      "General Purpose SSD (gp3) volumes with multi-attach enabled offer consistent and low-latency performance, and are designed for applications requiring multi-az resiliency.",
+      "Single root I/O virtualization (SR-IOV) volumes are suitable for a broad range of workloads, including small to medium-sized databases, development and test environments, and boot volumes."
+    ],
+    "answer": [
+      0,
+      2
+    ],
+    "explanation": "Provisioned IOPS SSD (io1/io2) volumes give consistent, low-latency performance for I/O-intensive workloads such as large relational or NoSQL databases. Magnetic (standard) volumes are the previous-generation HDD type with the lowest cost per gigabyte, meant for infrequently accessed data where cost matters most. Spot volumes do not exist: Spot is an EC2 purchase model. gp3 does not support Multi-Attach (only io1/io2 do) and an EBS volume is always confined to one Availability Zone, so it can never provide multi-AZ resiliency. SR-IOV is an enhanced-networking technology for NICs, not an EBS volume type; the description given matches General Purpose SSD."
+  },
+  "concept": "EBS volume types: Provisioned IOPS, Magnetic, gp2/gp3 and the made-up ones (Spot volumes, SR-IOV)",
+  "tests": "Matching EBS volume types to their real usage and spotting invented types or false claims (gp3 Multi-Attach, multi-AZ EBS).",
+  "expected": "Provisioned IOPS SSD for I/O-intensive databases; Magnetic for lowest cost/infrequent access. Spot volumes and SR-IOV volumes are not EBS types; gp3 has no Multi-Attach; EBS is single-AZ.",
+  "why_not": "Spot volumes do not exist (Spot is an EC2 purchase model). gp3 does not support Multi-Attach (io1/io2 only) and EBS is single-AZ, so no multi-AZ resiliency. SR-IOV is an enhanced-networking technology, not a volume type; the described use (boot, dev/test, small-medium DBs) is General Purpose SSD.",
+  "keywords": [
+    "EBS",
+    "Provisioned IOPS",
+    "io1",
+    "io2",
+    "Magnetic",
+    "gp3",
+    "Multi-Attach",
+    "SR-IOV",
+    "Spot",
+    "volume types"
+  ],
+  "services": [
+    "ebs",
+    "ec2",
+    "instance-store"
+  ],
+  "topics": [
+    "storage"
+  ],
+  "domain": 3,
+  "related": []
+}

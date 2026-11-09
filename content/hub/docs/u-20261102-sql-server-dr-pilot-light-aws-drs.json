@@ -1,0 +1,42 @@
+{
+  "id": "u-20261102-sql-server-dr-pilot-light-aws-drs",
+  "source": {
+    "type": "user",
+    "added": "2026-11-02",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "An e-commerce company plans to optimize its disaster recovery configuration using AWS Cloud to minimize operational disruptions during outages or major system maintenance for its on-premises Microsoft SQL Server-based application. The objective is to achieve a recovery point objective (RPO) of 60 seconds or less and a recovery time objective (RTO) of 1 hour.\nWhich of the following is the MOST cost-effective solution for this scenario?",
+    "options": [
+      "Back up SQL Server to AWS Storage Gateway for hybrid storage and fast disaster recovery. Enable fast snapshot restore in Amazon Elastic Block Store (Amazon EBS).",
+      "Set up a pilot light strategy using AWS Elastic Disaster Recovery (AWS DRS) to replicate the changes of the on-premises application to AWS",
+      "Use Microsoft SQL Server Enterprise with Always On availability groups and set up a multi-site active/active setup between the corporate on-premises application and AWS.",
+      "On AWS, implement a warm standby using Amazon RDS for SQL Server database and configure AWS Database Migration Service (AWS DMS) with change data capture (CDC) to sync the data from the on-premises application."
+    ],
+    "answer": 1,
+    "explanation": "AWS Elastic Disaster Recovery (AWS DRS) does continuous block-level replication of on-premises servers into a low-cost staging area (cheap storage plus minimal compute), giving an RPO of seconds and an RTO of minutes, so the 60-second RPO and 1-hour RTO are met at pilot-light cost. Always On availability groups with an active/active multi-site setup meet the targets but run full replicas continuously, which is the most expensive. A warm standby on RDS for SQL Server with DMS CDC also meets them but you pay for a running RDS instance all the time. Storage Gateway backups plus fast snapshot restore are backup/restore: no continuous replication and no automated failover, so the RPO is not 60 seconds."
+  },
+  "concept": "On-premises DR to AWS at low cost = AWS Elastic Disaster Recovery (pilot light style)",
+  "tests": "Choosing the DR strategy that meets a tight RPO/RTO at the lowest cost for an on-premises workload.",
+  "expected": "AWS Elastic Disaster Recovery (continuous replication to a staging area, launch recovery instances only on failover). Triggers: \"on-premises\", \"RPO 60 seconds, RTO 1 hour\", \"MOST cost-effective\".",
+  "why_not": "Always On multi-site active/active: full duplicate running continuously, highest cost. RDS warm standby with DMS CDC: meets RPO/RTO but a running RDS instance is paid for 24/7. Storage Gateway + FSR: backup/restore, no continuous replication, manual restore.",
+  "keywords": [
+    "AWS Elastic Disaster Recovery",
+    "pilot light",
+    "warm standby",
+    "multi-site active/active",
+    "Always On availability groups",
+    "RPO",
+    "RTO",
+    "SQL Server"
+  ],
+  "services": [
+    "elastic-disaster-recovery"
+  ],
+  "topics": [
+    "ha-dr",
+    "data-migration"
+  ],
+  "domain": 4,
+  "related": []
+}

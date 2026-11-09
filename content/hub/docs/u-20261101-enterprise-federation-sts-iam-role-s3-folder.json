@@ -1,0 +1,49 @@
+{
+  "id": "u-20261101-enterprise-federation-sts-iam-role-s3-folder",
+  "source": {
+    "type": "user",
+    "added": "2026-11-01",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A tech company that you are working for has undertaken a Total Cost Of Ownership (TCO) analysis evaluating the use of Amazon S3 versus acquiring more storage hardware. The result was that all 1200 employees would be granted access to use Amazon S3 for the storage of their personal documents.\nWhich of the following will you need to consider so you can set up a solution that incorporates a single sign-on feature from your corporate AD or LDAP directory and also restricts access for each individual user to a designated user folder in an S3 bucket? (Select TWO.)",
+    "options": [
+      "Map each individual user to a designated user folder in S3 using Amazon WorkDocs to access their personal documents.",
+      "Use 3rd party Single Sign-On solutions such as Atlassian Crowd, OKTA, OneLogin and many others.",
+      "Set up a Federation proxy or an Identity provider, and use AWS Security Token Service to generate temporary tokens.",
+      "Set up a matching IAM user for each of the 1200 users in your corporate directory that needs access to a folder in the S3 bucket.",
+      "Configure an IAM role and an IAM Policy to access the bucket."
+    ],
+    "answer": [
+      2,
+      4
+    ],
+    "explanation": "This is enterprise identity federation: users authenticate against the corporate directory through an identity provider or federation proxy (SAML 2.0, for example AD FS), and AWS STS generates temporary credentials for an IAM role whose IAM policy restricts access to the bucket and each user's folder. Third-party SSO products are not required because AWS already provides the tools. WorkDocs does not integrate with S3 for this. Creating 1200 IAM users is unnecessary and does not integrate with AD or LDAP."
+  },
+  "concept": "Enterprise federation: IdP/federation proxy + STS temporary credentials + IAM role and policy",
+  "tests": "Recognizing identity federation (not IAM users, WorkDocs or third-party SSO) for corporate directory users needing per-user S3 folders.",
+  "expected": "Identity provider or federation proxy with STS temporary tokens, and an IAM role with an IAM policy limiting access to the bucket and per-user folder. Triggers: \"single sign-on from corporate AD or LDAP\", \"1200 employees\", \"restrict each user to a folder\".",
+  "why_not": "Third-party SSO is not required, AWS offers federation with STS. WorkDocs is not the way to map users to S3 folders. One IAM user per employee does not scale and ignores the AD/LDAP directory.",
+  "keywords": [
+    "federation",
+    "SAML 2.0",
+    "AD FS",
+    "STS",
+    "IAM role",
+    "IAM policy",
+    "S3 folder",
+    "single sign-on",
+    "LDAP"
+  ],
+  "services": [
+    "sts",
+    "iam",
+    "identity-center",
+    "s3-security"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1,
+  "related": []
+}

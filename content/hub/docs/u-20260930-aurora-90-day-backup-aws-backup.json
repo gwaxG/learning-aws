@@ -1,0 +1,49 @@
+{
+  "id": "u-20260930-aurora-90-day-backup-aws-backup",
+  "source": {
+    "type": "user",
+    "added": "2026-09-30",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A company needs to use Amazon Aurora as the Amazon RDS database engine for its web application. The Solutions Architect has been instructed to implement a 90-day RDS backup retention policy.\nWhich of the following options can satisfy the given requirement?",
+    "options": [
+      "Create an AWS Backup plan to take daily snapshots with a retention period of 90 days.",
+      "Configure RDS to export the automated snapshot automatically to Amazon S3 and create a lifecycle policy to delete the object after 90 days.",
+      "Configure an automated backup and set the backup retention period to 90 days.",
+      "Create a daily scheduled event using Amazon EventBridge and AWS Lambda to directly download the RDS automated snapshot to an Amazon S3 bucket. Archive snapshots older than 90 days to Glacier."
+    ],
+    "answer": 0,
+    "explanation": "RDS/Aurora automated backups keep a maximum of 35 days, so a 90-day retention needs AWS Backup: a backup plan with a daily rule and 90-day retention (fully managed, no code). Setting the automated backup retention to 90 days is not possible. Exporting snapshots to S3 is a manual/scripted export to Parquet that is not an automatic feature of automated backups and is not directly restorable. You cannot directly download RDS snapshots to S3 with a Lambda function."
+  },
+  "concept": "RDS/Aurora backups: automated backups max 35 days, use AWS Backup for longer retention",
+  "tests": "Knowing the automated backup retention limit for RDS/Aurora (35 days) and that longer retention (e.g. 90 days) is done with AWS Backup plans (or manual snapshots).",
+  "expected": "An AWS Backup plan with a daily backup rule and a 90-day retention. Triggers: 'Aurora', '90-day backup retention', RDS automated backups top out at 35 days.",
+  "why_not": "Automated backup retention can't exceed 35 days, so option 3 can't be configured. S3 export is not an automatic feature of automated snapshots, produces Parquet files and is not a restorable backup. A Lambda can't just download an RDS snapshot to S3, and building this yourself is high overhead.",
+  "keywords": [
+    "AWS Backup",
+    "backup plan",
+    "retention period",
+    "35 days",
+    "automated backups",
+    "Aurora",
+    "RDS snapshots",
+    "90 days",
+    "backup retention",
+    "snapshot export"
+  ],
+  "services": [
+    "backup",
+    "aurora",
+    "rds"
+  ],
+  "topics": [
+    "databases",
+    "ha-dr"
+  ],
+  "domain": 2,
+  "related": [
+    "e2-q56",
+    "u-20260927-dynamodb-gateway-endpoint-backup-cross-account"
+  ]
+}

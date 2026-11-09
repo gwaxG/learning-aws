@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pulumi + AWS guide</title>
+<style>
+  :root { --bg:#0f1b2d; --fg:#e6edf6; --mut:#9fb0c6; --acc:#ff9900; --card:#16253b; --code:#0a1424; }
+  body { background:var(--bg); color:var(--fg); font:16px/1.6 system-ui,sans-serif; margin:0; padding:0 1rem 4rem; }
+  main { max-width:860px; margin:0 auto; }
+  h1,h2,h3 { line-height:1.25; } h2 { margin-top:2.5rem; border-bottom:1px solid #2a3c58; padding-bottom:.3rem; }
+  a { color:#6cb6ff; } code,pre { background:var(--code); border-radius:6px; font:14px/1.5 Consolas,monospace; }
+  code { padding:.1em .35em; } pre { padding:.8rem 1rem; overflow-x:auto; }
+  table { border-collapse:collapse; width:100%; display:block; overflow-x:auto; }
+  th,td { border:1px solid #2a3c58; padding:.4rem .6rem; text-align:left; vertical-align:top; }
+  th { background:var(--card); } .note { background:var(--card); border-left:4px solid var(--acc); padding:.6rem 1rem; border-radius:4px; }
+  nav li { margin:.15rem 0; } .mut { color:var(--mut); }
+</style>
+</head>
+<body>
+<main>
+<h1>Pulumi + AWS guide</h1>
+<p class="mut">Learning notes for the <code>playground/</code> projects. Language: Python (see <a href="adr/0002-pulumi-with-python.md">ADR 0002</a>). Decisions live in <a href="adr/README.md">docs/adr</a>.</p>
+
+<nav><strong>Contents</strong>
+<ol>
+  <li><a href="#what">What Pulumi is</a></li>
+  <li><a href="#concepts">Core concepts</a></li>
+  <li><a href="#workflow">Daily workflow</a></li>
+  <li><a href="#setup">Setup for this repo</a></li>
+  <li><a href="#example">Minimal AWS example</a></li>
+  <li><a href="#patterns">Patterns you will use</a></li>
+  <li><a href="#aws">AWS reference map</a></li>
+  <li><a href="#pitfalls">Pitfalls &amp; cost hygiene</a></li>
+  <li><a href="#links">All official links</a></li>
+</ol></nav>
+
+<h2 id="what">1. What Pulumi is</h2>
+<p>Infrastructure as Code with general-purpose languages. You write a program that <em>declares</em> resources (VPC, RDS, S3&hellip;); the Pulumi engine compares it to the recorded state and calls the AWS APIs to make reality match. Comparable to CloudFormation/Terraform, but loops, functions and types are just Python.</p>
+<ul>
+  <li><a href="https://www.pulumi.com/docs/iac/concepts/">Pulumi IaC concepts</a></li>
+  <li><a href="https://www.pulumi.com/docs/iac/get-started/aws/">Get started with AWS</a></li>
+</ul>
+
+<h2 id="concepts">2. Core concepts</h2>
+<table>
+<tr><th>Concept</th><th>Meaning</th><th>Docs</th></tr>
+<tr><td>Project</td><td>A directory with <code>Pulumi.yaml</code> (name, runtime). Here: <code>three-tier/pulumi</code>.</td><td><a href="https://www.pulumi.com/docs/iac/concepts/projects/">Projects</a></td></tr>
+<tr><td>Stack</td><td>One instance of a project (<code>dev</code>, <code>prod</code>), own config and state. Same code, different settings.</td><td><a href="https://www.pulumi.com/docs/iac/concepts/stacks/">Stacks</a></td></tr>
+<tr><td>Resource</td><td>A cloud object declared in code, e.g. <code>aws.rds.Instance</code>. The first argument is the logical name; Pulumi adds a random suffix to the physical name unless you set it.</td><td><a href="https://www.pulumi.com/docs/iac/concepts/resources/">Resources</a></td></tr>
+<tr><td>Inputs / Outputs</td><td>Values known only after deploy (an ID, an endpoint) are <code>Output[T]</code>. Use <code>.apply()</code> or <code>pulumi.Output.concat/all</code> to combine them; never treat them as plain strings.</td><td><a href="https://www.pulumi.com/docs/iac/concepts/inputs-outputs/">Inputs &amp; outputs</a></td></tr>
+<tr><td>Config &amp; secrets</td><td>Per-stack settings in <code>Pulumi.&lt;stack&gt;.yaml</code>; <code>--secret</code> values are encrypted in state.</td><td><a href="https://www.pulumi.com/docs/iac/concepts/config/">Config</a>, <a href="https://www.pulumi.com/docs/iac/concepts/secrets/">Secrets</a></td></tr>
+<tr><td>State &amp; backends</td><td>The record of what exists. Stored in Pulumi Cloud, an S3 bucket, or a local file.</td><td><a href="https://www.pulumi.com/docs/iac/concepts/state-and-backends/">State &amp; backends</a></td></tr>
+<tr><td>Providers</td><td>Plugins that talk to a cloud. <code>pulumi-aws</code> is the native AWS provider (also <code>pulumi-awsx</code> for higher-level components).</td><td><a href="https://www.pulumi.com/registry/packages/aws/">AWS provider</a>, <a href="https://www.pulumi.com/registry/packages/awsx/">AWSX</a></td></tr>
+<tr><td>Components</td><td>Your own reusable classes grouping resources (e.g. a "Database" component).</td><td><a href="https://www.pulumi.com/docs/iac/concepts/resources/components/">Components</a></td></tr>
+<tr><td>Stack outputs / references</td><td><code>pulumi.export()</code> publishes values; other stacks read them with <code>StackReference</code>.</td><td><a href="https://www.pulumi.com/docs/iac/concepts/stacks/#stackreferences">StackReference</a></td></tr>
+</table>
+
+<h2 id="workflow">3. Daily workflow</h2>
+<pre>pulumi login                 # choose backend (pulumi login --local for a file backend)
+pulumi stack init dev        # create a stack
+pulumi config set aws:region eu-west-1
+pulumi config set --secret dbPassword '...'
+pulumi preview               # diff: what WOULD change (like terraform plan)
+pulumi up                    # apply
+pulumi stack output          # read exported values
+pulumi refresh               # sync state with real cloud (after manual changes)
+pulumi destroy               # delete everything in the stack
+pulumi stack rm dev          # remove the empty stack</pre>
+<p>CLI reference: <a href="https://www.pulumi.com/docs/iac/cli/commands/">pulumi commands</a>.</p>
+
+<h2 id="setup">4. Setup for this repo</h2>
+<ul>
+  <li>Installed: Pulumi CLI 3.134, AWS CLI 2 (default region <code>eu-west-1</code>), uv, Docker.</li>
+  <li>Credentials: Pulumi uses the standard AWS chain (env vars, <code>~/.aws</code>, SSO). Verify with <code>aws sts get-caller-identity</code>. See <a href="https://www.pulumi.com/registry/packages/aws/installation-configuration/">AWS provider configuration</a> and the AWS <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-authentication.html">CLI authentication</a> page.</li>
+  <li>Python project with uv: <code>pulumi new aws-python</code>, or create <code>Pulumi.yaml</code> with <code>runtime: {name: python, options: {toolchain: uv}}</code> (see <a href="https://www.pulumi.com/docs/iac/languages-sdks/python/">Python in Pulumi</a>).</li>
+</ul>
+<p class="note">Use a dedicated IAM user/role with least privilege for the playground, never the root account. Enable a <a href="https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html">AWS Budget</a> alert before the first deploy.</p>
+
+<h2 id="example">5. Minimal AWS example</h2>
+<pre>import pulumi
+import pulumi_aws as aws
+
+bucket = aws.s3.BucketV2("site")                       # logical name "site"
+aws.s3.BucketPublicAccessBlock(
+    "site-block", bucket=bucket.id,
+    block_public_acls=True, block_public_policy=True,
+    ignore_public_acls=True, restrict_public_buckets=True,
+)
+
+pulumi.export("bucket_name", bucket.bucket)            # Output[str]
+pulumi.export("arn", bucket.arn)</pre>
+<p>Run <code>pulumi preview</code> first and read the plan: <code>+</code> create, <code>~</code> update, <code>-</code> delete, <code>+-</code> replace (destructive for databases!).</p>
+
+<h2 id="patterns">6. Patterns you will use</h2>
+<ul>
+  <li><strong>Config:</strong> <code>cfg = pulumi.Config(); cfg.require_secret("dbPassword")</code>.</li>
+  <li><strong>Dependencies:</strong> implicit via passing outputs (<code>vpc_id=vpc.id</code>); explicit via <code>opts=pulumi.ResourceOptions(depends_on=[...])</code>.</li>
+  <li><strong>Protect critical resources:</strong> <code>protect=True</code>, <code>retain_on_delete=True</code>.</li>
+  <li><strong>Import existing resources:</strong> <code>pulumi import</code> (<a href="https://www.pulumi.com/docs/iac/guides/migration/import/">guide</a>).</li>
+  <li><strong>Pass outputs into strings:</strong> <code>pulumi.Output.concat("postgresql://", user, "@", db.address)</code>.</li>
+  <li><strong>Testing:</strong> unit tests with mocks (<a href="https://www.pulumi.com/docs/iac/concepts/testing/unit/">unit testing</a>).</li>
+  <li><strong>Shipping files:</strong> <code>aws.s3.BucketObjectv2</code> with <code>pulumi.FileAsset</code>/<code>FileArchive</code> (<a href="https://www.pulumi.com/docs/iac/concepts/assets-archives/">assets &amp; archives</a>).</li>
+</ul>
+
+<h2 id="aws">7. AWS reference map</h2>
+<p>Pulumi resource &harr; AWS service docs. Pulumi names follow <code>aws.&lt;service&gt;.&lt;Resource&gt;</code>.</p>
+<table>
+<tr><th>Need</th><th>Pulumi resource</th><th>AWS docs</th></tr>
+<tr><td>Network</td><td><a href="https://www.pulumi.com/registry/packages/aws/api-docs/ec2/vpc/"><code>ec2.Vpc</code></a>, <code>ec2.Subnet</code>, <code>ec2.InternetGateway</code>, <code>ec2.RouteTable</code>, <code>ec2.SecurityGroup</code></td><td><a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>, <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html">Security groups</a></td></tr>
+<tr><td>Outbound from private subnets</td><td><a href="https://www.pulumi.com/registry/packages/aws/api-docs/ec2/natgateway/"><code>ec2.NatGateway</code></a>, <code>ec2.Eip</code></td><td><a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html">NAT gateway</a></td></tr>
+<tr><td>Database</td><td><a href="https://www.pulumi.com/registry/packages/aws/api-docs/rds/instance/"><code>rds.Instance</code></a>, <code>rds.SubnetGroup</code></td><td><a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html">Amazon RDS</a>, <a href="https://aws.amazon.com/rds/postgresql/pricing/">RDS PostgreSQL pricing</a></td></tr>
+<tr><td>Containers</td><td><a href="https://www.pulumi.com/registry/packages/aws/api-docs/ecs/cluster/"><code>ecs.Cluster</code></a>, <code>ecs.TaskDefinition</code>, <code>ecs.Service</code>, <code>ecr.Repository</code></td><td><a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html">Amazon ECS</a>, <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html">Fargate</a>, <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html">ECR</a></td></tr>
+<tr><td>Load balancer</td><td><a href="https://www.pulumi.com/registry/packages/aws/api-docs/lb/loadbalancer/"><code>lb.LoadBalancer</code></a>, <code>lb.TargetGroup</code>, <code>lb.Listener</code></td><td><a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html">Application Load Balancer</a></td></tr>
+<tr><td>Static front end</td><td><a href="https://www.pulumi.com/registry/packages/aws/api-docs/s3/bucketv2/"><code>s3.BucketV2</code></a>, <a href="https://www.pulumi.com/registry/packages/aws/api-docs/cloudfront/distribution/"><code>cloudfront.Distribution</code></a>, <code>cloudfront.OriginAccessControl</code></td><td><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html">Amazon S3</a>, <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html">CloudFront</a>, <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html">OAC</a></td></tr>
+<tr><td>Secrets</td><td><a href="https://www.pulumi.com/registry/packages/aws/api-docs/secretsmanager/secret/"><code>secretsmanager.Secret</code></a>, <code>ssm.Parameter</code></td><td><a href="https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html">Secrets Manager</a>, <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html">Parameter Store</a></td></tr>
+<tr><td>Permissions</td><td><a href="https://www.pulumi.com/registry/packages/aws/api-docs/iam/role/"><code>iam.Role</code></a>, <code>iam.RolePolicy</code>, <code>iam.RolePolicyAttachment</code></td><td><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html">IAM</a>, <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html">ECS task execution role</a></td></tr>
+<tr><td>Logs</td><td><a href="https://www.pulumi.com/registry/packages/aws/api-docs/cloudwatch/loggroup/"><code>cloudwatch.LogGroup</code></a></td><td><a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html">CloudWatch Logs</a></td></tr>
+<tr><td>Metrics, alarms, dashboards</td><td><a href="https://www.pulumi.com/registry/packages/aws/api-docs/cloudwatch/metricalarm/"><code>cloudwatch.MetricAlarm</code></a>, <a href="https://www.pulumi.com/registry/packages/aws/api-docs/cloudwatch/dashboard/"><code>cloudwatch.Dashboard</code></a>, <a href="https://www.pulumi.com/registry/packages/aws/api-docs/sns/topic/"><code>sns.Topic</code></a>, ECS <code>ClusterSettingArgs</code></td><td><a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html">CloudWatch</a>, <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContainerInsights.html">Container Insights</a>, <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html">Alarms + SNS email</a>, <a href="https://aws.amazon.com/cloudwatch/pricing/">pricing</a></td></tr>
+<tr><td>DNS / TLS</td><td><code>route53.Record</code>, <code>acm.Certificate</code></td><td><a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html">Route 53</a>, <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html">ACM</a></td></tr>
+</table>
+<p>Architecture background: <a href="https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html">AWS Well-Architected Framework</a>, <a href="https://calculator.aws/">AWS Pricing Calculator</a>. For exam-oriented notes on the same services see the main trainer (<code>content/topics/</code>).</p>
+
+<h2 id="pitfalls">8. Pitfalls &amp; cost hygiene</h2>
+<ul>
+  <li><strong>Always <code>pulumi destroy</code> after a session.</strong> The usual leaks: NAT Gateway (~$0.045/h + data), ALB, RDS, Elastic IPs, CloudFront logs, ECR images.</li>
+  <li><strong>Replace vs update:</strong> some property changes force replacement; on RDS that means a new empty database. Read the preview.</li>
+  <li><strong>Secrets:</strong> never put plain passwords in code or <code>Pulumi.&lt;stack&gt;.yaml</code>; use <code>--secret</code>. Secret outputs stay encrypted in state; the state backend still needs protecting.</li>
+  <li><strong>Manual console changes cause drift</strong>; run <code>pulumi refresh</code> and review.</li>
+  <li><strong>Stuck deletes:</strong> non-empty S3 buckets (<code>force_destroy=True</code> for playgrounds), VPCs with leftover ENIs, security groups still referenced.</li>
+  <li><strong>Resource names:</strong> let Pulumi auto-name unless a name is required to be stable; fixed names block replacements.</li>
+</ul>
+
+<h2 id="links">9. All official links</h2>
+<ul>
+  <li><a href="https://www.pulumi.com/docs/">Pulumi documentation home</a></li>
+  <li><a href="https://www.pulumi.com/docs/iac/get-started/aws/">Get started: AWS</a></li>
+  <li><a href="https://www.pulumi.com/docs/iac/languages-sdks/python/">Python language guide</a></li>
+  <li><a href="https://www.pulumi.com/registry/packages/aws/api-docs/">pulumi-aws API docs (Python/TS/Go&hellip;)</a></li>
+  <li><a href="https://www.pulumi.com/registry/packages/aws/how-to-guides/">AWS how-to guides</a></li>
+  <li><a href="https://www.pulumi.com/ai/">Pulumi templates &amp; examples</a> &middot; <a href="https://github.com/pulumi/examples">github.com/pulumi/examples</a></li>
+  <li><a href="https://www.pulumi.com/docs/iac/cli/commands/">CLI command reference</a></li>
+  <li><a href="https://www.pulumi.com/docs/iac/concepts/testing/">Testing</a></li>
+  <li><a href="https://docs.aws.amazon.com/">AWS documentation home</a></li>
+  <li><a href="https://aws.amazon.com/pricing/">AWS pricing</a></li>
+</ul>
+</main>
+</body>
+</html>

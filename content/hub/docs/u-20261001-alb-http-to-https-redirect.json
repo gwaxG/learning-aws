@@ -1,0 +1,45 @@
+{
+  "id": "u-20261001-alb-http-to-https-redirect",
+  "source": {
+    "type": "user",
+    "added": "2026-10-01",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A company has an Application Load Balancer (ALB) that accepts HTTP and HTTPS traffic on ports 80 and 443, respectively. Recently, the company associated a new domain for its website, and they want to ensure that all HTTP traffic for this new domain is automatically redirected to HTTPS to improve security.\nWhich ALB configuration should be done to satisfy the requirement?",
+    "options": [
+      "Configure the existing HTTP listener to redirect traffic to port 443.",
+      "Configure the existing on port 443 and add a redirect action to HTTP on port 80.",
+      "Create a new HTTP listener on port 80 and add a redirect action to the HTTPS protocol on port 443.",
+      "Create a new ALB listener on port 443 and configure it to redirect HTTP traffic to HTTPS."
+    ],
+    "answer": 0,
+    "explanation": "The ALB already has an HTTP listener on port 80, so the redirect is configured on that existing listener: a redirect action to HTTPS port 443 (HTTP 301), either as its default action or as a rule with a host-header condition for the new domain. A load balancer can have only one listener per port, so a second port-80 listener cannot be created. The HTTPS listener on 443 receives only HTTPS traffic, so a redirect there (to HTTP, or a new 443 listener) never sees the plain HTTP requests and would also downgrade security."
+  },
+  "concept": "ALB HTTP to HTTPS redirect: redirect action on the existing port-80 listener",
+  "tests": "Knowing that HTTP-to-HTTPS redirection on an ALB is a redirect action (HTTP 301 to HTTPS:443) set on the existing HTTP:80 listener, and that one listener per port is allowed.",
+  "expected": "Edit the existing HTTP:80 listener: default action or a host-header rule with 'Redirect to HTTPS, port 443'. Triggers: 'redirect HTTP to HTTPS', 'ALB accepts HTTP and HTTPS on ports 80 and 443', 'new domain' (host condition).",
+  "why_not": "A new HTTP listener on port 80 is impossible because port 80 already has one (one listener per port). A redirect on the 443 listener never receives HTTP requests, and redirecting HTTPS to HTTP is the opposite of the goal. A new 443 listener would conflict with the existing one and still does not catch port-80 traffic.",
+  "keywords": [
+    "ALB",
+    "listener",
+    "redirect action",
+    "HTTP to HTTPS",
+    "port 80",
+    "port 443",
+    "host-header rule",
+    "HTTP 301",
+    "one listener per port",
+    "listener rules"
+  ],
+  "services": [
+    "elb"
+  ],
+  "topics": [
+    "ec2-compute"
+  ],
+  "domain": 1,
+  "related": [
+    "u-20260929-alb-sni-multiple-certificates"
+  ]
+}

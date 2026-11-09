@@ -1,0 +1,953 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<title>AWS SAA-C03: конспект</title>
+<style>
+:root{--bg:#10151c;--fg:#e6ebf1;--mut:#9aa7b5;--card:#18202a;--line:#2a3542;--acc:#ff9900;--lnk:#6cb6ff;
+--hi:#ff5c5c;--mid:#ff9f43;--lo:#e6c84a;--code:#0c1117;--ok:#4cc38a}
+html[data-theme=light]{--bg:#fbfaf7;--fg:#1b232c;--mut:#5b6773;--card:#f0eee8;--line:#d8d4ca;--acc:#c46f00;--lnk:#0b5fb3;
+--hi:#c62828;--mid:#d9660a;--lo:#8a7400;--code:#e9e6de;--ok:#1b7f55}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.62 Georgia,"Iowan Old Style","Noto Serif",serif;padding-bottom:60px}
+main{max-width:720px;margin:0 auto;padding:0 16px}
+h1,h2,h3,h4,.bar,.b,nav,table,.box,button{font-family:-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif}
+h1{font-size:1.9rem;line-height:1.2;margin:28px 0 8px}
+h2{font-size:1.45rem;margin:0 0 10px;padding-top:6px;line-height:1.25}
+h3{font-size:1.15rem;margin:22px 0 6px;color:var(--acc);line-height:1.3}
+h4{font-size:1rem;margin:16px 0 4px}
+p{margin:.55em 0}
+ul,ol{padding-left:1.25em;margin:.5em 0}li{margin:.25em 0}
+a{color:var(--lnk)}
+code{background:var(--code);padding:.08em .35em;border-radius:5px;font:.88em ui-monospace,Menlo,Consolas,monospace}
+.bar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:center;padding:8px 12px;padding-top:calc(8px + env(safe-area-inset-top))}
+.bar .t{flex:1;font-weight:600;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+button{background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:7px 11px;font-size:.9rem;cursor:pointer}
+button.on{border-color:var(--hi);color:var(--hi)}
+#pg{position:fixed;top:0;left:0;height:3px;background:var(--acc);width:0;z-index:30}
+nav#toc{position:fixed;inset:0;z-index:25;background:var(--bg);overflow:auto;padding:16px;padding-top:calc(60px + env(safe-area-inset-top));display:none}
+nav#toc.open{display:block}
+nav#toc a{display:flex;gap:8px;align-items:center;padding:11px 8px;border-bottom:1px solid var(--line);color:var(--fg);text-decoration:none;font-size:1rem}
+nav#toc a span.n{color:var(--mut);min-width:1.7em}
+.b{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:99px;vertical-align:middle;letter-spacing:.02em;margin-left:6px;color:#111}
+.b3{background:var(--hi)}.b2{background:var(--mid)}.b1{background:var(--lo)}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-left:auto;flex:none}
+.d3{background:var(--hi)}.d2{background:var(--mid)}.d1{background:var(--lo)}
+section.ch{border-top:1px solid var(--line);margin-top:30px;padding-top:6px}
+section.ch[data-weak="3"]>h2{border-left:4px solid var(--hi);padding-left:10px}
+section.ch[data-weak="2"]>h2{border-left:4px solid var(--mid);padding-left:10px}
+section.ch[data-weak="1"]>h2{border-left:4px solid var(--lo);padding-left:10px}
+.sub[data-weak="3"]{border-left:3px solid var(--hi);padding-left:10px;margin-left:-13px}
+.sub[data-weak="2"]{border-left:3px solid var(--mid);padding-left:10px;margin-left:-13px}
+.sub[data-weak="1"]{border-left:3px solid var(--lo);padding-left:10px;margin-left:-13px}
+.box{border-radius:12px;padding:10px 13px;margin:12px 0;font-size:.95rem;line-height:1.5;border:1px solid var(--line);background:var(--card)}
+.box b:first-child{display:block;margin-bottom:2px}
+.miss{border-color:var(--hi);background:color-mix(in srgb,var(--hi) 10%,var(--card))}
+.trap{border-color:var(--mid)}.tip{border-color:var(--ok)}
+.tw{overflow-x:auto;margin:12px -16px;padding:0 16px}
+table{border-collapse:collapse;font-size:.88rem;line-height:1.4;min-width:100%}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:var(--card);position:sticky;top:0}
+.onlyweak section.ch:not([data-weak]){display:none}
+.onlyweak .sub:not([data-weak]){display:none}
+.onlyweak .nw{display:none}
+.hero{padding:10px 0 4px}.hero p{color:var(--mut)}
+.legend span{margin-right:12px;font-family:-apple-system,"Segoe UI",sans-serif;font-size:.85rem}
+.up{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:15;opacity:.85}
+@media print{.bar,#pg,.up,nav{display:none}body{background:#fff;color:#000}}
+</style>
+</head>
+<body>
+<div id="pg"></div>
+<div class="bar"><button id="mb" aria-label="Оглавление">☰</button><div class="t">SAA-C03 · конспект</div><button id="wb" title="Только слабые места">🔴 слабые</button><button id="tb" title="Тема">◐</button></div>
+<nav id="toc"><h1 style="margin-top:0">Оглавление</h1><a href="#c-map"><span class="n">0</span>Карта слабых мест <i class="dot d3"></i></a>
+<a href="#c-exam"><span class="n">1</span>Как устроен экзамен</a>
+<a href="#c-found"><span class="n">2</span>Фундамент: Regions, AZ и модель ответственности</a>
+<a href="#c-iam"><span class="n">3</span>Идентичность и доступ: IAM, Organizations<i class="dot d3"></i></a>
+<a href="#c-sec"><span class="n">4</span>Защита данных и безопасность <i class="dot d3"></i></a>
+<a href="#c-net"><span class="n">5</span>Сеть: VPC, DNS, CDN, балансировщики <i class="dot d3"></i></a>
+<a href="#c-res"><span class="n">6</span>Отказоустойчивость, decoupling и DR</a>
+<a href="#c-mig"><span class="n">7</span>Миграция и перенос данных <i class="dot d2"></i></a>
+<a href="#c-compute"><span class="n">8</span>Вычисления: EC2, Lambda, контейнеры <i class="dot d3"></i></a>
+<a href="#c-storage"><span class="n">9</span>Хранилища <i class="dot d2"></i></a>
+<a href="#c-db"><span class="n">10</span>Базы данных и аналитика <i class="dot d3"></i></a>
+<a href="#c-cost"><span class="n">11</span>Стоимость</a>
+<a href="#c-ops"><span class="n">12</span>Мониторинг и операции <i class="dot d1"></i></a>
+<a href="#c-misc"><span class="n">13</span>Типовые архитектуры и прочие сервисы</a>
+<a href="#c-cheat"><span class="n">14</span>Шпаргалки для финального повторения</a></nav>
+<main>
+<div class="hero">
+<h1>AWS Solutions Architect Associate<br>SAA-C03 — конспект</h1>
+<p>Книга для подготовки к экзамену: теория, таблицы «что выбрать», ловушки и слова-триггеры. Твои слабые места помечены цветом.</p>
+<p class="legend"><span><i class="dot d3"></i> слабо</span><span><i class="dot d2"></i> средне</span><span><i class="dot d1"></i> слегка</span><span>кнопка «🔴 слабые» вверху оставляет только слабые разделы</span></p>
+</div>
+
+<section class="ch" id="c-map" data-weak="3">
+<h2>0. Карта слабых мест <span class="b b3">главное</span></h2>
+<p>Составлена по диагностике (9/10) и по вопросам, где ты ошибся. Каждая строка — тема, в которой ты терял баллы, и глава, где она разобрана.</p>
+<div class="tw"><table>
+<tr><th>Область</th><th>Уровень</th><th>Где</th></tr>
+<tr><td>VPC и сеть: TGW, DX, SG, DNS, IPv6</td><td><span class="b b3">слабо</span></td><td><a href="#c-net">гл. 5</a></td></tr>
+<tr><td>Organizations, SCP, Control Tower</td><td><span class="b b3">слабо</span></td><td><a href="#c-iam">гл. 3</a></td></tr>
+<tr><td>Security: KMS, IAM, Config, шифрование</td><td><span class="b b3">слабо</span></td><td><a href="#c-iam">гл. 3</a>, <a href="#c-sec">4</a></td></tr>
+<tr><td>EC2: billing, ALB, License Manager, EFA</td><td><span class="b b3">слабо</span></td><td><a href="#c-compute">гл. 8</a></td></tr>
+<tr><td>Data: EMR, DynamoDB Streams, Redshift DR</td><td><span class="b b3">слабо</span></td><td><a href="#c-db">гл. 10</a></td></tr>
+<tr><td>Storage: CRR, типы EBS, Glacier</td><td><span class="b b2">средне</span></td><td><a href="#c-storage">гл. 9</a></td></tr>
+<tr><td>Миграция: MGN, DataSync, Snow</td><td><span class="b b2">средне</span></td><td><a href="#c-mig">гл. 7</a></td></tr>
+<tr><td>API Gateway, ACM, Route 53, Lambda@Edge</td><td><span class="b b2">средне</span></td><td><a href="#c-net">гл. 5</a></td></tr>
+<tr><td>Containers: EKS scaling</td><td><span class="b b1">слегка</span></td><td><a href="#c-compute">гл. 8</a></td></tr>
+<tr><td>Monitoring: Health, Config vs CloudTrail</td><td><span class="b b1">слегка</span></td><td><a href="#c-ops">гл. 12</a></td></tr>
+</table></div>
+<div class="box tip"><b>Три сквозных правила, на которых ты теряешь баллы</b>
+<ol><li><b>Граница Region.</b> Что живёт в одном Region и что нужно явно копировать или связывать между Regions (ACM, snapshots, S3 CRR, TGW).</li>
+<li><b>Похожие сервисы — разные задачи.</b> Выбирай по тому, что именно перемещается или обрабатывается (серверы, БД, файлы, поток событий).</li>
+<li><b>Готовая функция лучше ручной сборки.</b> «Least operational overhead» = управляемый сервис, а не EC2 или скрипт.</li></ol></div>
+</section>
+
+<section class="ch" id="c-exam">
+<h2>1. Как устроен экзамен</h2>
+<p><b>65 вопросов, 130 минут, проходной балл 720 из 1000.</b> Часть вопросов не оценивается (пробные). Формат: один верный из четырёх или несколько верных из пяти и более. Штрафа за неверный ответ нет, поэтому отвечай всегда.</p>
+<div class="tw"><table>
+<tr><th>Домен</th><th>Вес</th><th>О чём</th></tr>
+<tr><td>1. Secure</td><td>30%</td><td>IAM, шифрование, сеть, защита данных</td></tr>
+<tr><td>2. Resilient</td><td>26%</td><td>HA, DR, масштабирование, decoupling</td></tr>
+<tr><td>3. High-performing</td><td>24%</td><td>compute, storage, DB, сеть, аналитика</td></tr>
+<tr><td>4. Cost-optimized</td><td>20%</td><td>модели покупки, классы хранения, затраты</td></tr>
+</table></div>
+<h3>Как читать вопрос</h3>
+<ul>
+<li>Сначала <b>последнюю строку</b>: что просят (MOST secure / cost-effective / least overhead / highest availability).</li>
+<li>Выпиши ограничения: Region, объём, время, «без изменения кода», «минимум простоя».</li>
+<li>Отсеивай варианты с <b>выдуманными сервисами или свойствами</b> (Spot volumes, SR-IOV volumes), с ручной сборкой вместо managed и с нарушением ограничения.</li>
+<li>Из двух рабочих выбирай то, что точнее соответствует слову-ограничителю.</li>
+</ul>
+<div class="box trap"><b>Слова-ограничители</b>
+<ul><li><b>Least operational overhead</b> → serverless и managed.</li>
+<li><b>Most cost-effective</b> → Spot, Savings Plans, S3 классы, lifecycle.</li>
+<li><b>Near real-time / real-time</b> → Kinesis, а не Athena или batch.</li>
+<li><b>Without changing the application</b> → решение на уровне инфраструктуры (cache, proxy, gateway).</li>
+<li><b>Highly available</b> → минимум 2 AZ. <b>Disaster recovery</b> → другой Region.</li></ul></div>
+</section>
+
+<section class="ch" id="c-found">
+<h2>2. Фундамент: Regions, AZ и модель ответственности</h2>
+<ul>
+<li><b>Region</b> — изолированная географическая область, минимум 3 AZ. Данные не покидают Region сами. Выбор: законодательство, задержка, цена, наличие сервисов.</li>
+<li><b>AZ</b> — один или несколько дата-центров, соединённых низколатентно. Подсеть всегда в одной AZ.</li>
+<li><b>Edge location</b> — точки CloudFront, Route 53, Global Accelerator, Lambda@Edge. Их больше, чем Regions.</li>
+<li><b>Global-сервисы</b>: IAM, Route 53, CloudFront, Organizations, WAF (для CloudFront), Global Accelerator. Остальное — regional.</li>
+</ul>
+<h3>Shared Responsibility</h3>
+<div class="tw"><table>
+<tr><th>AWS отвечает за</th><th>Ты отвечаешь за</th></tr>
+<tr><td>Безопасность <b>облака</b>: железо, ДЦ, гипервизор, managed-слой</td><td>Безопасность <b>в облаке</b>: данные, IAM, SG, ОС на EC2, шифрование, патчи гостевой ОС</td></tr>
+<tr><td>RDS: патчи БД и ОС, бэкапы</td><td>RDS: схема, пользователи, параметры, SG</td></tr>
+<tr><td>S3: инфраструктура, durability</td><td>S3: политики, шифрование, публичный доступ</td></tr>
+</table></div>
+<h3>Well-Architected: шесть столпов</h3>
+<p><b>Operational Excellence</b> (автоматизация, IaC) · <b>Security</b> (least privilege, шифрование) · <b>Reliability</b> (восстановление, Multi-AZ) · <b>Performance Efficiency</b> (правильный тип ресурса) · <b>Cost Optimization</b> (платить за нужное) · <b>Sustainability</b>. Вопросы почти всегда проверяют первые четыре.</p>
+</section>
+
+<section class="ch" id="c-iam" data-weak="3">
+<h2>3. Идентичность и доступ: IAM, Organizations</h2>
+
+<div class="sub">
+<h3>IAM: основы</h3>
+<ul>
+<li><b>User</b> — долгоживущая личность (пароль, access keys). <b>Group</b> — набор users (в группу нельзя вложить группу, группа не может быть principal). <b>Role</b> — временные credentials через STS, без постоянных ключей.</li>
+<li><b>Policy</b> — JSON: Effect, Action, Resource, Condition. Identity-based (на user/role) и resource-based (S3 bucket policy, KMS key policy, SQS, trust policy роли).</li>
+<li>Для EC2, Lambda, ECS всегда <b>role</b> (instance profile), никогда ключи в коде или AMI.</li>
+<li><b>Root</b>: MFA, нет ключей, использовать только для задач, требующих root.</li>
+</ul>
+<div class="box tip"><b>Логика вычисления политик</b>
+<ol><li>По умолчанию всё запрещено (implicit deny).</li><li>Любой <b>explicit Deny</b> побеждает всё.</li><li>Иначе нужен хотя бы один Allow.</li></ol>
+SCP и permission boundary только <b>ограничивают</b> максимум и сами ничего не разрешают: итог — пересечение.</div>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>MFA на группу пользователей и Parameter Store против Secrets Manager. Политика ключа KMS против прав роли: чтобы роль могла использовать ключ, нужны <b>оба</b> — key policy допускает (или делегирует IAM), и IAM-политика роли разрешает.</div>
+<h4>Кросс-аккаунтный доступ</h4>
+<p>В аккаунте B создай role с <b>trust policy</b> на аккаунт A; в A пользователь получает право <code>sts:AssumeRole</code>. Временные credentials, без обмена ключами. Для внешних сторон добавляй <b>ExternalId</b>.</p>
+<h4>Federation</h4>
+<ul><li><b>IAM Identity Center</b> (бывший SSO) — вход сотрудников во все аккаунты Organization из корпоративного IdP.</li>
+<li><b>Cognito</b> — пользователи твоего приложения (User Pool = каталог и токены, Identity Pool = временные AWS credentials).</li>
+<li><b>SAML 2.0 / OIDC</b> federation — прямой вход в консоль через IdP.</li></ul>
+</div>
+
+<div class="sub" data-weak="3">
+<h3>Organizations и multi-account <span class="b b3">слабо</span></h3>
+<p><b>Organizations</b>: управляющий аккаунт, организационные единицы (OU) и member-аккаунты. Даёт consolidated billing (общий счёт, объёмные скидки, общее покрытие RI/Savings Plans) и централизованное управление через SCP.</p>
+<ul>
+<li><b>SCP</b> — потолок прав для аккаунтов и OU. Не выдаёт права, не действует на management account, действует на root user member-аккаунта. Типичные SCP: запрет выхода из Region, запрет отключать CloudTrail/Config, запрет root.</li>
+<li><b>Control Tower</b> — готовая landing zone: multi-account среда по best practice, <b>Account Factory</b> создаёт аккаунты по шаблону, <b>guardrails</b> (preventive = SCP, detective = Config rules), dashboard несоответствий. Ответ на «настроить и управлять multi-account окружением с наименьшими усилиями».</li>
+<li><b>RAM</b> — делится ресурсами (подсети, TGW, License Manager configs) между аккаунтами без копирования.</li>
+<li><b>Организационный CloudTrail</b> — один trail для всех аккаунтов; <b>Config aggregator</b> — сводный вид соответствия.</li>
+<li><b>Delegated administrator</b> — сервис (GuardDuty, Security Hub, Config) администрируется из отдельного security-аккаунта.</li>
+</ul>
+<div class="box trap"><b>Модель «много аккаунтов»</b>Отдельные аккаунты: prod/dev, log archive, security/audit, shared services (сеть). Граница аккаунта — самая сильная граница безопасности и биллинга. Если спрашивают «изолировать» — новый аккаунт, а не новый VPC.</div>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>Вопрос про landing zone с dashboard несоответствия → <b>Control Tower</b> (Account Factory + guardrails), а не ручная Organizations + Config. SCP не даёт прав: без IAM-политики доступа всё равно нет.</div>
+</div>
+
+<div class="sub">
+<h3>Доступ для приложений и ресурсов</h3>
+<ul>
+<li><b>S3 bucket policy</b> — resource-based, умеет Deny по условиям (<code>aws:SecureTransport</code>, <code>aws:SourceVpce</code>, org id).</li>
+<li><b>Presigned URL</b> — временный доступ к объекту от имени создателя.</li>
+<li><b>Permission boundary</b> — максимум прав, который IAM-админ может делегировать пользователю/роли.</li>
+<li><b>Access Analyzer</b> — находит ресурсы, доступные извне, и неиспользуемые права.</li>
+<li><b>Credential report / last used</b> — аудит ключей и паролей.</li>
+</ul>
+</div>
+</section>
+
+<section class="ch" id="c-sec" data-weak="3">
+<h2>4. Защита данных и безопасность <span class="b b3">слабо</span></h2>
+
+<div class="sub" data-weak="3">
+<h3>KMS и шифрование <span class="b b3">слабо</span></h3>
+<ul>
+<li><b>KMS</b> — managed ключи в HSM. Типы: <b>AWS owned</b> (невидимы), <b>AWS managed</b> (<code>aws/s3</code>, бесплатно, ротация раз в год автоматически, политику не изменить), <b>customer managed (CMK)</b> (ты управляешь политикой; автоматическая ротация включается галочкой, раз в год).</li>
+<li>Ключ привязан к <b>Region</b>. Для cross-Region — multi-Region keys или повторное шифрование при копировании.</li>
+<li><b>Envelope encryption</b>: KMS шифрует data key, data key шифрует данные. Прямой Encrypt в KMS ограничен 4 КБ.</li>
+<li><b>Key policy</b> обязательна у каждого ключа; доступ роли = key policy + IAM (или grants).</li>
+<li><b>CloudHSM</b> — выделенный HSM под твоим контролем (FIPS 140-2 Level 3), когда нужен полный контроль ключей или требование compliance. Для обычного шифрования хватит KMS.</li>
+</ul>
+<h4>Шифрование S3 (SSE)</h4>
+<div class="tw"><table>
+<tr><th>Вариант</th><th>Ключ</th><th>Когда</th></tr>
+<tr><td>SSE-S3</td><td>AES-256, ключи у AWS</td><td>Дефолт, шифрование без усилий; автоматическая ротация без настроек</td></tr>
+<tr><td>SSE-KMS</td><td>ключ в KMS</td><td>Аудит использования в CloudTrail, контроль доступа к ключу, ротация CMK</td></tr>
+<tr><td>SSE-C</td><td>ключ клиента в каждом запросе</td><td>Ты хранишь ключи сам; только HTTPS</td></tr>
+<tr><td>Client-side</td><td>до отправки</td><td>AWS вообще не видит открытый текст</td></tr>
+</table></div>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>«Принудительно шифровать каждую загрузку AES-256»: <b>bucket policy с Deny</b>, если нет заголовка <code>x-amz-server-side-encryption: AES256</code>. Default encryption на bucket включён автоматически (SSE-S3), но Deny-политика нужна, когда требуют именно <b>enforce</b>.</div>
+<ul>
+<li><b>В транзите</b>: TLS; на S3 запрет HTTP через условие <code>aws:SecureTransport = false</code> → Deny.</li>
+<li><b>EBS</b>: шифрование KMS, данные и snapshots зашифрованы. <b>Незашифрованный том/snapshot нельзя зашифровать на месте</b>: сделай snapshot → копируй с включённым шифрованием → создай том. Можно включить «шифрование по умолчанию» для Region.</li>
+<li><b>RDS</b>: шифруется при создании; для существующей — snapshot → копия с шифрованием → restore. Read replica шифрованной БД тоже шифруется.</li>
+</ul>
+</div>
+
+<div class="sub" data-weak="3">
+<h3>Secrets Manager и Parameter Store <span class="b b3">слабо</span></h3>
+<div class="tw"><table>
+<tr><th></th><th>Secrets Manager</th><th>SSM Parameter Store</th></tr>
+<tr><td>Для чего</td><td>пароли БД, API-ключи</td><td>конфиги, флаги, иногда секреты</td></tr>
+<tr><td>Авто-ротация</td><td><b>да</b> (Lambda; RDS из коробки)</td><td>нет</td></tr>
+<tr><td>Цена</td><td>платно за секрет</td><td>Standard бесплатно</td></tr>
+<tr><td>Кросс-Region репликация</td><td>да</td><td>нет</td></tr>
+</table></div>
+<div class="box tip"><b>Триггер</b>«Автоматическая ротация пароля БД» → <b>Secrets Manager</b>. «Дёшево хранить конфигурацию» → Parameter Store.</div>
+<h4>ACM</h4>
+<p>Бесплатные публичные сертификаты с автообновлением, для ELB, CloudFront, API Gateway. <b>Сертификат живёт в Region</b>: для CloudFront — <b>us-east-1</b>; для ALB и <b>regional</b> API Gateway — в Region ресурса. На EC2 ACM-сертификат установить нельзя (для этого нужен собственный).</p>
+</div>
+
+<div class="sub" data-weak="3">
+<h3>Аудит и соответствие: CloudTrail, Config <span class="b b3">слабо</span></h3>
+<div class="tw"><table>
+<tr><th>Сервис</th><th>Отвечает на вопрос</th></tr>
+<tr><td><b>CloudTrail</b></td><td>Кто, что и когда вызвал в API (аудит действий). По умолчанию 90 дней в Event history; trail в S3 — дольше; log file validation — целостность.</td></tr>
+<tr><td><b>Config</b></td><td>Как <b>настроен</b> ресурс и как менялась конфигурация; соответствует ли правилам (managed/custom rules); auto-remediation через SSM.</td></tr>
+<tr><td><b>CloudWatch</b></td><td>Метрики, логи, алармы: что происходит сейчас.</td></tr>
+</table></div>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>
+<ul><li>«Проверять политику паролей (длина 12)» → Config managed rule <code>iam-password-policy</code>, а не CloudTrail.</li>
+<li>«Автоматически удалять ключи старше 90 дней» → Config <code>access-keys-rotated</code> → EventBridge → Lambda (удаляет/деактивирует ключ).</li></ul></div>
+<p><b>Шаблон автоматизации:</b> событие или правило (Config, GuardDuty, CloudTrail) → <b>EventBridge</b> → цель (Lambda, SNS, SSM Automation, Step Functions).</p>
+</div>
+
+<div class="sub">
+<h3>Защита от угроз</h3>
+<div class="tw"><table>
+<tr><th>Сервис</th><th>Что делает</th></tr>
+<tr><td><b>GuardDuty</b></td><td>Обнаружение угроз по CloudTrail, VPC Flow Logs, DNS (необычные API, майнинг, C2). Без агентов.</td></tr>
+<tr><td><b>Inspector</b></td><td>Сканирует EC2, ECR-образы, Lambda на уязвимости (CVE) и сетевую доступность.</td></tr>
+<tr><td><b>Macie</b></td><td>Находит персональные и чувствительные данные в S3.</td></tr>
+<tr><td><b>Security Hub</b></td><td>Сводная картина безопасности и проверки стандартов (CIS, PCI) по аккаунтам.</td></tr>
+<tr><td><b>Detective</b></td><td>Расследование: связывает логи, показывает причину инцидента.</td></tr>
+<tr><td><b>WAF</b></td><td>L7-фильтр для CloudFront, ALB, API Gateway, AppSync: SQLi, XSS, rate-based, geo, IP.</td></tr>
+<tr><td><b>Shield</b></td><td>DDoS. Standard бесплатно, Advanced — платно (Route 53, CloudFront, ELB, EIP; SRT, возмещение расходов).</td></tr>
+<tr><td><b>Firewall Manager</b></td><td>Централизованно применяет WAF, SG, Network Firewall на аккаунты Organization.</td></tr>
+<tr><td><b>Network Firewall</b></td><td>Управляемый фаервол для VPC: stateful-правила, фильтрация доменов.</td></tr>
+</table></div>
+<div class="box trap"><b>DDoS-ответ</b>CloudFront + Shield + WAF + ALB с Auto Scaling, БД в private subnet. EFA и Dedicated Instances DDoS не смягчают.</div>
+</div>
+
+<div class="sub">
+<h3>S3 security</h3>
+<ul>
+<li><b>Block Public Access</b> (на аккаунт и bucket) — главный выключатель публичности.</li>
+<li><b>ACL</b> считаются устаревшими; включай <b>Bucket owner enforced</b> (ACL отключены).</li>
+<li><b>Object Lock</b> (WORM): Governance (можно обойти с правом) и Compliance (нельзя никому, включая root). <b>Glacier Vault Lock</b> — то же для vault.</li>
+<li><b>MFA Delete</b> при versioning: удаление версий только с MFA.</li>
+<li><b>VPC endpoint + bucket policy с <code>aws:SourceVpce</code></b> — доступ только из твоей VPC.</li>
+<li><b>Access Points</b> — отдельная политика на приложение/команду вместо одной огромной bucket policy.</li>
+</ul>
+</div>
+</section>
+
+<section class="ch" id="c-net" data-weak="3">
+<h2>5. Сеть: VPC, DNS, CDN, балансировщики <span class="b b3">слабо</span></h2>
+
+<div class="sub" data-weak="3">
+<h3>VPC: строительные блоки <span class="b b3">слабо</span></h3>
+<ul>
+<li><b>VPC</b> — частная сеть в Region (CIDR /16–/28). <b>Subnet</b> — в одной AZ. 5 адресов в каждой подсети зарезервированы AWS.</li>
+<li><b>Public subnet</b> = route table с маршрутом <code>0.0.0.0/0 → IGW</code> и у инстанса публичный/Elastic IP. <b>Private</b> — без маршрута в IGW.</li>
+<li><b>IGW</b> — двусторонний доступ в интернет для public subnet (горизонтально масштабируемый, без ограничений полосы).</li>
+<li><b>NAT Gateway</b> — исходящий IPv4 из private subnets. <b>Живёт в public subnet</b> (с Elastic IP), маршрут private → NAT. На AZ свой NAT для HA. Входящие соединения из интернета не пропускает.</li>
+<li><b>Egress-only IGW</b> — то же для <b>IPv6</b> (исходящий да, входящий нет). У IPv6 нет NAT: адреса публичные.</li>
+<li><b>Bastion host</b> / SSM Session Manager — вход в private instances; Session Manager без открытых портов и ключей.</li>
+<li><b>Flow Logs</b> — метаданные трафика (в S3, CloudWatch); не содержимое.</li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>«Исходящий IPv6 из private subnet, входящий закрыть» → <b>Egress-only Internet Gateway</b>, а не NAT Gateway. Инстанс без DNS hostname в новой VPC → включи в VPC атрибуты <b>DNS resolution</b> и <b>DNS hostnames</b>.</div>
+<h4>Security Group против NACL</h4>
+<div class="tw"><table>
+<tr><th></th><th>Security Group</th><th>NACL</th></tr>
+<tr><td>Уровень</td><td>инстанс/ENI</td><td>подсеть</td></tr>
+<tr><td>Состояние</td><td><b>stateful</b></td><td><b>stateless</b> (нужны правила в обе стороны, эфемерные порты)</td></tr>
+<tr><td>Правила</td><td>только Allow</td><td>Allow и Deny, по номеру</td></tr>
+<tr><td>Источник</td><td>IP, CIDR, <b>другая SG</b>, prefix list</td><td>только CIDR</td></tr>
+</table></div>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>Порт БД (1433, 3306) от app-tier в Auto Scaling: <b>Source = ID security group</b> app-tier, а не IP и не CIDR подсети. Так правило работает для любого нового инстанса. Заблокировать конкретный IP → NACL (Deny), в SG такого нет.</div>
+</div>
+
+<div class="sub" data-weak="3">
+<h3>Связность между сетями <span class="b b3">слабо</span></h3>
+<div class="tw"><table>
+<tr><th>Что</th><th>Когда</th><th>Ограничения</th></tr>
+<tr><td><b>VPC Peering</b></td><td>2 VPC (даже разные аккаунты/Regions), простая связь</td><td>нет транзитивности, CIDR не должны пересекаться, N VPC = N(N-1)/2 связей</td></tr>
+<tr><td><b>Transit Gateway</b></td><td>десятки/сотни VPC и VPN; hub-and-spoke; транзит</td><td><b>Regional</b>: между Regions — <b>TGW peering</b> (статические маршруты)</td></tr>
+<tr><td><b>Site-to-Site VPN</b></td><td>быстро, шифрованный IPsec через интернет</td><td>до 1,25 Гбит/с на туннель, 2 туннеля для HA</td></tr>
+<tr><td><b>Direct Connect</b></td><td>выделенный канал, стабильная задержка, большой трафик</td><td>недели на установку, <b>не шифрован</b> по умолчанию</td></tr>
+<tr><td><b>VPC endpoint</b></td><td>доступ к сервисам AWS без интернета</td><td>см. ниже</td></tr>
+</table></div>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>Сотни VPC и VPN в 5 Regions → <b>по одному Transit Gateway в каждом Region + TGW peering между ними</b>, ресурсы делятся через RAM. Direct Connect и peering для такой задачи не масштабируются.</div>
+<h4>Direct Connect</h4>
+<ul>
+<li><b>Private VIF</b> — к ресурсам в VPC (через VGW или DX Gateway). <b>Public VIF</b> — к публичным сервисам AWS (S3). <b>Transit VIF</b> — к Transit Gateway.</li>
+<li><b>Direct Connect Gateway</b> — один канал к VPC в нескольких Regions.</li>
+<li><b>Шифрование</b>: VPN поверх DX (IPsec over public VIF) или MACsec.</li>
+<li><b>Резервирование</b>: второй DX (другая локация) или VPN как backup. Максимальная отказоустойчивость — 2 DX в 2 локациях.</li>
+<li>Данные по DX: <b>DataSync agent через service/VPC endpoint</b> на private VIF (трафик не идёт в интернет).</li>
+</ul>
+<h4>VPC endpoints</h4>
+<ul>
+<li><b>Gateway endpoint</b> — <b>только S3 и DynamoDB</b>, бесплатно, запись в route table.</li>
+<li><b>Interface endpoint</b> (PrivateLink) — ENI с private IP в твоей подсети для остальных сервисов и для чужих сервисов; платно.</li>
+<li><b>PrivateLink</b> также публикует твой сервис другим VPC без peering (за NLB).</li>
+</ul>
+</div>
+
+<div class="sub" data-weak="2">
+<h3>Route 53 <span class="b b2">средне</span></h3>
+<ul>
+<li>Типы записей: A, AAAA, CNAME (не для корня зоны), <b>Alias</b> (бесплатно, для корня зоны, к ELB, CloudFront, S3 website, API Gateway; не к EC2 DNS).</li>
+<li><b>Health checks</b> + <b>failover</b> routing: primary/secondary. Health check умеет проверять endpoint, другие health checks (calculated) и CloudWatch alarm.</li>
+</ul>
+<div class="tw"><table>
+<tr><th>Политика</th><th>Смысл</th></tr>
+<tr><td>Simple</td><td>одна запись (несколько значений без health checks)</td></tr>
+<tr><td>Weighted</td><td>доли трафика, canary, A/B</td></tr>
+<tr><td>Latency</td><td>в Region с наименьшей задержкой для пользователя</td></tr>
+<tr><td>Failover</td><td>active-passive</td></tr>
+<tr><td>Geolocation</td><td>по стране/континенту пользователя (законодательство, язык, <b>EU data residency</b>)</td></tr>
+<tr><td>Geoproximity</td><td>по расстоянию с bias (нужен Traffic Flow)</td></tr>
+<tr><td>Multivalue</td><td>до 8 здоровых записей</td></tr>
+</table></div>
+<div class="box trap"><b>Route 53 только направляет DNS</b>Он не обрабатывает данные, не видит HTTP-заголовки и не ускоряет трафик. Для «обработать рядом с пользователем» нужен edge compute.</div>
+</div>
+
+<div class="sub" data-weak="2">
+<h3>CloudFront и Global Accelerator <span class="b b2">средне</span></h3>
+<ul>
+<li><b>CloudFront</b> — CDN: кэш статики и динамики на edge. Origins: S3, ALB, EC2, любой HTTP. <b>OAC</b> (Origin Access Control) закрывает S3 так, чтобы доступ был только через CloudFront. HTTPS с ACM-сертификатом из <b>us-east-1</b>.</li>
+<li><b>Приватный контент</b>: signed URLs (отдельный файл, клиенты без cookies) или signed cookies (много файлов), + OAC на origin. S3 presigned URL обходит CloudFront.</li>
+<li><b>Geo restriction</b>, WAF, Shield, origin failover (origin groups), field-level encryption.</li>
+<li><b>Edge compute</b>: <b>Lambda@Edge</b> (viewer/origin request и response, полноценный код) и <b>CloudFront Functions</b> (только viewer, очень лёгкая логика: заголовки, редиректы). Response headers policy только добавляет/меняет заголовки ответа.</li>
+<li><b>Global Accelerator</b> — 2 anycast IP, трафик идёт по сети AWS, быстрый failover по health. Для TCP/UDP и <b>не кэширует</b> (игры, VoIP, статические IP, быстрый регион-failover). CloudFront — для HTTP-кэша.</li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>Глобальный real-time clickstream, обработка у пользователя: <b>CloudFront + Lambda@Edge + Kinesis + S3</b>. Route 53 latency/geoproximity лишь направляет DNS; Athena не обрабатывает потоки.</div>
+</div>
+
+<div class="sub" data-weak="3">
+<h3>Elastic Load Balancing <span class="b b3">слабо</span></h3>
+<div class="tw"><table>
+<tr><th></th><th>ALB</th><th>NLB</th><th>GWLB</th></tr>
+<tr><td>Уровень</td><td>L7 HTTP/HTTPS, gRPC, WebSocket</td><td>L4 TCP/UDP/TLS</td><td>L3, виртуальные appliances</td></tr>
+<tr><td>Особенности</td><td>path/host/header routing, redirect, Lambda target, WAF, OIDC auth</td><td>миллионы RPS, <b>статический IP/EIP</b>, preserves source IP, PrivateLink</td><td>фаерволы, IDS через GENEVE</td></tr>
+<tr><td>Когда</td><td>веб, микросервисы, контейнеры</td><td>низкая задержка, статические IP, не-HTTP</td><td>inline-инспекция трафика</td></tr>
+</table></div>
+<ul>
+<li><b>Cross-zone</b>: на ALB включён по умолчанию (бесплатно), на NLB выключен (платно между AZ).</li>
+<li><b>SNI</b> — несколько сертификатов (доменов) на одном listener ALB/NLB (на CLB нет).</li>
+<li><b>Sticky sessions</b> (cookie), <b>connection draining</b> (deregistration delay), health checks.</li>
+<li><b>Один listener на порт.</b></li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>Редирект HTTP → HTTPS: <b>редактируй существующий listener :80</b> — действие redirect на HTTPS:443. Новый listener на том же порту создать нельзя, а listener :443 HTTP-трафик не видит.</div>
+<div class="box trap"><b>Нужен статический IP для балансировщика?</b> NLB (или Global Accelerator перед ALB). ALB имеет только DNS-имя.</div>
+</div>
+
+<div class="sub" data-weak="2">
+<h3>API Gateway <span class="b b2">средне</span></h3>
+<ul>
+<li>Типы: <b>REST</b> (кэш, usage plans, API keys, WAF, валидация), <b>HTTP</b> (дешевле, проще, JWT), <b>WebSocket</b>. Endpoint: edge-optimized, <b>regional</b>, private.</li>
+<li>Интеграции: Lambda, HTTP, сервисы AWS. Throttling, кэш ответов (TTL), stage variables, canary.</li>
+<li><b>Custom domain</b> для regional API: сертификат <b>ACM в том же Region</b> + Route 53 alias на домен API Gateway.</li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>Сертификат us-east-1 нужен только для CloudFront и edge-optimized. Для regional API Gateway — ACM в Region API.</div>
+</div>
+</section>
+
+<section class="ch" id="c-res">
+<h2>6. Отказоустойчивость, decoupling и DR</h2>
+
+<div class="sub">
+<h3>Принципы HA</h3>
+<ul>
+<li><b>High availability</b> = работает при отказе компонента: ≥ 2 AZ, нет single point of failure. <b>Disaster recovery</b> = восстановление после отказа Region/всего окружения.</li>
+<li><b>Stateless</b> приложение: сессии в ElastiCache/DynamoDB, файлы в S3/EFS — тогда инстансы заменимы.</li>
+<li>Состояние внутри инстанса (EBS, instance store) мешает масштабированию и HA.</li>
+</ul>
+<h4>Auto Scaling Group</h4>
+<ul>
+<li><code>min / desired / max</code>, размещение в нескольких AZ, замена нездоровых инстансов (EC2 и ELB health checks).</li>
+<li><b>Launch template</b> (версии) — новый AMI = новая версия шаблона; существующие инстансы обновляет <b>instance refresh</b>.</li>
+<li>Политики: <b>target tracking</b> (держи метрику ≈ значению, проще всего), step, simple, <b>scheduled</b> (известная нагрузка), <b>predictive</b>. Метрики: CPU, <code>ALBRequestCountPerTarget</code>, длина очереди SQS на инстанс.</li>
+<li><b>Lifecycle hooks</b> — действие при запуске/остановке; <b>warm pool</b> — предподготовленные инстансы для быстрого старта; cooldown.</li>
+</ul>
+</div>
+
+<div class="sub">
+<h3>Decoupling: очереди и события</h3>
+<div class="tw"><table>
+<tr><th>Сервис</th><th>Суть</th><th>Когда</th></tr>
+<tr><td><b>SQS Standard</b></td><td>очередь pull, at-least-once, порядок не гарантирован, безлимит</td><td>буфер между слоями, масштабирование по длине очереди</td></tr>
+<tr><td><b>SQS FIFO</b></td><td>строгий порядок в Message Group, exactly-once (дедупликация)</td><td>порядок важен (транзакции, команды)</td></tr>
+<tr><td><b>SNS</b></td><td>pub/sub push: SQS, Lambda, HTTP, email, SMS</td><td>fan-out: одно событие многим подписчикам (SNS → N SQS)</td></tr>
+<tr><td><b>EventBridge</b></td><td>шина событий, правила, расписание, SaaS-события, schema</td><td>события AWS (Config, Health, GuardDuty), cron, маршрутизация по содержимому</td></tr>
+<tr><td><b>Kinesis Data Streams</b></td><td>поток, порядок в шарде, несколько потребителей, повторное чтение</td><td>real-time аналитика, clickstream, логи</td></tr>
+<tr><td><b>Step Functions</b></td><td>оркестрация workflow (состояния, ретраи, ожидание)</td><td>длинные процессы из шагов Lambda/сервисов</td></tr>
+<tr><td><b>Amazon MQ</b></td><td>управляемые ActiveMQ/RabbitMQ</td><td>миграция приложений, которым нужны JMS/AMQP/MQTT</td></tr>
+</table></div>
+<ul>
+<li><b>SQS</b>: visibility timeout (скрывает сообщение на время обработки), <b>DLQ</b> (после N неудач), long polling (дешевле и без пустых ответов), delay queue. Размер до 256 КБ (больше — Extended Client + S3). Retention до 14 дней.</li>
+<li><b>Lambda + SQS</b>: Lambda опрашивает очередь сам. <b>Lambda + DynamoDB Streams / Kinesis</b>: event source mapping.</li>
+</ul>
+</div>
+
+<div class="sub">
+<h3>Disaster Recovery</h3>
+<p><b>RPO</b> — сколько данных можно потерять (время). <b>RTO</b> — как долго можно быть недоступным. Чем меньше, тем дороже.</p>
+<div class="tw"><table>
+<tr><th>Стратегия</th><th>RTO/RPO</th><th>Как</th></tr>
+<tr><td>Backup &amp; Restore</td><td>часы</td><td>бэкапы в другой Region, всё поднимается из IaC при аварии. Дёшево.</td></tr>
+<tr><td>Pilot Light</td><td>десятки минут</td><td>БД реплицируется и работает, серверы выключены, шаблоны готовы</td></tr>
+<tr><td>Warm Standby</td><td>минуты</td><td>полная копия в уменьшенном масштабе, готова к росту</td></tr>
+<tr><td>Multi-Site Active/Active</td><td>почти 0</td><td>полная нагрузка в обоих Regions. Дорого.</td></tr>
+</table></div>
+<h4>Какие данные как реплицировать</h4>
+<ul>
+<li><b>S3</b>: Cross-Region Replication (нужен versioning; реплицирует только <b>новые</b> объекты, для старых — Batch Replication). Lifecycle в Glacier и копии на EC2 данные между Regions не переносят.</li>
+<li><b>RDS</b>: Multi-AZ = HA в Region (синхронный standby, авто-failover, не для чтения); cross-Region read replica → можно повысить (promote).</li>
+<li><b>Aurora Global Database</b>: репликация &lt; 1 с, RTO &lt; 1 мин при promote вторичного Region.</li>
+<li><b>DynamoDB Global Tables</b>: multi-Region multi-active. PITR и on-demand backups.</li>
+<li><b>Redshift</b>: автоматические snapshots в Region; для аварии региона — <b>cross-Region snapshot copy</b>.</li>
+<li><b>EBS</b>: snapshots (в S3), копирование между Regions и аккаунтами; DLM автоматизирует расписание.</li>
+<li><b>Elastic Disaster Recovery (DRS)</b>: непрерывная репликация серверов в AWS, быстрое восстановление.</li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>«Данные S3 переживают отказ Region» → <b>CRR</b>. Redshift DR при отказе Region → <b>cross-Region snapshot copy</b>. Правило: DR = отдельный Region, а Multi-AZ защищает только от отказа AZ.</div>
+</div>
+
+<div class="sub">
+<h3>AWS Backup</h3>
+<p>Единая политика (plans) для EBS, RDS, DynamoDB, EFS, FSx, S3, EC2 и других. Расписание, retention, cross-Region и cross-account копии, <b>Vault Lock</b> (WORM), отчёты. «Хранить бэкапы &gt; 35 дней централизованно» → AWS Backup (у RDS нативно автобэкапы до 35 дней).</p>
+<div class="box trap"><b>EBS: Data Lifecycle Manager или AWS Backup?</b> «Автоматические snapshots EBS по расписанию» с минимумом настроек → <b>DLM</b> (бесплатно, по тегам). Много сервисов/аккаунтов или compliance → AWS Backup.</div>
+</div>
+</section>
+
+<section class="ch" id="c-mig" data-weak="2">
+<h2>7. Миграция и перенос данных <span class="b b2">средне</span></h2>
+<p>Похожие сервисы решают разные задачи. Сначала определи, <b>что</b> переносят: серверы, БД, файлы или огромный объём офлайн.</p>
+<div class="tw"><table>
+<tr><th>Что переносим</th><th>Сервис</th></tr>
+<tr><td>Серверы целиком (lift-and-shift VM, физика)</td><td><b>Application Migration Service (MGN)</b></td></tr>
+<tr><td>База данных</td><td><b>DMS</b> (+ <b>SCT</b> при смене движка)</td></tr>
+<tr><td>Файлы по сети, регулярно, ускорение</td><td><b>DataSync</b></td></tr>
+<tr><td>Гибридный доступ к S3/EBS/лентам с on-prem</td><td><b>Storage Gateway</b></td></tr>
+<tr><td>SFTP/FTPS/FTP партнёров в S3/EFS</td><td><b>Transfer Family</b></td></tr>
+<tr><td>Десятки ТБ–ПБ офлайн, мало канала</td><td><b>Snow Family</b></td></tr>
+<tr><td>Учёт и отслеживание миграции</td><td>Migration Hub</td></tr>
+</table></div>
+
+<div class="sub" data-weak="2">
+<h3>MGN: серверы <span class="b b2">средне</span></h3>
+<p>Агент (<b>Replication Agent</b>) непрерывно реплицирует диски источника в staging area в AWS; потом <b>cutover</b> запускает серверы почти без простоя. Заменил Server Migration Service. <b>VM Import/Export</b> — разовый импорт образа ВМ, без непрерывной репликации и без минимального простоя.</p>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>«Lift-and-shift VM с минимальным простоем» → <b>MGN</b> + Replication Agent, а не VM Import/Export.</div>
+</div>
+
+<div class="sub" data-weak="2">
+<h3>DMS и SCT</h3>
+<ul>
+<li><b>DMS</b>: миграция БД с минимальным простоем; <b>CDC</b> (непрерывная репликация изменений) после полной загрузки. Источник остаётся рабочим. Нужен replication instance.</li>
+<li><b>Homogeneous</b> (Oracle → Oracle): DMS достаточно. <b>Heterogeneous</b> (Oracle → Aurora PostgreSQL): сначала <b>SCT</b> конвертирует схему и код, затем DMS переносит данные.</li>
+<li>Цели: RDS/Aurora, DynamoDB, Redshift, S3, OpenSearch и др.</li>
+</ul>
+</div>
+
+<div class="sub" data-weak="2">
+<h3>DataSync против Storage Gateway <span class="b b2">средне</span></h3>
+<ul>
+<li><b>DataSync</b> — управляемое копирование NFS/SMB/HDFS/S3 → S3, EFS, FSx в обе стороны; расписание, проверка целостности, throttling, до 10× быстрее ручных инструментов. Агент on-prem. <b>Через Direct Connect</b> агент работает через <b>VPC/service endpoint</b> на private VIF.</li>
+<li><b>Storage Gateway</b> — постоянный гибридный доступ: <b>File Gateway</b> (SMB/NFS → S3, локальный кэш), <b>Volume Gateway</b> (iSCSI: stored — основной диск локально, cached — в S3), <b>Tape Gateway</b> (виртуальные ленты для backup-софта → S3/Glacier).</li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>«Полностью управляемая, автоматическая и ускоренная репликация данных в AWS-хранилища по Direct Connect» → <b>DataSync через service endpoint</b>. File gateway — это файловая шара для приложений, tape gateway — виртуальная лента.</div>
+</div>
+
+<div class="sub">
+<h3>Snow Family</h3>
+<p>Физические устройства для офлайн-переноса: <b>Snowcone</b> (малый, 8–14 ТБ), <b>Snowball Edge</b> (storage optimized ~80 ТБ, compute optimized) и вычисления на периферии. Выбор: если передача по сети займёт &gt; недели (сети мало или нет), берём Snowball. Данные шифруются; загрузка в S3 делает AWS. Для постоянного потока нужен DataSync/DX, не Snow.</p>
+</div>
+</section>
+
+<section class="ch" id="c-compute" data-weak="3">
+<h2>8. Вычисления: EC2, Lambda, контейнеры <span class="b b3">слабо</span></h2>
+
+<div class="sub" data-weak="3">
+<h3>EC2: модели оплаты <span class="b b3">слабо</span></h3>
+<div class="tw"><table>
+<tr><th>Модель</th><th>Скидка</th><th>Когда</th></tr>
+<tr><td>On-Demand</td><td>0</td><td>непредсказуемо/кратко</td></tr>
+<tr><td>Reserved (Standard)</td><td>до ~72%, 1–3 года</td><td>стабильная нагрузка. Можно <b>продать на RI Marketplace</b> (Convertible — нельзя)</td></tr>
+<tr><td>Reserved Convertible</td><td>до ~66%</td><td>можно менять семейство/ОС</td></tr>
+<tr><td>Savings Plans: <b>Compute</b></td><td>до ~66%</td><td>EC2 (любое семейство/Region/ОС), Fargate, Lambda: максимальная гибкость</td></tr>
+<tr><td>Savings Plans: EC2 Instance</td><td>до ~72%</td><td>одно семейство в Region</td></tr>
+<tr><td>Spot</td><td>до ~90%</td><td>прерываемое, отказоустойчивое (batch, CI, big data); 2 минуты до прерывания</td></tr>
+<tr><td>Dedicated Host / Instance</td><td>—</td><td>лицензии привязаны к сокетам/ядрам (BYOL), compliance</td></tr>
+<tr><td>Capacity Reservation</td><td>—</td><td>гарантия ёмкости в AZ (без скидки; скидку даёт RI/SP)</td></tr>
+</table></div>
+<h4>Платишь ли ты за состояние</h4>
+<ul>
+<li><b>running</b> — за инстанс; <b>stopped</b> — только за EBS (и Elastic IP, если не привязан); <b>hibernated</b> — EBS (RAM сохраняется на EBS); <b>terminated</b> — ничего.</li>
+<li><b>Stop/start</b>: данные <b>instance store теряются</b>, меняется публичный IP (Elastic IP остаётся), хост может смениться. Перезагрузка (reboot) данные сохраняет.</li>
+</ul>
+<h4>Placement groups</h4>
+<div class="tw"><table>
+<tr><th>Тип</th><th>Суть</th><th>Для</th></tr>
+<tr><td>Cluster</td><td>одна AZ, плотно: минимальная задержка</td><td>HPC, tightly-coupled. Нет HA</td></tr>
+<tr><td>Spread</td><td>разное железо, до 7 инстансов на AZ</td><td>мало критичных инстансов</td></tr>
+<tr><td>Partition</td><td>группы стоек, до 7 партиций на AZ</td><td>HDFS, Cassandra, Kafka</td></tr>
+</table></div>
+<h4>Сеть инстанса</h4>
+<ul>
+<li><b>ENI</b> — виртуальная сетевая карта (private IP, SG, MAC), можно перенести на другой инстанс. <b>ENA</b> — enhanced networking до 100 Гбит/с. <b>EFA</b> = ENA + <b>OS-bypass</b> для HPC/ML (MPI/NCCL, Linux, лучше с cluster placement group). Нужен «OS-bypass, ниже задержка чем TCP» → <b>EFA</b>.</li>
+</ul>
+<h4>AMI, user data, лицензии</h4>
+<ul>
+<li><b>AMI</b> привязан к Region (копируется между ними); user data выполняется при первом запуске; instance metadata — <code>169.254.169.254</code>.</li>
+<li><b>AWS License Manager</b> — отслеживает лицензии и <b>Enforce license limit</b> не даёт запустить инстанс сверх купленных (Windows Server, SQL Server); алерт через SNS. Fleet Manager/RAM/ACM лицензиями не управляют.</li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>
+<ul><li>HPC с OS-bypass → <b>EFA</b>, не ENA/ENI.</li>
+<li>Ограничить число запусков числом лицензий → <b>License Manager</b> с enforce limit.</li>
+<li>Instance store не для постоянных данных: пропадает при stop/terminate/сбое хоста.</li></ul></div>
+</div>
+
+<div class="sub">
+<h3>Lambda</h3>
+<ul>
+<li>Event-driven, до <b>15 минут</b>, память 128 МБ–10 ГБ (CPU пропорционально), /tmp до 10 ГБ. Платишь за вызовы и GB·с.</li>
+<li><b>Concurrency</b>: лимит аккаунта на Region (по умолчанию 1000); <b>reserved</b> — гарантия и потолок для функции (защищает от «соседей» и от перегрузки downstream БД); <b>provisioned</b> — тёплые экземпляры против cold start.</li>
+<li><b>В VPC</b>: Lambda создаёт ENI в подсети; для доступа в интернет нужен NAT. Не хватит IP в подсети — throttling.</li>
+<li><b>Источники</b>: S3, SQS, SNS, DynamoDB Streams, Kinesis, API Gateway, EventBridge, ALB. Асинхронные вызовы: 2 ретрая, DLQ/destinations.</li>
+<li><b>Lambda@Edge</b> — у edge CloudFront (viewer/origin events).</li>
+</ul>
+</div>
+
+<div class="sub" data-weak="1">
+<h3>Контейнеры <span class="b b1">слегка</span></h3>
+<div class="tw"><table>
+<tr><th>Сервис</th><th>Суть</th></tr>
+<tr><td><b>ECS</b></td><td>оркестратор AWS; запуск на EC2 или Fargate</td></tr>
+<tr><td><b>EKS</b></td><td>управляемый Kubernetes (если нужен K8s/переносимость)</td></tr>
+<tr><td><b>Fargate</b></td><td>serverless-вычисления для контейнеров: нет серверов</td></tr>
+<tr><td><b>ECR</b></td><td>реестр образов, скан уязвимостей</td></tr>
+<tr><td><b>App Runner</b></td><td>самый простой запуск веб-контейнера</td></tr>
+</table></div>
+<ul>
+<li>ECS: <b>task role</b> (права задачи), execution role (ECR, логи), service autoscaling.</li>
+<li><b>EKS масштабирование</b>: pods → <b>HPA</b> (нужен Metrics Server); nodes → <b>Cluster Autoscaler</b> (или Karpenter); с Fargate — без нод.</li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>«Масштабировать узлы EKS с минимальными усилиями» → <b>Cluster Autoscaler</b> + Metrics Server. CloudWatch alarms и ручной ASG — лишние усилия.</div>
+</div>
+</section>
+
+<section class="ch" id="c-storage" data-weak="2">
+<h2>9. Хранилища <span class="b b2">средне</span></h2>
+
+<div class="sub">
+<h3>Три вида хранения</h3>
+<div class="tw"><table>
+<tr><th></th><th>EBS</th><th>EFS</th><th>S3</th></tr>
+<tr><td>Тип</td><td>блочный диск</td><td>файловая шара NFS (Linux)</td><td>объекты</td></tr>
+<tr><td>Доступ</td><td>один инстанс, <b>одна AZ</b></td><td>тысячи инстансов, много AZ</td><td>HTTP API, весь Region</td></tr>
+<tr><td>Масштаб</td><td>до 64 ТиБ</td><td>растёт сам</td><td>безлимит</td></tr>
+</table></div>
+</div>
+
+<div class="sub" data-weak="2">
+<h3>EBS: типы томов <span class="b b2">средне</span></h3>
+<div class="tw"><table>
+<tr><th>Тип</th><th>Для чего</th></tr>
+<tr><td><b>gp3</b> / gp2 (SSD общего назначения)</td><td>boot, dev/test, малые и средние БД; gp3: 3000 IOPS и 125 МБ/с базово, IOPS и throughput <b>независимо</b> от размера</td></tr>
+<tr><td><b>io2 / io1</b> (Provisioned IOPS SSD)</td><td>постоянная низкая задержка, <b>большие relational/NoSQL БД</b>; io2 Block Express до 256 000 IOPS; только они поддерживают <b>Multi-Attach</b></td></tr>
+<tr><td><b>st1</b> (throughput HDD)</td><td>большие последовательные потоки: big data, логи; не boot</td></tr>
+<tr><td><b>sc1</b> (cold HDD)</td><td>самый дешёвый, редкий доступ; не boot</td></tr>
+<tr><td>Magnetic (standard)</td><td>устаревший HDD, <b>самая низкая цена за ГБ</b>, редкий доступ</td></tr>
+</table></div>
+<ul>
+<li>Том привязан к <b>AZ</b>; перенос — через <b>snapshot</b> (инкрементальные, в S3, копируются между Regions/аккаунтами, Fast Snapshot Restore).</li>
+<li><b>Instance store</b> — локальный NVMe с очень высокой производительностью, <b>временный</b>: данные теряются при stop/terminate/сбое хоста.</li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь (дважды)</b>Выдуманные типы: <b>«Spot volumes»</b> (Spot — модель покупки EC2) и <b>«SR-IOV volumes»</b> (SR-IOV — технология сетевых карт). <b>gp3 не поддерживает Multi-Attach</b>, а EBS не бывает multi-AZ. Верные описания: Provisioned IOPS = БД с высокой нагрузкой I/O, Magnetic = дёшево и редко.</div>
+</div>
+
+<div class="sub">
+<h3>EFS и FSx</h3>
+<ul>
+<li><b>EFS</b>: NFSv4, Linux, POSIX, multi-AZ, классы Standard/IA/Archive (lifecycle). Режимы: General Purpose / Max I/O, throughput Bursting/Provisioned/Elastic.</li>
+<li><b>FSx for Windows</b> — SMB, AD, NTFS; <b>FSx for Lustre</b> — HPC/ML, быстрая работа с S3; <b>FSx for NetApp ONTAP</b> — мультипротокол (NFS/SMB/iSCSI); <b>FSx for OpenZFS</b>.</li>
+<li>Триггеры: «Windows file share + AD» → FSx for Windows; «HPC / ML с S3» → Lustre; «Linux, много инстансов» → EFS.</li>
+</ul>
+</div>
+
+<div class="sub" data-weak="2">
+<h3>S3: классы и жизненный цикл <span class="b b2">средне</span></h3>
+<div class="tw"><table>
+<tr><th>Класс</th><th>Когда</th><th>Извлечение</th></tr>
+<tr><td>Standard</td><td>частый доступ</td><td>мгновенно</td></tr>
+<tr><td>Intelligent-Tiering</td><td>неизвестный/меняющийся паттерн, автоматически</td><td>мгновенно</td></tr>
+<tr><td>Standard-IA (3 AZ) / One Zone-IA</td><td>редко, быстро нужно; One Zone — воспроизводимые данные (одна AZ, дешевле)</td><td>мгновенно</td></tr>
+<tr><td>Glacier Instant Retrieval</td><td>архив, но доступ в мс</td><td>мгновенно</td></tr>
+<tr><td>Glacier Flexible Retrieval</td><td>архив</td><td>Expedited 1–5 мин, Standard 3–5 ч, Bulk 5–12 ч</td></tr>
+<tr><td>Glacier Deep Archive</td><td>самый дешёвый, ≥180 дней</td><td>Standard 12 ч, Bulk 48 ч</td></tr>
+</table></div>
+<ul>
+<li><b>Lifecycle</b> — автоматический переход между классами и удаление; минимальные сроки хранения (IA 30 дней, Glacier 90, Deep Archive 180).</li>
+<li><b>Glacier Expedited</b>: для гарантии ёмкости купи <b>Provisioned Capacity</b> (иначе при пике запрос может отклониться).</li>
+<li><b>Durability</b> 11 девяток; <b>versioning</b> защищает от удаления/перезаписи; <b>MFA Delete</b>.</li>
+<li><b>Производительность</b>: 3500 PUT / 5500 GET в секунду на префикс; <b>multipart upload</b> (&gt;100 МБ рекомендуется, &gt;5 ГБ обязателен), <b>Transfer Acceleration</b> (загрузка через edge-локации с дальних клиентов), byte-range fetch.</li>
+<li><b>Replication</b>: <b>CRR</b> (другой Region: DR, задержка) и <b>SRR</b> (тот же Region: агрегация логов, другая учётка). Нужен versioning; реплицирует новые объекты.</li>
+<li><b>Static website</b>, event notifications (→ SNS, SQS, Lambda, EventBridge), <b>S3 Select</b> / <b>Athena</b> для запросов к данным.</li>
+<li><b>Requester Pays</b>: платит скачивающий.</li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>Данные должны пережить отказ Region → <b>CRR</b> (а не lifecycle, не копия на EC2). Срочный доступ к Glacier → Expedited + provisioned capacity.</div>
+</div>
+
+<div class="sub">
+<h3>Гибрид и бэкап</h3>
+<p><b>Storage Gateway</b> и <b>DataSync</b> см. гл. 7. <b>AWS Backup</b> — гл. 6. Для приложений, которым нужен S3 как локальная NFS/SMB-шара, — <b>File Gateway</b>.</p>
+</div>
+</section>
+
+<section class="ch" id="c-db" data-weak="3">
+<h2>10. Базы данных и аналитика <span class="b b3">слабо</span></h2>
+
+<div class="sub">
+<h3>Какую БД выбрать</h3>
+<div class="tw"><table>
+<tr><th>Задача</th><th>Выбор</th></tr>
+<tr><td>Реляционная, SQL, транзакции</td><td><b>RDS</b> (MySQL, PostgreSQL, MariaDB, Oracle, SQL Server) или <b>Aurora</b></td></tr>
+<tr><td>Реляционная, быстрее и надёжнее RDS, до 15 реплик</td><td><b>Aurora</b></td></tr>
+<tr><td>Ключ-значение, мс, неограниченный масштаб, serverless</td><td><b>DynamoDB</b></td></tr>
+<tr><td>Кэш/сессии/лидерборды</td><td><b>ElastiCache</b> (Redis, Memcached)</td></tr>
+<tr><td>Хранилище данных, аналитика OLAP, SQL по ПБ</td><td><b>Redshift</b></td></tr>
+<tr><td>Граф связей</td><td><b>Neptune</b></td></tr>
+<tr><td>MongoDB-совместимая документная</td><td><b>DocumentDB</b></td></tr>
+<tr><td>Cassandra-совместимая</td><td>Keyspaces</td></tr>
+<tr><td>Временные ряды / ledger</td><td>Timestream / QLDB</td></tr>
+<tr><td>Поиск, логи, дашборды</td><td><b>OpenSearch</b></td></tr>
+</table></div>
+</div>
+
+<div class="sub">
+<h3>RDS и Aurora</h3>
+<ul>
+<li><b>Multi-AZ</b> — синхронный standby в другой AZ, авто-failover, для <b>HA</b> (не для чтения). <b>Read replica</b> — асинхронная, масштабирование чтения, можно в другом Region.</li>
+<li>Бэкапы: автоматические (до 35 дней, PITR) и ручные snapshots. Восстановление создаёт <b>новый</b> экземпляр.</li>
+<li><b>RDS Proxy</b> — пул соединений: спасает от шторма подключений Lambda, ускоряет failover.</li>
+<li><b>Aurora</b>: хранилище до 128 ТиБ, 6 копий в 3 AZ, быстрый failover; <b>Aurora Serverless v2</b> — автоматическое масштабирование ёмкости; <b>Global Database</b> — репликация в другие Regions &lt; 1 с, быстрый promote при аварии; <b>Backtrack</b> (откат во времени, MySQL).</li>
+<li>Миграция provisioned Aurora → Serverless v2: добавить Serverless-экземпляр в кластер, failover на него.</li>
+<li><b>IAM database authentication</b>, шифрование при создании, SG на порт БД.</li>
+</ul>
+</div>
+
+<div class="sub" data-weak="3">
+<h3>DynamoDB <span class="b b3">слабо</span></h3>
+<ul>
+<li>Режимы ёмкости: <b>provisioned</b> (+ auto scaling) и <b>on-demand</b> (непредсказуемо). Ключ: partition key (+ sort key). Горячий ключ — антипаттерн.</li>
+<li><b>GSI</b> (другой ключ, отдельная ёмкость), <b>LSI</b> (тот же partition key, только при создании таблицы).</li>
+<li><b>DAX</b> — in-memory кэш <b>только для DynamoDB</b>, микросекунды, без изменения кода приложения (вместо ElastiCache/API Gateway cache).</li>
+<li><b>TTL</b> — автоудаление; <b>PITR</b> — 35 дней; <b>Global Tables</b> — multi-Region multi-active.</li>
+<li><b>DynamoDB Streams</b> — упорядоченный поток изменений (24 ч); с <b>Lambda</b> (event source mapping) — реакция на новые/изменённые элементы.</li>
+<li>Транзакции (ACID, TransactWrite), условные записи.</li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>«Вызвать Lambda при появлении новой записи в таблице» → <b>DynamoDB Streams + Lambda</b>. Не SNS «от продюсера», не CloudWatch alarm, не Systems Manager.</div>
+</div>
+
+<div class="sub" data-weak="3">
+<h3>Redshift <span class="b b3">слабо</span></h3>
+<ul>
+<li>Колоночное хранилище <b>OLAP</b> (RDS = OLTP): отчёты, BI, PB. Кластеры (leader + compute nodes), <b>Redshift Spectrum</b> — SQL прямо по S3, <b>Serverless</b>.</li>
+<li>HA: Multi-AZ (RA3); snapshots автоматические и ручные; <b>DR при отказе Region → cross-Region snapshot copy</b>.</li>
+<li>Загрузка: <code>COPY</code> из S3 (параллельно), Kinesis Firehose → Redshift.</li>
+</ul>
+</div>
+
+<div class="sub" data-weak="3">
+<h3>Аналитика и потоки <span class="b b3">слабо</span></h3>
+<div class="tw"><table>
+<tr><th>Сервис</th><th>Роль</th></tr>
+<tr><td><b>Kinesis Data Streams</b></td><td>real-time ingest, порядок в шарде, хранение 24 ч–365 дней, свои consumers, on-demand или provisioned шарды</td></tr>
+<tr><td><b>Kinesis Data Firehose</b></td><td>доставка потока в S3, Redshift, OpenSearch, Splunk без кода (near real-time, буфер ≥60 с), с трансформацией Lambda</td></tr>
+<tr><td><b>Managed Service for Apache Flink</b></td><td>обработка потока SQL/Flink</td></tr>
+<tr><td><b>Athena</b></td><td>serverless SQL по S3; платишь за сканируемые данные; Parquet/ORC + партиции = дешевле. Не для потоков</td></tr>
+<tr><td><b>Glue</b></td><td>serverless ETL, <b>Data Catalog</b>, crawlers, <b>job bookmarks</b> (не обрабатывать повторно уже обработанное)</td></tr>
+<tr><td><b>EMR</b></td><td>управляемый Hadoop/Spark/Hive на кластере; большие объёмы, обработка логов из S3</td></tr>
+<tr><td><b>Lake Formation</b></td><td>права доступа и построение data lake</td></tr>
+<tr><td><b>QuickSight</b></td><td>BI-дашборды</td></tr>
+<tr><td><b>MSK</b></td><td>управляемая Kafka</td></tr>
+</table></div>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>Обработка больших объёмов логов приложения для отчёта → <b>S3 + EMR</b> (не Glacier, не один EC2, не ParallelCluster). Клик-стрим в реальном времени → <b>Kinesis</b>, а Athena — запросы к S3.</div>
+<h4>ML-сервисы (по триггерам)</h4>
+<ul>
+<li><b>Rekognition</b> — изображения/видео (лица, объекты). <b>Textract</b> — текст и таблицы из документов. <b>Comprehend</b> — NLP (тональность, сущности). <b>Transcribe</b> — речь → текст. <b>Polly</b> — текст → речь. <b>Translate</b> — перевод. <b>Lex</b> — чат-боты. <b>Kendra</b> — умный поиск. <b>SageMaker</b> — обучение и деплой своих моделей. <b>Personalize</b> — рекомендации. <b>Forecast</b> — прогнозы.</li>
+</ul>
+</div>
+</section>
+
+<section class="ch" id="c-cost">
+<h2>11. Стоимость</h2>
+<div class="sub">
+<h3>Где экономить</h3>
+<ul>
+<li><b>Compute</b>: стабильная база — Savings Plans/RI; прерываемое — Spot; нерегулярное — On-Demand; нагрузка по расписанию — scheduled scaling и Instance Scheduler; <b>Compute Optimizer</b> предлагает right-sizing.</li>
+<li><b>Serverless</b>: платишь только за использование (Lambda, Fargate, DynamoDB on-demand, Aurora Serverless).</li>
+<li><b>Хранение</b>: подходящий класс S3, lifecycle, Intelligent-Tiering при неизвестном доступе; EBS gp3 вместо gp2; удалять неприкреплённые тома, старые snapshots, неиспользуемые EIP.</li>
+<li><b>Передача данных</b>: вход бесплатен; выход в интернет платный; между AZ платно; в одной AZ по private IP бесплатно; через VPC Gateway endpoint к S3/DynamoDB без платы NAT. CloudFront дешевле прямой раздачи с S3/EC2.</li>
+<li><b>NAT Gateway</b> стоит дорого (почасовая + за ГБ): трафик к S3/DynamoDB пускай идёт через <b>Gateway endpoint</b>.</li>
+</ul>
+</div>
+<div class="sub">
+<h3>Инструменты учёта</h3>
+<div class="tw"><table>
+<tr><th>Сервис</th><th>Для чего</th></tr>
+<tr><td><b>Cost Explorer</b></td><td>анализ и прогноз расходов, рекомендации по RI/SP</td></tr>
+<tr><td><b>Budgets</b></td><td>бюджеты и алерты (SNS, email), actions</td></tr>
+<tr><td><b>Cost and Usage Report</b></td><td>детальный отчёт в S3 (+ Athena)</td></tr>
+<tr><td><b>Cost allocation tags</b></td><td>разбивка расходов по отделам/проектам (активировать в Billing)</td></tr>
+<tr><td><b>Trusted Advisor</b></td><td>проверки: стоимость, безопасность, лимиты, отказоустойчивость, производительность</td></tr>
+<tr><td><b>Organizations</b></td><td>consolidated billing, общие скидки</td></tr>
+</table></div>
+</div>
+<div class="sub">
+<h3>Серверно и бессерверно по цене</h3>
+<div class="box trap"><b>Типовые «most cost-effective»</b>
+<ul><li>Нерегулярная короткая нагрузка → Lambda, а не EC2.</li>
+<li>Устойчивая нагрузка 24/7 на 1–3 года → Savings Plans/Reserved.</li>
+<li>Отказоустойчивый batch → Spot (+ Spot Fleet/ASG mixed).</li>
+<li>Редкий доступ к данным → S3 IA/Glacier; неизвестный → Intelligent-Tiering.</li>
+<li>Раздача статики → CloudFront + S3, не EC2.</li></ul></div>
+</div>
+</section>
+
+<section class="ch" id="c-ops" data-weak="1">
+<h2>12. Мониторинг и операции <span class="b b1">слегка</span></h2>
+<div class="sub" data-weak="1">
+<h3>Кто что показывает <span class="b b1">слегка</span></h3>
+<div class="tw"><table>
+<tr><th>Вопрос</th><th>Сервис</th></tr>
+<tr><td>Что с метриками/логами сейчас?</td><td><b>CloudWatch</b> (метрики, Logs, Alarms, Dashboards, Logs Insights)</td></tr>
+<tr><td>Кто вызвал API?</td><td><b>CloudTrail</b></td></tr>
+<tr><td>Как настроен ресурс и соответствует ли правилам?</td><td><b>Config</b></td></tr>
+<tr><td>Что AWS меняет/ломает у моих ресурсов?</td><td><b>AWS Health</b> (Personal Health Dashboard) → событие в <b>EventBridge</b> → SNS</td></tr>
+<tr><td>Трассировка запросов микросервисов</td><td><b>X-Ray</b></td></tr>
+<tr><td>Управление парком инстансов (патчи, команды, сессии)</td><td><b>Systems Manager</b> (Run Command, Patch Manager, Session Manager, Parameter Store)</td></tr>
+</table></div>
+<ul>
+<li><b>Метрики EC2 по умолчанию</b>: CPU, сеть, диск; <b>память и место на диске</b> — только через <b>CloudWatch agent</b>. Детальный мониторинг — 1 минута.</li>
+<li><b>Alarm</b> → действия: SNS, Auto Scaling, EC2 (stop/recover/reboot).</li>
+<li><b>Logs</b>: подписки (subscription filters) → Kinesis/Firehose/Lambda; экспорт в S3.</li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>Уведомление о запланированных событиях AWS по EC2 → <b>EventBridge rule на события AWS Health + SNS</b>.</div>
+</div>
+<div class="sub">
+<h3>Инфраструктура как код</h3>
+<ul>
+<li><b>CloudFormation</b>: шаблоны (YAML/JSON), stacks, <b>StackSets</b> (много аккаунтов/Regions), change sets, drift detection. <b>CDK</b> генерирует CloudFormation.</li>
+<li><b>Elastic Beanstalk</b> — PaaS для веб-приложений (загрузи код). <b>OpsWorks</b> — Chef/Puppet. <b>Service Catalog</b> — одобренные продукты для пользователей.</li>
+</ul>
+</div>
+</section>
+
+<section class="ch" id="c-misc">
+<h2>13. Типовые архитектуры и прочие сервисы</h2>
+
+<div class="sub">
+<h3>Паттерны архитектур, которые любит экзамен</h3>
+<div class="tw"><table>
+<tr><th>Паттерн</th><th>Состав</th></tr>
+<tr><td><b>Статический сайт</b></td><td>S3 + CloudFront (OAC) + Route 53 alias + ACM (us-east-1) + WAF</td></tr>
+<tr><td><b>Трёхзвенное веб-приложение</b></td><td>Route 53 → CloudFront → ALB (public) → ASG в private subnets (2+ AZ) → RDS Multi-AZ / Aurora, кэш ElastiCache; NAT для исходящего</td></tr>
+<tr><td><b>Serverless web/API</b></td><td>CloudFront + S3 (фронт) + API Gateway + Lambda + DynamoDB + Cognito</td></tr>
+<tr><td><b>Асинхронная обработка</b></td><td>S3/API → SQS → ASG воркеров (масштаб по длине очереди) → результат в S3/БД; DLQ для ошибок</td></tr>
+<tr><td><b>Fan-out</b></td><td>SNS topic → несколько SQS/Lambda (разная обработка одного события)</td></tr>
+<tr><td><b>Событийная автоматизация</b></td><td>источник (Config/GuardDuty/Health/cron) → EventBridge → Lambda/SSM/SNS</td></tr>
+<tr><td><b>Data lake</b></td><td>S3 + Glue Catalog + Athena/Redshift Spectrum + Lake Formation + QuickSight</td></tr>
+<tr><td><b>Стриминг и аналитика</b></td><td>источники → Kinesis → Firehose → S3/Redshift/OpenSearch; Flink для обработки</td></tr>
+<tr><td><b>Hybrid</b></td><td>DX + VPN backup, Storage Gateway/DataSync, Route 53 Resolver endpoints для DNS между on-prem и VPC</td></tr>
+</table></div>
+</div>
+
+<div class="sub">
+<h3>Каталоги и пользователи приложений</h3>
+<ul>
+<li><b>Directory Service</b>: <b>AWS Managed Microsoft AD</b> (полноценный AD в AWS, trust с on-prem), <b>AD Connector</b> (прокси к on-prem AD), <b>Simple AD</b> (дёшево, базовый).</li>
+<li><b>Cognito User Pools</b> — регистрация, вход, MFA, федерация соцсетей/SAML, JWT; работает с ALB и API Gateway. <b>Identity Pools</b> — выдают временные AWS credentials.</li>
+</ul>
+</div>
+
+<div class="sub">
+<h3>EC2: семейства инстансов</h3>
+<div class="tw"><table>
+<tr><th>Семейство</th><th>Для чего</th></tr>
+<tr><td><b>T</b> (burstable)</td><td>низкая средняя нагрузка со всплесками, CPU credits</td></tr>
+<tr><td><b>M</b> (general)</td><td>баланс CPU/памяти, веб, приложения</td></tr>
+<tr><td><b>C</b> (compute)</td><td>CPU: batch, кодирование видео, HPC</td></tr>
+<tr><td><b>R / X</b> (memory)</td><td>БД в памяти, кэши, big data</td></tr>
+<tr><td><b>I / D</b> (storage)</td><td>высокий IOPS, локальный NVMe (I), плотное хранение (D)</td></tr>
+<tr><td><b>P / G</b> (GPU)</td><td>ML-обучение, графика; Inf/Trn — чипы AWS для инференса/обучения</td></tr>
+</table></div>
+<ul>
+<li><b>Graviton</b> (ARM) — лучше цена/производительность, если приложение собрано под ARM.</li>
+<li><b>Elastic IP</b> — статический публичный IPv4, платно, если не привязан; можно перекинуть на другой инстанс (failover).</li>
+<li><b>Hibernate</b> — RAM сохраняется на зашифрованный EBS; быстрый возврат состояния.</li>
+</ul>
+</div>
+
+<div class="sub">
+<h3>Остальное по триггерам</h3>
+<div class="tw"><table>
+<tr><th>Сервис</th><th>Триггер</th></tr>
+<tr><td><b>Elastic Beanstalk</b></td><td>«загрузить код, не управлять инфраструктурой» (PaaS)</td></tr>
+<tr><td><b>AWS Batch</b></td><td>пакетные задания, очередь, Spot, без своего планировщика</td></tr>
+<tr><td><b>Outposts</b></td><td>инфраструктура AWS в твоём ДЦ (низкая задержка до on-prem, данные остаются локально)</td></tr>
+<tr><td><b>Local Zones / Wavelength</b></td><td>вычисления ближе к городу / к 5G-сети</td></tr>
+<tr><td><b>AppSync</b></td><td>управляемый GraphQL, real-time подписки</td></tr>
+<tr><td><b>SES</b></td><td>отправка email; <b>Pinpoint</b> — маркетинговые кампании</td></tr>
+<tr><td><b>WorkSpaces / AppStream 2.0</b></td><td>виртуальные рабочие столы / стриминг приложений</td></tr>
+<tr><td><b>Service Catalog</b></td><td>одобренные шаблоны для пользователей</td></tr>
+<tr><td><b>Systems Manager Session Manager</b></td><td>доступ к инстансам без SSH и открытых портов</td></tr>
+<tr><td><b>Route 53 Resolver</b></td><td>DNS между VPC и on-prem (inbound/outbound endpoints)</td></tr>
+<tr><td><b>X-Ray</b></td><td>трассировка запросов</td></tr>
+<tr><td><b>Amazon OpenSearch</b></td><td>полнотекстовый поиск, логи, дашборды</td></tr>
+<tr><td><b>AWS Glue DataBrew / SageMaker</b></td><td>подготовка данных без кода / свои ML-модели</td></tr>
+</table></div>
+</div>
+</section>
+
+<section class="ch" id="c-cheat">
+<h2>14. Шпаргалки для финального повторения</h2>
+
+<h3>Слово-триггер → ответ</h3>
+<div class="tw"><table>
+<tr><th>В вопросе</th><th>Выбирай</th></tr>
+<tr><td>Redirect HTTP → HTTPS на ALB</td><td>действие redirect на существующем listener :80</td></tr>
+<tr><td>Статический IP у балансировщика</td><td>NLB / Global Accelerator</td></tr>
+<tr><td>OS-bypass, HPC</td><td>EFA</td></tr>
+<tr><td>Ограничить запуск по числу лицензий</td><td>License Manager, enforce limit</td></tr>
+<tr><td>Исходящий IPv6 без входящего</td><td>Egress-only IGW</td></tr>
+<tr><td>Сотни VPC, несколько Regions</td><td>TGW в каждом Region + peering</td></tr>
+<tr><td>Порт БД от приложения в ASG</td><td>SG источника = ID SG приложения</td></tr>
+<tr><td>Сервис AWS из private subnet без интернета</td><td>VPC endpoint (S3/DynamoDB — Gateway)</td></tr>
+<tr><td>Multi-account landing zone, dashboard</td><td>Control Tower</td></tr>
+<tr><td>Потолок прав в Organization</td><td>SCP</td></tr>
+<tr><td>Авторотация пароля БД</td><td>Secrets Manager</td></tr>
+<tr><td>Проверка политики паролей / возраста ключей</td><td>Config managed rules (+ EventBridge + Lambda)</td></tr>
+<tr><td>Принудительно SSE на загрузку в S3</td><td>bucket policy Deny без нужного заголовка</td></tr>
+<tr><td>Кто что делал в API</td><td>CloudTrail</td></tr>
+<tr><td>Серверы lift-and-shift, мин. простой</td><td>MGN</td></tr>
+<tr><td>БД с минимальным простоем</td><td>DMS (+ SCT при смене движка)</td></tr>
+<tr><td>Ускоренная управляемая передача файлов</td><td>DataSync (через endpoint по DX)</td></tr>
+<tr><td>Десятки ТБ без сети</td><td>Snowball Edge</td></tr>
+<tr><td>S3-данные пережить отказ Region</td><td>CRR</td></tr>
+<tr><td>Redshift DR на уровне Region</td><td>cross-Region snapshot copy</td></tr>
+<tr><td>Lambda по изменениям таблицы</td><td>DynamoDB Streams</td></tr>
+<tr><td>Кэш перед DynamoDB без правок кода</td><td>DAX</td></tr>
+<tr><td>Обработка логов в больших объёмах</td><td>S3 + EMR</td></tr>
+<tr><td>Real-time поток</td><td>Kinesis Data Streams</td></tr>
+<tr><td>Обработка у пользователя по всему миру</td><td>CloudFront + Lambda@Edge</td></tr>
+<tr><td>Сертификат для CloudFront / regional API GW</td><td>ACM us-east-1 / ACM в том же Region</td></tr>
+<tr><td>Масштабировать ноды EKS</td><td>Cluster Autoscaler</td></tr>
+<tr><td>Извещение о событии AWS Health</td><td>EventBridge + SNS</td></tr>
+<tr><td>Память инстанса в метриках</td><td>CloudWatch agent</td></tr>
+</table></div>
+
+<h3>Топ ловушек экзамена</h3>
+<ol>
+<li><b>Выдуманные ресурсы</b> («Spot volumes», «SR-IOV volumes»): сомневаешься — вычёркивай.</li>
+<li><b>Region-границы</b>: ACM, snapshots, AMI, KMS-ключи, TGW, S3 CRR.</li>
+<li><b>Route 53 не обрабатывает данные</b>, только направляет DNS.</li>
+<li><b>SCP не даёт прав</b>, а только ограничивает.</li>
+<li><b>Multi-AZ ≠ DR</b>: для аварии региона нужен другой Region.</li>
+<li><b>gp3 без Multi-Attach</b>; EBS в одной AZ; EFS — между AZ.</li>
+<li><b>NAT Gateway в public subnet</b>; в private только маршрут на него.</li>
+<li><b>Athena ≠ real-time</b>, Kinesis ≠ SQL по S3.</li>
+<li><b>Config</b> = состояние, <b>CloudTrail</b> = действия, <b>CloudWatch</b> = метрики/логи.</li>
+<li><b>Instance store пропадает</b>, EBS остаётся.</li>
+<li>«Минимум усилий» → managed/serverless; «минимум стоимости» → Spot/SP/IA; «real-time» → Kinesis.</li>
+</ol>
+
+<h3>Что выбрать: сравнения в одну строку</h3>
+<ul>
+<li><b>SQS</b> очередь (pull) · <b>SNS</b> рассылка (push) · <b>EventBridge</b> события AWS и расписание · <b>Kinesis</b> поток.</li>
+<li><b>ALB</b> HTTP · <b>NLB</b> TCP/статический IP · <b>GWLB</b> appliances.</li>
+<li><b>CloudFront</b> кэш HTTP · <b>Global Accelerator</b> TCP/UDP anycast без кэша.</li>
+<li><b>Secrets Manager</b> ротация · <b>Parameter Store</b> конфиги · <b>KMS</b> ключи · <b>CloudHSM</b> свой HSM.</li>
+<li><b>GuardDuty</b> угрозы · <b>Inspector</b> уязвимости · <b>Macie</b> PII в S3 · <b>Security Hub</b> сводка.</li>
+<li><b>WAF</b> L7 · <b>Shield</b> DDoS · <b>NACL</b> подсеть stateless · <b>SG</b> инстанс stateful.</li>
+<li><b>Peering</b> 1:1 · <b>TGW</b> hub · <b>PrivateLink</b> сервис без peering · <b>VPN</b> быстро · <b>DX</b> выделенный канал.</li>
+<li><b>RDS Multi-AZ</b> HA · <b>read replica</b> чтение · <b>Aurora Global</b> DR между Regions.</li>
+<li><b>EBS</b> блок · <b>EFS</b> Linux-шара · <b>FSx</b> Windows/Lustre · <b>S3</b> объекты.</li>
+</ul>
+
+<h3>Чек-лист за день до теста</h3>
+<ul>
+<li>Прочитай главу 0 (карта слабых мест) и все блоки «⚠ Ты ошибался здесь».</li>
+<li>Пролистай таблицу триггеров выше и список ловушек.</li>
+<li>Перед сном — 15 минут на Flashcards и Weak points в приложении.</li>
+<li>На экзамене: читай последнюю строку первой, вычёркивай неверное, не застревай (≈2 минуты на вопрос), отмечай сложное и возвращайся.</li>
+</ul>
+</section>
+
+</main>
+<button class="up" id="up" aria-label="Наверх">↑</button>
+<script>
+(function(){
+var d=document,h=d.documentElement,S=function(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}};
+var th=S('saa-theme');if(th)h.dataset.theme=th;
+d.getElementById('tb').onclick=function(){var t=h.dataset.theme==='dark'?'light':'dark';h.dataset.theme=t;S('saa-theme',t)};
+var toc=d.getElementById('toc');
+d.getElementById('mb').onclick=function(){toc.classList.toggle('open')};
+toc.addEventListener('click',function(e){if(e.target.closest('a'))toc.classList.remove('open')});
+var wb=d.getElementById('wb');
+wb.onclick=function(){var on=d.body.classList.toggle('onlyweak');wb.classList.toggle('on',on);S('saa-weak',on?'1':'0');window.scrollTo(0,0)};
+if(S('saa-weak')==='1'){d.body.classList.add('onlyweak');wb.classList.add('on')}
+d.getElementById('up').onclick=function(){window.scrollTo({top:0})};
+var pg=d.getElementById('pg'),tm;
+addEventListener('scroll',function(){var m=d.body.scrollHeight-innerHeight;pg.style.width=(m>0?scrollY/m*100:0)+'%';clearTimeout(tm);tm=setTimeout(function(){S('saa-y',String(Math.round(scrollY)))},300)},{passive:true});
+var y=parseInt(S('saa-y')||'0',10);if(y>0&&!location.hash)setTimeout(function(){scrollTo(0,y)},50);
+})();
+</script>
+</body>
+</html>

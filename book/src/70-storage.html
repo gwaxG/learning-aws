@@ -1,0 +1,67 @@
+<section class="ch" id="c-storage" data-weak="2">
+<h2>9. Хранилища <span class="b b2">средне</span></h2>
+
+<div class="sub">
+<h3>Три вида хранения</h3>
+<div class="tw"><table>
+<tr><th></th><th>EBS</th><th>EFS</th><th>S3</th></tr>
+<tr><td>Тип</td><td>блочный диск</td><td>файловая шара NFS (Linux)</td><td>объекты</td></tr>
+<tr><td>Доступ</td><td>один инстанс, <b>одна AZ</b></td><td>тысячи инстансов, много AZ</td><td>HTTP API, весь Region</td></tr>
+<tr><td>Масштаб</td><td>до 64 ТиБ</td><td>растёт сам</td><td>безлимит</td></tr>
+</table></div>
+</div>
+
+<div class="sub" data-weak="2">
+<h3>EBS: типы томов <span class="b b2">средне</span></h3>
+<div class="tw"><table>
+<tr><th>Тип</th><th>Для чего</th></tr>
+<tr><td><b>gp3</b> / gp2 (SSD общего назначения)</td><td>boot, dev/test, малые и средние БД; gp3: 3000 IOPS и 125 МБ/с базово, IOPS и throughput <b>независимо</b> от размера</td></tr>
+<tr><td><b>io2 / io1</b> (Provisioned IOPS SSD)</td><td>постоянная низкая задержка, <b>большие relational/NoSQL БД</b>; io2 Block Express до 256 000 IOPS; только они поддерживают <b>Multi-Attach</b></td></tr>
+<tr><td><b>st1</b> (throughput HDD)</td><td>большие последовательные потоки: big data, логи; не boot</td></tr>
+<tr><td><b>sc1</b> (cold HDD)</td><td>самый дешёвый, редкий доступ; не boot</td></tr>
+<tr><td>Magnetic (standard)</td><td>устаревший HDD, <b>самая низкая цена за ГБ</b>, редкий доступ</td></tr>
+</table></div>
+<ul>
+<li>Том привязан к <b>AZ</b>; перенос — через <b>snapshot</b> (инкрементальные, в S3, копируются между Regions/аккаунтами, Fast Snapshot Restore).</li>
+<li><b>Instance store</b> — локальный NVMe с очень высокой производительностью, <b>временный</b>: данные теряются при stop/terminate/сбое хоста.</li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь (дважды)</b>Выдуманные типы: <b>«Spot volumes»</b> (Spot — модель покупки EC2) и <b>«SR-IOV volumes»</b> (SR-IOV — технология сетевых карт). <b>gp3 не поддерживает Multi-Attach</b>, а EBS не бывает multi-AZ. Верные описания: Provisioned IOPS = БД с высокой нагрузкой I/O, Magnetic = дёшево и редко.</div>
+</div>
+
+<div class="sub">
+<h3>EFS и FSx</h3>
+<ul>
+<li><b>EFS</b>: NFSv4, Linux, POSIX, multi-AZ, классы Standard/IA/Archive (lifecycle). Режимы: General Purpose / Max I/O, throughput Bursting/Provisioned/Elastic.</li>
+<li><b>FSx for Windows</b> — SMB, AD, NTFS; <b>FSx for Lustre</b> — HPC/ML, быстрая работа с S3; <b>FSx for NetApp ONTAP</b> — мультипротокол (NFS/SMB/iSCSI); <b>FSx for OpenZFS</b>.</li>
+<li>Триггеры: «Windows file share + AD» → FSx for Windows; «HPC / ML с S3» → Lustre; «Linux, много инстансов» → EFS.</li>
+</ul>
+</div>
+
+<div class="sub" data-weak="2">
+<h3>S3: классы и жизненный цикл <span class="b b2">средне</span></h3>
+<div class="tw"><table>
+<tr><th>Класс</th><th>Когда</th><th>Извлечение</th></tr>
+<tr><td>Standard</td><td>частый доступ</td><td>мгновенно</td></tr>
+<tr><td>Intelligent-Tiering</td><td>неизвестный/меняющийся паттерн, автоматически</td><td>мгновенно</td></tr>
+<tr><td>Standard-IA (3 AZ) / One Zone-IA</td><td>редко, быстро нужно; One Zone — воспроизводимые данные (одна AZ, дешевле)</td><td>мгновенно</td></tr>
+<tr><td>Glacier Instant Retrieval</td><td>архив, но доступ в мс</td><td>мгновенно</td></tr>
+<tr><td>Glacier Flexible Retrieval</td><td>архив</td><td>Expedited 1–5 мин, Standard 3–5 ч, Bulk 5–12 ч</td></tr>
+<tr><td>Glacier Deep Archive</td><td>самый дешёвый, ≥180 дней</td><td>Standard 12 ч, Bulk 48 ч</td></tr>
+</table></div>
+<ul>
+<li><b>Lifecycle</b> — автоматический переход между классами и удаление; минимальные сроки хранения (IA 30 дней, Glacier 90, Deep Archive 180).</li>
+<li><b>Glacier Expedited</b>: для гарантии ёмкости купи <b>Provisioned Capacity</b> (иначе при пике запрос может отклониться).</li>
+<li><b>Durability</b> 11 девяток; <b>versioning</b> защищает от удаления/перезаписи; <b>MFA Delete</b>.</li>
+<li><b>Производительность</b>: 3500 PUT / 5500 GET в секунду на префикс; <b>multipart upload</b> (&gt;100 МБ рекомендуется, &gt;5 ГБ обязателен), <b>Transfer Acceleration</b> (загрузка через edge-локации с дальних клиентов), byte-range fetch.</li>
+<li><b>Replication</b>: <b>CRR</b> (другой Region: DR, задержка) и <b>SRR</b> (тот же Region: агрегация логов, другая учётка). Нужен versioning; реплицирует новые объекты.</li>
+<li><b>Static website</b>, event notifications (→ SNS, SQS, Lambda, EventBridge), <b>S3 Select</b> / <b>Athena</b> для запросов к данным.</li>
+<li><b>Requester Pays</b>: платит скачивающий.</li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>Данные должны пережить отказ Region → <b>CRR</b> (а не lifecycle, не копия на EC2). Срочный доступ к Glacier → Expedited + provisioned capacity.</div>
+</div>
+
+<div class="sub">
+<h3>Гибрид и бэкап</h3>
+<p><b>Storage Gateway</b> и <b>DataSync</b> см. гл. 7. <b>AWS Backup</b> — гл. 6. Для приложений, которым нужен S3 как локальная NFS/SMB-шара, — <b>File Gateway</b>.</p>
+</div>
+</section>

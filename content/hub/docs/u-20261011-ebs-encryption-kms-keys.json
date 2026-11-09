@@ -1,0 +1,48 @@
+{
+  "id": "u-20261011-ebs-encryption-kms-keys",
+  "source": {
+    "type": "user",
+    "added": "2026-10-11",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A health organization is using a large Dedicated Amazon EC2 instance with multiple Amazon EBS volumes to host its health records web application. To ensure compliance and consistency, the organization uses AWS Systems Manager State Manager to automatically enforce baseline configurations.\nThe EBS volumes must be encrypted to protect the confidentiality of the data and to comply with the HIPAA (Health Insurance Portability and Accountability Act) standard.\nIn EBS encryption, which of the following does AWS use to secure data at rest on the volume? (Select TWO.)",
+    "options": [
+      "By using Amazon-managed keys in AWS Key Management Service (KMS).",
+      "By using your own keys in AWS Key Management Service (KMS).",
+      "By using Amazon S3 Server-Side Encryption and S3 Client-Side Encryption.",
+      "By using a password stored in AWS CloudHSM.",
+      "By using the SSL certificates provided by the AWS Certificate Manager (ACM)."
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "Amazon EBS encryption protects data at rest on volumes (data and boot volumes) and snapshots with keys in AWS KMS: either the AWS managed key for EBS or your own customer managed key. The encryption happens on the servers that host the EC2 instances, so data moving between the instance and the volume is encrypted as well. S3 server-side and client-side encryption only apply to S3. CloudHSM stores keys, not passwords, and is not how EBS encryption works. ACM provides TLS certificates for data in transit, not volume encryption."
+  },
+  "concept": "EBS encryption = KMS keys (AWS managed or customer managed)",
+  "tests": "Knowing which key mechanism EBS encryption uses, versus S3 encryption options, CloudHSM and ACM.",
+  "expected": "KMS: the AWS managed key (aws/ebs) and/or your own customer managed key, applied to volumes and snapshots. Triggers: \"EBS volumes must be encrypted\", \"data at rest\", \"HIPAA\".",
+  "why_not": "S3 SSE and client-side encryption are S3-only features. CloudHSM holds keys, not passwords, and is not how EBS encryption is done. ACM issues TLS certificates for encryption in transit and does not encrypt volumes.",
+  "keywords": [
+    "EBS encryption",
+    "KMS",
+    "AWS managed key",
+    "customer managed key",
+    "CloudHSM",
+    "ACM",
+    "data at rest",
+    "HIPAA"
+  ],
+  "services": [
+    "ebs",
+    "kms",
+    "cloudhsm"
+  ],
+  "topics": [
+    "storage",
+    "iam-security"
+  ],
+  "domain": 1,
+  "related": []
+}

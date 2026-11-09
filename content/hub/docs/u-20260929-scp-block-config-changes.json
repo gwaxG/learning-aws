@@ -1,0 +1,51 @@
+{
+  "id": "u-20260929-scp-block-config-changes",
+  "source": {
+    "type": "user",
+    "added": "2026-09-29",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A company intends to give each of its developers a personal AWS account through AWS Organizations. To enforce regulatory policies, preconfigured AWS Config rules will be set in the new accounts. A solutions architect must see to it that developers are unable to remove or modify any rules in AWS Config.\nWhich solution meets the objective with the least operational overhead?",
+    "options": [
+      "Use an IAM Role in the new accounts with an attached IAM trust relationship to disable the access of the root user to AWS Config.",
+      "Add the developers' AWS account to an organization unit (OU). Attach a service control policy (SCP) to the OU that restricts access to AWS Config.",
+      "Configure an AWS Config rule in the root account to detect if changes to the new account’s Config rules are made.",
+      "Set up an AWS Control Tower in the root account to detect if there were any changes to the new account’s AWS Config rules. Attach an IAM trust relationship to the IAM User of each developer which prevents any changes in AWS Config."
+    ],
+    "answer": 1,
+    "explanation": "An SCP attached to the OU denies the AWS Config actions that modify or delete rules (e.g. config:DeleteConfigRule, config:PutConfigRule, config:StopConfigurationRecorder) for every account in the OU, including future ones and even for account admins and the root user of member accounts. It is a preventive control set once. A role trust policy cannot disable the root user. An AWS Config rule only detects and does not prevent. Control Tower detects changes, and IAM trust relationships attached to users are not a thing (trust policies belong to roles) and would be per-user overhead."
+  },
+  "concept": "Organizations SCP: deny changes to AWS Config rules for all accounts in an OU",
+  "tests": "Preventive guardrail across many accounts: an SCP on the OU that denies AWS Config modification actions, versus detective controls (Config rule, Control Tower detection) or IAM trust policies.",
+  "expected": "Put the accounts in an OU and attach an SCP denying config:DeleteConfigRule, config:PutConfigRule, config:StopConfigurationRecorder etc. Triggers: 'unable to remove or modify', 'AWS Organizations', 'least operational overhead'.",
+  "why_not": "Trust policies belong to roles and can't disable the root user. A Config rule in the root account only detects changes after they happen. Control Tower detective controls don't prevent changes, and 'IAM trust relationship on a user' doesn't exist and would be per-user work.",
+  "keywords": [
+    "SCP",
+    "service control policy",
+    "AWS Config",
+    "AWS Organizations",
+    "OU",
+    "preventive control",
+    "guardrail",
+    "developer accounts",
+    "config:DeleteConfigRule",
+    "least operational overhead"
+  ],
+  "services": [
+    "organizations",
+    "config",
+    "control-tower",
+    "iam"
+  ],
+  "topics": [
+    "iam-security",
+    "monitoring"
+  ],
+  "domain": 1,
+  "related": [
+    "e3-q4",
+    "e4-q4",
+    "e2-q19"
+  ]
+}

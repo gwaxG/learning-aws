@@ -1,0 +1,63 @@
+<section class="ch" id="c-cost">
+<h2>11. Стоимость</h2>
+<div class="sub">
+<h3>Где экономить</h3>
+<ul>
+<li><b>Compute</b>: стабильная база — Savings Plans/RI; прерываемое — Spot; нерегулярное — On-Demand; нагрузка по расписанию — scheduled scaling и Instance Scheduler; <b>Compute Optimizer</b> предлагает right-sizing.</li>
+<li><b>Serverless</b>: платишь только за использование (Lambda, Fargate, DynamoDB on-demand, Aurora Serverless).</li>
+<li><b>Хранение</b>: подходящий класс S3, lifecycle, Intelligent-Tiering при неизвестном доступе; EBS gp3 вместо gp2; удалять неприкреплённые тома, старые snapshots, неиспользуемые EIP.</li>
+<li><b>Передача данных</b>: вход бесплатен; выход в интернет платный; между AZ платно; в одной AZ по private IP бесплатно; через VPC Gateway endpoint к S3/DynamoDB без платы NAT. CloudFront дешевле прямой раздачи с S3/EC2.</li>
+<li><b>NAT Gateway</b> стоит дорого (почасовая + за ГБ): трафик к S3/DynamoDB пускай идёт через <b>Gateway endpoint</b>.</li>
+</ul>
+</div>
+<div class="sub">
+<h3>Инструменты учёта</h3>
+<div class="tw"><table>
+<tr><th>Сервис</th><th>Для чего</th></tr>
+<tr><td><b>Cost Explorer</b></td><td>анализ и прогноз расходов, рекомендации по RI/SP</td></tr>
+<tr><td><b>Budgets</b></td><td>бюджеты и алерты (SNS, email), actions</td></tr>
+<tr><td><b>Cost and Usage Report</b></td><td>детальный отчёт в S3 (+ Athena)</td></tr>
+<tr><td><b>Cost allocation tags</b></td><td>разбивка расходов по отделам/проектам (активировать в Billing)</td></tr>
+<tr><td><b>Trusted Advisor</b></td><td>проверки: стоимость, безопасность, лимиты, отказоустойчивость, производительность</td></tr>
+<tr><td><b>Organizations</b></td><td>consolidated billing, общие скидки</td></tr>
+</table></div>
+</div>
+<div class="sub">
+<h3>Серверно и бессерверно по цене</h3>
+<div class="box trap"><b>Типовые «most cost-effective»</b>
+<ul><li>Нерегулярная короткая нагрузка → Lambda, а не EC2.</li>
+<li>Устойчивая нагрузка 24/7 на 1–3 года → Savings Plans/Reserved.</li>
+<li>Отказоустойчивый batch → Spot (+ Spot Fleet/ASG mixed).</li>
+<li>Редкий доступ к данным → S3 IA/Glacier; неизвестный → Intelligent-Tiering.</li>
+<li>Раздача статики → CloudFront + S3, не EC2.</li></ul></div>
+</div>
+</section>
+
+<section class="ch" id="c-ops" data-weak="1">
+<h2>12. Мониторинг и операции <span class="b b1">слегка</span></h2>
+<div class="sub" data-weak="1">
+<h3>Кто что показывает <span class="b b1">слегка</span></h3>
+<div class="tw"><table>
+<tr><th>Вопрос</th><th>Сервис</th></tr>
+<tr><td>Что с метриками/логами сейчас?</td><td><b>CloudWatch</b> (метрики, Logs, Alarms, Dashboards, Logs Insights)</td></tr>
+<tr><td>Кто вызвал API?</td><td><b>CloudTrail</b></td></tr>
+<tr><td>Как настроен ресурс и соответствует ли правилам?</td><td><b>Config</b></td></tr>
+<tr><td>Что AWS меняет/ломает у моих ресурсов?</td><td><b>AWS Health</b> (Personal Health Dashboard) → событие в <b>EventBridge</b> → SNS</td></tr>
+<tr><td>Трассировка запросов микросервисов</td><td><b>X-Ray</b></td></tr>
+<tr><td>Управление парком инстансов (патчи, команды, сессии)</td><td><b>Systems Manager</b> (Run Command, Patch Manager, Session Manager, Parameter Store)</td></tr>
+</table></div>
+<ul>
+<li><b>Метрики EC2 по умолчанию</b>: CPU, сеть, диск; <b>память и место на диске</b> — только через <b>CloudWatch agent</b>. Детальный мониторинг — 1 минута.</li>
+<li><b>Alarm</b> → действия: SNS, Auto Scaling, EC2 (stop/recover/reboot).</li>
+<li><b>Logs</b>: подписки (subscription filters) → Kinesis/Firehose/Lambda; экспорт в S3.</li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>Уведомление о запланированных событиях AWS по EC2 → <b>EventBridge rule на события AWS Health + SNS</b>.</div>
+</div>
+<div class="sub">
+<h3>Инфраструктура как код</h3>
+<ul>
+<li><b>CloudFormation</b>: шаблоны (YAML/JSON), stacks, <b>StackSets</b> (много аккаунтов/Regions), change sets, drift detection. <b>CDK</b> генерирует CloudFormation.</li>
+<li><b>Elastic Beanstalk</b> — PaaS для веб-приложений (загрузи код). <b>OpsWorks</b> — Chef/Puppet. <b>Service Catalog</b> — одобренные продукты для пользователей.</li>
+</ul>
+</div>
+</section>

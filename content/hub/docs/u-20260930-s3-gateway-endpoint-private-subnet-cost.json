@@ -1,0 +1,50 @@
+{
+  "id": "u-20260930-s3-gateway-endpoint-private-subnet-cost",
+  "source": {
+    "type": "user",
+    "added": "2026-09-30",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A company is hosting an application on EC2 instances that regularly pushes and fetches data in Amazon S3. Due to a change in compliance, the instances need to be moved on a private subnet. Along with this change, the company wants to lower the data transfer costs by configuring its AWS resources.\nHow can this be accomplished in the MOST cost-efficient manner?",
+    "options": [
+      "Create an Amazon S3 interface endpoint to enable a connection between the instances and Amazon S3.",
+      "Set up a NAT Gateway in the public subnet to connect to Amazon S3.",
+      "Create an Amazon S3 gateway endpoint to enable a connection between the instances and Amazon S3.",
+      "Set up an AWS Transit Gateway to access Amazon S3."
+    ],
+    "answer": 2,
+    "explanation": "An S3 gateway endpoint gives private-subnet instances a private path to S3 through a route table entry, with no internet gateway or NAT and at no additional charge. An interface endpoint also works but costs per hour and per GB. A NAT Gateway charges per hour and per GB processed. Transit Gateway connects VPCs and networks, it is not a way to reach S3."
+  },
+  "concept": "VPC endpoints: S3/DynamoDB gateway endpoints instead of NAT (savings)",
+  "tests": "Cheapest private access from a private subnet to S3: the free S3 gateway endpoint (route table target), not NAT Gateway, interface endpoint or Transit Gateway.",
+  "expected": "Create an S3 gateway endpoint and associate it with the private subnets' route tables. Triggers: 'private subnet', 'S3', 'lower data transfer costs', 'MOST cost-efficient'.",
+  "why_not": "NAT Gateway costs per hour plus per GB processed. An interface endpoint (PrivateLink) is paid hourly and per GB and is not needed for S3 within the VPC. Transit Gateway interconnects networks, it doesn't provide S3 access.",
+  "keywords": [
+    "S3 gateway endpoint",
+    "VPC endpoint",
+    "private subnet",
+    "NAT Gateway",
+    "interface endpoint",
+    "data transfer cost",
+    "route table",
+    "Transit Gateway",
+    "most cost-efficient",
+    "S3"
+  ],
+  "services": [
+    "vpc-endpoints",
+    "s3",
+    "nat-gateway"
+  ],
+  "topics": [
+    "vpc-networking",
+    "cost"
+  ],
+  "domain": 4,
+  "related": [
+    "cost-q4",
+    "vpc-q3",
+    "e1-q26"
+  ]
+}

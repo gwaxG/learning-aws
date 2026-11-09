@@ -1,0 +1,53 @@
+{
+  "id": "u-20260929-nacl-sg-https-ephemeral",
+  "source": {
+    "type": "user",
+    "added": "2026-09-29",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A company hosted a web application on a Linux Amazon EC2 instance in the public subnet that uses a non-default network ACL. The instance uses a default security group and has an attached Elastic IP address. The network ACL is configured to block all inbound and outbound traffic. The Solutions Architect must allow incoming traffic on port 443 to access the application from any source.\nWhich combination of steps will accomplish this requirement? (Select TWO.)",
+    "options": [
+      "In the Network ACL, update the rule to allow both inbound and outbound TCP connection on port 443 from source `0.0.0.0/0` and to destination `0.0.0.0/0`",
+      "In the Security Group, create a new rule to allow TCP connection on port 443 to destination `0.0.0.0/0`",
+      "In the Network ACL, update the rule to allow inbound TCP connection on port 443 from source `0.0.0.0/0` and outbound TCP connection on port `32768 - 65535` to destination `0.0.0.0/0`",
+      "In the Security Group, add a new rule to allow TCP connection on port 443 from source `0.0.0.0/0`",
+      "In the Network ACL, update the rule to allow outbound TCP connection on port `32768 - 65535` to destination `0.0.0.0/0`"
+    ],
+    "answer": [
+      2,
+      3
+    ],
+    "explanation": "The Security Group needs an inbound rule for TCP 443 from 0.0.0.0/0 (default SG only allows traffic from itself); it is stateful, so replies are allowed automatically. The Network ACL is stateless: it needs an inbound allow for TCP 443 and an outbound allow for the ephemeral ports (32768-65535) that the client uses for the response. Allowing outbound port 443 is wrong because the reply goes to the client's ephemeral port, a SG rule 'to destination' is an outbound rule that is not needed, and the last option lacks the inbound 443 rule."
+  },
+  "concept": "NACL: stateless — outbound rule for ephemeral ports",
+  "tests": "Opening HTTPS to the internet needs both layers: SG inbound 443 (stateful) and NACL inbound 443 plus outbound ephemeral ports (stateless).",
+  "expected": "Security Group: inbound TCP 443 from 0.0.0.0/0. Network ACL: inbound TCP 443 from 0.0.0.0/0 and outbound TCP 32768-65535 (ephemeral ports) to 0.0.0.0/0. Triggers: 'non-default network ACL blocks all', 'default security group', 'port 443 from any source'.",
+  "why_not": "NACL outbound 443 is wrong because the response leaves from 443 to the client's ephemeral port. A SG rule with a destination is outbound and unnecessary (SG is stateful, outbound already open by default). Outbound ephemeral alone lacks inbound 443.",
+  "keywords": [
+    "network ACL",
+    "security group",
+    "ephemeral ports",
+    "32768-65535",
+    "stateless",
+    "stateful",
+    "port 443",
+    "HTTPS",
+    "non-default NACL",
+    "default security group"
+  ],
+  "services": [
+    "nacl",
+    "security-groups",
+    "ec2"
+  ],
+  "topics": [
+    "vpc-networking"
+  ],
+  "domain": 1,
+  "related": [
+    "vpc-q6",
+    "u-20260927-intra-vpc-sg-nacl",
+    "u-20260929-bastion-linux-ssh-tcp-32"
+  ]
+}

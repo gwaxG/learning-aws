@@ -1,0 +1,47 @@
+{
+  "id": "u-20261011-efs-provisioned-max-io-ecs-hpc",
+  "source": {
+    "type": "user",
+    "added": "2026-10-11",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A Solutions Architect is implementing a new High-Performance Computing (HPC) system in AWS that involves orchestrating several Amazon Elastic Container Service (Amazon ECS) tasks with an Amazon EC2 launch type that is part of an ECS cluster. The ECS cluster is configured with an ECS Capacity Provider to dynamically manage and scale the EC2 instances based on ECS task demand, ensuring sufficient compute resources are always available for high-throughput workloads.\nUsers around the globe will frequently access the system, and it is expected that hundreds of ECS tasks will run most of the time. These tasks require high-frequency read and write operations to a shared storage system. The output data of each ECS task is around 10 MB, and although obsolete data is eventually archived and deleted, the total storage size will not exceed 10 TB.\nWhich of the following is the MOST suitable solution that the Architect should recommend?",
+    "options": [
+      "Launch an Amazon Elastic File System (Amazon EFS) with Provisioned Throughput mode and set the performance mode to `Max I/O`. Configure the EFS file system as the container mount point in the ECS task definition of the ECS cluster.",
+      "Launch an Amazon Elastic File System (Amazon EFS) file system with Bursting Throughput mode and set the performance mode to `General Purpose`. Configure the EFS file system as the container mount point in the ECS task definition of the ECS cluster.",
+      "Launch an Amazon DynamoDB table with DynamoDB Accelerator (DAX) and DynamoDB Streams enabled. Configure the table to be accessible by all ECS cluster instances. Set the DynamoDB table as the container mount point in the ECS task definition of the ECS cluster.",
+      "Set up an SMB file share by creating an Amazon FSx for Windows File Server. Set the file share as the container mount point in the ECS task definition of the ECS cluster."
+    ],
+    "answer": 0,
+    "explanation": "Amazon EFS gives all ECS tasks shared, persistent file storage that you reference as a mount point in the task definition. Because hundreds of tasks run most of the time with frequent reads and writes, the file system needs sustained throughput: Provisioned Throughput mode provides it independently of the amount of stored data, and Max I/O performance mode supports highly parallel access (the performance mode is chosen at creation and cannot be changed). Bursting Throughput scales with stored data (about 10 TB here) and cannot sustain constant heavy demand, so it is not enough. DynamoDB is a database, not a file system, and cannot be mounted. FSx for Windows File Server is an SMB service for Windows workloads and is not the fit for high-frequency container I/O on Linux."
+  },
+  "concept": "EFS Provisioned Throughput + Max I/O as shared storage for many ECS tasks",
+  "tests": "Choosing EFS throughput and performance modes for sustained parallel I/O from many containers, versus Bursting, DynamoDB and FSx for Windows.",
+  "expected": "EFS with Provisioned Throughput and Max I/O, mounted in the ECS task definition. Triggers: \"hundreds of ECS tasks running most of the time\", \"high-frequency read and write\", \"shared storage\", total size small (10 TB).",
+  "why_not": "Bursting Throughput scales with stored size and cannot sustain constant demand from hundreds of tasks. DynamoDB is a database and cannot be mounted as a file system. FSx for Windows File Server is an SMB file share for Windows workloads, not the best fit for high-frequency container I/O.",
+  "keywords": [
+    "EFS",
+    "Provisioned Throughput",
+    "Max I/O",
+    "Bursting Throughput",
+    "ECS",
+    "task definition",
+    "mount point",
+    "FSx for Windows",
+    "DynamoDB",
+    "HPC"
+  ],
+  "services": [
+    "efs",
+    "ecs",
+    "fsx",
+    "dynamodb"
+  ],
+  "topics": [
+    "storage",
+    "serverless-containers"
+  ],
+  "domain": 3,
+  "related": []
+}

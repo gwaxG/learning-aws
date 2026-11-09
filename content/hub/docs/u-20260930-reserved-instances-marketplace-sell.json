@@ -1,0 +1,52 @@
+{
+  "id": "u-20260930-reserved-instances-marketplace-sell",
+  "source": {
+    "type": "user",
+    "added": "2026-09-30",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A large financial firm in the country has an AWS environment that contains several Reserved EC2 instances hosting a web application that has been decommissioned last week. To save costs, you need to stop incurring charges for the Reserved instances as soon as possible.\nWhat cost-effective steps will you take in this circumstance? (Select TWO.)",
+    "options": [
+      "Stop the Reserved instances as soon as possible.",
+      "Terminate the Reserved instances as soon as possible to avoid getting billed at the on-demand price when it expires.",
+      "Contact AWS to cancel your AWS subscription.",
+      "Go to the Amazon.com online shopping website and sell the Reserved instances.",
+      "Go to the AWS Reserved Instance Marketplace and sell the Reserved instances."
+    ],
+    "answer": [
+      1,
+      4
+    ],
+    "explanation": "Reserved Instances are a billing commitment for the term, so stopping the instance doesn't stop the charge. Terminate the instances so that once the reservation expires (or is sold) you aren't billed at on-demand rates, and sell the unused Reserved Instances on the AWS Reserved Instance Marketplace to recover part of the cost. Cancelling an 'AWS subscription' is not how RIs work and Amazon.com is not a place to sell RIs."
+  },
+  "concept": "Reserved Instances: terminate the instances and sell unused RIs on the RI Marketplace",
+  "tests": "What to do with unneeded Reserved Instances: billing continues for the term, so terminate the instances and sell the reservation on the Reserved Instance Marketplace.",
+  "expected": "Terminate the instances (avoid on-demand billing after expiry) and sell the unused Reserved Instances on the AWS Reserved Instance Marketplace. Triggers: 'Reserved instances', 'decommissioned', 'stop incurring charges'.",
+  "why_not": "Stopping the instance doesn't stop RI billing (you pay for the reservation). You can't cancel an 'AWS subscription' to get out of RIs, and Amazon.com's shopping site doesn't buy Reserved Instances.",
+  "keywords": [
+    "Reserved Instances",
+    "Reserved Instance Marketplace",
+    "terminate",
+    "stop",
+    "on-demand price",
+    "billing",
+    "decommissioned",
+    "Standard RI",
+    "Convertible RI",
+    "cost optimization"
+  ],
+  "services": [
+    "ec2-purchasing",
+    "ec2"
+  ],
+  "topics": [
+    "ec2-compute",
+    "cost"
+  ],
+  "domain": 4,
+  "related": [
+    "u-20260930-ec2-billing-by-instance-state",
+    "e5-q58"
+  ]
+}

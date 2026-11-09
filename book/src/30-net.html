@@ -1,0 +1,112 @@
+<section class="ch" id="c-net" data-weak="3">
+<h2>5. Сеть: VPC, DNS, CDN, балансировщики <span class="b b3">слабо</span></h2>
+
+<div class="sub" data-weak="3">
+<h3>VPC: строительные блоки <span class="b b3">слабо</span></h3>
+<ul>
+<li><b>VPC</b> — частная сеть в Region (CIDR /16–/28). <b>Subnet</b> — в одной AZ. 5 адресов в каждой подсети зарезервированы AWS.</li>
+<li><b>Public subnet</b> = route table с маршрутом <code>0.0.0.0/0 → IGW</code> и у инстанса публичный/Elastic IP. <b>Private</b> — без маршрута в IGW.</li>
+<li><b>IGW</b> — двусторонний доступ в интернет для public subnet (горизонтально масштабируемый, без ограничений полосы).</li>
+<li><b>NAT Gateway</b> — исходящий IPv4 из private subnets. <b>Живёт в public subnet</b> (с Elastic IP), маршрут private → NAT. На AZ свой NAT для HA. Входящие соединения из интернета не пропускает.</li>
+<li><b>Egress-only IGW</b> — то же для <b>IPv6</b> (исходящий да, входящий нет). У IPv6 нет NAT: адреса публичные.</li>
+<li><b>Bastion host</b> / SSM Session Manager — вход в private instances; Session Manager без открытых портов и ключей.</li>
+<li><b>Flow Logs</b> — метаданные трафика (в S3, CloudWatch); не содержимое.</li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>«Исходящий IPv6 из private subnet, входящий закрыть» → <b>Egress-only Internet Gateway</b>, а не NAT Gateway. Инстанс без DNS hostname в новой VPC → включи в VPC атрибуты <b>DNS resolution</b> и <b>DNS hostnames</b>.</div>
+<h4>Security Group против NACL</h4>
+<div class="tw"><table>
+<tr><th></th><th>Security Group</th><th>NACL</th></tr>
+<tr><td>Уровень</td><td>инстанс/ENI</td><td>подсеть</td></tr>
+<tr><td>Состояние</td><td><b>stateful</b></td><td><b>stateless</b> (нужны правила в обе стороны, эфемерные порты)</td></tr>
+<tr><td>Правила</td><td>только Allow</td><td>Allow и Deny, по номеру</td></tr>
+<tr><td>Источник</td><td>IP, CIDR, <b>другая SG</b>, prefix list</td><td>только CIDR</td></tr>
+</table></div>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>Порт БД (1433, 3306) от app-tier в Auto Scaling: <b>Source = ID security group</b> app-tier, а не IP и не CIDR подсети. Так правило работает для любого нового инстанса. Заблокировать конкретный IP → NACL (Deny), в SG такого нет.</div>
+</div>
+
+<div class="sub" data-weak="3">
+<h3>Связность между сетями <span class="b b3">слабо</span></h3>
+<div class="tw"><table>
+<tr><th>Что</th><th>Когда</th><th>Ограничения</th></tr>
+<tr><td><b>VPC Peering</b></td><td>2 VPC (даже разные аккаунты/Regions), простая связь</td><td>нет транзитивности, CIDR не должны пересекаться, N VPC = N(N-1)/2 связей</td></tr>
+<tr><td><b>Transit Gateway</b></td><td>десятки/сотни VPC и VPN; hub-and-spoke; транзит</td><td><b>Regional</b>: между Regions — <b>TGW peering</b> (статические маршруты)</td></tr>
+<tr><td><b>Site-to-Site VPN</b></td><td>быстро, шифрованный IPsec через интернет</td><td>до 1,25 Гбит/с на туннель, 2 туннеля для HA</td></tr>
+<tr><td><b>Direct Connect</b></td><td>выделенный канал, стабильная задержка, большой трафик</td><td>недели на установку, <b>не шифрован</b> по умолчанию</td></tr>
+<tr><td><b>VPC endpoint</b></td><td>доступ к сервисам AWS без интернета</td><td>см. ниже</td></tr>
+</table></div>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>Сотни VPC и VPN в 5 Regions → <b>по одному Transit Gateway в каждом Region + TGW peering между ними</b>, ресурсы делятся через RAM. Direct Connect и peering для такой задачи не масштабируются.</div>
+<h4>Direct Connect</h4>
+<ul>
+<li><b>Private VIF</b> — к ресурсам в VPC (через VGW или DX Gateway). <b>Public VIF</b> — к публичным сервисам AWS (S3). <b>Transit VIF</b> — к Transit Gateway.</li>
+<li><b>Direct Connect Gateway</b> — один канал к VPC в нескольких Regions.</li>
+<li><b>Шифрование</b>: VPN поверх DX (IPsec over public VIF) или MACsec.</li>
+<li><b>Резервирование</b>: второй DX (другая локация) или VPN как backup. Максимальная отказоустойчивость — 2 DX в 2 локациях.</li>
+<li>Данные по DX: <b>DataSync agent через service/VPC endpoint</b> на private VIF (трафик не идёт в интернет).</li>
+</ul>
+<h4>VPC endpoints</h4>
+<ul>
+<li><b>Gateway endpoint</b> — <b>только S3 и DynamoDB</b>, бесплатно, запись в route table.</li>
+<li><b>Interface endpoint</b> (PrivateLink) — ENI с private IP в твоей подсети для остальных сервисов и для чужих сервисов; платно.</li>
+<li><b>PrivateLink</b> также публикует твой сервис другим VPC без peering (за NLB).</li>
+</ul>
+</div>
+
+<div class="sub" data-weak="2">
+<h3>Route 53 <span class="b b2">средне</span></h3>
+<ul>
+<li>Типы записей: A, AAAA, CNAME (не для корня зоны), <b>Alias</b> (бесплатно, для корня зоны, к ELB, CloudFront, S3 website, API Gateway; не к EC2 DNS).</li>
+<li><b>Health checks</b> + <b>failover</b> routing: primary/secondary. Health check умеет проверять endpoint, другие health checks (calculated) и CloudWatch alarm.</li>
+</ul>
+<div class="tw"><table>
+<tr><th>Политика</th><th>Смысл</th></tr>
+<tr><td>Simple</td><td>одна запись (несколько значений без health checks)</td></tr>
+<tr><td>Weighted</td><td>доли трафика, canary, A/B</td></tr>
+<tr><td>Latency</td><td>в Region с наименьшей задержкой для пользователя</td></tr>
+<tr><td>Failover</td><td>active-passive</td></tr>
+<tr><td>Geolocation</td><td>по стране/континенту пользователя (законодательство, язык, <b>EU data residency</b>)</td></tr>
+<tr><td>Geoproximity</td><td>по расстоянию с bias (нужен Traffic Flow)</td></tr>
+<tr><td>Multivalue</td><td>до 8 здоровых записей</td></tr>
+</table></div>
+<div class="box trap"><b>Route 53 только направляет DNS</b>Он не обрабатывает данные, не видит HTTP-заголовки и не ускоряет трафик. Для «обработать рядом с пользователем» нужен edge compute.</div>
+</div>
+
+<div class="sub" data-weak="2">
+<h3>CloudFront и Global Accelerator <span class="b b2">средне</span></h3>
+<ul>
+<li><b>CloudFront</b> — CDN: кэш статики и динамики на edge. Origins: S3, ALB, EC2, любой HTTP. <b>OAC</b> (Origin Access Control) закрывает S3 так, чтобы доступ был только через CloudFront. HTTPS с ACM-сертификатом из <b>us-east-1</b>.</li>
+<li><b>Приватный контент</b>: signed URLs (отдельный файл, клиенты без cookies) или signed cookies (много файлов), + OAC на origin. S3 presigned URL обходит CloudFront.</li>
+<li><b>Geo restriction</b>, WAF, Shield, origin failover (origin groups), field-level encryption.</li>
+<li><b>Edge compute</b>: <b>Lambda@Edge</b> (viewer/origin request и response, полноценный код) и <b>CloudFront Functions</b> (только viewer, очень лёгкая логика: заголовки, редиректы). Response headers policy только добавляет/меняет заголовки ответа.</li>
+<li><b>Global Accelerator</b> — 2 anycast IP, трафик идёт по сети AWS, быстрый failover по health. Для TCP/UDP и <b>не кэширует</b> (игры, VoIP, статические IP, быстрый регион-failover). CloudFront — для HTTP-кэша.</li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>Глобальный real-time clickstream, обработка у пользователя: <b>CloudFront + Lambda@Edge + Kinesis + S3</b>. Route 53 latency/geoproximity лишь направляет DNS; Athena не обрабатывает потоки.</div>
+</div>
+
+<div class="sub" data-weak="3">
+<h3>Elastic Load Balancing <span class="b b3">слабо</span></h3>
+<div class="tw"><table>
+<tr><th></th><th>ALB</th><th>NLB</th><th>GWLB</th></tr>
+<tr><td>Уровень</td><td>L7 HTTP/HTTPS, gRPC, WebSocket</td><td>L4 TCP/UDP/TLS</td><td>L3, виртуальные appliances</td></tr>
+<tr><td>Особенности</td><td>path/host/header routing, redirect, Lambda target, WAF, OIDC auth</td><td>миллионы RPS, <b>статический IP/EIP</b>, preserves source IP, PrivateLink</td><td>фаерволы, IDS через GENEVE</td></tr>
+<tr><td>Когда</td><td>веб, микросервисы, контейнеры</td><td>низкая задержка, статические IP, не-HTTP</td><td>inline-инспекция трафика</td></tr>
+</table></div>
+<ul>
+<li><b>Cross-zone</b>: на ALB включён по умолчанию (бесплатно), на NLB выключен (платно между AZ).</li>
+<li><b>SNI</b> — несколько сертификатов (доменов) на одном listener ALB/NLB (на CLB нет).</li>
+<li><b>Sticky sessions</b> (cookie), <b>connection draining</b> (deregistration delay), health checks.</li>
+<li><b>Один listener на порт.</b></li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>Редирект HTTP → HTTPS: <b>редактируй существующий listener :80</b> — действие redirect на HTTPS:443. Новый listener на том же порту создать нельзя, а listener :443 HTTP-трафик не видит.</div>
+<div class="box trap"><b>Нужен статический IP для балансировщика?</b> NLB (или Global Accelerator перед ALB). ALB имеет только DNS-имя.</div>
+</div>
+
+<div class="sub" data-weak="2">
+<h3>API Gateway <span class="b b2">средне</span></h3>
+<ul>
+<li>Типы: <b>REST</b> (кэш, usage plans, API keys, WAF, валидация), <b>HTTP</b> (дешевле, проще, JWT), <b>WebSocket</b>. Endpoint: edge-optimized, <b>regional</b>, private.</li>
+<li>Интеграции: Lambda, HTTP, сервисы AWS. Throttling, кэш ответов (TTL), stage variables, canary.</li>
+<li><b>Custom domain</b> для regional API: сертификат <b>ACM в том же Region</b> + Route 53 alias на домен API Gateway.</li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>Сертификат us-east-1 нужен только для CloudFront и edge-optimized. Для regional API Gateway — ACM в Region API.</div>
+</div>
+</section>

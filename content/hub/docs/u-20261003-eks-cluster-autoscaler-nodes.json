@@ -1,0 +1,50 @@
+{
+  "id": "u-20261003-eks-cluster-autoscaler-nodes",
+  "source": {
+    "type": "user",
+    "added": "2026-10-03",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A solutions architect is tasked with designing a scalable infrastructure solution for a business that runs uses Amazon Elastic Kubernetes Service (Amazon EKS) to execute container applications. Since the company’s workload varies throughout the day, they want to make sure that its underlying infrastructure automatically scales in and out in response to demand.\nWhich of the following would meet the requirements with the LEAST amount of operational overhead?",
+    "options": [
+      "Set up CloudWatch alarms for CPU utilization or request count to monitor the relevant metrics of the container applications running on Amazon EKS.",
+      "Use a combination of Kubernetes Metrics and Kubernetes Cluster Autoscaler to manage the number of nodes.",
+      "Integrate an edge-optimized API endpoint in Amazon API Gateway with Amazon EKS to manage and expose APIs for the containerized applications running on EKS.",
+      "Use Amazon EC2 Auto Scaling Groups with custom scaling policies to manage the scaling of EKS worker nodes."
+    ],
+    "answer": 1,
+    "explanation": "The Kubernetes Metrics Server collects resource usage and the Kubernetes Cluster Autoscaler automatically adds nodes (through the node group's Auto Scaling group) when pods cannot be scheduled and removes under-used nodes, so the infrastructure follows demand with no custom scaling policies to build. CloudWatch alarms only monitor and notify, they do not scale anything by themselves. API Gateway exposes APIs and has nothing to do with scaling nodes. Managing EC2 Auto Scaling groups with custom policies works but is manual and the Auto Scaling group does not know about pending pods, so it is more operational work than the Cluster Autoscaler."
+  },
+  "concept": "EKS: Kubernetes Metrics Server + Cluster Autoscaler scale the worker nodes automatically",
+  "tests": "Knowing that the Cluster Autoscaler (with the Metrics Server; HPA for pods) is the low-overhead way to scale EKS worker nodes in and out, versus CloudWatch alarms, API Gateway or hand-built Auto Scaling policies.",
+  "expected": "Metrics Server + Cluster Autoscaler (or Karpenter) for nodes, Horizontal Pod Autoscaler for pods; Fargate profiles remove node management entirely. Triggers: 'EKS', 'scales in and out', 'underlying infrastructure', 'least operational overhead'.",
+  "why_not": "CloudWatch alarms only alert, they do not add or remove nodes. API Gateway only publishes APIs and has no scaling role for the nodes. A custom EC2 Auto Scaling group policy has to be designed and tuned by hand and is not aware of pending pods, so it is more overhead than the Cluster Autoscaler.",
+  "keywords": [
+    "Amazon EKS",
+    "Cluster Autoscaler",
+    "Metrics Server",
+    "Horizontal Pod Autoscaler",
+    "worker nodes",
+    "node group",
+    "Auto Scaling group",
+    "Karpenter",
+    "least operational overhead",
+    "Fargate"
+  ],
+  "services": [
+    "eks",
+    "auto-scaling",
+    "cloudwatch",
+    "api-gateway",
+    "fargate"
+  ],
+  "topics": [
+    "serverless-containers"
+  ],
+  "domain": 3,
+  "related": [
+    "e5-q34",
+    "srv-q1"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "id": "u-20261004-s3-emr-log-processing",
+  "source": {
+    "type": "user",
+    "added": "2026-10-04",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A company has a set of Linux servers running on multiple On-Demand Amazon EC2 instances powered by the EC2 Nitro System. The Audit team wants to collect and process the application log files generated from these servers for the report.\nWhich of the following is the most suitable solution to meet this requirement?",
+    "options": [
+      "A single On-Demand EC2 instance for both storing and processing the log files",
+      "Amazon S3 Glacier for storing the application log files and Spot EC2 Instances for processing them.",
+      "Amazon S3 Glacier Deep Archive for storing the application log files and AWS ParallelCluster for processing the log files.",
+      "Amazon S3 for storing the application log files and Amazon Elastic MapReduce for processing the log files."
+    ],
+    "answer": 3,
+    "explanation": "Amazon S3 is the durable, scalable, low-cost place to collect log files, and Amazon EMR (Hadoop/Spark) processes large volumes of data stored in S3 on a managed cluster that can add cheap Spot task nodes. A single EC2 instance is a single point of failure with limited storage and compute. Glacier and Glacier Deep Archive are archive tiers that need a retrieval step (minutes to hours) before the logs can be processed, and unmanaged Spot instances can be interrupted. AWS ParallelCluster is for HPC workloads, not log analytics."
+  },
+  "concept": "Log collection and processing: S3 for storage + EMR for big-data processing",
+  "tests": "Choosing S3 as the log store and EMR as the processing engine for large-scale log analysis, versus a single EC2 instance, archive tiers (Glacier) or HPC tooling (ParallelCluster).",
+  "expected": "Ship logs to S3 (e.g. CloudWatch agent/Firehose), then run EMR (Spark/Hadoop, Spot task nodes) or Athena for SQL. Triggers: 'collect and process the application log files', 'audit report', multiple servers.",
+  "why_not": "A single EC2 instance does not scale, has limited storage and is a single point of failure. Glacier and Glacier Deep Archive are for rarely accessed archives and need a retrieval before processing, and a pure Spot fleet can be interrupted. AWS ParallelCluster builds HPC clusters for tightly coupled simulations, not log analytics.",
+  "keywords": [
+    "Amazon S3",
+    "Amazon EMR",
+    "log files",
+    "Hadoop",
+    "Spark",
+    "big data processing",
+    "Glacier",
+    "Glacier Deep Archive",
+    "ParallelCluster",
+    "Spot task nodes"
+  ],
+  "services": [
+    "s3",
+    "emr",
+    "glacier",
+    "athena",
+    "ec2"
+  ],
+  "topics": [
+    "data-migration",
+    "storage"
+  ],
+  "domain": 3,
+  "related": [
+    "u-20260930-glue-job-bookmark-reprocessing"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "u-20261101-rds-sql-server-force-ssl-root-ca",
+  "source": {
+    "type": "user",
+    "added": "2026-11-01",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "An application is hosted in an Auto Scaling group of EC2 instances and a Microsoft SQL Server on Amazon RDS. There is a requirement that all in-flight data between your web servers and RDS should be secured.\nWhich of the following options is the MOST suitable solution that you should implement? (Select TWO.)",
+    "options": [
+      "Enable the IAM DB authentication in RDS using the AWS Management Console.",
+      "Download the Amazon RDS Root CA certificate. Import the certificate to your servers and configure your application to use SSL to encrypt the connection to RDS.",
+      "Specify the TDE option in an RDS option group that is associated with that DB instance to enable transparent data encryption (TDE).",
+      "Force all connections to your DB instance to use SSL by setting the rds.force_ssl parameter to true. Once done, reboot your DB instance.",
+      "Configure the security groups of your EC2 instances and RDS to only allow traffic to and from port 443."
+    ],
+    "answer": [
+      1,
+      3
+    ],
+    "explanation": "To secure data in flight to RDS for SQL Server you use SSL/TLS: set the rds.force_ssl parameter to true so every connection must use SSL (it is a static parameter, so reboot the DB instance), and download the RDS root CA certificate, import it on the servers and configure the application to connect with SSL. TDE encrypts stored data at rest, not data in transit. IAM database authentication only supports MySQL and PostgreSQL and replaces the password, it does not encrypt traffic. Security groups only filter ports and do not encrypt anything (the database does not even listen on 443)."
+  },
+  "concept": "In-flight encryption to RDS = SSL: rds.force_ssl=true (reboot) + RDS root CA certificate on the clients",
+  "tests": "Separating encryption in transit (SSL, force_ssl) from at rest (TDE), IAM DB authentication and security groups.",
+  "expected": "rds.force_ssl = true with a reboot, plus importing the RDS root CA certificate on the clients and enabling SSL in the application. Triggers: \"in-flight data\", \"SQL Server on RDS\".",
+  "why_not": "TDE protects data at rest. IAM DB authentication is for MySQL/PostgreSQL logins and does not encrypt the connection. Security groups limiting to port 443 do not encrypt traffic.",
+  "keywords": [
+    "RDS SSL",
+    "rds.force_ssl",
+    "root CA certificate",
+    "TDE",
+    "IAM DB authentication",
+    "SQL Server",
+    "in-flight encryption"
+  ],
+  "services": [
+    "rds",
+    "security-groups"
+  ],
+  "topics": [
+    "databases"
+  ],
+  "domain": 1,
+  "related": []
+}

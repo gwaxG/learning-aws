@@ -1,0 +1,73 @@
+<section class="ch" id="c-cheat">
+<h2>14. Шпаргалки для финального повторения</h2>
+
+<h3>Слово-триггер → ответ</h3>
+<div class="tw"><table>
+<tr><th>В вопросе</th><th>Выбирай</th></tr>
+<tr><td>Redirect HTTP → HTTPS на ALB</td><td>действие redirect на существующем listener :80</td></tr>
+<tr><td>Статический IP у балансировщика</td><td>NLB / Global Accelerator</td></tr>
+<tr><td>OS-bypass, HPC</td><td>EFA</td></tr>
+<tr><td>Ограничить запуск по числу лицензий</td><td>License Manager, enforce limit</td></tr>
+<tr><td>Исходящий IPv6 без входящего</td><td>Egress-only IGW</td></tr>
+<tr><td>Сотни VPC, несколько Regions</td><td>TGW в каждом Region + peering</td></tr>
+<tr><td>Порт БД от приложения в ASG</td><td>SG источника = ID SG приложения</td></tr>
+<tr><td>Сервис AWS из private subnet без интернета</td><td>VPC endpoint (S3/DynamoDB — Gateway)</td></tr>
+<tr><td>Multi-account landing zone, dashboard</td><td>Control Tower</td></tr>
+<tr><td>Потолок прав в Organization</td><td>SCP</td></tr>
+<tr><td>Авторотация пароля БД</td><td>Secrets Manager</td></tr>
+<tr><td>Проверка политики паролей / возраста ключей</td><td>Config managed rules (+ EventBridge + Lambda)</td></tr>
+<tr><td>Принудительно SSE на загрузку в S3</td><td>bucket policy Deny без нужного заголовка</td></tr>
+<tr><td>Кто что делал в API</td><td>CloudTrail</td></tr>
+<tr><td>Серверы lift-and-shift, мин. простой</td><td>MGN</td></tr>
+<tr><td>БД с минимальным простоем</td><td>DMS (+ SCT при смене движка)</td></tr>
+<tr><td>Ускоренная управляемая передача файлов</td><td>DataSync (через endpoint по DX)</td></tr>
+<tr><td>Десятки ТБ без сети</td><td>Snowball Edge</td></tr>
+<tr><td>S3-данные пережить отказ Region</td><td>CRR</td></tr>
+<tr><td>Redshift DR на уровне Region</td><td>cross-Region snapshot copy</td></tr>
+<tr><td>Lambda по изменениям таблицы</td><td>DynamoDB Streams</td></tr>
+<tr><td>Кэш перед DynamoDB без правок кода</td><td>DAX</td></tr>
+<tr><td>Обработка логов в больших объёмах</td><td>S3 + EMR</td></tr>
+<tr><td>Real-time поток</td><td>Kinesis Data Streams</td></tr>
+<tr><td>Обработка у пользователя по всему миру</td><td>CloudFront + Lambda@Edge</td></tr>
+<tr><td>Сертификат для CloudFront / regional API GW</td><td>ACM us-east-1 / ACM в том же Region</td></tr>
+<tr><td>Масштабировать ноды EKS</td><td>Cluster Autoscaler</td></tr>
+<tr><td>Извещение о событии AWS Health</td><td>EventBridge + SNS</td></tr>
+<tr><td>Память инстанса в метриках</td><td>CloudWatch agent</td></tr>
+</table></div>
+
+<h3>Топ ловушек экзамена</h3>
+<ol>
+<li><b>Выдуманные ресурсы</b> («Spot volumes», «SR-IOV volumes»): сомневаешься — вычёркивай.</li>
+<li><b>Region-границы</b>: ACM, snapshots, AMI, KMS-ключи, TGW, S3 CRR.</li>
+<li><b>Route 53 не обрабатывает данные</b>, только направляет DNS.</li>
+<li><b>SCP не даёт прав</b>, а только ограничивает.</li>
+<li><b>Multi-AZ ≠ DR</b>: для аварии региона нужен другой Region.</li>
+<li><b>gp3 без Multi-Attach</b>; EBS в одной AZ; EFS — между AZ.</li>
+<li><b>NAT Gateway в public subnet</b>; в private только маршрут на него.</li>
+<li><b>Athena ≠ real-time</b>, Kinesis ≠ SQL по S3.</li>
+<li><b>Config</b> = состояние, <b>CloudTrail</b> = действия, <b>CloudWatch</b> = метрики/логи.</li>
+<li><b>Instance store пропадает</b>, EBS остаётся.</li>
+<li>«Минимум усилий» → managed/serverless; «минимум стоимости» → Spot/SP/IA; «real-time» → Kinesis.</li>
+</ol>
+
+<h3>Что выбрать: сравнения в одну строку</h3>
+<ul>
+<li><b>SQS</b> очередь (pull) · <b>SNS</b> рассылка (push) · <b>EventBridge</b> события AWS и расписание · <b>Kinesis</b> поток.</li>
+<li><b>ALB</b> HTTP · <b>NLB</b> TCP/статический IP · <b>GWLB</b> appliances.</li>
+<li><b>CloudFront</b> кэш HTTP · <b>Global Accelerator</b> TCP/UDP anycast без кэша.</li>
+<li><b>Secrets Manager</b> ротация · <b>Parameter Store</b> конфиги · <b>KMS</b> ключи · <b>CloudHSM</b> свой HSM.</li>
+<li><b>GuardDuty</b> угрозы · <b>Inspector</b> уязвимости · <b>Macie</b> PII в S3 · <b>Security Hub</b> сводка.</li>
+<li><b>WAF</b> L7 · <b>Shield</b> DDoS · <b>NACL</b> подсеть stateless · <b>SG</b> инстанс stateful.</li>
+<li><b>Peering</b> 1:1 · <b>TGW</b> hub · <b>PrivateLink</b> сервис без peering · <b>VPN</b> быстро · <b>DX</b> выделенный канал.</li>
+<li><b>RDS Multi-AZ</b> HA · <b>read replica</b> чтение · <b>Aurora Global</b> DR между Regions.</li>
+<li><b>EBS</b> блок · <b>EFS</b> Linux-шара · <b>FSx</b> Windows/Lustre · <b>S3</b> объекты.</li>
+</ul>
+
+<h3>Чек-лист за день до теста</h3>
+<ul>
+<li>Прочитай главу 0 (карта слабых мест) и все блоки «⚠ Ты ошибался здесь».</li>
+<li>Пролистай таблицу триггеров выше и список ловушек.</li>
+<li>Перед сном — 15 минут на Flashcards и Weak points в приложении.</li>
+<li>На экзамене: читай последнюю строку первой, вычёркивай неверное, не застревай (≈2 минуты на вопрос), отмечай сложное и возвращайся.</li>
+</ul>
+</section>

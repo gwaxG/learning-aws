@@ -1,0 +1,50 @@
+{
+  "id": "u-20261003-config-access-keys-rotated-eventbridge-lambda",
+  "source": {
+    "type": "user",
+    "added": "2026-10-03",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A company has a team of developers that provisions its own resources on the AWS cloud. The developers use IAM user access keys to automate resource provisioning and application testing processes in AWS. To ensure proper security compliance, the security team wants to automate the process of deactivating and deleting any IAM user access key that is over 90 days old.\nWhich solution will meet these requirements with the LEAST operational effort?",
+    "options": [
+      "Use the AWS Config managed rule to check if the IAM user access keys are not rotated within 90 days. Create an Amazon EventBridge rule for the non-compliant keys, and define a target to invoke a custom AWS Lambda function to deactivate and delete the keys.",
+      "Create an Amazon EventBridge rule to filter IAM user access keys older than 90 days. Define a target to invoke an AWS Lambda function to deactivate and delete the old access keys.",
+      "Create an Amazon EventBridge rule to filter IAM user access keys older than 90 days. Schedule an AWS Batch job that runs every 24 hours to delete all the specified access keys.",
+      "Create a custom AWS Config rule to check the max-age of IAM access keys. Use Amazon EventBridge Scheduler to invoke an AWS Batch job every 24 hours to delete all non-compliant access keys."
+    ],
+    "answer": 0,
+    "explanation": "The AWS Config managed rule access-keys-rotated already checks whether IAM access keys are older than a set number of days (90), so nothing has to be written to detect old keys. Config emits compliance-change events to EventBridge, and an EventBridge rule on NON_COMPLIANT results invokes a small Lambda function that deactivates and deletes the key (Config can also run SSM Automation remediation). EventBridge cannot filter keys by age because IAM does not emit an event when a key becomes 90 days old, so those two options have no detection source. A custom Config rule plus Batch adds code and infrastructure you do not need when a managed rule exists."
+  },
+  "concept": "Config managed rule access-keys-rotated + EventBridge + Lambda to remove old IAM access keys",
+  "tests": "Using the AWS Config managed rule (access-keys-rotated) as the detector and EventBridge + Lambda (or SSM Automation remediation) as the automatic response for IAM keys older than 90 days, with the least effort.",
+  "expected": "Config managed rule access-keys-rotated (maxAccessKeyAge 90) → EventBridge rule on NON_COMPLIANT → Lambda that deactivates then deletes the key. Triggers: 'access keys over 90 days', 'automate', 'LEAST operational effort'.",
+  "why_not": "An EventBridge rule alone cannot filter keys by age, because no event is emitted when a key reaches 90 days, so there is nothing to match. Batch jobs on a 24-hour schedule are extra infrastructure for a task a small Lambda does. A custom Config rule is unnecessary when a managed rule already checks access-key age.",
+  "keywords": [
+    "AWS Config",
+    "access-keys-rotated",
+    "managed rule",
+    "IAM access keys",
+    "90 days",
+    "EventBridge",
+    "Lambda",
+    "remediation",
+    "non-compliant",
+    "AWS Batch"
+  ],
+  "services": [
+    "config",
+    "eventbridge",
+    "lambda",
+    "iam"
+  ],
+  "topics": [
+    "monitoring",
+    "iam-security"
+  ],
+  "domain": 1,
+  "related": [
+    "u-20260929-scp-block-config-changes",
+    "u-20260929-iam-groups-mfa-policy"
+  ]
+}

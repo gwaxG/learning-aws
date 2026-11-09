@@ -1,0 +1,47 @@
+{
+  "id": "u-20261101-s3-encryption-hipaa-client-side-sse-aes256",
+  "source": {
+    "type": "user",
+    "added": "2026-11-01",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "For data privacy, a healthcare company has been asked to comply with the Health Insurance Portability and Accountability Act (HIPAA). The company stores all its backups on an Amazon S3 bucket. It is required that data stored on the S3 bucket must be encrypted.\nWhat is the best option to do this? (Select TWO.)",
+    "options": [
+      "Before sending the data to S3 over HTTPS, encrypt the data locally first using your own encryption keys.",
+      "Store the data on Amazon EBS volumes with encryption enabled instead of using S3.",
+      "Enable Server-Side Encryption on an S3 bucket to make use of AES-256 encryption.",
+      "Store the data in encrypted Amazon EBS snapshots.",
+      "Enable Server-Side Encryption on an S3 bucket to make use of AES-128 encryption."
+    ],
+    "answer": [
+      0,
+      2
+    ],
+    "explanation": "To encrypt data stored in S3 you can encrypt it yourself before upload (client-side encryption with your own keys, sent over HTTPS) and/or enable server-side encryption, which in S3 uses AES-256 (SSE-S3, SSE-KMS or SSE-C). EBS volumes and encrypted EBS snapshots are block storage, they do not satisfy a requirement that data stored in S3 is encrypted. S3 has no AES-128 server-side encryption option."
+  },
+  "concept": "S3 data encryption = client-side encryption and/or SSE with AES-256",
+  "tests": "Choosing S3-native encryption options and rejecting EBS encryption and non-existent AES-128 SSE.",
+  "expected": "Client-side encryption before upload with your own keys and S3 server-side encryption with AES-256. Triggers: \"data stored on the S3 bucket must be encrypted\", \"HIPAA\".",
+  "why_not": "EBS encryption and encrypted EBS snapshots protect block storage, not S3 objects. S3 server-side encryption is AES-256 only, there is no AES-128 option.",
+  "keywords": [
+    "S3 encryption",
+    "client-side encryption",
+    "SSE-S3",
+    "AES-256",
+    "AES-128",
+    "HIPAA",
+    "EBS snapshots"
+  ],
+  "services": [
+    "s3-security",
+    "s3",
+    "kms"
+  ],
+  "topics": [
+    "storage",
+    "iam-security"
+  ],
+  "domain": 1,
+  "related": []
+}

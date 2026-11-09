@@ -1,0 +1,50 @@
+{
+  "id": "u-20261004-s3-sse-s3-bucket-policy-deny-unencrypted",
+  "source": {
+    "type": "user",
+    "added": "2026-10-04",
+    "origin": "user-supplied practice question (missed); category 'CSAA – Design Secure Architectures'"
+  },
+  "question": {
+    "stem": "A multinational bank is storing its confidential files in an S3 bucket. The security team recently performed an audit, and the report shows that multiple files have been uploaded without 256-bit Advanced Encryption Standard (AES) server-side encryption. For added protection, the encryption key must be automatically rotated every year. The solutions architect must ensure that there would be no other unencrypted files uploaded in the S3 bucket in the future.\nWhich of the following will meet these requirements with the LEAST operational overhead?",
+    "options": [
+      "Create an S3 bucket policy that denies permissions to upload an object unless the request includes the s3:x-amz-server-side-encryption\": \"AES256\" header. Enable server-side encryption with Amazon S3-managed encryption keys (SSE-S3) and rely on the built-in key rotation feature of the SSE-S3 encryption keys.",
+      "Create a Service Control Policy (SCP) for the S3 bucket that rejects any object uploads unless the request includes the s3:x-amz-server-side-encryption\": \"AES256\" header. Enable server-side encryption with Amazon S3-managed encryption keys (SSE-S3) and modify the built-in key rotation feature of the SSE-S3 encryption keys to rotate the key yearly.",
+      "Create a new customer-managed key from the AWS Key Management Service (AWS KMS). Configure the default encryption behavior of the bucket to use the customer-managed key. Manually rotate the KMS key and every year.",
+      "Create an S3 bucket policy for the S3 bucket that rejects any object uploads unless the request includes the s3:x-amz-server-side-encryption\":\"aws:kms\" header. Enable the S3 Object Lock in compliance mode for all objects to automatically rotate the built-in AES256 customer-managed key of the bucket."
+    ],
+    "answer": 0,
+    "explanation": "SSE-S3 encrypts objects with AES-256 and AWS manages the keys, including rotating them automatically, so there is nothing to operate. A bucket policy that denies s3:PutObject unless the request carries x-amz-server-side-encryption: AES256 makes sure no unencrypted object can be uploaded in the future. An SCP applies to accounts and OUs, not to a single bucket, and the SSE-S3 key rotation is fully managed by AWS and cannot be modified. A customer-managed KMS key that you rotate manually adds exactly the operational work the question wants to avoid (and KMS offers automatic yearly rotation anyway, so 'manual' is wrong). Object Lock only protects objects from deletion or overwrite and has nothing to do with key rotation; also the aws:kms header asks for SSE-KMS, not the AES256 SSE-S3 the audit refers to."
+  },
+  "concept": "S3 enforce encryption with a bucket policy (deny PutObject without the SSE header) + SSE-S3 (AWS-managed, auto-rotated keys)",
+  "tests": "Combining a deny-unless-header bucket policy with SSE-S3, whose keys AWS rotates automatically, for the least operational overhead; recognizing that SCPs, manual KMS rotation and Object Lock do not fit.",
+  "expected": "Bucket policy: Deny s3:PutObject unless s3:x-amz-server-side-encryption equals AES256, plus default encryption SSE-S3 (AES-256, AWS-managed key rotation). Triggers: '256-bit AES server-side encryption', 'no other unencrypted files in the future', 'LEAST operational overhead'.",
+  "why_not": "An SCP is attached to accounts or OUs and cannot be scoped to one bucket, and you cannot change how AWS rotates SSE-S3 keys. A customer-managed KMS key rotated manually is operational work (KMS automatic rotation exists, so manual is also not the recommended way). Object Lock in compliance mode only prevents deletion and overwrite and does not rotate keys; the aws:kms header would also enforce SSE-KMS rather than AES256.",
+  "keywords": [
+    "S3 bucket policy",
+    "SSE-S3",
+    "AES256",
+    "x-amz-server-side-encryption",
+    "server-side encryption",
+    "key rotation",
+    "SCP",
+    "KMS customer managed key",
+    "Object Lock",
+    "least operational overhead"
+  ],
+  "services": [
+    "s3",
+    "s3-security",
+    "kms",
+    "scp",
+    "encryption"
+  ],
+  "topics": [
+    "storage",
+    "iam-security"
+  ],
+  "domain": 1,
+  "related": [
+    "u-20260929-s3-client-side-encryption-kms-master-key"
+  ]
+}

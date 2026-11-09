@@ -15,6 +15,11 @@ const TYPES = {
 const MODES = { learn: "To learn", all: "All", mastered: "Mastered" };
 const MAX_BOX = 3;
 
+async function loadWeakAreas() {
+  const res = await fetch("content/weak/weak-points.json");
+  return res.ok ? (await res.json()).areas : [];
+}
+
 const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const norm = (s) => String(s ?? "").toLowerCase();
 const html = (s) => esc(s).replace(/\n/g, "<br>");
@@ -36,7 +41,7 @@ function orderDeck(cards) {
 }
 
 export async function renderFlashcards(view, arg, query) {
-  const [svc, all] = await Promise.all([loadServices(), loadCards()]);
+  const [svc, all, weakAreas] = await Promise.all([loadServices(), loadCards(), loadWeakAreas()]);
   const svcById = new Map(svc.categories.flatMap((c) => c.services.map((s) => [s.id, s])));
   const st = {
     cat: query.cat || "",
@@ -44,7 +49,10 @@ export async function renderFlashcards(view, arg, query) {
     type: query.type || "",
     mode: MODES[query.mode] ? query.mode : "learn",
     q: query.q || "",
+    w: query.w || "",
   };
+  const weakOf = () => weakAreas.find((a) => a.id === st.w);
+  const inWeak = (c) => !weakOf() || weakOf().services.includes(c.svc);
   let deck = [];
   let pos = 0;
   let flipped = false;
@@ -55,6 +63,7 @@ export async function renderFlashcards(view, arg, query) {
       if (st.cat && c.cat !== st.cat) return false;
       if (st.s && c.svc !== st.s) return false;
       if (st.type && c.type !== st.type) return false;
+      if (!inWeak(c)) return false;
       const b = boxOf(c.id);
       if (st.mode === "learn" && b >= MAX_BOX) return false;
       if (st.mode === "mastered" && b < MAX_BOX) return false;
@@ -88,13 +97,14 @@ export async function renderFlashcards(view, arg, query) {
       <input id="fcQ" type="search" placeholder="Search cards…" />
       <button class="btn" id="fcShuffle" title="Reshuffle">Shuffle</button>
     </div>
+    <div id="fcWeak"></div>
     <div id="fcStats" class="muted fc-stats"></div>
     <div id="fcStage"></div>
   </div>`;
 
   const $ = (id) => view.querySelector(id);
   const fillServices = () => {
-    const list = svc.categories.filter((c) => !st.cat || c.id === st.cat).flatMap((c) => c.services);
+    const list = svc.categories.filter((c) => !st.cat || c.id === st.cat).flatMap((c) => c.services).filter((s) => !weakOf() || weakOf().services.includes(s.id));
     if (st.s && !list.some((s) => s.id === st.s)) st.s = "";
     $("#fcSvc").innerHTML =
       `<option value="">All services</option>` + list.map((s) => `<option value="${esc(s.id)}">${esc(s.name)}</option>`).join("");
@@ -112,9 +122,16 @@ export async function renderFlashcards(view, arg, query) {
   $("#fcMode").onchange = (e) => { st.mode = e.target.value; rebuild(); };
   $("#fcQ").oninput = (e) => { st.q = e.target.value; rebuild(); };
   $("#fcShuffle").onclick = rebuild;
+  const drawWeak = () => {
+    const a = weakOf();
+    $("#fcWeak").innerHTML = a ? `<span class="fc-weak chip">Weak area: ${esc(a.title)} <a href="#/weak-points" title="Back to weak points">theory →</a> <button class="btn" id="fcWeakX">✕ clear</button></span>` : "";
+    const x = $("#fcWeakX");
+    if (x) x.onclick = () => { st.w = ""; drawWeak(); fillServices(); rebuild(); };
+  };
+  drawWeak();
 
   function stats() {
-    const scope = all.filter((c) => (!st.cat || c.cat === st.cat) && (!st.s || c.svc === st.s) && (!st.type || c.type === st.type));
+    const scope = all.filter((c) => inWeak(c) && (!st.cat || c.cat === st.cat) && (!st.s || c.svc === st.s) && (!st.type || c.type === st.type));
     const done = scope.filter((c) => boxOf(c.id) >= MAX_BOX).length;
     const seen = scope.filter((c) => boxOf(c.id) > 0).length;
     $("#fcStats").textContent = `${deck.length ? pos + 1 : 0} / ${deck.length} in this deck · mastered ${done} of ${scope.length} · seen ${seen}`;

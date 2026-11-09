@@ -1,0 +1,65 @@
+<section class="ch" id="c-misc">
+<h2>13. Типовые архитектуры и прочие сервисы</h2>
+
+<div class="sub">
+<h3>Паттерны архитектур, которые любит экзамен</h3>
+<div class="tw"><table>
+<tr><th>Паттерн</th><th>Состав</th></tr>
+<tr><td><b>Статический сайт</b></td><td>S3 + CloudFront (OAC) + Route 53 alias + ACM (us-east-1) + WAF</td></tr>
+<tr><td><b>Трёхзвенное веб-приложение</b></td><td>Route 53 → CloudFront → ALB (public) → ASG в private subnets (2+ AZ) → RDS Multi-AZ / Aurora, кэш ElastiCache; NAT для исходящего</td></tr>
+<tr><td><b>Serverless web/API</b></td><td>CloudFront + S3 (фронт) + API Gateway + Lambda + DynamoDB + Cognito</td></tr>
+<tr><td><b>Асинхронная обработка</b></td><td>S3/API → SQS → ASG воркеров (масштаб по длине очереди) → результат в S3/БД; DLQ для ошибок</td></tr>
+<tr><td><b>Fan-out</b></td><td>SNS topic → несколько SQS/Lambda (разная обработка одного события)</td></tr>
+<tr><td><b>Событийная автоматизация</b></td><td>источник (Config/GuardDuty/Health/cron) → EventBridge → Lambda/SSM/SNS</td></tr>
+<tr><td><b>Data lake</b></td><td>S3 + Glue Catalog + Athena/Redshift Spectrum + Lake Formation + QuickSight</td></tr>
+<tr><td><b>Стриминг и аналитика</b></td><td>источники → Kinesis → Firehose → S3/Redshift/OpenSearch; Flink для обработки</td></tr>
+<tr><td><b>Hybrid</b></td><td>DX + VPN backup, Storage Gateway/DataSync, Route 53 Resolver endpoints для DNS между on-prem и VPC</td></tr>
+</table></div>
+</div>
+
+<div class="sub">
+<h3>Каталоги и пользователи приложений</h3>
+<ul>
+<li><b>Directory Service</b>: <b>AWS Managed Microsoft AD</b> (полноценный AD в AWS, trust с on-prem), <b>AD Connector</b> (прокси к on-prem AD), <b>Simple AD</b> (дёшево, базовый).</li>
+<li><b>Cognito User Pools</b> — регистрация, вход, MFA, федерация соцсетей/SAML, JWT; работает с ALB и API Gateway. <b>Identity Pools</b> — выдают временные AWS credentials.</li>
+</ul>
+</div>
+
+<div class="sub">
+<h3>EC2: семейства инстансов</h3>
+<div class="tw"><table>
+<tr><th>Семейство</th><th>Для чего</th></tr>
+<tr><td><b>T</b> (burstable)</td><td>низкая средняя нагрузка со всплесками, CPU credits</td></tr>
+<tr><td><b>M</b> (general)</td><td>баланс CPU/памяти, веб, приложения</td></tr>
+<tr><td><b>C</b> (compute)</td><td>CPU: batch, кодирование видео, HPC</td></tr>
+<tr><td><b>R / X</b> (memory)</td><td>БД в памяти, кэши, big data</td></tr>
+<tr><td><b>I / D</b> (storage)</td><td>высокий IOPS, локальный NVMe (I), плотное хранение (D)</td></tr>
+<tr><td><b>P / G</b> (GPU)</td><td>ML-обучение, графика; Inf/Trn — чипы AWS для инференса/обучения</td></tr>
+</table></div>
+<ul>
+<li><b>Graviton</b> (ARM) — лучше цена/производительность, если приложение собрано под ARM.</li>
+<li><b>Elastic IP</b> — статический публичный IPv4, платно, если не привязан; можно перекинуть на другой инстанс (failover).</li>
+<li><b>Hibernate</b> — RAM сохраняется на зашифрованный EBS; быстрый возврат состояния.</li>
+</ul>
+</div>
+
+<div class="sub">
+<h3>Остальное по триггерам</h3>
+<div class="tw"><table>
+<tr><th>Сервис</th><th>Триггер</th></tr>
+<tr><td><b>Elastic Beanstalk</b></td><td>«загрузить код, не управлять инфраструктурой» (PaaS)</td></tr>
+<tr><td><b>AWS Batch</b></td><td>пакетные задания, очередь, Spot, без своего планировщика</td></tr>
+<tr><td><b>Outposts</b></td><td>инфраструктура AWS в твоём ДЦ (низкая задержка до on-prem, данные остаются локально)</td></tr>
+<tr><td><b>Local Zones / Wavelength</b></td><td>вычисления ближе к городу / к 5G-сети</td></tr>
+<tr><td><b>AppSync</b></td><td>управляемый GraphQL, real-time подписки</td></tr>
+<tr><td><b>SES</b></td><td>отправка email; <b>Pinpoint</b> — маркетинговые кампании</td></tr>
+<tr><td><b>WorkSpaces / AppStream 2.0</b></td><td>виртуальные рабочие столы / стриминг приложений</td></tr>
+<tr><td><b>Service Catalog</b></td><td>одобренные шаблоны для пользователей</td></tr>
+<tr><td><b>Systems Manager Session Manager</b></td><td>доступ к инстансам без SSH и открытых портов</td></tr>
+<tr><td><b>Route 53 Resolver</b></td><td>DNS между VPC и on-prem (inbound/outbound endpoints)</td></tr>
+<tr><td><b>X-Ray</b></td><td>трассировка запросов</td></tr>
+<tr><td><b>Amazon OpenSearch</b></td><td>полнотекстовый поиск, логи, дашборды</td></tr>
+<tr><td><b>AWS Glue DataBrew / SageMaker</b></td><td>подготовка данных без кода / свои ML-модели</td></tr>
+</table></div>
+</div>
+</section>

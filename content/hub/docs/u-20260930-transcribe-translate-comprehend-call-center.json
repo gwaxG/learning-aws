@@ -1,0 +1,50 @@
+{
+  "id": "u-20260930-transcribe-translate-comprehend-call-center",
+  "source": {
+    "type": "user",
+    "added": "2026-09-30",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A call center wants to use Artificial Intelligence(AI) to extract insights from audio recordings to assess the quality of its customer service. The calls are available in both English and Hindi. A sentiment analysis report in English must be generated for each recording to assess whether or not the customer had a positive experience. Once the solution is completed, new languages will eventually be supported, such as Arabic, Mandarin, and Spanish.\nHow can the solutions architect build the solution without maintaining any machine learning model?",
+    "options": [
+      "Convert audio recordings into text using Amazon Transcribe. Set up Amazon Translate to translate Hindi texts into English and use Amazon Comprehend for sentiment analysis.",
+      "Transcribe audio recordings into text using Amazon Polly’s `StartSpeechSynthesisTask` operation. Set up Amazon Rekognition to recognize and automatically translate Hindi texts into English. Use the combination of Amazon Fraud Detector and Amazon SageMaker BlazingText algorithm for sentiment analysis.",
+      "Utilize the Amazon Lex service to convert audio recordings into text. Call the Amazon Translate API to translate Hindi texts into English and use Amazon SageMaker Clarify for sentiment prediction and analysis.",
+      "Set up Amazon Comprehend to convert audio recordings into text. Use Amazon Kendra to translate Hindi texts into English and utilize the Amazon Detective service to automatically detect negative user behaviors for sentiment analysis."
+    ],
+    "answer": 0,
+    "explanation": "Transcribe converts speech to text (it supports many languages), Translate converts the Hindi text to English, and Comprehend performs sentiment analysis on the English text. All three are fully managed AI services, so no ML model has to be built or maintained, and new languages just need the corresponding language settings. Polly is text-to-speech and Rekognition analyzes images/video. Lex builds chatbots and SageMaker Clarify explains/bias-checks models, so you would maintain models. Comprehend does not transcribe audio, Kendra is enterprise search and Detective investigates security findings."
+  },
+  "concept": "AI services: Transcribe (speech to text) + Translate + Comprehend (sentiment), no ML model to maintain",
+  "tests": "Matching managed AI services to each pipeline step: audio to text (Transcribe), language conversion (Translate), sentiment (Comprehend), and rejecting look-alike services (Polly, Rekognition, Lex, SageMaker, Kendra, Detective).",
+  "expected": "Transcribe the recordings, Translate Hindi text to English, then Comprehend for sentiment analysis. Triggers: 'audio recordings', 'sentiment analysis', 'translate', 'without maintaining any machine learning model'.",
+  "why_not": "Polly is text-to-speech and Rekognition is image/video analysis, and BlazingText/Fraud Detector don't fit. Lex builds chatbots (not transcription of recordings) and SageMaker Clarify is for model bias/explainability, which means custom models. Comprehend can't convert audio, Kendra is document search (not translation) and Detective is for security investigation.",
+  "keywords": [
+    "Transcribe",
+    "Translate",
+    "Comprehend",
+    "sentiment analysis",
+    "speech to text",
+    "call center",
+    "audio recordings",
+    "no ML model",
+    "Polly",
+    "Lex"
+  ],
+  "services": [
+    "transcribe",
+    "translate",
+    "comprehend",
+    "polly",
+    "lex",
+    "rekognition"
+  ],
+  "topics": [
+    "architecture"
+  ],
+  "domain": 3,
+  "related": [
+    "u-20260928-kvs-rekognition-sns-sms"
+  ]
+}

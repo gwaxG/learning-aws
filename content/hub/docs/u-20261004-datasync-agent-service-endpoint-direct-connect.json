@@ -1,0 +1,51 @@
+{
+  "id": "u-20261004-datasync-agent-service-endpoint-direct-connect",
+  "source": {
+    "type": "user",
+    "added": "2026-10-04",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "An organization plans to use an AWS Direct Connect connection to establish a dedicated connection between its on-premises network and AWS. The organization needs to launch a fully managed solution that will automate and accelerate the replication of data to and from various AWS storage services.\nWhich of the following solutions would you recommend?",
+    "options": [
+      "Use an AWS DataSync agent to rapidly move the data over a service endpoint.",
+      "Use an AWS Storage Gateway file gateway to store and retrieve files directly using the SMB file system protocol.",
+      "Use an AWS Storage Gateway tape gateway to store data on virtual tape cartridges and asynchronously copy your backups to AWS.",
+      "Use an AWS DataSync agent to rapidly move the data over the Internet."
+    ],
+    "answer": 0,
+    "explanation": "AWS DataSync is the fully managed service that automates and accelerates data transfer between on-premises storage and AWS storage services (S3, EFS, FSx) in both directions. Over a Direct Connect link, the DataSync agent connects to a (VPC) service endpoint through a private virtual interface, so the data stays on the dedicated private connection instead of crossing the public Internet. File gateway and tape gateway are hybrid storage appliances for ongoing file access or tape backups, not a managed bulk replication service. Moving the data over the Internet ignores the Direct Connect connection."
+  },
+  "concept": "DataSync over Direct Connect: agent connects through a service (VPC) endpoint on the private link",
+  "tests": "Choosing DataSync (agent + VPC/service endpoint) to automate and accelerate bulk transfers to and from AWS storage over Direct Connect, versus Storage Gateway types or the Internet path.",
+  "expected": "DataSync agent on-premises, activated against a VPC endpoint (PrivateLink) over a Direct Connect private VIF, with tasks that copy between on-premises NFS/SMB and S3/EFS/FSx, in both directions. Triggers: 'fully managed', 'automate and accelerate the replication', 'to and from AWS storage services', 'Direct Connect'.",
+  "why_not": "A file gateway gives on-premises applications SMB/NFS access to S3 (a hybrid file share), it is not a managed bulk replication service. A tape gateway is only a virtual tape library for backup software. Using DataSync over the Internet ignores the dedicated Direct Connect connection the company is paying for and loses its private, consistent network path.",
+  "keywords": [
+    "AWS DataSync",
+    "DataSync agent",
+    "service endpoint",
+    "VPC endpoint",
+    "Direct Connect",
+    "Storage Gateway",
+    "file gateway",
+    "tape gateway",
+    "data transfer",
+    "replication"
+  ],
+  "services": [
+    "datasync",
+    "direct-connect",
+    "storage-gateway",
+    "vpc-endpoints",
+    "s3",
+    "efs"
+  ],
+  "topics": [
+    "data-migration",
+    "storage"
+  ],
+  "domain": 3,
+  "related": [
+    "u-20260930-file-gateway-backups-nfs-smb"
+  ]
+}

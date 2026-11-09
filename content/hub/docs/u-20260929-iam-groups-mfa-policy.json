@@ -1,0 +1,45 @@
+{
+  "id": "u-20260929-iam-groups-mfa-policy",
+  "source": {
+    "type": "user",
+    "added": "2026-09-29",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A company that is rapidly growing in recent months has been in the process of setting up IAM users on its single AWS Account. A solutions architect has been tasked to handle the user management, which includes granting read-only access to users and denying permissions whenever an IAM user has no MFA setup. New users will be added frequently based on their respective departments.\nWhich of the following action is the MOST secure way to grant permissions to the new users?",
+    "options": [
+      "Launch an IAM Group for each department. Create an IAM Policy that enforces MFA authentication with the least privilege permission. Attach the IAM Policy to each IAM Group.",
+      "Create an IAM Role that enforces MFA authentication with the least privilege permission. Set up a corresponding IAM Group for each department. Attach the IAM Role to the IAM Groups.",
+      "Create a Service Control Policy (SCP) that enforces MFA authentication for each department. Add a trust relationship to every SCP and attach it to each IAM User.",
+      "Set up IAM roles for each IAM user and associate a permissions boundary that defines the maximum permissions."
+    ],
+    "answer": 0,
+    "explanation": "Groups are the scalable way to manage many users by department: new users just join the group and inherit its policy. An IAM policy with an aws:MultiFactorAuthPresent condition (deny without MFA) plus read-only least-privilege permissions gives the required behavior. A role cannot be attached to a group (roles are assumed, not attached). SCPs apply to accounts/OUs in AWS Organizations, not to individual IAM users, and have no trust relationship. A role plus permissions boundary per user does not scale and a boundary only caps permissions, it grants none."
+  },
+  "concept": "IAM: groups per department + MFA-enforcing policy (aws:MultiFactorAuthPresent)",
+  "tests": "Scalable, secure user management: attach a least-privilege policy with an MFA condition to IAM groups (per department), and know that roles can't be attached to groups and SCPs don't apply to individual IAM users.",
+  "expected": "An IAM group per department with an attached policy that grants read-only access and denies (or only allows with) aws:MultiFactorAuthPresent = true. New users are added to the group. Triggers: 'new users added frequently', 'per department', 'deny without MFA'.",
+  "why_not": "A role can't be attached to a group (users/services assume roles). SCPs work on accounts and OUs in Organizations, not on IAM users, and SCPs have no trust relationship. A role per user with a permissions boundary doesn't scale, and a boundary sets a maximum but grants nothing.",
+  "keywords": [
+    "IAM group",
+    "IAM policy",
+    "MFA",
+    "aws:MultiFactorAuthPresent",
+    "least privilege",
+    "read-only",
+    "SCP",
+    "permissions boundary",
+    "IAM role",
+    "department"
+  ],
+  "services": [
+    "iam"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1,
+  "related": [
+    "e1-q46"
+  ]
+}

@@ -1,0 +1,71 @@
+<div class="hero">
+<h1>AWS Solutions Architect Associate<br>SAA-C03 — конспект</h1>
+<p>Книга для подготовки к экзамену: теория, таблицы «что выбрать», ловушки и слова-триггеры. Твои слабые места помечены цветом.</p>
+<p class="legend"><span><i class="dot d3"></i> слабо</span><span><i class="dot d2"></i> средне</span><span><i class="dot d1"></i> слегка</span><span>кнопка «🔴 слабые» вверху оставляет только слабые разделы</span></p>
+</div>
+
+<section class="ch" id="c-map" data-weak="3">
+<h2>0. Карта слабых мест <span class="b b3">главное</span></h2>
+<p>Составлена по диагностике (9/10) и по вопросам, где ты ошибся. Каждая строка — тема, в которой ты терял баллы, и глава, где она разобрана.</p>
+<div class="tw"><table>
+<tr><th>Область</th><th>Уровень</th><th>Где</th></tr>
+<tr><td>VPC и сеть: TGW, DX, SG, DNS, IPv6</td><td><span class="b b3">слабо</span></td><td><a href="#c-net">гл. 5</a></td></tr>
+<tr><td>Organizations, SCP, Control Tower</td><td><span class="b b3">слабо</span></td><td><a href="#c-iam">гл. 3</a></td></tr>
+<tr><td>Security: KMS, IAM, Config, шифрование</td><td><span class="b b3">слабо</span></td><td><a href="#c-iam">гл. 3</a>, <a href="#c-sec">4</a></td></tr>
+<tr><td>EC2: billing, ALB, License Manager, EFA</td><td><span class="b b3">слабо</span></td><td><a href="#c-compute">гл. 8</a></td></tr>
+<tr><td>Data: EMR, DynamoDB Streams, Redshift DR</td><td><span class="b b3">слабо</span></td><td><a href="#c-db">гл. 10</a></td></tr>
+<tr><td>Storage: CRR, типы EBS, Glacier</td><td><span class="b b2">средне</span></td><td><a href="#c-storage">гл. 9</a></td></tr>
+<tr><td>Миграция: MGN, DataSync, Snow</td><td><span class="b b2">средне</span></td><td><a href="#c-mig">гл. 7</a></td></tr>
+<tr><td>API Gateway, ACM, Route 53, Lambda@Edge</td><td><span class="b b2">средне</span></td><td><a href="#c-net">гл. 5</a></td></tr>
+<tr><td>Containers: EKS scaling</td><td><span class="b b1">слегка</span></td><td><a href="#c-compute">гл. 8</a></td></tr>
+<tr><td>Monitoring: Health, Config vs CloudTrail</td><td><span class="b b1">слегка</span></td><td><a href="#c-ops">гл. 12</a></td></tr>
+</table></div>
+<div class="box tip"><b>Три сквозных правила, на которых ты теряешь баллы</b>
+<ol><li><b>Граница Region.</b> Что живёт в одном Region и что нужно явно копировать или связывать между Regions (ACM, snapshots, S3 CRR, TGW).</li>
+<li><b>Похожие сервисы — разные задачи.</b> Выбирай по тому, что именно перемещается или обрабатывается (серверы, БД, файлы, поток событий).</li>
+<li><b>Готовая функция лучше ручной сборки.</b> «Least operational overhead» = управляемый сервис, а не EC2 или скрипт.</li></ol></div>
+</section>
+
+<section class="ch" id="c-exam">
+<h2>1. Как устроен экзамен</h2>
+<p><b>65 вопросов, 130 минут, проходной балл 720 из 1000.</b> Часть вопросов не оценивается (пробные). Формат: один верный из четырёх или несколько верных из пяти и более. Штрафа за неверный ответ нет, поэтому отвечай всегда.</p>
+<div class="tw"><table>
+<tr><th>Домен</th><th>Вес</th><th>О чём</th></tr>
+<tr><td>1. Secure</td><td>30%</td><td>IAM, шифрование, сеть, защита данных</td></tr>
+<tr><td>2. Resilient</td><td>26%</td><td>HA, DR, масштабирование, decoupling</td></tr>
+<tr><td>3. High-performing</td><td>24%</td><td>compute, storage, DB, сеть, аналитика</td></tr>
+<tr><td>4. Cost-optimized</td><td>20%</td><td>модели покупки, классы хранения, затраты</td></tr>
+</table></div>
+<h3>Как читать вопрос</h3>
+<ul>
+<li>Сначала <b>последнюю строку</b>: что просят (MOST secure / cost-effective / least overhead / highest availability).</li>
+<li>Выпиши ограничения: Region, объём, время, «без изменения кода», «минимум простоя».</li>
+<li>Отсеивай варианты с <b>выдуманными сервисами или свойствами</b> (Spot volumes, SR-IOV volumes), с ручной сборкой вместо managed и с нарушением ограничения.</li>
+<li>Из двух рабочих выбирай то, что точнее соответствует слову-ограничителю.</li>
+</ul>
+<div class="box trap"><b>Слова-ограничители</b>
+<ul><li><b>Least operational overhead</b> → serverless и managed.</li>
+<li><b>Most cost-effective</b> → Spot, Savings Plans, S3 классы, lifecycle.</li>
+<li><b>Near real-time / real-time</b> → Kinesis, а не Athena или batch.</li>
+<li><b>Without changing the application</b> → решение на уровне инфраструктуры (cache, proxy, gateway).</li>
+<li><b>Highly available</b> → минимум 2 AZ. <b>Disaster recovery</b> → другой Region.</li></ul></div>
+</section>
+
+<section class="ch" id="c-found">
+<h2>2. Фундамент: Regions, AZ и модель ответственности</h2>
+<ul>
+<li><b>Region</b> — изолированная географическая область, минимум 3 AZ. Данные не покидают Region сами. Выбор: законодательство, задержка, цена, наличие сервисов.</li>
+<li><b>AZ</b> — один или несколько дата-центров, соединённых низколатентно. Подсеть всегда в одной AZ.</li>
+<li><b>Edge location</b> — точки CloudFront, Route 53, Global Accelerator, Lambda@Edge. Их больше, чем Regions.</li>
+<li><b>Global-сервисы</b>: IAM, Route 53, CloudFront, Organizations, WAF (для CloudFront), Global Accelerator. Остальное — regional.</li>
+</ul>
+<h3>Shared Responsibility</h3>
+<div class="tw"><table>
+<tr><th>AWS отвечает за</th><th>Ты отвечаешь за</th></tr>
+<tr><td>Безопасность <b>облака</b>: железо, ДЦ, гипервизор, managed-слой</td><td>Безопасность <b>в облаке</b>: данные, IAM, SG, ОС на EC2, шифрование, патчи гостевой ОС</td></tr>
+<tr><td>RDS: патчи БД и ОС, бэкапы</td><td>RDS: схема, пользователи, параметры, SG</td></tr>
+<tr><td>S3: инфраструктура, durability</td><td>S3: политики, шифрование, публичный доступ</td></tr>
+</table></div>
+<h3>Well-Architected: шесть столпов</h3>
+<p><b>Operational Excellence</b> (автоматизация, IaC) · <b>Security</b> (least privilege, шифрование) · <b>Reliability</b> (восстановление, Multi-AZ) · <b>Performance Efficiency</b> (правильный тип ресурса) · <b>Cost Optimization</b> (платить за нужное) · <b>Sustainability</b>. Вопросы почти всегда проверяют первые четыре.</p>
+</section>

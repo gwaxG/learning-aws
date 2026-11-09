@@ -1,0 +1,48 @@
+{
+  "id": "u-20260930-s3-transfer-acceleration-global-uploads",
+  "source": {
+    "type": "user",
+    "added": "2026-09-30",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A company has a global online trading platform in which users from all over the world regularly upload terabytes of transactional data to a centralized Amazon S3 bucket.\nWhich of the following should be used in the present system to improve throughput and ensure consistently fast data transfer to the S3 bucket, regardless of the user’s location?",
+    "options": [
+      "AWS Direct Connect",
+      "S3 Transfer Acceleration",
+      "FTP",
+      "Use Amazon CloudFront Origin Access Control (OAC)"
+    ],
+    "answer": 1,
+    "explanation": "S3 Transfer Acceleration routes uploads from users anywhere to the nearest AWS edge location and then over the AWS backbone network to the bucket, giving fast, consistent upload speed for long-distance transfers; it is enabled on the bucket and used through the accelerate endpoint. Direct Connect is a dedicated link from one site, not from users worldwide. FTP is just a protocol with no acceleration. CloudFront OAC restricts bucket access to CloudFront and does not speed up uploads."
+  },
+  "concept": "S3 Transfer Acceleration: fast uploads from distant users via edge locations",
+  "tests": "Choosing S3 Transfer Acceleration for fast, consistent uploads to one S3 bucket from users all over the world (vs Direct Connect, FTP or CloudFront OAC).",
+  "expected": "Enable S3 Transfer Acceleration on the bucket and upload through the accelerate endpoint; combine with multipart upload for large files. Triggers: 'users from all over the world upload to a centralized S3 bucket', 'terabytes', 'consistently fast regardless of location'.",
+  "why_not": "Direct Connect is a private link from one data center or office, not a solution for global end users. FTP is a transfer protocol with no acceleration. CloudFront OAC is an access-control setting for serving private S3 content and does not speed up uploads.",
+  "keywords": [
+    "S3 Transfer Acceleration",
+    "edge locations",
+    "global uploads",
+    "multipart upload",
+    "Direct Connect",
+    "CloudFront OAC",
+    "accelerate endpoint",
+    "terabytes",
+    "S3 bucket",
+    "long-distance transfer"
+  ],
+  "services": [
+    "s3",
+    "cloudfront",
+    "direct-connect"
+  ],
+  "topics": [
+    "storage",
+    "edge-dns"
+  ],
+  "domain": 3,
+  "related": [
+    "u-20260928-cloudfront-vs-transfer-acceleration-downloads"
+  ]
+}

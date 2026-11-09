@@ -1,0 +1,42 @@
+{
+  "id": "u-20261102-cost-explorer-api-programmatic-forecast",
+  "source": {
+    "type": "user",
+    "added": "2026-11-02",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A company is building an automation tool for generating custom reports on its AWS usage. The company must be able to programmatically access and forecast usage costs on specific services.\nWhich of the following would meet the requirements with the LEAST amount of operational overhead?",
+    "options": [
+      "Use the AWS Cost Explorer API with pagination to programmatically retrieve the usage cost-related data.",
+      "Configure AWS Budgets to send usage cost data to the company via Amazon SNS.",
+      "Utilize the downloadable AWS Cost Explorer report .csv files to access the cost-related data. Predict usage costs using AWS Budgets.",
+      "Generate AWS Budgets reports for usage cost data and deliver them via Amazon Simple Queue Service (SQS)."
+    ],
+    "answer": 0,
+    "explanation": "The Cost Explorer API lets code query aggregated or granular cost and usage data (filter by service, tag, account) and also returns forecasts, with pagination for large result sets, so there is no manual work. AWS Budgets only tracks a threshold and notifies (SNS/email) when it is crossed; it does not hand you detailed usage data and does not feed an SQS queue with reports. Downloading Cost Explorer CSV files is a manual step that adds operational overhead and cannot be called programmatically."
+  },
+  "concept": "Programmatic cost/usage data and forecasts = Cost Explorer API; Budgets = alerts on thresholds",
+  "tests": "Knowing Cost Explorer (analysis, forecast, API) vs Budgets (thresholds, alerts) vs manual CSV export.",
+  "expected": "Cost Explorer API (GetCostAndUsage, GetCostForecast). Triggers: \"programmatically access\", \"forecast usage costs on specific services\", \"least operational overhead\".",
+  "why_not": "Budgets via SNS: only threshold notifications, no detailed usage data. Cost Explorer CSV + Budgets: manual download, not programmatic. Budgets reports via SQS: Budgets does not deliver detailed cost data to SQS.",
+  "keywords": [
+    "Cost Explorer API",
+    "AWS Budgets",
+    "forecast",
+    "programmatic",
+    "pagination",
+    "SNS",
+    "SQS",
+    "CSV"
+  ],
+  "services": [
+    "cost-explorer",
+    "budgets"
+  ],
+  "topics": [
+    "cost"
+  ],
+  "domain": 4,
+  "related": []
+}

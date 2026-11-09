@@ -1,0 +1,66 @@
+<section class="ch" id="c-res">
+<h2>6. Отказоустойчивость, decoupling и DR</h2>
+
+<div class="sub">
+<h3>Принципы HA</h3>
+<ul>
+<li><b>High availability</b> = работает при отказе компонента: ≥ 2 AZ, нет single point of failure. <b>Disaster recovery</b> = восстановление после отказа Region/всего окружения.</li>
+<li><b>Stateless</b> приложение: сессии в ElastiCache/DynamoDB, файлы в S3/EFS — тогда инстансы заменимы.</li>
+<li>Состояние внутри инстанса (EBS, instance store) мешает масштабированию и HA.</li>
+</ul>
+<h4>Auto Scaling Group</h4>
+<ul>
+<li><code>min / desired / max</code>, размещение в нескольких AZ, замена нездоровых инстансов (EC2 и ELB health checks).</li>
+<li><b>Launch template</b> (версии) — новый AMI = новая версия шаблона; существующие инстансы обновляет <b>instance refresh</b>.</li>
+<li>Политики: <b>target tracking</b> (держи метрику ≈ значению, проще всего), step, simple, <b>scheduled</b> (известная нагрузка), <b>predictive</b>. Метрики: CPU, <code>ALBRequestCountPerTarget</code>, длина очереди SQS на инстанс.</li>
+<li><b>Lifecycle hooks</b> — действие при запуске/остановке; <b>warm pool</b> — предподготовленные инстансы для быстрого старта; cooldown.</li>
+</ul>
+</div>
+
+<div class="sub">
+<h3>Decoupling: очереди и события</h3>
+<div class="tw"><table>
+<tr><th>Сервис</th><th>Суть</th><th>Когда</th></tr>
+<tr><td><b>SQS Standard</b></td><td>очередь pull, at-least-once, порядок не гарантирован, безлимит</td><td>буфер между слоями, масштабирование по длине очереди</td></tr>
+<tr><td><b>SQS FIFO</b></td><td>строгий порядок в Message Group, exactly-once (дедупликация)</td><td>порядок важен (транзакции, команды)</td></tr>
+<tr><td><b>SNS</b></td><td>pub/sub push: SQS, Lambda, HTTP, email, SMS</td><td>fan-out: одно событие многим подписчикам (SNS → N SQS)</td></tr>
+<tr><td><b>EventBridge</b></td><td>шина событий, правила, расписание, SaaS-события, schema</td><td>события AWS (Config, Health, GuardDuty), cron, маршрутизация по содержимому</td></tr>
+<tr><td><b>Kinesis Data Streams</b></td><td>поток, порядок в шарде, несколько потребителей, повторное чтение</td><td>real-time аналитика, clickstream, логи</td></tr>
+<tr><td><b>Step Functions</b></td><td>оркестрация workflow (состояния, ретраи, ожидание)</td><td>длинные процессы из шагов Lambda/сервисов</td></tr>
+<tr><td><b>Amazon MQ</b></td><td>управляемые ActiveMQ/RabbitMQ</td><td>миграция приложений, которым нужны JMS/AMQP/MQTT</td></tr>
+</table></div>
+<ul>
+<li><b>SQS</b>: visibility timeout (скрывает сообщение на время обработки), <b>DLQ</b> (после N неудач), long polling (дешевле и без пустых ответов), delay queue. Размер до 256 КБ (больше — Extended Client + S3). Retention до 14 дней.</li>
+<li><b>Lambda + SQS</b>: Lambda опрашивает очередь сам. <b>Lambda + DynamoDB Streams / Kinesis</b>: event source mapping.</li>
+</ul>
+</div>
+
+<div class="sub">
+<h3>Disaster Recovery</h3>
+<p><b>RPO</b> — сколько данных можно потерять (время). <b>RTO</b> — как долго можно быть недоступным. Чем меньше, тем дороже.</p>
+<div class="tw"><table>
+<tr><th>Стратегия</th><th>RTO/RPO</th><th>Как</th></tr>
+<tr><td>Backup &amp; Restore</td><td>часы</td><td>бэкапы в другой Region, всё поднимается из IaC при аварии. Дёшево.</td></tr>
+<tr><td>Pilot Light</td><td>десятки минут</td><td>БД реплицируется и работает, серверы выключены, шаблоны готовы</td></tr>
+<tr><td>Warm Standby</td><td>минуты</td><td>полная копия в уменьшенном масштабе, готова к росту</td></tr>
+<tr><td>Multi-Site Active/Active</td><td>почти 0</td><td>полная нагрузка в обоих Regions. Дорого.</td></tr>
+</table></div>
+<h4>Какие данные как реплицировать</h4>
+<ul>
+<li><b>S3</b>: Cross-Region Replication (нужен versioning; реплицирует только <b>новые</b> объекты, для старых — Batch Replication). Lifecycle в Glacier и копии на EC2 данные между Regions не переносят.</li>
+<li><b>RDS</b>: Multi-AZ = HA в Region (синхронный standby, авто-failover, не для чтения); cross-Region read replica → можно повысить (promote).</li>
+<li><b>Aurora Global Database</b>: репликация &lt; 1 с, RTO &lt; 1 мин при promote вторичного Region.</li>
+<li><b>DynamoDB Global Tables</b>: multi-Region multi-active. PITR и on-demand backups.</li>
+<li><b>Redshift</b>: автоматические snapshots в Region; для аварии региона — <b>cross-Region snapshot copy</b>.</li>
+<li><b>EBS</b>: snapshots (в S3), копирование между Regions и аккаунтами; DLM автоматизирует расписание.</li>
+<li><b>Elastic Disaster Recovery (DRS)</b>: непрерывная репликация серверов в AWS, быстрое восстановление.</li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>«Данные S3 переживают отказ Region» → <b>CRR</b>. Redshift DR при отказе Region → <b>cross-Region snapshot copy</b>. Правило: DR = отдельный Region, а Multi-AZ защищает только от отказа AZ.</div>
+</div>
+
+<div class="sub">
+<h3>AWS Backup</h3>
+<p>Единая политика (plans) для EBS, RDS, DynamoDB, EFS, FSx, S3, EC2 и других. Расписание, retention, cross-Region и cross-account копии, <b>Vault Lock</b> (WORM), отчёты. «Хранить бэкапы &gt; 35 дней централизованно» → AWS Backup (у RDS нативно автобэкапы до 35 дней).</p>
+<div class="box trap"><b>EBS: Data Lifecycle Manager или AWS Backup?</b> «Автоматические snapshots EBS по расписанию» с минимумом настроек → <b>DLM</b> (бесплатно, по тегам). Много сервисов/аккаунтов или compliance → AWS Backup.</div>
+</div>
+</section>

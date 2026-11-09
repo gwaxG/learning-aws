@@ -1,0 +1,54 @@
+{
+  "id": "u-20260929-ec2-stop-start-instance-store",
+  "source": {
+    "type": "user",
+    "added": "2026-09-29",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A FinTech startup deployed an application on an Amazon EC2 instance with attached Instance Store volumes and an Elastic IP address. The server is only accessed from 8 AM to 6 PM and can be stopped from 6 PM to 8 AM for cost efficiency using AWS Lambda with a script that automates this based on tags.\nWhich of the following will occur when the EC2 instance is stopped and started? (Select TWO.)",
+    "options": [
+      "The Elastic IP address is disassociated with the instance.",
+      "The ENI (Elastic Network Interface) is detached.",
+      "The underlying host for the instance is possibly changed.",
+      "All data on the attached instance-store devices will be lost.",
+      "There will be no changes."
+    ],
+    "answer": [
+      2,
+      3
+    ],
+    "explanation": "When an EBS-backed instance is stopped and started, it may be placed on a different underlying host, and data on instance-store volumes is lost (it lives on the host's disks). The Elastic IP stays associated with the instance, and the primary ENI stays attached (its private IP and MAC persist), so those options are wrong. 'No changes' is wrong because of the host change and instance-store loss."
+  },
+  "concept": "EC2 stop/start: instance store data lost, host may change, Elastic IP and ENI persist",
+  "tests": "What survives an EC2 stop/start: EBS data, Elastic IP and primary ENI persist; instance-store data is lost and the instance may move to another host.",
+  "expected": "Host possibly changed and instance-store data lost. Triggers: 'Instance Store volumes', 'stopped and started', 'Elastic IP' (which persists).",
+  "why_not": "The Elastic IP stays associated across stop/start (it is only released if you disassociate/release it; a non-Elastic public IP would change). The primary ENI remains attached. 'No changes' ignores the host move and the instance-store wipe.",
+  "keywords": [
+    "instance store",
+    "ephemeral storage",
+    "stop and start",
+    "Elastic IP",
+    "ENI",
+    "underlying host",
+    "EBS-backed",
+    "Instance Scheduler",
+    "cost optimization",
+    "Lambda schedule"
+  ],
+  "services": [
+    "ec2",
+    "instance-store",
+    "ebs"
+  ],
+  "topics": [
+    "ec2-compute",
+    "storage"
+  ],
+  "domain": 3,
+  "related": [
+    "e1-q65",
+    "e2-q33",
+    "sto-q3"
+  ]
+}

@@ -17,6 +17,8 @@ export async function renderNav(nav) {
   nav.innerHTML =
     `<a href="#/">Dashboard</a>` +
     `<a href="#/exams">Mock Exams</a>` +
+    `<a href="#/weak-points">Weak points</a>` +
+    `<a href="#/retrain">Retrain misses</a>` +
     `<span class="nav-sep">Maps</span>` +
     `<a href="#/services">Services Map</a>` +
     `<a href="#/hub">Question Hub</a>` +

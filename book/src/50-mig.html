@@ -1,0 +1,43 @@
+<section class="ch" id="c-mig" data-weak="2">
+<h2>7. Миграция и перенос данных <span class="b b2">средне</span></h2>
+<p>Похожие сервисы решают разные задачи. Сначала определи, <b>что</b> переносят: серверы, БД, файлы или огромный объём офлайн.</p>
+<div class="tw"><table>
+<tr><th>Что переносим</th><th>Сервис</th></tr>
+<tr><td>Серверы целиком (lift-and-shift VM, физика)</td><td><b>Application Migration Service (MGN)</b></td></tr>
+<tr><td>База данных</td><td><b>DMS</b> (+ <b>SCT</b> при смене движка)</td></tr>
+<tr><td>Файлы по сети, регулярно, ускорение</td><td><b>DataSync</b></td></tr>
+<tr><td>Гибридный доступ к S3/EBS/лентам с on-prem</td><td><b>Storage Gateway</b></td></tr>
+<tr><td>SFTP/FTPS/FTP партнёров в S3/EFS</td><td><b>Transfer Family</b></td></tr>
+<tr><td>Десятки ТБ–ПБ офлайн, мало канала</td><td><b>Snow Family</b></td></tr>
+<tr><td>Учёт и отслеживание миграции</td><td>Migration Hub</td></tr>
+</table></div>
+
+<div class="sub" data-weak="2">
+<h3>MGN: серверы <span class="b b2">средне</span></h3>
+<p>Агент (<b>Replication Agent</b>) непрерывно реплицирует диски источника в staging area в AWS; потом <b>cutover</b> запускает серверы почти без простоя. Заменил Server Migration Service. <b>VM Import/Export</b> — разовый импорт образа ВМ, без непрерывной репликации и без минимального простоя.</p>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>«Lift-and-shift VM с минимальным простоем» → <b>MGN</b> + Replication Agent, а не VM Import/Export.</div>
+</div>
+
+<div class="sub" data-weak="2">
+<h3>DMS и SCT</h3>
+<ul>
+<li><b>DMS</b>: миграция БД с минимальным простоем; <b>CDC</b> (непрерывная репликация изменений) после полной загрузки. Источник остаётся рабочим. Нужен replication instance.</li>
+<li><b>Homogeneous</b> (Oracle → Oracle): DMS достаточно. <b>Heterogeneous</b> (Oracle → Aurora PostgreSQL): сначала <b>SCT</b> конвертирует схему и код, затем DMS переносит данные.</li>
+<li>Цели: RDS/Aurora, DynamoDB, Redshift, S3, OpenSearch и др.</li>
+</ul>
+</div>
+
+<div class="sub" data-weak="2">
+<h3>DataSync против Storage Gateway <span class="b b2">средне</span></h3>
+<ul>
+<li><b>DataSync</b> — управляемое копирование NFS/SMB/HDFS/S3 → S3, EFS, FSx в обе стороны; расписание, проверка целостности, throttling, до 10× быстрее ручных инструментов. Агент on-prem. <b>Через Direct Connect</b> агент работает через <b>VPC/service endpoint</b> на private VIF.</li>
+<li><b>Storage Gateway</b> — постоянный гибридный доступ: <b>File Gateway</b> (SMB/NFS → S3, локальный кэш), <b>Volume Gateway</b> (iSCSI: stored — основной диск локально, cached — в S3), <b>Tape Gateway</b> (виртуальные ленты для backup-софта → S3/Glacier).</li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>«Полностью управляемая, автоматическая и ускоренная репликация данных в AWS-хранилища по Direct Connect» → <b>DataSync через service endpoint</b>. File gateway — это файловая шара для приложений, tape gateway — виртуальная лента.</div>
+</div>
+
+<div class="sub">
+<h3>Snow Family</h3>
+<p>Физические устройства для офлайн-переноса: <b>Snowcone</b> (малый, 8–14 ТБ), <b>Snowball Edge</b> (storage optimized ~80 ТБ, compute optimized) и вычисления на периферии. Выбор: если передача по сети займёт &gt; недели (сети мало или нет), берём Snowball. Данные шифруются; загрузка в S3 делает AWS. Для постоянного потока нужен DataSync/DX, не Snow.</p>
+</div>
+</section>

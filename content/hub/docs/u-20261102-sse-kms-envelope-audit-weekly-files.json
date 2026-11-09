@@ -1,0 +1,48 @@
+{
+  "id": "u-20261102-sse-kms-envelope-audit-weekly-files",
+  "source": {
+    "type": "user",
+    "added": "2026-11-02",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A company is looking to store its confidential financial files in AWS, which are accessed every week. The Architect was instructed to set up the storage system, which uses envelope encryption and automates key rotation. It should also provide an audit trail that shows who used the encryption key and by whom for security purposes.\nWhich combination of actions should the Architect implement to satisfy the requirement in the most cost-effective way? (Select TWO.)",
+    "options": [
+      "Use Amazon S3 to store the data.",
+      "Configure Server-Side Encryption with Amazon S3-Managed Keys (SSE-S3).",
+      "Configure Server-Side Encryption with Customer-Provided Keys (SSE-C).",
+      "Use Amazon S3 Glacier Deep Archive to store the data.",
+      "Configure Server-Side Encryption with AWS KMS Keys (SSE-KMS)."
+    ],
+    "answer": [
+      0,
+      4
+    ],
+    "explanation": "S3 (data is read weekly, so a cheap archive class does not fit) with SSE-KMS: it uses envelope encryption (KMS key protects per-object data keys), supports automatic key rotation, and every use of the key is logged in AWS CloudTrail, giving the audit trail of who used the key. SSE-S3 has no per-use key audit trail (you cannot see key usage in CloudTrail) and you do not control the key. SSE-C means you supply and manage keys yourself (S3 does not store them), so there is no KMS audit trail or automatic rotation. Glacier Deep Archive is the cheapest storage but retrieval takes hours and it is meant for data accessed rarely, not weekly."
+  },
+  "concept": "SSE-KMS = envelope encryption + automatic rotation + CloudTrail audit of key use",
+  "tests": "Telling apart SSE-S3, SSE-KMS and SSE-C by the audit-trail and key-control requirement, and not picking a cold archive class for weekly-accessed data.",
+  "expected": "S3 + SSE-KMS (customer managed or AWS managed key). Triggers: \"envelope encryption\", \"automates key rotation\", \"audit trail that shows who used the encryption key\" = KMS; \"accessed every week\" = not Glacier Deep Archive.",
+  "why_not": "SSE-S3: S3 owns and rotates the key, no per-use audit trail in CloudTrail. SSE-C: you hold and supply the key on every request, no KMS audit or managed rotation. Glacier Deep Archive: cheapest, but hours-long retrieval and a 180-day minimum, wrong for weekly access.",
+  "keywords": [
+    "SSE-KMS",
+    "SSE-S3",
+    "SSE-C",
+    "envelope encryption",
+    "key rotation",
+    "CloudTrail audit trail",
+    "weekly access",
+    "Glacier Deep Archive"
+  ],
+  "services": [
+    "s3-security",
+    "kms",
+    "s3"
+  ],
+  "topics": [
+    "storage",
+    "iam-security"
+  ],
+  "domain": 1,
+  "related": []
+}

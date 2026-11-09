@@ -1,0 +1,51 @@
+{
+  "id": "u-20260930-lambda-kms-decrypt-role-and-key-policy",
+  "source": {
+    "type": "user",
+    "added": "2026-09-30",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A solutions architect is writing an AWS Lambda function that will process encrypted documents from an Amazon FSx for NetApp ONTAP file system. The documents are protected by an AWS KMS customer key. After processing the documents, the Lambda function will store the results in an S3 bucket with an Amazon S3 Glacier Flexible Retrieval storage class. The solutions architect must ensure that the files can be decrypted by the Lambda function.\nWhich action accomplishes the requirement?",
+    "options": [
+      "Attach the `kms:decrypt` permission to the Lambda function’s resource policy. Add a statement to the AWS KMS key’s policy that grants the function’s execution role the `kms:decrypt` permission.",
+      "Attach the `kms:decrypt` permission to the Lambda function’s resource policy. Add a statement to the AWS KMS key’s policy that grants the function’s resource policy ARN the `kms:decrypt` permission.",
+      "Attach the `kms:decrypt` permission to the Lambda function’s execution role. Add a statement to the AWS KMS key’s policy that grants the function’s ARN the `kms:decrypt` permission.",
+      "Attach the `kms:decrypt` permission to the Lambda function’s execution role. Add a statement to the AWS KMS key’s policy that grants the function’s execution role the `kms:decrypt` permission."
+    ],
+    "answer": 3,
+    "explanation": "What the function is allowed to do is defined in its execution role (identity-based policy), so kms:Decrypt goes on the execution role. A KMS key is only usable when its key policy also allows the principal, so the key policy must name the execution role. A Lambda resource policy controls who can invoke the function, not what the function can call, and the function itself (its ARN) is not the principal making KMS calls; the execution role is."
+  },
+  "concept": "KMS: Lambda needs kms:Decrypt on its execution role AND the key policy naming that role",
+  "tests": "Two-sided KMS authorization for a Lambda function: the execution role (identity policy) gets kms:Decrypt and the KMS key policy must allow that role; Lambda resource policies are for invoking.",
+  "expected": "Attach kms:Decrypt to the function's execution role and add a key policy statement allowing the execution role to decrypt. Triggers: 'Lambda function', 'KMS customer key', 'ensure the files can be decrypted'.",
+  "why_not": "A Lambda resource policy controls who may invoke the function, not which AWS services it can call, so kms:Decrypt there has no effect. A function ARN or resource policy ARN isn't the calling principal: Lambda calls KMS as its execution role, so the key policy must name the role.",
+  "keywords": [
+    "Lambda",
+    "execution role",
+    "KMS key policy",
+    "kms:Decrypt",
+    "resource policy",
+    "customer managed key",
+    "FSx for NetApp ONTAP",
+    "identity-based policy",
+    "principal",
+    "encrypted files"
+  ],
+  "services": [
+    "lambda",
+    "kms",
+    "iam",
+    "fsx"
+  ],
+  "topics": [
+    "iam-security",
+    "serverless-containers"
+  ],
+  "domain": 1,
+  "related": [
+    "e5-q17",
+    "iam-q7",
+    "e2-q54"
+  ]
+}

@@ -307,3 +307,29 @@ svg.filtering .hub-svc:not(.hit):not(.sel) { opacity: 0.2; }
   body { background: #fff; color: #000; }
   .sheet-card { break-inside: avoid; background: #fff; color: #000; }
 }
+
+/* ---- Weak points ---- */
+.wp-score { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+.wp-big { font-size: 2.4rem; font-weight: 700; color: var(--accent); }
+.wp-big small { font-size: 1rem; color: var(--muted); }
+.wp-results { list-style: none; padding: 0; margin: 8px 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 4px 18px; font-size: 0.88rem; }
+.wp-results li.r-ok span { color: var(--ok); }
+.wp-results li.r-miss span { color: var(--bad); }
+.wp-results li.r-miss { font-weight: 600; }
+.wp-row { display: grid; grid-template-columns: 74px minmax(180px, 1.2fr) minmax(120px, 1fr) 150px; gap: 12px; align-items: center; padding: 8px 4px; border-bottom: 1px solid var(--border); color: var(--fg); }
+.wp-row:hover { background: var(--panel-2); text-decoration: none; }
+.wp-sev { display: inline-block; border-radius: 999px; padding: 2px 10px; font-size: 0.72rem; font-weight: 600; color: #0f1b2d; text-align: center; }
+.wp-sev.sev-3 { background: var(--bad); color: #fff; }
+.wp-sev.sev-2 { background: var(--accent); }
+.wp-sev.sev-1 { background: var(--accent-2); }
+.wp-bar > span.sev-3 { background: var(--bad); }
+.wp-bar > span.sev-2 { background: var(--accent); }
+.wp-bar > span.sev-1 { background: var(--accent-2); }
+.wp-area h2 { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.wp-area h3 { margin: 14px 0 6px; font-size: 0.95rem; color: var(--accent-2); }
+.wp-rules li { margin: 3px 0; }
+.wp-theory { background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; margin: 6px 0; }
+.wp-theory summary { cursor: pointer; font-weight: 600; }
+.wp-qs { columns: 2; column-gap: 24px; font-size: 0.88rem; padding-left: 18px; }
+.fc-weak { display: inline-flex; gap: 6px; align-items: center; }
+@media (max-width: 900px) { .wp-row { grid-template-columns: 70px 1fr; } .wp-row .bar, .wp-row small { grid-column: 1 / -1; } .wp-qs { columns: 1; } }

@@ -1,0 +1,54 @@
+{
+  "id": "u-20260930-cloudfront-signed-urls-oac-private-content",
+  "source": {
+    "type": "user",
+    "added": "2026-09-30",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A company has clients all across the globe that access product files stored in several Amazon S3 buckets, which are behind each of the respective Amazon CloudFront web distributions. The company currently wants to deliver content to a specific client, ensuring that only that client can access the data. At present, all clients can access the S3 buckets directly using an S3 URL or through the CloudFront distribution. The Solutions Architect must serve the private content via CloudFront only, to secure the distribution of files. Which combination of actions should the Architect implement to meet the above requirements? (Select TWO.)",
+    "options": [
+      "Require the users to access the private content by using special CloudFront signed URLs or signed cookies.",
+      "Restrict access to files in the origin by creating an origin access control (OAC) and giving it permission to read the files in the bucket.",
+      "Enable the Origin Shield feature of the CloudFront distribution to protect the files from unauthorized access.",
+      "Generate an S3 presigned URL to ensure that only the client can access the files. Remove permission to use S3 URLs to read the files for anyone else.",
+      "Create a custom CloudFront function to check and ensure that only their clients can access the files."
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "Two layers are needed. Signed URLs or signed cookies restrict WHO can fetch content through CloudFront (only clients holding a valid signature). An origin access control (OAC) with a bucket policy allowing only CloudFront removes direct S3 URL access, so CloudFront is the only path. Origin Shield is an extra caching layer, not security. An S3 presigned URL goes straight to S3 and bypasses CloudFront. A CloudFront Function is lightweight viewer-event logic and is not the standard way to authenticate specific clients."
+  },
+  "concept": "CloudFront private content: signed URLs/cookies (who) + OAC (only via CloudFront)",
+  "tests": "Combining CloudFront signed URLs/cookies with OAC to serve private S3 content to specific clients only through CloudFront.",
+  "expected": "Signed URLs or signed cookies + OAC on the S3 origin with a bucket policy for CloudFront only. Triggers: 'only that client', 'serve private content via CloudFront only', 'clients can access S3 directly'.",
+  "why_not": "Origin Shield is an additional regional caching layer that reduces origin load and does not authenticate anyone. S3 presigned URL bypasses CloudFront and S3 access stays direct, which contradicts 'via CloudFront only'. CloudFront Function runs simple viewer-request code, it has no built-in per-client authorization and is not the answer for private content.",
+  "keywords": [
+    "CloudFront",
+    "signed URLs",
+    "signed cookies",
+    "OAC",
+    "origin access control",
+    "private content",
+    "Origin Shield",
+    "S3 presigned URL",
+    "CloudFront Functions",
+    "bucket policy"
+  ],
+  "services": [
+    "cloudfront",
+    "s3"
+  ],
+  "topics": [
+    "edge-dns",
+    "storage"
+  ],
+  "domain": 1,
+  "related": [
+    "e3-q47",
+    "edge-q1",
+    "sto-q2",
+    "e4-q5"
+  ]
+}

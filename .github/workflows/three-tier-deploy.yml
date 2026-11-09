@@ -1,0 +1,118 @@
+# Deploys playground/three-tier to AWS with Pulumi on every merge to main/master. See ADR 0006.
+#
+# The deploy and preview jobs do nothing until you finish the one-time setup in ADR 0006
+# (OIDC role + Pulumi token + secrets) and set the repository variable DEPLOY_ENABLED=true.
+# Tests always run.
+name: three-tier
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - "playground/three-tier/**"
+      - ".github/workflows/three-tier-deploy.yml"
+  pull_request:
+    paths:
+      - "playground/three-tier/**"
+      - ".github/workflows/three-tier-deploy.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # lets the job ask GitHub for an OIDC token that AWS exchanges for temporary credentials
+  pull-requests: write # preview comment on the PR
+
+env:
+  AWS_REGION: eu-west-1
+  PULUMI_STACK: dev
+  APP_DIR: playground/three-tier
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: playground/three-tier/client/package-lock.json
+      - name: Build client (the Pulumi program and its tests need client/dist)
+        working-directory: ${{ env.APP_DIR }}/client
+        run: npm ci && npm run build
+      - name: Server tests
+        working-directory: ${{ env.APP_DIR }}/server
+        run: uv run --python 3.12 pytest
+      - name: Infrastructure unit tests (Pulumi mocks, no AWS)
+        working-directory: ${{ env.APP_DIR }}/pulumi
+        run: uv run --python 3.12 pytest
+
+  preview:
+    # Pull requests: show what `pulumi up` would change. Skipped for forks (no OIDC token) and until enabled.
+    if: github.event_name == 'pull_request' && vars.DEPLOY_ENABLED == 'true' && github.event.pull_request.head.repo.full_name == github.repository
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: playground/three-tier/client/package-lock.json
+      - name: Build client
+        working-directory: ${{ env.APP_DIR }}/client
+        run: npm ci && npm run build
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+      - uses: pulumi/actions@v6
+        with:
+          command: preview
+          stack-name: ${{ env.PULUMI_STACK }}
+          work-dir: ${{ env.APP_DIR }}/pulumi
+          comment-on-pr: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+
+  deploy:
+    # Merge to main/master (or manual run): `pulumi up`. One deploy at a time: Pulumi locks the stack.
+    if: github.event_name != 'pull_request' && vars.DEPLOY_ENABLED == 'true'
+    needs: test
+    runs-on: ubuntu-latest
+    environment: dev # optional: add required reviewers in Settings > Environments for a manual approval gate
+    concurrency:
+      group: three-tier-pulumi-dev
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: playground/three-tier/client/package-lock.json
+      - name: Build client (Pulumi uploads client/dist to S3)
+        working-directory: ${{ env.APP_DIR }}/client
+        run: npm ci && npm run build
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+      - uses: docker/setup-buildx-action@v3 # the image is built by Pulumi (docker-build provider) on this runner
+      - uses: pulumi/actions@v6
+        with:
+          command: up
+          stack-name: ${{ env.PULUMI_STACK }}
+          work-dir: ${{ env.APP_DIR }}/pulumi
+          upsert: true
+          config-map: |
+            {
+              dbPassword: { value: "${{ secrets.DB_PASSWORD }}", secret: true },
+              jwtSecret:  { value: "${{ secrets.JWT_SECRET }}",  secret: true }
+            }
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}

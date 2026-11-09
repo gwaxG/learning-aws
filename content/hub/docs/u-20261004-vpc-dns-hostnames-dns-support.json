@@ -1,0 +1,46 @@
+{
+  "id": "u-20261004-vpc-dns-hostnames-dns-support",
+  "source": {
+    "type": "user",
+    "added": "2026-10-04",
+    "origin": "user-supplied practice question (missed); category 'CSAA – Design Resilient Architectures'"
+  },
+  "question": {
+    "stem": "A company launched an EC2 instance in the newly created VPC. They noticed that the generated instance does not have an associated DNS hostname.\nWhich of the following options could be a valid reason for this issue?",
+    "options": [
+      "Amazon Route 53 is not enabled.",
+      "The newly created VPC has an invalid CIDR block.",
+      "The security group of the EC2 instance needs to be modified.",
+      "The DNS resolution and DNS hostname of the VPC configuration should be enabled."
+    ],
+    "answer": 3,
+    "explanation": "Whether an instance gets a public DNS hostname depends on two VPC attributes: DNS resolution (enableDnsSupport) and DNS hostnames (enableDnsHostnames). A VPC created with the VPC wizard or the default VPC has them enabled, while a VPC created by other means (for example the CLI or API) has DNS hostnames disabled by default. Enable both attributes on the VPC (and the instance needs a public IPv4 address for a public DNS name). Route 53 is not required for the automatically assigned hostname, a CIDR block that is invalid would have been rejected when the VPC was created, and security groups filter traffic but do not assign DNS names."
+  },
+  "concept": "VPC DNS attributes: enableDnsSupport and enableDnsHostnames give instances DNS hostnames",
+  "tests": "Knowing that instance DNS hostnames require the VPC options DNS resolution and DNS hostnames to be enabled, regardless of Route 53, CIDR or security groups.",
+  "expected": "Enable both VPC attributes: DNS resolution (enableDnsSupport) and DNS hostnames (enableDnsHostnames); the instance also needs a public IPv4 address for a public hostname. Triggers: 'newly created VPC', 'instance has no DNS hostname'. Private hosted zones also need both attributes enabled.",
+  "why_not": "Route 53 is not needed for the default instance hostnames, those come from the VPC DNS (Amazon-provided DNS). An invalid CIDR block cannot be created in the first place, the VPC creation would fail. Security groups only filter traffic and have no effect on hostname assignment.",
+  "keywords": [
+    "VPC",
+    "DNS hostnames",
+    "DNS resolution",
+    "enableDnsHostnames",
+    "enableDnsSupport",
+    "public DNS",
+    "Amazon-provided DNS",
+    "private hosted zone",
+    "Route 53",
+    "EC2"
+  ],
+  "services": [
+    "vpc",
+    "route53",
+    "security-groups",
+    "ec2"
+  ],
+  "topics": [
+    "vpc-networking"
+  ],
+  "domain": 2,
+  "related": []
+}

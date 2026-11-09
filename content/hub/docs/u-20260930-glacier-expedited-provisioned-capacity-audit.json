@@ -1,0 +1,53 @@
+{
+  "id": "u-20260930-glacier-expedited-provisioned-capacity-audit",
+  "source": {
+    "type": "user",
+    "added": "2026-09-30",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "An online stock trading application stores financial data in an Amazon S3 bucket, with a lifecycle policy that moves older data to Glacier every month. A strict compliance requirement mandates that a surprise audit can occur at any time, and the required data must be retrievable in under 15 minutes under all circumstances. The manager has instructed that retrieval capacity be available when needed and should support up to 150 MB/s of retrieval throughput. Which of the following will meet the given requirement? (Select TWO.)",
+    "options": [
+      "Use Expedited Retrieval to access the financial data.",
+      "Use Bulk Retrieval to access the financial data.",
+      "Use Standard Retrieval for accessing the financial data.",
+      "Specify a range, or portion, of the financial data archive to retrieve.",
+      "Purchase provisioned retrieval capacity."
+    ],
+    "answer": [
+      0,
+      4
+    ],
+    "explanation": "Expedited retrievals return data in 1-5 minutes, which fits the 15-minute limit. Expedited requests can be rejected when demand is high, so provisioned capacity units (each guarantees that expedited retrievals succeed and provides up to 150 MB/s) must be purchased to meet 'under all circumstances'. Bulk (5-12 h) and Standard (3-5 h) are too slow, and retrieving a byte range only reduces the amount of data and does not guarantee speed or capacity."
+  },
+  "concept": "Glacier: Expedited retrieval + provisioned capacity guarantees fast retrieval",
+  "tests": "Guaranteeing Glacier retrieval in minutes: Expedited Retrieval combined with provisioned capacity units (150 MB/s each).",
+  "expected": "Expedited Retrieval + provisioned retrieval capacity. Triggers: 'under 15 minutes', 'under all circumstances', 'capacity available when needed', '150 MB/s'.",
+  "why_not": "Bulk Retrieval takes about 5-12 hours. Standard Retrieval takes about 3-5 hours. Retrieving a range of the archive saves cost and data volume but does not make retrieval faster or guaranteed.",
+  "keywords": [
+    "Glacier",
+    "Expedited Retrieval",
+    "provisioned capacity",
+    "150 MB/s",
+    "Bulk Retrieval",
+    "Standard Retrieval",
+    "compliance audit",
+    "lifecycle policy",
+    "archive range retrieval",
+    "retrieval time"
+  ],
+  "services": [
+    "glacier",
+    "s3"
+  ],
+  "topics": [
+    "storage",
+    "cost"
+  ],
+  "domain": 1,
+  "related": [
+    "cost-q6",
+    "e3-q38",
+    "e3-q46"
+  ]
+}

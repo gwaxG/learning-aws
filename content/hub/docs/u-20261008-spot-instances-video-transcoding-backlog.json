@@ -1,0 +1,45 @@
+{
+  "id": "u-20261008-spot-instances-video-transcoding-backlog",
+  "source": {
+    "type": "user",
+    "added": "2026-10-08",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "The media company that you are working for has a video transcoding application running on Amazon EC2. Each EC2 instance polls a queue to find out which video should be transcoded, and then runs a transcoding process. If this process is interrupted, the video will be transcoded by another instance based on the queuing system. This application has a large backlog of videos which need to be transcoded. Your manager would like to reduce this backlog by adding more EC2 instances, however, these instances are only needed until the backlog is reduced.\nIn this scenario, which type of Amazon EC2 instance is the most cost-effective type to use?",
+    "options": [
+      "Reserved instances",
+      "Spot instances",
+      "Dedicated instances",
+      "On-demand instances"
+    ],
+    "answer": 1,
+    "explanation": "The extra instances are spare compute for a queue-driven job that tolerates interruption (another instance picks up an interrupted video from the queue) and are needed only until the backlog is cleared. That is the textbook Spot use case: up to 90% cheaper than On-Demand, with a 2-minute interruption notice; since 2018 there is no bid price, you only set an optional maximum price. Reserved and Dedicated instances are long-term or isolation options, not spare capacity. On-Demand would work but costs far more than Spot."
+  },
+  "concept": "Spot instances for interruption-tolerant, queue-driven workers that are needed temporarily",
+  "tests": "Matching an interruptible, temporary, queue-based workload to Spot rather than On-Demand, Reserved or Dedicated.",
+  "expected": "Spot instances (via an Auto Scaling group or Spot Fleet) polling the SQS queue; work lost on interruption is re-queued. Triggers: \"if this process is interrupted ... another instance\", \"only needed until the backlog is reduced\", \"most cost-effective\".",
+  "why_not": "Reserved instances commit for 1-3 years and Dedicated instances provide isolation, neither is cheap temporary spare capacity. On-Demand is valid but much more expensive than Spot for work that can be interrupted.",
+  "keywords": [
+    "Spot",
+    "interruption",
+    "video transcoding",
+    "queue",
+    "backlog",
+    "SQS",
+    "most cost-effective",
+    "On-Demand",
+    "Reserved"
+  ],
+  "services": [
+    "ec2-purchasing",
+    "sqs",
+    "auto-scaling",
+    "ec2"
+  ],
+  "topics": [
+    "ec2-compute"
+  ],
+  "domain": 4,
+  "related": []
+}

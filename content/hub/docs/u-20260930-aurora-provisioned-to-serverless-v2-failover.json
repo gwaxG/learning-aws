@@ -1,0 +1,48 @@
+{
+  "id": "u-20260930-aurora-provisioned-to-serverless-v2-failover",
+  "source": {
+    "type": "user",
+    "added": "2026-09-30",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "An online registration system hosted in an Amazon EKS cluster stores data to a `db.t4g.medium` Amazon Aurora DB cluster. The database performs well during regular hours but is unable to handle the traffic surge that occurs during flash sales. A solutions architect must move the database to Aurora Serverless while minimizing downtime and the impact on the operation of the application.\nWhich change should be taken to meet the objective?",
+    "options": [
+      "Change the Aurora Instance class to Serverless",
+      "Take a snapshot of the DB cluster. Use the snapshot to create a new Aurora DB cluster.",
+      "Use AWS Database Migration Service (AWS DMS) to migrate to a new Aurora Serverless database.",
+      "Add an Aurora Replica to the cluster and set its instance class to Serverless. Failover to the read replica and promote it to primary."
+    ],
+    "answer": 3,
+    "explanation": "Aurora Serverless v2 instances can be added to an existing provisioned cluster. Add a Serverless v2 reader, then fail over so it is promoted to writer: the switch takes seconds, the endpoint stays the same and the data is never copied. Changing the instance class in place of the writer causes downtime (the instance is modified/rebooted). Snapshot-restore creates a new cluster with a new endpoint and loses the changes made after the snapshot. DMS works but is a heavier migration with extra setup and cutover effort for a move within Aurora."
+  },
+  "concept": "Aurora: move provisioned to Serverless v2 by adding a Serverless reader and failing over",
+  "tests": "Low-downtime migration from provisioned Aurora to Serverless v2: add a Serverless v2 replica to the same cluster, fail over to it, no data migration needed.",
+  "expected": "Add an Aurora Serverless v2 reader instance to the cluster, then fail over to promote it to writer. Triggers: 'move to Aurora Serverless', 'minimizing downtime', 'traffic surge/flash sales'.",
+  "why_not": "Modifying the writer's instance class causes downtime. Snapshot + restore makes a new cluster (new endpoint, stale data, downtime to cut over). DMS is heavy machinery for a move inside Aurora.",
+  "keywords": [
+    "Aurora Serverless v2",
+    "provisioned to serverless",
+    "Aurora Replica",
+    "failover",
+    "ACU",
+    "traffic surge",
+    "flash sale",
+    "minimal downtime",
+    "db.t4g.medium",
+    "promote reader"
+  ],
+  "services": [
+    "aurora",
+    "aurora-serverless",
+    "dms"
+  ],
+  "topics": [
+    "databases"
+  ],
+  "domain": 3,
+  "related": [
+    "e2-q3",
+    "e1-q10"
+  ]
+}

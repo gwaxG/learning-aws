@@ -1,0 +1,49 @@
+{
+  "id": "u-20260929-alb-sni-multiple-certificates",
+  "source": {
+    "type": "user",
+    "added": "2026-09-30",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A travel company has a suite of web applications hosted in an Auto Scaling group of On-Demand EC2 instances behind an Application Load Balancer that handles traffic from various web domains such as `i-love-manila.com`,`i-love-boracay.com` `i-love-cebu.com` and many others. To improve security and lessen the overall cost, you are instructed to secure the system by allowing multiple domains to serve SSL traffic without the need to reauthenticate and reprovision your certificate everytime you add a new domain. This migration from HTTP to HTTPS will help improve their SEO and Google search ranking.\nWhich of the following is the most cost-effective solution to meet the above requirement?",
+    "options": [
+      "Add a Subject Alternative Name (SAN) for each additional domain to your certificate.",
+      "Use a wildcard certificate to handle multiple sub-domains and different domains.",
+      "Create a new CloudFront web distribution and configure it to serve HTTPS requests using dedicated IP addresses in order to associate your alternate domain names with a dedicated IP address in each CloudFront edge location.",
+      "Upload all SSL certificates of the domains in the ALB using the console and bind multiple certificates to the same secure listener on your load balancer. ALB will automatically choose the optimal TLS certificate for each client using Server Name Indication (SNI)."
+    ],
+    "answer": 3,
+    "explanation": "An ALB HTTPS listener can hold multiple certificates (a default plus additional ones) and uses Server Name Indication (SNI) to pick the right certificate for the domain the client requested, at no extra cost. Adding a domain is just attaching another certificate to the listener. A SAN certificate needs reissuing every time a domain is added, a wildcard certificate covers only subdomains of ONE domain (not different domains), and CloudFront with dedicated IPs costs about $600 per month per distribution."
+  },
+  "concept": "ALB: multiple TLS certificates on one HTTPS listener via SNI",
+  "tests": "Serving many different domains over HTTPS from one ALB cheaply: attach multiple certificates to the listener and rely on SNI, versus SAN/wildcard certificates or CloudFront dedicated IP.",
+  "expected": "Bind multiple certificates (e.g. from ACM) to the same ALB HTTPS listener; the ALB picks the certificate with SNI. Triggers: 'multiple domains', 'without reprovisioning the certificate for each new domain', 'most cost-effective', 'ALB'.",
+  "why_not": "SAN means re-issuing the certificate for every new domain. A wildcard covers subdomains of one domain (*.example.com), not different domains. CloudFront with dedicated IPs is very expensive and unnecessary since SNI is free.",
+  "keywords": [
+    "SNI",
+    "Server Name Indication",
+    "ALB",
+    "multiple certificates",
+    "HTTPS listener",
+    "ACM",
+    "wildcard certificate",
+    "SAN",
+    "multiple domains",
+    "dedicated IP CloudFront"
+  ],
+  "services": [
+    "elb",
+    "acm",
+    "cloudfront"
+  ],
+  "topics": [
+    "ec2-compute",
+    "edge-dns"
+  ],
+  "domain": 1,
+  "related": [
+    "e1-q18",
+    "e2-q44"
+  ]
+}

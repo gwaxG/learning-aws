@@ -1,0 +1,46 @@
+{
+  "id": "u-20261101-encrypted-ebs-snapshots-data-in-transit",
+  "source": {
+    "type": "user",
+    "added": "2026-11-01",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "An application is hosted on an EC2 instance with multiple EBS Volumes attached and uses Amazon Neptune as its database. To improve data security, you encrypted all of the EBS volumes attached to the instance to protect the confidential data stored in the volumes.\nWhich of the following statements are true about encrypted Amazon Elastic Block Store volumes? (Select TWO.)",
+    "options": [
+      "Snapshots are automatically encrypted.",
+      "Snapshots are not automatically encrypted.",
+      "Only the data in the volume is encrypted and not all the data moving between the volume and the instance.",
+      "The volumes created from the encrypted snapshot are not encrypted.",
+      "All data moving between the volume and the instance are encrypted."
+    ],
+    "answer": [
+      0,
+      4
+    ],
+    "explanation": "Amazon EBS encryption covers data at rest inside the volume, data moving between the volume and the instance, all snapshots created from the volume, and all volumes created from those snapshots. So snapshots of an encrypted volume are encrypted automatically, and all data moving between the volume and the instance is encrypted. The statements that snapshots are not automatically encrypted, that only the data in the volume is encrypted, and that volumes restored from an encrypted snapshot are not encrypted are all false."
+  },
+  "concept": "Encrypted EBS: snapshots, restored volumes and volume-instance traffic are all encrypted",
+  "tests": "Knowing the scope of EBS encryption (at rest, in transit between volume and instance, snapshots, volumes created from snapshots).",
+  "expected": "Snapshots are automatically encrypted, and all data moving between the volume and the instance is encrypted. Volumes created from an encrypted snapshot are encrypted too.",
+  "why_not": "Snapshots of an encrypted volume are encrypted automatically. Encryption also covers data moving between the volume and the instance, not only data at rest. Volumes created from an encrypted snapshot are encrypted as well.",
+  "keywords": [
+    "EBS encryption",
+    "encrypted snapshot",
+    "data in transit",
+    "volume",
+    "instance",
+    "KMS",
+    "Neptune"
+  ],
+  "services": [
+    "ebs",
+    "kms"
+  ],
+  "topics": [
+    "storage",
+    "iam-security"
+  ],
+  "domain": 1,
+  "related": []
+}

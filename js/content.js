@@ -14,6 +14,7 @@ export const loadTopic = (slug) => getJSON(`content/topics/${slug}.json`);
 export const loadExam = (id) => getJSON(`content/exams/exam-${id}.json`);
 export const loadServices = () => getJSON("content/maps/services.json");
 export const loadFlashcards = () => getJSON("content/flashcards/cards.json");
+export const loadWeakPoints = () => getJSON("content/weak/weak-points.json");
 export const loadHub = () => getJSON("content/hub/index.json");
 
 const svgCache = new Map();

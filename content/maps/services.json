@@ -17,6 +17,7 @@
             "Identity-based vs resource-based policies (S3 bucket policy, KMS key policy)",
             "Roles for EC2/Lambda (instance profile) instead of access keys on the instance",
             "Permissions boundary caps the maximum permissions of a user/role",
+        "Many users by department: IAM group + policy (e.g. read-only + aws:MultiFactorAuthPresent deny) — a role can't be attached to a group, SCPs don't apply to IAM users",
             "Root: enable MFA, don't use it for everyday tasks"
           ],
           "use_when": [
@@ -64,7 +65,8 @@
             "AssumeRole, AssumeRoleWithWebIdentity, AssumeRoleWithSAML, GetSessionToken (MFA)",
             "Credentials last from 15 min to 12 h (1 h by default)",
             "Cross-account: role trust policy + sts:AssumeRole permission for the caller",
-            "Regional endpoints available (better latency/redundancy)"
+            "Regional endpoints available (better latency/redundancy)",
+            "Enterprise identity federation / SSO for many corporate users to S3 or the console: no IAM user per employee. An identity provider or federation proxy (SAML 2.0, e.g. AD FS) authenticates against the corporate directory and STS issues temporary credentials for an IAM role whose IAM policy limits what the user can reach (e.g. only their own S3 folder). 3rd-party SSO products and WorkDocs are not required"
           ],
           "use_when": [
             "Temporary access to another account",
@@ -103,6 +105,7 @@
             "Modes: consolidated billing only or all features — SCPs and IAM Identity Center require all features",
             "Consolidated billing: one bill, volume discounts, shared RI/Savings Plans pool",
             "SCPs apply to OUs/accounts (not to the management account)",
+        "SCP = preventive guardrail for all accounts in an OU (incl. root of member accounts): e.g. deny config:DeleteConfigRule/PutConfigRule, cloudtrail:StopLogging",
             "Tag policies, backup policies, AI opt-out policies",
             "Organization CloudTrail trail for all accounts"
           ],
@@ -184,7 +187,7 @@
             "Built on Organizations, Identity Center, CloudTrail, Config",
             "Controls (guardrails): preventive (SCP), detective (Config), proactive (CloudFormation hooks)",
             "Account Factory — provisions new accounts per OU from preapproved baselines (incl. VPC/network config); built on Service Catalog",
-            "Per-account compliance dashboard"
+            "Per-account compliance dashboard; the easiest best-practice answer for 'set up and govern a multi-account environment with guardrails and a non-compliance dashboard' (not hand-built StackSets + Config aggregator, not Service Catalog launch constraints, not Direct Connect)"
           ],
           "use_when": [
             "Set up a multi-account environment per best practices with LEAST operational overhead",
@@ -372,7 +375,7 @@
           "facts": [
             "AWS owned / AWS managed (aws/s3) / customer managed keys (CMK)",
             "Symmetric (AES-256) and asymmetric; direct encryption up to 4 KB, larger — envelope encryption (data key)",
-            "Key policy is mandatory; access = key policy + IAM",
+            "Key policy is mandatory; access = key policy + IAM (e.g. Lambda: kms:Decrypt on its EXECUTION ROLE + key policy allowing that role; a Lambda resource policy only controls invocation)",
             "Automatic CMK rotation (yearly by default, configurable)",
             "Keys are regional; multi-Region keys for copying encrypted data",
             "All calls logged in CloudTrail; API quotas (throttling)"
@@ -489,7 +492,7 @@
           "tagline": "Free public TLS certificates with auto-renewal",
           "facts": [
             "Integrations: ELB, CloudFront, API Gateway (not directly on EC2)",
-            "For CloudFront the certificate must be in us-east-1",
+            "For CloudFront (and edge-optimized API Gateway) the certificate must be in us-east-1; for ALB or a regional API Gateway endpoint it must be in that same Region",
             "Auto-renewal for ACM-issued certificates (DNS validation)",
             "Imported certificates are not renewed automatically",
             "Private CA — for internal certificates (paid)"
@@ -574,7 +577,8 @@
             "Shield Standard — automatic and free, L3/L4",
             "Shield Advanced: ~$3000/month per organization, 24/7 Shield Response Team",
             "Advanced: cost protection against bill spikes caused by DDoS",
-            "Protects EC2 EIPs, ELB, CloudFront, Global Accelerator, Route 53"
+            "Protects EC2 EIPs, ELB, CloudFront, Global Accelerator, Route 53",
+        "DDoS playbook: CloudFront + Shield/WAF + ALB with Auto Scaling + database in a private subnet; EFA (HPC bandwidth) and Dedicated Instances (isolation) do NOT mitigate DDoS"
           ],
           "use_when": [
             "DDoS protection for a critical application",
@@ -940,7 +944,8 @@
             "CIDR from /16 to /28; secondary CIDRs can be added",
             "Default VPC in every Region (public subnets)",
             "IPv6 dual-stack supported; up to 5 VPCs per Region (soft limit)",
-            "Route tables, IGW, NAT, endpoints, SG, NACL — the building blocks"
+            "Route tables, IGW, NAT, endpoints, SG, NACL — the building blocks",
+          "DNS attributes: DNS resolution (enableDnsSupport) + DNS hostnames (enableDnsHostnames); both must be on for instance DNS hostnames and for private hosted zones; a VPC from the wizard/default VPC has them on, one created via CLI/API has hostnames off; Route 53, CIDR and SGs are not the cause"
           ],
           "use_when": [
             "Isolate resources in your own network",
@@ -1010,7 +1015,7 @@
           "facts": [
             "Stateful: return traffic is allowed automatically",
             "Allow rules only, no deny",
-            "Source can be another SG (SG reference)",
+            "Source can be another SG (SG reference): DB rule (e.g. TCP 1433/3306) with Source = the app tier's SG ID is the least-privilege answer and survives Auto Scaling; not instance IDs, NACL IDs or static IPs",
             "Default: all inbound denied, all outbound allowed",
             "All rules are evaluated"
           ],
@@ -1048,6 +1053,7 @@
           "tagline": "Stateless firewall at the subnet level, allow and deny",
           "facts": [
             "Stateless: return traffic must be explicitly allowed (ephemeral ports 1024–65535)",
+        "Open HTTPS to the world = SG inbound 443 + NACL inbound 443 AND NACL outbound ephemeral (e.g. 32768-65535) — outbound 443 is wrong",
             "Rules by number, first match wins",
             "Has deny — can block specific IPs",
             "Default NACL allows everything; a custom one denies everything by default"
@@ -1161,6 +1167,7 @@
           "facts": [
             "Lives in a public subnet with a public/Elastic IP",
             "Bastion SG: SSH 22 (Linux) / RDP 3389 (Windows) only from corporate public IP ranges",
+        "SSH/RDP are TCP (never UDP); a single IP is written as x.x.x.x/32 — /0 means the whole internet",
             "Instance SGs: allow SSH/RDP only from the bastion's SG (SG reference)",
             "Make it HA with an Auto Scaling group across AZs",
             "Modern alternative: SSM Session Manager — no bastion, no open ports, audited"
@@ -1200,7 +1207,9 @@
           "tagline": "Private access to AWS services without IGW/NAT",
           "facts": [
             "Gateway endpoint: S3 and DynamoDB, added as a target in route tables (prefix list), free — the default exam answer for private S3/DynamoDB access",
+            "Gateway endpoint for DynamoDB (also from EKS/Fargate pods in private subnets): you create it and associate it with the route tables of the subnets — a NACL rule cannot route to it, Network Firewall rules do not replace it, and a DynamoDB interface endpoint is not what the exam expects (DAX/DynamoDB calls stay on the AWS network via the gateway endpoint)",
             "Interface endpoint (PrivateLink): ENI with a private IP, most services, paid",
+            "Cheapest fix for \"private-subnet EC2 must reach S3 without the internet\" = S3 Gateway endpoint (free, route table). Interface endpoint for S3 costs per hour + per GB and is only needed from on-premises / another Region / other VPCs; a VPN or a custom endpoint service (your own service behind an NLB) is not the way to reach S3. Pre-signed URLs given to internet users are served by S3 directly and are unaffected by how the app reaches S3",
             "Interface endpoint is reachable from on-prem via VPN/DX; Gateway is not",
             "Endpoint policy = what can be reached THROUGH the endpoint (e.g. only trusted bucket ARNs); bucket policy with aws:SourceVpce/aws:SourceVpc = who may reach the bucket"
           ],
@@ -1323,7 +1332,8 @@
             "Attaches VPCs, VPN, Direct Connect (via DX Gateway)",
             "Inter-Region peering between TGWs; sharing via RAM",
             "TGW route tables for segmentation",
-            "ECMP across multiple VPN tunnels to increase throughput"
+            "ECMP across multiple VPN tunnels to increase throughput",
+          "Hundreds of VPCs + VPNs across Regions in one fabric: one TGW per Region, TGW peering attachments between Regions (static routes), shared across accounts with RAM; peering, DX gateway or VPN CloudHub alone cannot do this"
           ],
           "use_when": [
             "Many VPCs + on-prem, simplify a complex peering mesh",
@@ -1434,7 +1444,8 @@
             "Provisioning takes weeks",
             "Not encrypted by default → VPN over DX or MACsec",
             "VIF: private (VPC), public (AWS public services), transit (TGW)",
-            "Direct Connect Gateway — access to VPCs in different Regions",
+            "Direct Connect Gateway — access to VPCs in different Regions and accounts; associates only with a virtual private gateway or a Transit Gateway (transit VIF), NOT with VPC peering",
+        "New accounts sharing an existing DX: DX Gateway + Transit Gateway (no new DX per account)",
             "HA: two DX connections in different locations; cheap option — DX + VPN backup"
           ],
           "use_when": [
@@ -1515,7 +1526,9 @@
             "GWLB: proxy for third-party appliances (firewall, IDS), GENEVE 6081",
             "Health checks; cross-zone balancing (on by default for ALB)",
             "Sticky sessions, SSL termination via ACM, SNI",
-            "Connection draining (deregistration delay)"
+        "Many domains on one ALB HTTPS listener: attach multiple certificates (default + additional), ALB picks by SNI — free; wildcard = one domain's subdomains only, SAN needs reissue",
+            "Connection draining (deregistration delay)",
+          "HTTP→HTTPS redirect: edit the EXISTING port-80 listener (default action or host-header rule) with a redirect action to HTTPS:443 (301); one listener per port, so no second :80 listener; the 443 listener never sees HTTP traffic"
           ],
           "use_when": [
             "Routing by URL path/hostname, microservices → ALB",
@@ -1616,12 +1629,13 @@
           "tagline": "Global CDN: caching at edge locations",
           "facts": [
             "Origins: S3, ALB, EC2, any HTTP; Origin Access Control (OAC) for private S3",
-            "Signed URLs / signed cookies for private content",
+            "Signed URLs / signed cookies for private content — private content for specific clients = signed URLs/cookies (who) + OAC on the S3 origin (only via CloudFront); Origin Shield is caching not security; S3 presigned URL bypasses CloudFront",
             "Geo restriction, WAF, Shield; HTTPS with an ACM certificate from us-east-1",
             "Cache behaviors by path, TTL, invalidation",
             "Lambda@Edge (viewer/origin request+response, can rewrite URI by User-Agent, full Node/Python) vs CloudFront Functions (viewer events only, ultra-light header/URL logic)",
             "Origin failover via origin groups",
-            "Response headers policy: add/override response headers (security, CORS, custom) — cannot choose content by request"
+            "Response headers policy: add/override response headers (security, CORS, custom) — cannot choose content by request",
+            "Global real-time clickstream/user-activity processing close to users with low latency = CloudFront + Lambda@Edge (compute at the edge) + Kinesis (streaming) + S3 (durable results); Route 53 latency/geoproximity routing only steers DNS and processes nothing; Athena is interactive SQL over S3, not a stream processor"
           ],
           "use_when": [
             "Reduce latency for static/dynamic content worldwide",
@@ -1713,7 +1727,8 @@
             "Integration timeout 29 s by default",
             "Throttling, usage plans, API keys, response caching",
             "Auth: IAM, Cognito User Pools, Lambda authorizer",
-            "Endpoint types: edge-optimized, regional, private"
+            "Endpoint types: edge-optimized, regional, private",
+          "Custom domain (api.example.com) + HTTPS: ACM certificate in the SAME Region as a regional API (us-east-1 only for edge-optimized), custom domain name + base path mapping to the stage, Route 53 alias record to the API Gateway domain name (not a CNAME to the invoke URL)"
           ],
           "use_when": [
             "Serverless API: API Gateway + Lambda",
@@ -1803,9 +1818,12 @@
             "On-Demand — no commitment, for short unpredictable workloads",
             "Reserved Instances / Savings Plans — 1 or 3 years, up to ~72% discount",
             "Compute Savings Plans are more flexible (any family/Region, Fargate, Lambda); EC2 Instance SP — family+Region",
-            "Spot — up to 90% discount, can be interrupted with a 2-min notice",
+            "Spot — up to 90% discount, can be interrupted with a 2-min notice; no bid price since 2018, you only set an optional max price. Best for queue-driven, interruption-tolerant extra capacity (video transcoding backlog polling SQS: an interrupted job is re-processed by another instance) that is only needed until the backlog is gone",
             "Dedicated Hosts — socket/core-level BYOL, compliance; Dedicated Instances — hardware isolation",
-            "Capacity Reservations — guaranteed capacity in an AZ, no discount"
+            "Capacity Reservations — guaranteed capacity in a specific AZ for any duration (no 1/3-year term, cancel any time, billed from the moment active even if unused); no discount by itself but Savings Plans / Regional RIs apply to it. A Regional RI gives the discount but does NOT reserve capacity; only a Zonal RI does (1-3 year term). Nightly batch that must not be delayed or interrupted and only runs a few hours = Capacity Reservation (create/cancel by automation), not Dedicated Hosts (BYOL, idle the rest of the day)",
+            "Launch limits: On-Demand instances are limited by vCPU-based quotas per Region (not per AZ and not a flat 20 instances); new accounts start lower; when requests start failing after N successes, request a quota increase (Service Quotas / limit form) for that Region and retry; there is also a 20 Standard Reserved Instances per Region limit and a dynamic Spot limit",
+        "Billing by state: running = billed; pending / stopped / Spot-stopping = not billed; stopping-to-hibernate = billed; Reserved Instances bill for the whole term even if terminated",
+            "Billing by state: stopping-to-hibernate IS billed, stopping-to-stop, pending and Spot stopping are not; Reserved Instances on terminated instances are billed to the end of the term (sell Standard RIs on the RI Marketplace; snapshot EBS then terminate)"
           ],
           "use_when": [
             "Steady 24/7 workload for years → RI / Savings Plans",
@@ -1815,7 +1833,8 @@
           ],
           "not_for": [
             "Spot for a critical DB or a workload that can't be interrupted — a trap",
-            "RI for a short-term project — overpaying"
+            "RI for a short-term project — overpaying",
+        "Unneeded Reserved Instances: stopping doesn't stop the charge — terminate the instances and sell Standard RIs on the Reserved Instance Marketplace (Convertible RIs can't be sold)"
           ],
           "vs": [
             {
@@ -1847,7 +1866,9 @@
             "Cluster — one AZ, low latency and 10–100 Gbps between instances (HPC)",
             "Spread — each instance on separate hardware, max 7 instances per AZ",
             "Partition — groups of racks, up to 7 partitions per AZ, for Hadoop/Cassandra/Kafka",
-            "Free"
+            "Free",
+        "EFA (Elastic Fabric Adapter) = ENA + OS-bypass: a NIC for HPC/ML inter-node traffic with lower latency and higher throughput than TCP (SRD protocol; MPI/NCCL libraries; Linux only; use with a cluster placement group) — a performance feature, not a security one",
+        "ENA = enhanced networking (up to 100 Gbps, no OS-bypass); plain ENI = just a virtual network card (private IP, SG, MAC) with no HPC acceleration; a private VIF is a Direct Connect concept, not attachable to EC2"
           ],
           "use_when": [
             "HPC, low latency between nodes → cluster",
@@ -1879,12 +1900,13 @@
           "name": "EC2 Auto Scaling",
           "tagline": "Auto Scaling Group: automatic EC2 count based on load and health",
           "facts": [
-            "Min/desired/max; launch template",
+            "Min/desired/max; launch template (holds the AMI — new AMI = new launch template or version, then instance refresh for existing instances; target group is unrelated)",
             "Policies: target tracking (simplest), step, simple, scheduled, predictive",
             "EC2 or ELB health checks; replaces unhealthy instances",
             "Spread across multiple AZs; cooldown/warm-up",
             "Mixed instances (On-Demand + Spot); warm pools; lifecycle hooks",
-            "Default termination policy: balance AZs, then oldest launch template"
+            "Default termination policy: balance AZs, then oldest launch template",
+            "Avoid over-provisioning without hurting performance = target tracking scaling (keeps a metric at a target, scales in and out); simple scaling waits for cooldown, scheduled is for predictable patterns, suspend/resume is not a policy"
           ],
           "use_when": [
             "Keep CPU at ~50% → target tracking",
@@ -2111,7 +2133,7 @@
             "Default concurrency 1000 per Region (soft); reserved and provisioned concurrency",
             "Provisioned concurrency / SnapStart — against cold starts",
             "Triggers: S3, SQS, SNS, EventBridge, DynamoDB Streams, Kinesis, API Gateway, ALB",
-            "In a VPC — via ENI; internet access requires NAT"
+            "In a VPC — via ENI; internet access requires NAT; periodic EC2ThrottledException = ENI quota or subnet IPs exhausted (tiny subnet like /27) → larger subnets in several AZs, raise the ENI quota; not IAM/NAT/SG (those give constant failures)"
           ],
           "use_when": [
             "Event-driven processing (upload to S3 → process)",
@@ -2198,7 +2220,8 @@
             "Worker nodes: managed node groups, self-managed, Fargate, Auto Mode",
             "Compatible with upstream Kubernetes",
             "IRSA / EKS Pod Identity for pod-level IAM",
-            "Can run on-prem (EKS Anywhere) and on Outposts"
+            "Can run on-prem (EKS Anywhere) and on Outposts",
+          "Scaling: Metrics Server + Horizontal Pod Autoscaler scale pods; Cluster Autoscaler (or Karpenter) adds/removes worker nodes when pods are unschedulable or nodes idle; Fargate profiles remove node management entirely"
           ],
           "use_when": [
             "\"Cloud-agnostic\", \"open-source\", \"same config/tools across on-prem and clouds\" → EKS (upstream Kubernetes)",
@@ -2397,7 +2420,7 @@
             "Durability 99.999999999%; bucket names are globally unique, the bucket is regional",
             "Versioning, Object Lock (WORM), event notifications (Lambda/SQS/SNS/EventBridge)",
             "Static website hosting; presigned URLs for temporary access",
-            "Transfer Acceleration — faster uploads via the edge"
+            "Transfer Acceleration — faster, more consistent uploads from distant/global users via the nearest edge location + AWS backbone (accelerate endpoint; pair with multipart); not for downloads caching → CloudFront; not Direct Connect/FTP/OAC"
           ],
           "use_when": [
             "Store unstructured data, backups, data lakes",
@@ -2518,7 +2541,7 @@
           "name": "S3 Replication (CRR / SRR)",
           "tagline": "Asynchronous object replication between buckets (CRR/SRR)",
           "facts": [
-            "CRR — to another Region; SRR — within the same Region",
+            "CRR — to another Region; SRR — within the same Region; S3 is already multi-AZ, so a Region failure (not an AZ outage) = Cross-Region Replication, not lifecycle to Glacier, EC2 copies or cross-account access",
             "Requires versioning on both buckets",
             "Only new objects are replicated; for existing ones — S3 Batch Replication",
             "Replication Time Control (RTC): 99.99% within 15 minutes",
@@ -2554,13 +2577,15 @@
           "name": "S3 Security (Bucket Policy, Block Public Access, Object Lock, Encryption)",
           "tagline": "S3 access and encryption: policies, Block Public Access, SSE",
           "facts": [
-            "Default encryption SSE-S3; also SSE-KMS, DSSE-KMS, SSE-C, client-side",
+            "Default encryption SSE-S3 (AES-256, keys managed AND rotated automatically by AWS — least overhead); also SSE-KMS, DSSE-KMS, SSE-C, client-side; to forbid unencrypted uploads: bucket policy denying s3:PutObject unless x-amz-server-side-encryption is AES256 (or aws:kms) — an SCP cannot target a single bucket",
             "Headers: `x-amz-server-side-encryption: AES256` (SSE-S3) or `aws:kms` (+ `-aws-kms-key-id`) for SSE-KMS; SSE-C uses `-customer-algorithm`, `-customer-key`, `-customer-key-MD5` on every request",
             "Block Public Access (on by default), bucket policy, IAM",
             "Object Ownership: ACLs disabled by default (bucket owner enforced)",
             "aws:SecureTransport to enforce HTTPS; MFA Delete",
             "Object Lock (requires versioning): Compliance = nobody, not even root, can delete/shorten retention; Governance = users with s3:BypassGovernanceRetention can; legal hold = no expiry",
-            "Access Points to simplify access to shared buckets"
+            "Access Points to simplify access to shared buckets",
+            "Encrypting data stored in S3 (e.g. HIPAA): server-side encryption with AES-256 (SSE-S3, or SSE-KMS/SSE-C) and/or client-side encryption with your own keys before sending it over HTTPS; S3 has no AES-128 option, and encrypting EBS volumes or EBS snapshots does not encrypt objects stored in S3",
+            "Audit trail of who used the encryption key + envelope encryption + automatic rotation = SSE-KMS (key use is logged in CloudTrail); SSE-S3 has no per-use key audit and SSE-C means you supply and manage keys yourself"
           ],
           "use_when": [
             "Key auditing and control over encryption access → SSE-KMS",
@@ -2640,7 +2665,9 @@
             "Instant Retrieval — ms; Flexible — Expedited 1–5 min, Standard 3–5 h, Bulk 5–12 h",
             "Deep Archive — Standard up to 12 h, Bulk up to 48 h",
             "Minimum storage duration 90 / 90 / 180 days",
-            "Vault Lock — WORM policy for a vault"
+            "Vault Lock — WORM policy for a vault",
+          "Guaranteed fast retrieval (audit, \"under all circumstances\"): Expedited (1–5 min) + provisioned capacity units (each gives up to 150 MB/s and guarantees expedited requests succeed); Standard/Bulk too slow; range retrieval only reduces volume",
+            "Rare access with up to 24 h retrieval (audit data): S3 lifecycle rule transitioning to Glacier after 0 days archives immediately; Standard-IA/One Zone-IA cost more, One Zone-IA is also single-AZ, FSx is far costlier"
           ],
           "use_when": [
             "Long-term storage for compliance",
@@ -2680,6 +2707,10 @@
             "io2 Block Express: up to 256000 IOPS, Multi-Attach (io1/io2)",
             "st1 (throughput HDD), sc1 (cold HDD) — can't be boot volumes",
             "Incremental snapshots in S3; cross-Region copy; Fast Snapshot Restore",
+        "Provisioned IOPS SSD (io1/io2) = consistent low latency for I/O-intensive databases (large relational/NoSQL); gp2/gp3 = general purpose (boot, dev/test, small-medium DBs); Magnetic (standard) = previous-generation HDD, lowest cost per GB, infrequent access. NOT EBS types: Spot volumes (Spot is an EC2 purchase model) and SR-IOV (an enhanced-networking technology); gp3 has no Multi-Attach and no multi-AZ",
+            "Encrypted EBS volume behavior: snapshots of an encrypted volume are automatically encrypted, volumes created from an encrypted snapshot are automatically encrypted, and all data moving between the volume and the instance is encrypted too (not just the data at rest on the volume)",
+            "Encryption at rest = KMS keys: the AWS managed key (aws/ebs) or your own customer managed key (symmetric only); covers data volumes, boot volumes and snapshots, AES-256, done on the host so data in transit between instance and volume is encrypted too. NOT S3 SSE/client-side encryption, NOT a password in CloudHSM, NOT ACM certificates",
+            "Facts for \"is EBS suitable\" questions: persists independently of the instance (off-instance storage); Elastic Volumes let you change type, size and IOPS live in production without interruption; replicated automatically only within its own AZ (not another Region) and attachable only to instances in the same AZ; snapshots go to S3, not RDS",
             "Encryption via KMS; Data Lifecycle Manager (DLM) — free, tag-based schedule for automated snapshot/AMI creation, retention and deletion"
           ],
           "use_when": [
@@ -2725,6 +2756,7 @@
           "tagline": "Local NVMe disk on the EC2 host: very fast, ephemeral",
           "facts": [
             "Data is lost on stop, terminate, hibernate or host failure (reboot preserves it)",
+        "Stop/start: instance-store data lost + host may change, but Elastic IP and primary ENI stay attached",
             "Very high IOPS / low latency",
             "Size is fixed by the instance type"
           ],
@@ -2761,6 +2793,7 @@
             "Grows automatically, pay per use",
             "Storage classes: Standard, IA, Archive + lifecycle management",
             "Throughput modes: Elastic (recommended), Provisioned, Bursting",
+            "Shared storage for hundreds of ECS tasks with constant high-frequency reads/writes (small data set, ~10 TB): EFS with Provisioned Throughput + Max I/O performance mode, mounted in the ECS task definition. Bursting throughput scales with stored size and cannot sustain constant heavy demand; performance mode is chosen at creation and cannot be changed. FSx for Windows is SMB for Windows workloads; DynamoDB is a database and cannot be mounted",
             "Mounts in EC2, ECS, EKS, Lambda"
           ],
           "use_when": [
@@ -2846,9 +2879,9 @@
           "name": "AWS Storage Gateway",
           "tagline": "Hybrid: on-prem access to cloud storage via a local cache",
           "facts": [
-            "S3 File Gateway — NFS/SMB → S3 objects",
+            "S3 File Gateway — NFS/SMB → S3 objects (each file = one S3 object, local cache); on-prem backups over file protocols → File Gateway, not DataSync/EBS",
             "FSx File Gateway — local cache for FSx for Windows",
-            "Volume Gateway — iSCSI: cached (data in S3) or stored (data local, backups in S3)",
+            "Volume Gateway — iSCSI: cached (data in S3) or stored (data local, backups in S3); data lives as EBS snapshots, NOT readable via S3 API",
             "Tape Gateway — virtual tape library (VTL) → S3/Glacier",
             "Deployed as a VM or hardware appliance"
           ],
@@ -2889,7 +2922,7 @@
           "tagline": "Centralized backup policies for many services",
           "facts": [
             "Supports EC2, EBS, RDS, Aurora, DynamoDB, EFS, FSx, S3, Storage Gateway, etc.",
-            "Backup plans: schedule, retention, lifecycle to cold storage",
+            "Backup plans: schedule, retention, lifecycle to cold storage — the way to keep RDS/Aurora backups longer than the 35-day automated limit (e.g. 90 days)",
             "Cross-Region and cross-account copies",
             "Backup Vault Lock — WORM, protection against deletion",
             "Integration with Organizations (backup policies)"
@@ -2944,7 +2977,8 @@
             "Automated backups: retention up to 35 days, point-in-time restore",
             "Manual snapshots are kept indefinitely; cross-Region copy",
             "Storage autoscaling; encryption only at creation (otherwise snapshot → copy encrypted → restore)",
-            "IAM database authentication (MySQL/PostgreSQL)"
+            "IAM database authentication (MySQL/PostgreSQL only, not SQL Server)",
+            "Encrypt in-flight data to RDS (e.g. SQL Server): download the RDS root CA certificate, import it on the clients and configure the application to connect with SSL, and force SSL for every connection with the rds.force_ssl parameter = true (static parameter: reboot the DB instance). TDE only encrypts data at rest on SQL Server/Oracle, IAM DB authentication is only a login method, and security groups on port 443 do not encrypt anything (databases do not listen on 443)"
           ],
           "use_when": [
             "Relational OLTP workload without managing the DB",
@@ -3145,7 +3179,8 @@
             "Serverless v2 scales instantly in 0.5 ACU increments",
             "Can scale down to 0 ACU (auto-pause) in current versions",
             "Supports Multi-AZ, read replicas, Global Database",
-            "Billed per ACU-second"
+            "Billed per ACU-second",
+        "Provisioned → Serverless v2 with minimal downtime: add a Serverless v2 reader to the cluster, then fail over (no snapshot/DMS)"
           ],
           "use_when": [
             "Unpredictable/variable or infrequent workload",
@@ -3219,9 +3254,10 @@
           "facts": [
             "Item up to 400 KB; partition key (+ sort key)",
             "On-demand or provisioned capacity (with auto scaling)",
+        "Auto Scaling is on by default only when the table is created in the console — tables created via CLI/API/IaC have NONE until you enable it",
             "GSI (different PK, eventual consistency) and LSI (only at table creation)",
-            "Streams (24 h) → Lambda; TTL for automatic deletion",
-            "PITR up to 35 days (restore to a new table in the same account); on-demand backups; export to S3; cross-account/long-term copies → AWS Backup",
+            "Streams (24 h, ordered item-level changes) → Lambda event source mapping: the way to react to new items with no change to the writer app (not SNS from the producer, CloudWatch alarms or Systems Manager); TTL for automatic deletion",
+            "PITR up to 35 days (restore to a NEW table, same Region and same account); on-demand backups; export to S3; automated cross-account / long-term retention copies → AWS Backup (copy the backup to a vault in another account); the native on-demand backups and PITR do not copy cross-account, and Timestream is not a recovery tool",
             "Transactions; strongly consistent reads optional"
           ],
           "use_when": [
@@ -3274,6 +3310,7 @@
           "facts": [
             "API-compatible with DynamoDB — minimal code changes",
             "Caches items and query results",
+        "Microsecond reads for hot items; pair with DynamoDB Auto Scaling (DAX doesn't scale table capacity)",
             "Cluster in a VPC, Multi-AZ"
           ],
           "use_when": [
@@ -3898,6 +3935,7 @@
             "Provisioned (per shard: 1 MB/s or 1,000 records/s write, 2 MB/s read) or on-demand",
             "Ordering guaranteed within a shard (partition key)",
             "Enhanced fan-out — 2 MB/s per consumer per shard",
+            "Clickstream / user-activity analytics: Kinesis ingests real-time events (with Lambda@Edge/CloudFront for global proximity) and results land durably in S3; Athena queries S3 but does not process streams",
             "Records up to 1 MB (current limit up to 10 MB); consumers: Lambda, KCL, Flink, Firehose"
           ],
           "use_when": [
@@ -4131,7 +4169,7 @@
             "Glue ETL jobs on Spark (Python/Scala), serverless",
             "Crawlers automatically infer schemas and populate the Data Catalog",
             "Data Catalog is used by Athena, Redshift Spectrum, EMR",
-            "Job bookmarks — process only new data",
+            "Job bookmarks — keep state between runs so the job processes only NEW data (fix for 'old data reprocessed / job gets slower'); no custom cleanup needed",
             "Glue DataBrew — visual data preparation; Glue Data Quality"
           ],
           "use_when": [
@@ -4208,6 +4246,7 @@
             "Redshift Spectrum — query data in S3 without loading it",
             "Redshift Serverless; RA3 with managed storage",
             "Snapshots, cross-region snapshot copy; Multi-AZ for RA3",
+          "DR for a Region outage: enable cross-Region snapshot copy (automated/manual snapshots copied to a second Region, KMS grant if encrypted) and restore there; same-Region automated snapshots or Multi-AZ do not survive a Region failure",
             "Zero-ETL integrations with Aurora/RDS/DynamoDB; concurrency scaling"
           ],
           "use_when": [
@@ -4252,7 +4291,8 @@
             "Master/core/task nodes; task nodes are a good fit for Spot",
             "EMR on EC2, EMR on EKS, EMR Serverless",
             "Storage in HDFS or S3 (EMRFS)",
-            "Full control over frameworks and configuration"
+            "Full control over frameworks and configuration",
+          "Log/analytics pipeline: collect logs in S3, process the big data with EMR (Spark/Hadoop, Spot task nodes); Glacier needs retrieval first, a single EC2 instance does not scale, ParallelCluster is for HPC"
           ],
           "use_when": [
             "Migrate on-prem Hadoop/Spark",
@@ -4453,7 +4493,8 @@
             "Destinations: S3 (writes directly into any storage class, incl. Glacier Deep Archive), EFS, FSx",
             "Agent on-prem; no agent needed between AWS services",
             "Encryption, integrity verification, preserves metadata/permissions",
-            "Scheduling, bandwidth throttling"
+            "Scheduling, bandwidth throttling",
+          "Over Direct Connect: agent connects through a VPC/service endpoint (PrivateLink) on the private VIF so traffic stays off the Internet; fully managed, works both ways between on-prem and S3/EFS/FSx; Storage Gateway = hybrid access, not bulk replication"
           ],
           "use_when": [
             "Move NFS/SMB data to S3/EFS/FSx over the network",
@@ -4571,14 +4612,16 @@
           "facts": [
             "Continuous block-level replication of servers (physical, VMware, other clouds)",
             "Test launches, then cutover with minimal downtime",
-            "Recommended service for rehost (replaced SMS)"
+            "Recommended service for rehost (replaced SMS)",
+          "Lift-and-shift VMs with minimal downtime: Replication Agent on each source server → continuous replication → test launch → cutover; no application changes"
           ],
           "use_when": [
             "Move hundreds of servers to AWS as-is (rehost)",
             "Minimal downtime during server migration"
           ],
           "not_for": [
-            "Database-only migration → DMS"
+            "Database-only migration → DMS",
+          "Not DataSync (moves files, not servers), not Application Discovery Service (only discovers, no replication); VM Import/Export is a one-time image import with long downtime"
           ],
           "vs": [
             {
@@ -4640,7 +4683,8 @@
             "RPO in seconds, RTO in minutes",
             "Low-cost staging area; full resources launch on failover",
             "Sources: on-prem, other clouds, other AWS Regions",
-            "Failback after recovery"
+            "Failback after recovery",
+            "Cheapest way to hit tight RPO/RTO (RPO seconds, RTO minutes) for on-premises servers, even SQL Server: continuous block-level replication into a low-cost staging area (pilot-light style); beats warm standby on RDS + DMS CDC and Always On multi-site on cost"
           ],
           "use_when": [
             "DR for on-prem servers into AWS with low RPO/RTO at low cost",
@@ -4815,6 +4859,7 @@
             "Configuration items and a timeline of resource changes",
             "Config Rules (managed and custom via Lambda/Guard) — detective control",
             "Remediation via SSM Automation (automatic fix)",
+          "Managed rules cover common checks (e.g. access-keys-rotated for IAM keys older than N days, iam-password-policy for the account password policy such as minimum length, s3-bucket-public-read-prohibited); non-compliance events go to EventBridge → Lambda for custom auto-response; prefer a managed rule over a custom one",
             "Conformance packs; aggregator for multi-account/multi-region",
             "Regional; charged per configuration item and rule evaluation"
           ],
@@ -4859,7 +4904,8 @@
           "facts": [
             "Session Manager — shell access without SSH, bastions, or open ports, with logging",
             "Run Command, Patch Manager, Maintenance Windows, State Manager",
-            "Parameter Store: configs and SecureString (KMS), free standard tier",
+            "Parameter Store: configs and SecureString (KMS), free standard tier — the cheapest encrypted store for app variables/passwords when no rotation is needed",
+        "OpsCenter is for operational issues (OpsItems), NOT a config/secret store",
             "Automation runbooks (used for Config remediation)",
             "Requires SSM Agent + IAM role; also works on-prem (hybrid activations)"
           ],
@@ -4902,6 +4948,7 @@
             "Templates, stacks, change sets, drift detection",
             "StackSets — deploy across many accounts/Regions",
             "DeletionPolicy (Retain/Snapshot), rollback on failure",
+        "Wait for instance bootstrap: CreationPolicy on the resource + cfn-signal from the instance (DependsOn only orders; cfn-init installs but doesn't signal); UpdatePolicy/UpdateReplacePolicy are for updates",
             "Parameters, outputs, cross-stack references; CDK generates templates"
           ],
           "use_when": [
@@ -5007,7 +5054,7 @@
           "tagline": "AWS Health Dashboard: AWS events affecting your resources",
           "facts": [
             "Personalized notifications about outages and scheduled maintenance",
-            "Events → EventBridge for automation",
+            "Events → EventBridge (source aws.health) for automation: rule + SNS target = notice of upcoming events affecting your resources (maintenance, EC2 retirement); not EC2 state-change rules (fire after the fact) and not the public Service Health Dashboard (no events, all customers)",
             "Organizational view across all accounts"
           ],
           "use_when": [
@@ -5101,6 +5148,46 @@
             "stop at night"
           ],
           "doc": "https://docs.aws.amazon.com/solutions/latest/instance-scheduler-on-aws/solution-overview.html"
+        },
+        {
+          "id": "license-manager",
+          "name": "AWS License Manager",
+          "tagline": "Track and control software licenses (BYOL) across EC2 and on-premises servers",
+          "facts": [
+            "License configuration: license count by vCPU, core, socket or instance, with optional rules",
+            "'Enforce license limit' blocks launching new instances once the licenses are used up",
+            "Usage threshold alerts via SNS; works with Systems Manager inventory for on-premises and other servers",
+            "Supports AWS Organizations: manage licenses centrally and share them with member accounts (via RAM)"
+          ],
+          "use_when": [
+            "Cap EC2 launches when purchased licenses (Windows Server, SQL Server, Oracle) run out",
+            "Track license consumption by CPU/core/socket and alert before breaching the vendor agreement"
+          ],
+          "not_for": [
+            "Certificates for TLS → ACM (not software licenses)",
+            "Sharing resources across accounts → RAM; License Manager only tracks licenses"
+          ],
+          "vs": [
+            {
+              "id": "systems-manager",
+              "note": "Systems Manager (Fleet Manager, Inventory) manages servers; License Manager counts and enforces licenses"
+            },
+            {
+              "id": "ec2-purchasing",
+              "note": "Dedicated Hosts give physical servers for BYOL; License Manager tracks license usage on top"
+            }
+          ],
+          "keywords": [
+            "License Manager",
+            "license configuration",
+            "enforce license limit",
+            "BYOL",
+            "vCPU licenses",
+            "Windows Server licenses",
+            "SQL Server licenses",
+            "license usage"
+          ],
+          "doc": "https://docs.aws.amazon.com/license-manager/latest/userguide/license-manager.html"
         }
       ]
     },
@@ -5117,7 +5204,8 @@
             "History up to 13 months (up to 38 months at finer granularity when enabled), forecast up to 12 months",
             "Group by service, account, tag, Region",
             "Recommendations for purchasing Reserved Instances and Savings Plans",
-            "RI/SP utilization and coverage reports"
+            "RI/SP utilization and coverage reports",
+            "Programmatic access to cost/usage data and forecasts = Cost Explorer API (GetCostAndUsage, GetCostForecast, paginated); Budgets only alerts on thresholds, CSV downloads are manual"
           ],
           "use_when": [
             "Understand where the money goes and spot trends",
@@ -5356,8 +5444,215 @@
     {
       "id": "ml",
       "name": "Machine Learning & AI",
-      "summary": "Managed AI services — pick by input type: images/video → Rekognition, text → Comprehend, documents → Textract, search → Kendra; custom models → SageMaker.",
+      "summary": "Managed AI services — pick by input type: images/video → Rekognition, audio → Transcribe, text → Comprehend (sentiment) / Translate, text-to-speech → Polly, chatbots → Lex, documents → Textract, search → Kendra; custom models → SageMaker.",
       "services": [
+        {
+          "id": "transcribe",
+          "name": "Amazon Transcribe",
+          "tagline": "Speech-to-text (ASR) for audio/video files and streams",
+          "facts": [
+            "Batch or real-time streaming transcription; many languages, auto language identification",
+            "Speaker diarization, custom vocabulary, PII redaction",
+            "Call Analytics: transcript + sentiment, talk time, issue detection for contact centers",
+            "Fully managed — no ML model to build or maintain"
+          ],
+          "use_when": [
+            "Turn call recordings/audio into text",
+            "Feed transcripts to Translate/Comprehend for analysis"
+          ],
+          "not_for": [
+            "Text-to-speech → Polly",
+            "Translating text → Translate",
+            "Sentiment/entities of text → Comprehend"
+          ],
+          "vs": [
+            {
+              "id": "polly",
+              "note": "Transcribe — speech to text; Polly — text to speech"
+            },
+            {
+              "id": "lex",
+              "note": "Lex — conversational chatbot (ASR+NLU); Transcribe — plain transcription"
+            }
+          ],
+          "keywords": [
+            "Transcribe",
+            "speech to text",
+            "audio",
+            "call recordings",
+            "transcription",
+            "call center",
+            "ASR"
+          ],
+          "doc": "https://docs.aws.amazon.com/transcribe/latest/dg/what-is.html"
+        },
+        {
+          "id": "translate",
+          "name": "Amazon Translate",
+          "tagline": "Neural machine translation of text between languages",
+          "facts": [
+            "Real-time and batch translation, 75+ languages",
+            "Custom terminology and formality settings",
+            "Fully managed API — new languages need no model work"
+          ],
+          "use_when": [
+            "Translate transcripts/text (e.g. Hindi → English)",
+            "Localize content at scale"
+          ],
+          "not_for": [
+            "Audio to text → Transcribe",
+            "Sentiment analysis → Comprehend"
+          ],
+          "vs": [
+            {
+              "id": "comprehend",
+              "note": "Translate — changes language; Comprehend — analyzes text (sentiment, entities)"
+            }
+          ],
+          "keywords": [
+            "Translate",
+            "translation",
+            "Hindi",
+            "language",
+            "localization",
+            "multi-language"
+          ],
+          "doc": "https://docs.aws.amazon.com/translate/latest/dg/what-is.html"
+        },
+        {
+          "id": "comprehend",
+          "name": "Amazon Comprehend",
+          "tagline": "NLP: sentiment, entities, key phrases, language detection, PII",
+          "facts": [
+            "Sentiment analysis: positive, negative, neutral, mixed",
+            "Entity, key phrase, language and PII detection; topic modeling",
+            "Custom classification/entity models via managed training (optional)",
+            "Fully managed — no ML model to maintain for standard analysis"
+          ],
+          "use_when": [
+            "Sentiment of customer feedback, reviews or call transcripts",
+            "Extract entities/PII from text"
+          ],
+          "not_for": [
+            "Audio input directly → Transcribe first",
+            "Image/video analysis → Rekognition",
+            "Enterprise document search → Kendra"
+          ],
+          "vs": [
+            {
+              "id": "translate",
+              "note": "Comprehend — understand text; Translate — convert between languages"
+            },
+            {
+              "id": "kendra",
+              "note": "Kendra — search over documents; Comprehend — analyze text content"
+            }
+          ],
+          "keywords": [
+            "Comprehend",
+            "sentiment analysis",
+            "NLP",
+            "entities",
+            "key phrases",
+            "natural language"
+          ],
+          "doc": "https://docs.aws.amazon.com/comprehend/latest/dg/what-is.html"
+        },
+        {
+          "id": "polly",
+          "name": "Amazon Polly",
+          "tagline": "Text-to-speech: lifelike voices from text",
+          "facts": [
+            "Neural and standard voices, many languages",
+            "SSML for pronunciation/pauses; speech marks",
+            "Async synthesis to S3 (StartSpeechSynthesisTask)"
+          ],
+          "use_when": [
+            "Turn text into spoken audio (IVR, accessibility, apps)"
+          ],
+          "not_for": [
+            "Speech to text → Transcribe",
+            "Translation → Translate"
+          ],
+          "vs": [
+            {
+              "id": "transcribe",
+              "note": "Polly — text to speech; Transcribe — speech to text"
+            }
+          ],
+          "keywords": [
+            "Polly",
+            "text to speech",
+            "TTS",
+            "voice",
+            "speech synthesis"
+          ],
+          "doc": "https://docs.aws.amazon.com/polly/latest/dg/what-is.html"
+        },
+        {
+          "id": "lex",
+          "name": "Amazon Lex",
+          "tagline": "Build conversational chatbots/voicebots (ASR + NLU)",
+          "facts": [
+            "Same technology as Alexa; intents, slots, utterances",
+            "Integrates with Amazon Connect, Lambda fulfillment, Slack/Facebook channels",
+            "Not a transcription service for recordings"
+          ],
+          "use_when": [
+            "Chatbot or IVR voicebot with natural-language intents"
+          ],
+          "not_for": [
+            "Transcribing call recordings → Transcribe",
+            "Sentiment analysis → Comprehend"
+          ],
+          "vs": [
+            {
+              "id": "transcribe",
+              "note": "Lex — dialog/intent bot; Transcribe — speech to text only"
+            }
+          ],
+          "keywords": [
+            "Lex",
+            "chatbot",
+            "voicebot",
+            "conversational",
+            "intents",
+            "Alexa"
+          ],
+          "doc": "https://docs.aws.amazon.com/lexv2/latest/dg/what-is.html"
+        },
+        {
+          "id": "textract",
+          "name": "Amazon Textract",
+          "tagline": "Extract text, forms and tables from scanned documents",
+          "facts": [
+            "OCR plus forms (key-value pairs) and tables extraction",
+            "Queries, signatures, ID and invoice analysis",
+            "Fully managed; results to S3/Lambda"
+          ],
+          "use_when": [
+            "Digitize scanned PDFs, invoices, forms"
+          ],
+          "not_for": [
+            "Images of objects/faces → Rekognition",
+            "Search over documents → Kendra"
+          ],
+          "vs": [
+            {
+              "id": "rekognition",
+              "note": "Textract — structured document text; Rekognition — objects/faces, text in scenes"
+            }
+          ],
+          "keywords": [
+            "Textract",
+            "OCR",
+            "scanned documents",
+            "forms",
+            "tables",
+            "extract text"
+          ],
+          "doc": "https://docs.aws.amazon.com/textract/latest/dg/what-is.html"
+        },
         {
           "id": "rekognition",
           "name": "Amazon Rekognition",
@@ -5748,7 +6043,7 @@
             "At rest: KMS (SSE-KMS, EBS, RDS), SSE-S3, CloudHSM",
             "In transit: TLS/HTTPS (ACM), VPN IPsec, MACsec on DX",
             "RDS: encryption can only be enabled at creation; unencrypted → snapshot → encrypted copy → restore",
-            "Client-side encryption — you encrypt before sending to AWS",
+            "Client-side encryption — you encrypt before sending to AWS (with a KMS key or your own client-side master key); 'encrypt before upload' is never SSE",
             "Encrypted snapshots can be shared only with a customer managed key"
           ],
           "use_when": [

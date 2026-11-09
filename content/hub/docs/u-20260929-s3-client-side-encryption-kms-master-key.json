@@ -1,0 +1,54 @@
+{
+  "id": "u-20260929-s3-client-side-encryption-kms-master-key",
+  "source": {
+    "type": "user",
+    "added": "2026-09-29",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A company is generating confidential data that is saved on its on-premises data center. As a backup solution, the company wants to upload its data to an Amazon S3 bucket. In compliance with its internal security mandate, the encryption of the data must be done before sending it to S3. The company must spend time managing and rotating the encryption keys as well as controlling who can access those keys.\nWhich of the following methods can achieve this requirement? (Select TWO.)",
+    "options": [
+      "Set up Client-Side Encryption with AWS KMS key.",
+      "Set up Server-Side Encryption with keys stored in a separate S3 bucket.",
+      "Set up Server-Side Encryption (SSE) with Amazon EC2 key pair.",
+      "Set up Client-Side Encryption with S3 managed encryption keys.",
+      "Set up Client-Side Encryption using a client-side master key."
+    ],
+    "answer": [
+      0,
+      4
+    ],
+    "explanation": "Encryption before upload means client-side encryption. You can use a KMS key (you manage the key policy, rotation and who can use it) or a client-side master key that you keep and manage yourself. Server-side encryption happens after the data reaches S3, so it does not meet the requirement, and 'keys in a separate S3 bucket' and 'EC2 key pair' are not S3 encryption options. S3 managed keys (SSE-S3) are server-side and managed by AWS, so they cannot be used for client-side encryption and the company would not be managing them."
+  },
+  "concept": "S3 client-side encryption: encrypt before upload with a KMS key or your own master key",
+  "tests": "Recognizing that 'encrypt before sending to S3' means client-side encryption, and that the keys can be a KMS key or a client-side master key, while SSE (server-side) and 'S3 managed keys' don't fit.",
+  "expected": "Client-side encryption using an AWS KMS key or a client-side master key. Triggers: 'encryption must be done before sending it to S3', 'manage and rotate the keys', 'control who can access those keys'.",
+  "why_not": "SSE happens after upload, so it fails 'before sending'. Keys in another S3 bucket and EC2 key pairs aren't S3 encryption options. S3 managed keys are SSE-S3, server-side and managed by AWS, so they don't fit client-side encryption or self-managed keys.",
+  "keywords": [
+    "client-side encryption",
+    "encrypt before upload",
+    "KMS key",
+    "client-side master key",
+    "SSE-S3",
+    "SSE-KMS",
+    "SSE-C",
+    "key rotation",
+    "on-premises backup",
+    "S3 encryption"
+  ],
+  "services": [
+    "s3",
+    "kms",
+    "encryption"
+  ],
+  "topics": [
+    "storage",
+    "iam-security"
+  ],
+  "domain": 1,
+  "related": [
+    "e5-q10",
+    "e5-q2",
+    "e3-q5"
+  ]
+}

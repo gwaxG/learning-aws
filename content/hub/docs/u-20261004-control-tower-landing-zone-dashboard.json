@@ -1,0 +1,52 @@
+{
+  "id": "u-20261004-control-tower-landing-zone-dashboard",
+  "source": {
+    "type": "user",
+    "added": "2026-10-04",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A startup is planning to set up and govern a secure, compliant, multi-account AWS environment in preparation for its upcoming projects. The IT Manager requires the solution to have a dashboard for continuous detection of policy non-conformance and non-compliant resources across the enterprise, as well as to comply with the AWS multi-account strategy best practices.\nWhich of the following offers the easiest way to fulfill this task?",
+    "options": [
+      "Launch new AWS member accounts using the AWS CloudFormation StackSets. Use AWS Config to continuously track the configuration changes and set rules to monitor non-compliant resources. Set up a Multi-Account Multi-Region Data Aggregator to monitor compliance data for rules and accounts in an aggregated view",
+      "Use AWS Service Catalog to launch new AWS member accounts. Configure AWS Service Catalog Launch Constraints to continuously track configuration changes and monitor non-compliant resources. Set up a Multi-Account Multi-Region Data Aggregator to monitor compliance data for rules and accounts in an aggregated view",
+      "Establish connectivity to AWS through an AWS Direct Connect Partner to securely link on-premises environments to the new AWS accounts. Use AWS Organizations to manage and govern multiple accounts. Set up AWS Config to monitor non-compliant resources across the enterprise.",
+      "Use AWS Control Tower to launch a landing zone to automatically provision and configure new accounts through an Account Factory. Utilize the AWS Control Tower dashboard to monitor provisioned accounts across your enterprise. Set up preventive and detective guardrails for policy enforcement."
+    ],
+    "answer": 3,
+    "explanation": "AWS Control Tower is the easiest way to set up and govern a secure multi-account environment that follows AWS best practices: it creates a landing zone (built on Organizations, IAM Identity Center, CloudTrail and Config), provisions new accounts through Account Factory, applies preventive (SCP) and detective (Config) guardrails, and shows compliance status and non-compliant resources in its dashboard. The other options assemble the same pieces by hand (StackSets, Service Catalog, Config aggregators, Organizations) with much more setup, and Service Catalog launch constraints only define the IAM role used to launch products, they do not monitor compliance. Direct Connect is unrelated to account governance."
+  },
+  "concept": "AWS Control Tower: landing zone, Account Factory, guardrails and a compliance dashboard for multi-account governance",
+  "tests": "Choosing AWS Control Tower as the easiest, best-practice way to set up and govern a multi-account environment with guardrails and a dashboard of non-compliant resources, versus hand-built StackSets/Config/Service Catalog combinations.",
+  "expected": "Control Tower landing zone + Account Factory + preventive/detective guardrails + dashboard. Triggers: 'set up and govern a secure, compliant, multi-account environment', 'dashboard for non-conformance', 'multi-account best practices', 'easiest way'.",
+  "why_not": "StackSets + Config + aggregator builds the governance by hand and has no account vending baseline or dashboard of guardrails. Service Catalog launch constraints only set the role used to deploy a product, they do not track configuration changes or compliance. Direct Connect, Organizations and Config alone give connectivity and basic structure, without the landing zone, guardrails and dashboard that Control Tower sets up.",
+  "keywords": [
+    "AWS Control Tower",
+    "landing zone",
+    "Account Factory",
+    "guardrails",
+    "preventive guardrail",
+    "detective guardrail",
+    "multi-account",
+    "dashboard",
+    "AWS Organizations",
+    "AWS Config"
+  ],
+  "services": [
+    "control-tower",
+    "organizations",
+    "config",
+    "scp",
+    "service-catalog",
+    "direct-connect"
+  ],
+  "topics": [
+    "iam-security",
+    "monitoring"
+  ],
+  "domain": 1,
+  "related": [
+    "u-20260927-control-tower-account-factory",
+    "u-20260929-scp-block-config-changes"
+  ]
+}

@@ -1,0 +1,675 @@
+{
+  "version": 1,
+  "diagnostic": {
+    "date": "2026-10-01",
+    "asked": 10,
+    "correct": 9,
+    "note": "Ten mixed questions across the four exam domains, plus the questions brought in during practice. A single miss is a thin signal, so severity mostly follows how often an area needed explaining. Re-run the diagnostic with harder questions to sharpen it. Two areas (VPC, Organizations & accounts) are also marked weak by your own assessment.",
+    "results": [
+      {
+        "area": "vpc-networking",
+        "q": "Outbound-only IPv6 from a private subnet",
+        "ok": false,
+        "answer": "Egress-only internet gateway"
+      },
+      {
+        "area": "security-governance",
+        "q": "Encrypt an existing unencrypted EBS volume",
+        "ok": true
+      },
+      {
+        "area": "data-ml-services",
+        "q": "Aurora cross-Region DR with RTO ~1 min",
+        "ok": true
+      },
+      {
+        "area": "data-ml-services",
+        "q": "Ordering + no duplicates at 250 msg/s (SQS FIFO)",
+        "ok": true
+      },
+      {
+        "area": "security-governance",
+        "q": "Explicit Deny vs identity Allow",
+        "ok": true
+      },
+      {
+        "area": null,
+        "q": "Route 53 routing for EU data residency (geolocation)",
+        "ok": true
+      },
+      {
+        "area": "storage-archive-hybrid",
+        "q": "80 TB one-time transfer on a 100 Mbps link (Snowball Edge)",
+        "ok": true
+      },
+      {
+        "area": "compute-billing-scaling",
+        "q": "Flexible discount across EC2, Fargate, Lambda (Compute Savings Plan)",
+        "ok": true
+      },
+      {
+        "area": "data-ml-services",
+        "q": "Lambda concurrency cap for a 50-connection database",
+        "ok": true
+      },
+      {
+        "area": "compute-billing-scaling",
+        "q": "Memory alarm on EC2 (CloudWatch agent)",
+        "ok": true
+      }
+    ]
+  },
+  "areas": [
+    {
+      "id": "vpc-networking",
+      "title": "VPC & hybrid networking",
+      "severity": 3,
+      "why": "The only miss in the diagnostic (IPv6 egress) plus the largest cluster of questions you brought in: peering, Direct Connect, NACLs, endpoints, subnets and route tables, Lambda ENIs.",
+      "evidence": [
+        "Missed (twice): many accounts on one existing Direct Connect (DX gateway + Transit Gateway; VPC peering is not supported over a DX gateway, new DX per account or VPN CloudHub is not dedicated)",
+        "Missed (twice): private access from a private-subnet EC2 to S3 at the lowest cost (Gateway VPC endpoint is free; interface endpoint costs per hour and per GB, VPN and custom endpoint service are not for S3)",
+        "Missed: private DynamoDB access from EKS on Fargate (gateway endpoint associated with route tables, not a NACL rule, interface endpoint or Network Firewall) plus cross-account backup via AWS Backup (not PITR)",
+        "Self-reported: VPC topics feel weak",
+        "Missed: instance without a DNS hostname in a new VPC (enable the VPC attributes DNS resolution and DNS hostnames; not Route 53, CIDR or security groups)",
+        "Missed: least-privilege rule for the database port from an Auto Scaling app tier (Source = the app tier's security group ID, not IPs, instance IDs or NACL IDs)",
+        "Missed: hundreds of VPCs + VPNs across 5 Regions (answer: Transit Gateway per Region joined by TGW peering; mixed it up with Direct Connect gateway / peering / VPN CloudHub)",
+        "Diagnostic: chose NAT gateway for outbound-only IPv6 (correct: egress-only internet gateway)",
+        "Brought in questions on VPC peering, DX gateway + Transit Gateway, NACL ephemeral ports, S3 gateway endpoint, Lambda in a VPC (ENI/IP limits)",
+        "Asked for the whole picture on route tables, subnets and AZs (main route table, subnet = one AZ)"
+      ],
+      "rules": [
+        "IPv6 outbound-only from a private subnet = egress-only internet gateway (NAT gateway is IPv4 only)",
+        "VPC peering is not transitive; many VPCs or accounts = Transit Gateway",
+        "NACLs are stateless: allow inbound 443 AND outbound ephemeral ports 1024-65535; security groups are stateful",
+        "S3 and DynamoDB from a private subnet without NAT cost = gateway endpoint (free)",
+        "Direct Connect to many VPCs/accounts = Direct Connect gateway (+ Transit Gateway)",
+        "A subnet lives in one AZ; every VPC has one main route table; a subnet can be associated with only one route table",
+        "Lambda in a VPC needs ENIs and free IPs in the subnet: a tiny /27 exhausts at peak (EC2ThrottledException)",
+        "Hundreds of VPCs, VPNs and several Regions = one Transit Gateway per Region + TGW peering between Regions (share with RAM); VPC peering is a one-to-one full mesh, a DX gateway gives no VPC-to-VPC transit, VPN CloudHub is branch-to-branch VPN",
+        "Tier-to-tier least privilege: security group rule Source = the other tier's security group ID (works with Auto Scaling); a source can never be an instance ID or NACL ID",
+        "No DNS hostname in a new VPC = enable DNS resolution (enableDnsSupport) and DNS hostnames (enableDnsHostnames); both also needed for private hosted zones; a public hostname also needs a public IPv4 address",
+        "Gateway endpoint (S3, DynamoDB) is wired through route table associations; NACLs cannot target endpoints, and a gateway endpoint is the default for private DynamoDB/S3 access from private subnets",
+        "Private-subnet workload to S3 or DynamoDB, cheapest = Gateway endpoint (free, route table); interface endpoint (PrivateLink) only for on-prem/other Region/VPC access or other services; custom endpoint service = publishing your own service"
+      ],
+      "theory": [
+        {
+          "topic": "vpc-networking",
+          "heading": "VPC, Subnets, CIDR & AZs"
+        },
+        {
+          "topic": "vpc-networking",
+          "heading": "Route Tables, IGW, NAT Gateway vs NAT Instance"
+        },
+        {
+          "topic": "vpc-networking",
+          "heading": "Security Groups (stateful) vs Network ACLs (stateless)"
+        },
+        {
+          "topic": "vpc-networking",
+          "heading": "VPC Endpoints: Gateway vs Interface (PrivateLink)"
+        },
+        {
+          "topic": "vpc-networking",
+          "heading": "VPC Peering vs Transit Gateway"
+        },
+        {
+          "topic": "vpc-networking",
+          "heading": "Hybrid Connectivity: Site-to-Site VPN vs Direct Connect"
+        }
+      ],
+      "services": [
+        "vpc",
+        "subnets",
+        "igw",
+        "nat-gateway",
+        "security-groups",
+        "nacl",
+        "vpc-endpoints",
+        "vpc-peering",
+        "transit-gateway",
+        "direct-connect",
+        "bastion-host",
+        "site-to-site-vpn"
+      ]
+    },
+    {
+      "id": "organizations-accounts",
+      "title": "Organizations & multi-account",
+      "severity": 3,
+      "why": "Self-reported weak area, and the SCP question needed a full explanation. Multi-account questions mix identity, billing, networking and governance, so it helps to have one mental model.",
+      "evidence": [
+        "Missed: SSO for 1200 corporate users to personal S3 folders (identity provider/federation proxy + STS temporary credentials + IAM role and policy; not IAM users, WorkDocs or third-party SSO)",
+        "Missed: setting up and governing a multi-account environment with a non-compliance dashboard (Control Tower landing zone + Account Factory + guardrails, not StackSets/Config aggregator or Service Catalog)",
+        "Self-reported: Organizations and accounts feel weak",
+        "Brought in an SCP question (block Config changes in developer accounts) and multi-account Direct Connect (DX gateway + Transit Gateway)"
+      ],
+      "rules": [
+        "Organizations = management account + member accounts in OUs; policies attach to the root, an OU or an account and inherit downward",
+        "SCPs never grant permissions; they set the maximum. Effective permission = SCP AND IAM policy; they do not affect the management account; use them for preventive guardrails (e.g. deny changes to AWS Config)",
+        "Consolidated billing: one bill, combined volume discounts, and Reserved Instances / Savings Plans shared across accounts",
+        "Cross-account access: create a role in the target account that trusts the source account, then call sts:AssumeRole (temporary credentials); a resource policy is the alternative for S3, SQS, KMS",
+        "Share resources without copying them: AWS RAM (subnets, Transit Gateway, Route 53 Resolver rules); same org = no invitations",
+        "Control Tower = landing zone with guardrails and Account Factory; IAM Identity Center = single sign-on and permission sets for all accounts",
+        "Many accounts and VPCs to on-prem: Transit Gateway shared with RAM + Direct Connect gateway; peering does not scale and is not transitive",
+        "Detective vs preventive: SCP prevents, AWS Config rules detect; organization trails and Config aggregators collect from all accounts",
+        "'Set up and govern a multi-account environment, easiest way' = Control Tower (landing zone, Account Factory, preventive SCP + detective Config guardrails, dashboard); Service Catalog launch constraints only set the launching role",
+        "Corporate directory users to AWS without IAM users = identity federation: IdP/federation proxy (SAML 2.0, AD FS) + STS temporary credentials for an IAM role with a restricting policy"
+      ],
+      "theory": [
+        {
+          "topic": "iam-security",
+          "heading": "AWS Organizations and SCPs"
+        },
+        {
+          "topic": "iam-security",
+          "heading": "Cross-account access, AssumeRole & permission boundaries"
+        },
+        {
+          "topic": "iam-security",
+          "heading": "Users vs groups vs roles, and STS"
+        },
+        {
+          "topic": "vpc-networking",
+          "heading": "VPC Peering vs Transit Gateway"
+        },
+        {
+          "topic": "cost",
+          "heading": "Cost allocation tags & Organizations billing"
+        }
+      ],
+      "services": [
+        "organizations",
+        "scp",
+        "control-tower",
+        "identity-center",
+        "ram",
+        "sts",
+        "iam",
+        "transit-gateway",
+        "direct-connect",
+        "config",
+        "service-catalog"
+      ]
+    },
+    {
+      "id": "security-governance",
+      "title": "Security: KMS, IAM & encryption",
+      "severity": 3,
+      "why": "Several questions here needed an explanation first: key policy vs role permissions, groups for MFA, Parameter Store vs Secrets Manager. Policy evaluation itself is solid (diagnostic: correct). Organizations and SCPs moved to their own area.",
+      "evidence": [
+        "Missed: encrypted weekly-accessed files needing envelope encryption, rotation and an audit of key use (S3 + SSE-KMS; SSE-S3 has no key audit, SSE-C is self-managed, Deep Archive is for rare access)",
+        "Missed: encrypting data stored in S3 for HIPAA (client-side encryption and SSE AES-256; not EBS encryption or snapshots, and S3 has no AES-128)",
+        "Missed: encrypting in-flight data to RDS SQL Server (rds.force_ssl=true + reboot and RDS root CA certificate; not TDE, IAM DB auth or port 443 security groups)",
+        "Missed (twice): scope of EBS encryption (snapshots and restored volumes encrypted, volume-to-instance traffic encrypted)",
+        "Missed: EBS encryption at rest (KMS keys: AWS managed or customer managed; not S3 encryption, CloudHSM passwords or ACM)",
+        "Missed: forcing AES-256 server-side encryption on every S3 upload with automatic yearly key rotation (bucket policy deny unless x-amz-server-side-encryption: AES256 + SSE-S3; not SCP, manual KMS rotation or Object Lock)",
+        "Missed: automatically removing IAM access keys older than 90 days (Config managed rule access-keys-rotated + EventBridge + Lambda; EventBridge alone has no event for key age)",
+        "Missed: automatically checking the account password policy (minimum length 12): AWS Config managed rule iam-password-policy, not CloudTrail/EventBridge ChangePassword events",
+        "Brought in questions on KMS key policy + Lambda role, IAM groups with MFA, Parameter Store SecureString, client-side encryption",
+        "Diagnostic: IAM explicit Deny and EBS encryption questions answered correctly"
+      ],
+      "rules": [
+        "KMS decrypt needs BOTH the key policy (or grant) AND the caller's IAM permission",
+        "Attach policies to groups, not users; MFA enforcement = a condition in the group policy",
+        "Cheapest secure config storage = SSM Parameter Store SecureString; automatic rotation = Secrets Manager",
+        "Unencrypted EBS volume: snapshot, copy the snapshot with encryption, create a new volume",
+        "Encrypt before upload = client-side encryption (the key never reaches AWS unprotected)",
+        "Old IAM access keys (90 days): Config managed rule access-keys-rotated detects, EventBridge on NON_COMPLIANT triggers Lambda/SSM Automation to deactivate and delete; always prefer a managed Config rule over a custom one",
+        "Compliance questions ('automatically check/evaluate whether X complies') = AWS Config managed rule (iam-password-policy, access-keys-rotated, ...); CloudTrail and EventBridge only record events and do not evaluate state",
+        "Enforce encryption on S3 uploads = bucket policy denying PutObject without the x-amz-server-side-encryption header; SSE-S3 keys are rotated automatically by AWS; SCPs apply to accounts/OUs not buckets; Object Lock is about immutability not keys",
+        "S3 data encryption = client-side encryption and/or SSE AES-256 (no AES-128; EBS encryption does not cover S3)",
+        "RDS in-flight encryption = SSL: rds.force_ssl=true (static, reboot) + RDS root CA on the clients; TDE = at rest; IAM DB auth = MySQL/PostgreSQL login only",
+        "Audit trail of key use = KMS (CloudTrail); SSE-S3 and SSE-C give none"
+      ],
+      "theory": [
+        {
+          "topic": "iam-security",
+          "heading": "Policy evaluation logic"
+        },
+        {
+          "topic": "iam-security",
+          "heading": "Users vs groups vs roles, and STS"
+        },
+        {
+          "topic": "iam-security",
+          "heading": "MFA, password policy, and root protection"
+        },
+        {
+          "topic": "iam-security",
+          "heading": "KMS and encryption at rest"
+        },
+        {
+          "topic": "iam-security",
+          "heading": "Secrets Manager vs SSM Parameter Store"
+        },
+        {
+          "topic": "monitoring",
+          "heading": "AWS Config — Compliance State"
+        },
+        {
+          "topic": "storage",
+          "heading": "S3 security: policies, BPA, encryption, presigned URLs"
+        },
+        {
+          "topic": "databases",
+          "heading": "RDS engines, Multi-AZ vs Read Replicas"
+        }
+      ],
+      "services": [
+        "iam",
+        "kms",
+        "secrets-manager",
+        "systems-manager",
+        "encryption",
+        "config",
+        "eventbridge",
+        "lambda",
+        "s3",
+        "s3-security"
+      ]
+    },
+    {
+      "id": "compute-billing-scaling",
+      "title": "EC2: billing, placement, ELB & scaling",
+      "severity": 3,
+      "why": "Details that exam questions twist: billing by instance state, Reserved Instance marketplace, placement group types, SNI, launch templates and AMIs.",
+      "evidence": [
+        "Missed (twice): EC2 billing by instance state (stopping-to-hibernate and Reserved Instance on a terminated instance ARE billed) and decommissioning Reserved Instances (sell on the RI Marketplace + snapshot EBS and terminate)",
+        "Missed: programmatic cost/usage data and forecasts (Cost Explorer API; Budgets only alerts, CSV export is manual)",
+        "Missed: avoiding over-provisioning in an Auto Scaling group (target tracking scaling; simple scaling waits for cooldown, scheduled is for predictable patterns, suspend/resume is not a policy)",
+        "Missed (twice): reserving capacity in a specific AZ for a nightly 5-hour batch (On-Demand Capacity Reservation; Regional RIs give only a discount, Dedicated Hosts are for licenses)",
+        "Missed: EC2 launches failing after 20 successful requests (vCPU-based On-Demand quota per Region, request an increase; not an API fault, not a per-AZ limit)",
+        "Missed: temporary extra workers for a transcoding backlog (Spot; queue-driven and interruption-tolerant, not On-Demand)",
+        "Missed: ALB HTTP-to-HTTPS redirect (chose a new listener instead of editing the existing port-80 listener)",
+        "Missed: Windows Server license limit on EC2 (AWS License Manager with Enforce license limit, not Fleet Manager/RAM/ACM)",
+        "Missed: HPC network acceleration with OS-bypass (chose ENA/ENI-style answers instead of Elastic Fabric Adapter)",
+        "Brought in questions on EC2 billing by state, selling Reserved Instances, placement groups (asked for a separate explanation), SNI on ALB, stop/start with instance store, new AMI for an Auto Scaling group",
+        "Diagnostic: Compute Savings Plans answered correctly"
+      ],
+      "rules": [
+        "Billing: running = pay; stopped = EBS only; hibernated = EBS (+ RAM stored); terminated = nothing",
+        "Unused Standard RIs can be sold on the RI Marketplace; Convertible RIs cannot",
+        "Cluster = low latency/HPC in one AZ; Spread = few critical instances on separate hardware; Partition = large distributed systems (Kafka, Hadoop)",
+        "Stop/start loses instance store data and changes the public IP (Elastic IP stays)",
+        "ALB with several domains and certificates = SNI (add certificates to the listener)",
+        "A new AMI needs a new launch template or version; existing instances need an instance refresh",
+        "ALB HTTP→HTTPS: edit the existing port-80 listener (default action or host-header rule) with a redirect action to HTTPS:443; one listener per port, and the 443 listener never sees HTTP traffic",
+        "Cap EC2 launches by purchased licenses = AWS License Manager: license configuration (count by vCPU/core/socket) + Enforce license limit + SNS alert; Fleet Manager, RAM and ACM do not manage licenses",
+        "HPC/ML inter-node traffic with OS-bypass, lower latency than TCP = EFA (Linux, cluster placement group); ENA = enhanced networking without OS-bypass; ENI = plain virtual NIC; a private VIF is Direct Connect, not an EC2 attachment",
+        "Reserve capacity in an AZ without a term = On-Demand Capacity Reservation (cancel any time, billed while active); Regional RI = discount only, Zonal RI = discount + capacity; Dedicated Host = per-socket/core licensing",
+        "Launch failures after N instances = vCPU-based quota per Region: request a quota increase for that Region and retry",
+        "Interruptible, queue-driven, temporary workers = Spot (no bid price anymore, 2-minute notice)",
+        "Cut cost without hurting performance in an ASG = target tracking policy",
+        "Code needs cost data or a forecast = Cost Explorer API, not Budgets"
+      ],
+      "theory": [
+        {
+          "topic": "ec2-compute",
+          "heading": "Purchasing options"
+        },
+        {
+          "topic": "ec2-compute",
+          "heading": "AMIs, user data & instance metadata"
+        },
+        {
+          "topic": "ec2-compute",
+          "heading": "Placement groups"
+        },
+        {
+          "topic": "ec2-compute",
+          "heading": "Elastic Load Balancing — ALB vs NLB vs GWLB"
+        },
+        {
+          "topic": "ec2-compute",
+          "heading": "Auto Scaling Groups"
+        },
+        {
+          "topic": "cost",
+          "heading": "EC2 pricing models & matching workloads"
+        },
+        {
+          "topic": "cost",
+          "heading": "Budgets vs Cost Explorer vs CUR"
+        }
+      ],
+      "services": [
+        "ec2",
+        "ec2-purchasing",
+        "placement-groups",
+        "instance-store",
+        "ami",
+        "auto-scaling",
+        "elb",
+        "cloudformation",
+        "license-manager",
+        "cost-explorer",
+        "budgets"
+      ]
+    },
+    {
+      "id": "storage-archive-hybrid",
+      "title": "Storage: archive, hybrid & delivery",
+      "severity": 3,
+      "why": "Specific features that decide the answer: Glacier retrieval options, File Gateway, Transfer Acceleration, AWS Backup retention, and CloudFront private content.",
+      "evidence": [
+        "Missed (twice): immutable retention with versioning (Standard + versioning + Object Lock compliance mode + lifecycle to Deep Archive; governance mode can be bypassed by privileged users)",
+        "Missed: 10 TB of audit data read rarely with up to 24 h retrieval (S3 lifecycle to Glacier after 0 days; not IA classes, One Zone-IA or FSx)",
+        "Missed (twice): scope of EBS encryption (snapshots of an encrypted volume and volumes restored from them are encrypted; data between volume and instance is encrypted too)",
+        "Missed (twice): private content only via CloudFront for one client (OAC on the S3 origin + CloudFront signed URLs/cookies; not Origin Shield, S3 presigned URLs or a CloudFront Function)",
+        "Missed: shared storage for hundreds of ECS tasks (EFS with Provisioned Throughput + Max I/O; Bursting cannot sustain constant load)",
+        "Missed: EBS encryption at rest (KMS: AWS managed or own customer managed keys; not S3 SSE, CloudHSM passwords or ACM)",
+        "Missed: valid EBS facts (persists independently, live Elastic Volumes changes; replication is only within the AZ, attach only in the same AZ, snapshots go to S3 not RDS)",
+        "Missed: S3 data surviving a Region failure (Cross-Region Replication; lifecycle to Glacier, EC2 copies and cross-account access do not replicate data)",
+        "Missed (three times): EBS volume types (Provisioned IOPS and Magnetic are real; Spot volumes and SR-IOV volumes are made up; gp3 has no Multi-Attach and no multi-AZ)",
+        "Brought in questions on Glacier Expedited + provisioned capacity, File Gateway, Transfer Acceleration, AWS Backup (>35 days), CloudFront signed URLs + OAC",
+        "Diagnostic: Snowball Edge for a one-time 80 TB transfer answered correctly"
+      ],
+      "rules": [
+        "Guaranteed fast Glacier retrieval = Expedited (1-5 min) + provisioned capacity (150 MB/s per unit)",
+        "On-prem backups over NFS/SMB into S3 = File Gateway; iSCSI volumes = Volume Gateway; tapes = Tape Gateway",
+        "Global users uploading to one bucket = S3 Transfer Acceleration; downloads = CloudFront",
+        "RDS/Aurora automated backups max 35 days; longer = AWS Backup (or manual snapshots)",
+        "Private content for specific clients = signed URLs/cookies + OAC (S3 presigned URLs bypass CloudFront)",
+        "Large one-time transfer with a weak link = Snow Family, not DataSync or Direct Connect",
+        "S3 is already multi-AZ (AZ outage covered); Region failure = Cross-Region Replication with versioning on both buckets; lifecycle transitions are for cost, cross-account access only grants permissions",
+        "EBS types: io1/io2 = consistent low latency for large relational/NoSQL DBs; Magnetic = cheapest per GB, infrequent access; gp3 = general purpose (boot, dev/test). \"Spot volumes\" and \"SR-IOV volumes\" do not exist; Multi-Attach is io1/io2 only; EBS is single-AZ",
+        "EBS encryption = KMS keys (AWS managed or your own CMK, symmetric) for volumes and snapshots; S3 SSE, CloudHSM passwords and ACM are not it",
+        "EBS: replicated only in its AZ, attach only in the same AZ, Elastic Volumes change type/size/IOPS live, snapshots live in S3 (not RDS)",
+        "Many containers sharing a file system with constant heavy I/O = EFS mounted in the task definition, Provisioned Throughput (Bursting scales with stored size) + Max I/O; FSx for Windows = SMB, DynamoDB cannot be mounted",
+        "Encrypted EBS: snapshots and volumes restored from them are encrypted automatically, and data moving between volume and instance is encrypted as well as data at rest",
+        "Rare access + hours-tolerant retrieval = Glacier via lifecycle (0 days is allowed)"
+      ],
+      "theory": [
+        {
+          "topic": "storage",
+          "heading": "S3 storage classes & retrieval trade-offs"
+        },
+        {
+          "topic": "storage",
+          "heading": "Replication, Transfer Acceleration & multipart upload"
+        },
+        {
+          "topic": "storage",
+          "heading": "Storage Gateway types"
+        },
+        {
+          "topic": "edge-dns",
+          "heading": "CloudFront security"
+        },
+        {
+          "topic": "databases",
+          "heading": "Backup, restore, snapshots, PITR"
+        },
+        {
+          "topic": "data-migration",
+          "heading": "Snow Family: offline bulk transfer"
+        },
+        {
+          "topic": "storage",
+          "heading": "Durability, availability, versioning & MFA delete"
+        },
+        {
+          "topic": "storage",
+          "heading": "EBS volume types & snapshots"
+        },
+        {
+          "topic": "storage",
+          "heading": "EFS vs FSx vs instance store"
+        }
+      ],
+      "services": [
+        "glacier",
+        "s3",
+        "storage-gateway",
+        "backup",
+        "cloudfront",
+        "snow-family",
+        "s3-replication",
+        "ebs",
+        "efs",
+        "ecs"
+      ]
+    },
+    {
+      "id": "data-ml-services",
+      "title": "Data, ML & database edge cases",
+      "severity": 3,
+      "why": "Narrow facts you met once: Glue job bookmarks, the ML services family, moving Aurora to Serverless v2, DAX vs API Gateway caching. Core DR and queue choices are solid (diagnostic: Aurora Global Database and SQS FIFO correct).",
+      "evidence": [
+        "Missed: automated cross-account long-term DynamoDB backup (AWS Backup copy to another account; PITR restores only to a new table in the same account, Timestream is not a recovery tool)",
+        "Missed: collecting and processing application logs for an audit report (S3 + EMR; not Glacier, a single EC2 instance or ParallelCluster)",
+        "Missed: triggering Lambda for new DynamoDB items (DynamoDB Streams + Lambda event source mapping; not SNS from the producer, CloudWatch alarms or Systems Manager)",
+        "Missed: Redshift disaster recovery for a Region outage (cross-Region snapshot copy; same-Region snapshots and the cluster's own availability do not help)",
+        "Brought in questions on Glue job bookmarks, Transcribe/Translate/Comprehend, Aurora provisioned to Serverless v2, DynamoDB + DAX vs API Gateway cache",
+        "Diagnostic: Aurora Global Database, SQS FIFO, Lambda reserved concurrency, CloudWatch agent for memory all answered correctly"
+      ],
+      "rules": [
+        "Glue job bookmark = process only new data and skip already processed data",
+        "Speech to text = Transcribe, translation = Translate, sentiment/entities = Comprehend",
+        "Aurora provisioned to Serverless v2: add a Serverless v2 reader, then fail over to it",
+        "Microsecond DynamoDB reads = DAX; API response caching = API Gateway cache",
+        "Cross-Region DR with RTO ~1 min = Aurora Global Database",
+        "Region-outage DR by service: Redshift = cross-Region snapshot copy; Aurora = Global Database; DynamoDB = global tables; S3 = cross-Region replication; same-Region snapshots/Multi-AZ never cover a Region failure",
+        "React to DynamoDB changes with no producer changes = DynamoDB Streams + Lambda trigger; CloudWatch alarms fire on metric thresholds, never per item",
+        "Large-scale log processing = S3 (store) + EMR (Spark/Hadoop, Spot task nodes) or Athena for SQL; Glacier tiers need retrieval first, ParallelCluster is HPC",
+        "DynamoDB backups: PITR = 35 days, new table, same account/Region; cross-account or long-term = AWS Backup plan with a copy to another account vault"
+      ],
+      "theory": [
+        {
+          "topic": "data-migration",
+          "heading": "Glue, Athena & the S3 Data Lake pattern"
+        },
+        {
+          "topic": "databases",
+          "heading": "Aurora"
+        },
+        {
+          "topic": "databases",
+          "heading": "DynamoDB"
+        },
+        {
+          "topic": "serverless-containers",
+          "heading": "Lambda concurrency, cold starts, throttling"
+        },
+        {
+          "topic": "databases",
+          "heading": "Redshift (OLAP) vs RDS (OLTP)"
+        },
+        {
+          "topic": "data-migration",
+          "heading": "EMR basics"
+        }
+      ],
+      "services": [
+        "glue",
+        "transcribe",
+        "translate",
+        "comprehend",
+        "aurora-serverless",
+        "aurora-global",
+        "dynamodb",
+        "dax",
+        "redshift",
+        "emr",
+        "athena",
+        "backup"
+      ]
+    },
+    {
+      "id": "migration-services",
+      "title": "Migration: MGN, DMS, DataSync & Snow",
+      "severity": 2,
+      "why": "Several look-alike services solve different migration problems; picking by what is being moved (servers, databases, files, bulk offline data) decides the answer.",
+      "evidence": [
+        "Missed: cheapest DR for on-premises SQL Server with RPO 60 s / RTO 1 h (AWS Elastic Disaster Recovery, pilot-light style; warm standby on RDS + DMS and Always On multi-site cost far more)",
+        "Missed: managed, accelerated data replication over Direct Connect (DataSync agent through a service/VPC endpoint; not Storage Gateway types or the Internet path)",
+        "Missed: lift-and-shift of VMs with minimal downtime (chose VM Import/Export instead of MGN with the Replication Agent)",
+        "Diagnostic: Snowball Edge for a one-time 80 TB transfer answered correctly"
+      ],
+      "rules": [
+        "Lift-and-shift / rehost of servers with minimal downtime = Application Migration Service (MGN): Replication Agent, continuous replication, test launch, cutover",
+        "Application Discovery Service only collects inventory and utilization; Migration Hub only tracks progress; neither migrates anything",
+        "VM Import/Export is a one-time image import with no continuous replication, so downtime is long",
+        "Files over the network (NFS/SMB) = DataSync; very large data or weak link = Snow Family; databases and ongoing changes = DMS (+ SCT for a different engine)",
+        "DataSync over Direct Connect: agent activated against a VPC (service) endpoint on the private VIF; Storage Gateway is ongoing hybrid access (file/volume/tape), not bulk replication",
+        "Low-cost DR for on-premises servers with tight RPO/RTO = AWS Elastic Disaster Recovery"
+      ],
+      "theory": [
+        {
+          "topic": "data-migration",
+          "heading": "Application Migration Service (MGN): lift-and-shift of servers"
+        },
+        {
+          "topic": "data-migration",
+          "heading": "DMS + SCT (homogeneous vs heterogeneous, CDC)"
+        },
+        {
+          "topic": "data-migration",
+          "heading": "Snow Family: offline bulk transfer"
+        },
+        {
+          "topic": "data-migration",
+          "heading": "DataSync, Transfer Family, Storage Gateway & choosing a transfer method"
+        },
+        {
+          "topic": "ha-dr",
+          "heading": "The 4 DR Strategies"
+        }
+      ],
+      "services": [
+        "mgn",
+        "migration-hub",
+        "datasync",
+        "snow-family",
+        "dms",
+        "sct",
+        "elastic-disaster-recovery",
+        "transfer-family",
+        "vpc-endpoints",
+        "storage-gateway",
+        "direct-connect"
+      ]
+    },
+    {
+      "id": "api-dns-certificates",
+      "title": "API Gateway, ACM & Route 53",
+      "severity": 2,
+      "why": "Certificate Region rules and DNS record types are easy to mix up, and exam questions combine API Gateway, ACM and Route 53 in one scenario.",
+      "evidence": [
+        "Missed: custom domain with HTTPS for a regional API Gateway (chose the us-east-1 ACM certificate; it must be in the API's Region). Answered correctly on a repeat",
+        "Missed: global clickstream processing near users (Lambda@Edge + Kinesis + S3; Route 53 latency/geoproximity routing only steers DNS, Athena is not a stream processor)",
+        "Diagnostic: Route 53 geolocation for EU data residency answered correctly"
+      ],
+      "rules": [
+        "Regional API Gateway custom domain: ACM certificate in the SAME Region; edge-optimized APIs and CloudFront need us-east-1",
+        "Custom domain steps: ACM certificate, custom domain name, base path mapping to the stage, Route 53 alias to the API Gateway domain name",
+        "Alias record (not CNAME) for AWS targets: free, works at the zone apex; a CNAME cannot be at the apex",
+        "ALB certificates live in the ALB's Region; many domains on one HTTPS listener = SNI with several certificates",
+        "Private CA certificates are not trusted by public clients; imported certificates are not auto-renewed",
+        "Process data near users worldwide = CloudFront + Lambda@Edge (edge compute); real-time streams = Kinesis, results to S3; Route 53 routing policies process nothing; Athena = SQL over S3, not real-time"
+      ],
+      "theory": [
+        {
+          "topic": "integration",
+          "heading": "API Gateway — REST vs HTTP"
+        },
+        {
+          "topic": "edge-dns",
+          "heading": "Route 53 hosted zones & record types"
+        },
+        {
+          "topic": "edge-dns",
+          "heading": "CloudFront security"
+        },
+        {
+          "topic": "edge-dns",
+          "heading": "Route 53 routing policies"
+        }
+      ],
+      "services": [
+        "api-gateway",
+        "acm",
+        "route53",
+        "cloudfront",
+        "elb",
+        "kinesis-data-streams",
+        "athena"
+      ]
+    },
+    {
+      "id": "containers-eks-ecs",
+      "title": "Containers: EKS, ECS & Fargate",
+      "severity": 1,
+      "why": "Container questions test which layer scales (pods vs nodes) and which option has the least operational overhead.",
+      "evidence": [
+        "Missed: scaling EKS worker nodes with least overhead (Cluster Autoscaler with the Metrics Server, not CloudWatch alarms or hand-built Auto Scaling policies)"
+      ],
+      "rules": [
+        "EKS pods scale with the Horizontal Pod Autoscaler (Metrics Server); worker nodes scale with the Cluster Autoscaler (or Karpenter)",
+        "CloudWatch alarms alert only; they never add nodes by themselves",
+        "Fargate (ECS or EKS) removes node management: choose it when 'least operational overhead' and no host access is needed",
+        "ECS is the simple AWS-native orchestrator; EKS when Kubernetes tooling or portability (Helm, operators) is required; EKS charges a control-plane fee"
+      ],
+      "theory": [
+        {
+          "topic": "serverless-containers",
+          "heading": "ECS: EC2 launch type vs Fargate"
+        },
+        {
+          "topic": "serverless-containers",
+          "heading": "EKS vs ECS — when to choose"
+        },
+        {
+          "topic": "serverless-containers",
+          "heading": "Serverless vs containers vs EC2: cost & ops trade-offs"
+        }
+      ],
+      "services": [
+        "eks",
+        "ecs",
+        "fargate",
+        "ecr",
+        "auto-scaling",
+        "app-runner"
+      ]
+    },
+    {
+      "id": "monitoring-events",
+      "title": "Monitoring & event notifications",
+      "severity": 1,
+      "why": "Questions about who tells you what: CloudWatch (metrics), CloudTrail (API calls), Config (state), AWS Health (AWS events about your resources), EventBridge (routing events to targets).",
+      "evidence": [
+        "Missed: notification about upcoming AWS events affecting EC2 (EventBridge rule on AWS Health / Personal Health Dashboard events with an SNS target; not state-change rules or the public Service Health Dashboard)",
+        "Diagnostic: CloudWatch agent for memory metrics answered correctly"
+      ],
+      "rules": [
+        "Upcoming AWS events for your resources (maintenance, instance retirement) = AWS Health (Personal Health Dashboard) events → EventBridge rule → SNS",
+        "The Service Health Dashboard is the public status page for all customers and emits no events to your account",
+        "EC2 state-change rules fire after the instance has already changed state; they cannot warn in advance",
+        "EventBridge reacts to AWS service events; CloudWatch alarms need a metric threshold; Config evaluates resource state; CloudTrail records API calls"
+      ],
+      "theory": [
+        {
+          "topic": "monitoring",
+          "heading": "EventBridge & X-Ray"
+        },
+        {
+          "topic": "monitoring",
+          "heading": "CloudWatch vs CloudTrail vs Config (exam trap)"
+        },
+        {
+          "topic": "monitoring",
+          "heading": "CloudWatch Alarms"
+        }
+      ],
+      "services": [
+        "health",
+        "eventbridge",
+        "sns",
+        "cloudwatch",
+        "cloudtrail",
+        "config"
+      ]
+    }
+  ]
+}

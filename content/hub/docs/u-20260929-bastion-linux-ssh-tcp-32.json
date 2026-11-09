@@ -1,0 +1,49 @@
+{
+  "id": "u-20260929-bastion-linux-ssh-tcp-32",
+  "source": {
+    "type": "user",
+    "added": "2026-09-29",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A large financial firm needs to set up a Linux bastion host to allow access to the Amazon EC2 instances running in their VPC. For security purposes, only the clients connecting from the corporate external public IP address 175.45.116.100 should have SSH access to the host.\nWhich is the best option that can meet the customer’s requirement?",
+    "options": [
+      "Security Group Inbound Rule: Protocol – TCP. Port Range – 22, Source 175.45.116.100/32",
+      "Security Group Inbound Rule: Protocol – UDP, Port Range – 22, Source 175.45.116.100/32",
+      "Network ACL Inbound Rule: Protocol – UDP, Port Range – 22, Source 175.45.116.100/32",
+      "Network ACL Inbound Rule: Protocol – TCP, Port Range-22, Source 175.45.116.100/0"
+    ],
+    "answer": 0,
+    "explanation": "SSH runs over TCP port 22, and /32 limits the source to exactly one IP. A Security Group is stateful, so the return traffic is allowed automatically. UDP (options 2 and 3) is the wrong protocol for SSH. The NACL option with /0 is an invalid/wrong CIDR (/0 would mean any address) and a NACL is stateless, so it would also need an outbound rule for ephemeral ports."
+  },
+  "concept": "Bastion host: public subnet + EIP, RDP/SSH only from corporate IPs",
+  "tests": "Writing the exact rule that restricts SSH to one corporate IP: right protocol (TCP 22), right CIDR (/32 = single host), and the right layer (Security Group, stateful).",
+  "expected": "Security Group inbound rule TCP 22 from 175.45.116.100/32. Triggers: 'Linux bastion', 'SSH', 'only from corporate public IP'.",
+  "why_not": "UDP 22 is the wrong protocol (SSH is TCP). NACL with /0 allows the entire internet, not one IP, and NACLs are stateless (return traffic needs its own outbound rule) — the SG is simpler and correct.",
+  "keywords": [
+    "bastion host",
+    "SSH",
+    "port 22",
+    "TCP",
+    "/32",
+    "security group",
+    "network ACL",
+    "corporate public IP",
+    "stateful",
+    "stateless"
+  ],
+  "services": [
+    "bastion-host",
+    "security-groups",
+    "nacl",
+    "ec2"
+  ],
+  "topics": [
+    "vpc-networking",
+    "iam-security"
+  ],
+  "domain": 1,
+  "related": [
+    "u-20260927-bastion-host-rdp-corporate-ip"
+  ]
+}

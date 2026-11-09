@@ -1,0 +1,50 @@
+{
+  "id": "u-20260929-dx-gateway-transit-gateway-multi-account",
+  "source": {
+    "type": "user",
+    "added": "2026-09-29",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A company has established a dedicated network connection from its on-premises data center to AWS Cloud using AWS Direct Connect (DX). The core network services, such as the Domain Name System (DNS) service and Active Directory services, are all hosted on-premises. The company has new AWS accounts that will also require consistent and dedicated access to these network services.\nWhich of the following can satisfy this requirement with the LEAST amount of operational overhead and in a cost-effective manner?",
+    "options": [
+      "Set up another Direct Connect connection for each and every new AWS account that will be added.",
+      "Create a new AWS VPN CloudHub. Set up a Virtual Private Network (VPN) connection for additional AWS accounts.",
+      "Set up a new Direct Connect gateway and integrate it with the existing Direct Connect connection. Configure a VPC peering connection between AWS accounts and associate it with Direct Connect gateway.",
+      "Create a new Direct Connect gateway and integrate it with the existing Direct Connect connection. Set up a Transit Gateway between AWS accounts and associate it with the Direct Connect gateway."
+    ],
+    "answer": 3,
+    "explanation": "A Direct Connect gateway lets one DX connection reach VPCs in many accounts and Regions, and a Transit Gateway associated with it (via a transit VIF) fans out to all the account VPCs with transitive routing, so adding an account is just another TGW attachment. A DX connection per account is slow and expensive. VPN CloudHub uses internet-based VPNs, so it is not dedicated. VPC peering cannot be associated with a Direct Connect gateway (only a virtual private gateway or a Transit Gateway can) and peering is non-transitive."
+  },
+  "concept": "Direct Connect Gateway + Transit Gateway: one DX connection shared by many accounts/VPCs",
+  "tests": "How to share one existing Direct Connect link with many (new) AWS accounts with the least overhead: Direct Connect gateway plus Transit Gateway (transit VIF), not more DX links, not VPN, not VPC peering.",
+  "expected": "Create a Direct Connect gateway, associate it with a Transit Gateway (shared to the other accounts, e.g. via RAM) that has the accounts' VPCs attached. Triggers: 'existing Direct Connect', 'new AWS accounts', 'consistent and dedicated access', 'least operational overhead'.",
+  "why_not": "A new DX per account is weeks of provisioning and costly. VPN CloudHub is over the internet (not dedicated/consistent). VPC peering cannot be associated with a Direct Connect gateway and is non-transitive, so on-prem could not reach the peered VPCs.",
+  "keywords": [
+    "Direct Connect",
+    "Direct Connect gateway",
+    "Transit Gateway",
+    "transit VIF",
+    "multiple accounts",
+    "dedicated connection",
+    "VPC peering",
+    "VPN CloudHub",
+    "on-premises DNS",
+    "Active Directory"
+  ],
+  "services": [
+    "direct-connect",
+    "transit-gateway",
+    "vpc-peering",
+    "ram"
+  ],
+  "topics": [
+    "vpc-networking",
+    "ha-dr"
+  ],
+  "domain": 2,
+  "related": [
+    "u-20260927-dx-resilience-peering",
+    "u-20260929-peering-not-transitive-dev-prod"
+  ]
+}

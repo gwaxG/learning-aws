@@ -1,0 +1,48 @@
+{
+  "id": "u-20260930-file-gateway-backups-nfs-smb",
+  "source": {
+    "type": "user",
+    "added": "2026-09-30",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A company plans to use a durable storage service to store on-premises database backups to the AWS Cloud. To move the backup data, the company needs a service that can store and retrieve objects via standard file storage protocols for quick recovery.\nWhich of the following options will meet this requirement?",
+    "options": [
+      "Use AWS DataSync to directly transfer the backup data to Amazon S3 Glacier.",
+      "Use Amazon EBS volumes to store all the backup data and attach it to an Amazon EC2 instance.",
+      "Use the AWS Storage Gateway volume gateway to store the backup data and directly access it using Amazon S3 API actions.",
+      "Use the AWS Storage Gateway file gateway to store all the backup data in Amazon S3."
+    ],
+    "answer": 3,
+    "explanation": "The Storage Gateway file gateway exposes NFS/SMB file shares on-premises and stores each file as an object in Amazon S3 (durable, and recent data is cached locally for quick recovery). DataSync is a transfer service, not a file protocol endpoint, and Glacier retrieval isn't quick. EBS volumes attach to EC2 in the cloud, not to on-premises servers. A volume gateway exposes iSCSI block volumes stored as EBS snapshots, so the data can't be accessed directly with S3 API actions."
+  },
+  "concept": "Storage Gateway: File Gateway (NFS/SMB) stores files as S3 objects for on-premises backups",
+  "tests": "Mapping the access protocol to the right Storage Gateway type: NFS/SMB file storage backed by S3 = File Gateway (not Volume Gateway, DataSync or EBS).",
+  "expected": "AWS Storage Gateway file gateway: on-premises servers write backups over NFS/SMB and they land in S3 as objects. Triggers: 'standard file storage protocols', 'on-premises backups to S3', 'quick recovery'.",
+  "why_not": "DataSync moves data but isn't a file-protocol endpoint, and Glacier isn't a quick-recovery target. EBS attaches to EC2 instances, not on-premises servers. Volume gateway serves iSCSI block volumes stored as EBS snapshots, so objects can't be read via S3 API.",
+  "keywords": [
+    "Storage Gateway",
+    "File Gateway",
+    "NFS",
+    "SMB",
+    "on-premises backups",
+    "S3",
+    "Volume Gateway",
+    "DataSync",
+    "file protocols",
+    "hybrid storage"
+  ],
+  "services": [
+    "storage-gateway",
+    "s3",
+    "datasync"
+  ],
+  "topics": [
+    "storage",
+    "data-migration"
+  ],
+  "domain": 2,
+  "related": [
+    "u-20260927-datasync-direct-to-deep-archive"
+  ]
+}

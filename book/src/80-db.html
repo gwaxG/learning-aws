@@ -1,0 +1,75 @@
+<section class="ch" id="c-db" data-weak="3">
+<h2>10. Базы данных и аналитика <span class="b b3">слабо</span></h2>
+
+<div class="sub">
+<h3>Какую БД выбрать</h3>
+<div class="tw"><table>
+<tr><th>Задача</th><th>Выбор</th></tr>
+<tr><td>Реляционная, SQL, транзакции</td><td><b>RDS</b> (MySQL, PostgreSQL, MariaDB, Oracle, SQL Server) или <b>Aurora</b></td></tr>
+<tr><td>Реляционная, быстрее и надёжнее RDS, до 15 реплик</td><td><b>Aurora</b></td></tr>
+<tr><td>Ключ-значение, мс, неограниченный масштаб, serverless</td><td><b>DynamoDB</b></td></tr>
+<tr><td>Кэш/сессии/лидерборды</td><td><b>ElastiCache</b> (Redis, Memcached)</td></tr>
+<tr><td>Хранилище данных, аналитика OLAP, SQL по ПБ</td><td><b>Redshift</b></td></tr>
+<tr><td>Граф связей</td><td><b>Neptune</b></td></tr>
+<tr><td>MongoDB-совместимая документная</td><td><b>DocumentDB</b></td></tr>
+<tr><td>Cassandra-совместимая</td><td>Keyspaces</td></tr>
+<tr><td>Временные ряды / ledger</td><td>Timestream / QLDB</td></tr>
+<tr><td>Поиск, логи, дашборды</td><td><b>OpenSearch</b></td></tr>
+</table></div>
+</div>
+
+<div class="sub">
+<h3>RDS и Aurora</h3>
+<ul>
+<li><b>Multi-AZ</b> — синхронный standby в другой AZ, авто-failover, для <b>HA</b> (не для чтения). <b>Read replica</b> — асинхронная, масштабирование чтения, можно в другом Region.</li>
+<li>Бэкапы: автоматические (до 35 дней, PITR) и ручные snapshots. Восстановление создаёт <b>новый</b> экземпляр.</li>
+<li><b>RDS Proxy</b> — пул соединений: спасает от шторма подключений Lambda, ускоряет failover.</li>
+<li><b>Aurora</b>: хранилище до 128 ТиБ, 6 копий в 3 AZ, быстрый failover; <b>Aurora Serverless v2</b> — автоматическое масштабирование ёмкости; <b>Global Database</b> — репликация в другие Regions &lt; 1 с, быстрый promote при аварии; <b>Backtrack</b> (откат во времени, MySQL).</li>
+<li>Миграция provisioned Aurora → Serverless v2: добавить Serverless-экземпляр в кластер, failover на него.</li>
+<li><b>IAM database authentication</b>, шифрование при создании, SG на порт БД.</li>
+</ul>
+</div>
+
+<div class="sub" data-weak="3">
+<h3>DynamoDB <span class="b b3">слабо</span></h3>
+<ul>
+<li>Режимы ёмкости: <b>provisioned</b> (+ auto scaling) и <b>on-demand</b> (непредсказуемо). Ключ: partition key (+ sort key). Горячий ключ — антипаттерн.</li>
+<li><b>GSI</b> (другой ключ, отдельная ёмкость), <b>LSI</b> (тот же partition key, только при создании таблицы).</li>
+<li><b>DAX</b> — in-memory кэш <b>только для DynamoDB</b>, микросекунды, без изменения кода приложения (вместо ElastiCache/API Gateway cache).</li>
+<li><b>TTL</b> — автоудаление; <b>PITR</b> — 35 дней; <b>Global Tables</b> — multi-Region multi-active.</li>
+<li><b>DynamoDB Streams</b> — упорядоченный поток изменений (24 ч); с <b>Lambda</b> (event source mapping) — реакция на новые/изменённые элементы.</li>
+<li>Транзакции (ACID, TransactWrite), условные записи.</li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>«Вызвать Lambda при появлении новой записи в таблице» → <b>DynamoDB Streams + Lambda</b>. Не SNS «от продюсера», не CloudWatch alarm, не Systems Manager.</div>
+</div>
+
+<div class="sub" data-weak="3">
+<h3>Redshift <span class="b b3">слабо</span></h3>
+<ul>
+<li>Колоночное хранилище <b>OLAP</b> (RDS = OLTP): отчёты, BI, PB. Кластеры (leader + compute nodes), <b>Redshift Spectrum</b> — SQL прямо по S3, <b>Serverless</b>.</li>
+<li>HA: Multi-AZ (RA3); snapshots автоматические и ручные; <b>DR при отказе Region → cross-Region snapshot copy</b>.</li>
+<li>Загрузка: <code>COPY</code> из S3 (параллельно), Kinesis Firehose → Redshift.</li>
+</ul>
+</div>
+
+<div class="sub" data-weak="3">
+<h3>Аналитика и потоки <span class="b b3">слабо</span></h3>
+<div class="tw"><table>
+<tr><th>Сервис</th><th>Роль</th></tr>
+<tr><td><b>Kinesis Data Streams</b></td><td>real-time ingest, порядок в шарде, хранение 24 ч–365 дней, свои consumers, on-demand или provisioned шарды</td></tr>
+<tr><td><b>Kinesis Data Firehose</b></td><td>доставка потока в S3, Redshift, OpenSearch, Splunk без кода (near real-time, буфер ≥60 с), с трансформацией Lambda</td></tr>
+<tr><td><b>Managed Service for Apache Flink</b></td><td>обработка потока SQL/Flink</td></tr>
+<tr><td><b>Athena</b></td><td>serverless SQL по S3; платишь за сканируемые данные; Parquet/ORC + партиции = дешевле. Не для потоков</td></tr>
+<tr><td><b>Glue</b></td><td>serverless ETL, <b>Data Catalog</b>, crawlers, <b>job bookmarks</b> (не обрабатывать повторно уже обработанное)</td></tr>
+<tr><td><b>EMR</b></td><td>управляемый Hadoop/Spark/Hive на кластере; большие объёмы, обработка логов из S3</td></tr>
+<tr><td><b>Lake Formation</b></td><td>права доступа и построение data lake</td></tr>
+<tr><td><b>QuickSight</b></td><td>BI-дашборды</td></tr>
+<tr><td><b>MSK</b></td><td>управляемая Kafka</td></tr>
+</table></div>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>Обработка больших объёмов логов приложения для отчёта → <b>S3 + EMR</b> (не Glacier, не один EC2, не ParallelCluster). Клик-стрим в реальном времени → <b>Kinesis</b>, а Athena — запросы к S3.</div>
+<h4>ML-сервисы (по триггерам)</h4>
+<ul>
+<li><b>Rekognition</b> — изображения/видео (лица, объекты). <b>Textract</b> — текст и таблицы из документов. <b>Comprehend</b> — NLP (тональность, сущности). <b>Transcribe</b> — речь → текст. <b>Polly</b> — текст → речь. <b>Translate</b> — перевод. <b>Lex</b> — чат-боты. <b>Kendra</b> — умный поиск. <b>SageMaker</b> — обучение и деплой своих моделей. <b>Personalize</b> — рекомендации. <b>Forecast</b> — прогнозы.</li>
+</ul>
+</div>
+</section>

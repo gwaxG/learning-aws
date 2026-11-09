@@ -1,0 +1,55 @@
+{
+  "id": "u-20260930-ddos-not-suitable-efa-dedicated",
+  "source": {
+    "type": "user",
+    "added": "2026-09-30",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A Solutions Architect working for a startup is designing a High Performance Computing (HPC) application which is publicly accessible for their customers. The startup founders want to mitigate distributed denial-of-service (DDoS) attacks on their application.\nWhich of the following options are not suitable to be implemented in this scenario? (Select TWO.)",
+    "options": [
+      "Use an Amazon CloudFront service for distributing both static and dynamic content.",
+      "Add multiple Elastic Fabric Adapters (EFA) to each EC2 instance to increase the network bandwidth.",
+      "Use Dedicated EC2 instances to ensure that each instance has the maximum performance possible.",
+      "Use AWS Shield and AWS WAF.",
+      "Use an Application Load Balancer with Auto Scaling groups for your EC2 instances. Prevent direct Internet traffic to your Amazon RDS database by deploying it to a new private subnet."
+    ],
+    "answer": [
+      1,
+      2
+    ],
+    "explanation": "DDoS mitigation relies on absorbing and filtering traffic at the edge and scaling: CloudFront for static and dynamic content, Shield and WAF, and an ALB with Auto Scaling in front of a database in a private subnet (reducing the attack surface). Elastic Fabric Adapters only speed up node-to-node HPC/ML traffic and do nothing against DDoS, and Dedicated Instances only give hardware isolation for the instances, they add no DDoS protection. Those two are the options that are not suitable."
+  },
+  "concept": "DDoS mitigation: CloudFront + Shield + WAF + ALB/ASG + private subnets (EFA and Dedicated Instances don't help)",
+  "tests": "Recognizing which measures mitigate DDoS (edge distribution, Shield/WAF, load balancing with scaling, reduced attack surface) and which are performance/isolation features that don't (EFA, Dedicated Instances). Note the question asks for what is NOT suitable.",
+  "expected": "Not suitable: multiple EFAs (HPC network bandwidth) and Dedicated EC2 instances (hardware isolation). Suitable: CloudFront, Shield + WAF, ALB + Auto Scaling with RDS in a private subnet. Triggers: 'mitigate DDoS', 'not suitable' (inverted question).",
+  "why_not": "Reading the question inverted: CloudFront, Shield/WAF and ALB + ASG with a private database are valid DDoS mitigations. EFA is a network interface for tightly-coupled HPC/ML and Dedicated Instances are for hardware isolation/licensing, neither mitigates DDoS.",
+  "keywords": [
+    "DDoS",
+    "AWS Shield",
+    "AWS WAF",
+    "CloudFront",
+    "Elastic Fabric Adapter",
+    "EFA",
+    "Dedicated Instances",
+    "ALB",
+    "Auto Scaling",
+    "not suitable"
+  ],
+  "services": [
+    "shield",
+    "waf",
+    "cloudfront",
+    "elb",
+    "ec2"
+  ],
+  "topics": [
+    "iam-security",
+    "edge-dns"
+  ],
+  "domain": 1,
+  "related": [
+    "e2-q37",
+    "e1-q42"
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "id": "u-20261003-api-gateway-custom-domain-regional-acm",
+  "source": {
+    "type": "user",
+    "added": "2026-10-03",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A company has a regional API Gateway in the us-east-2 region that serves as a proxy to a backend service. Clients connect to the service using the invoke URL of the API stage. To improve usability, the company wants to associate a custom domain name (api.tutorialsdojo.com) with the API. Moreover, the domain name must support HTTPS to ensure secure connections. The company has an existing hosted zone for its domain on Amazon Route 53.\nWhich of the following would be the next step to achieve the company’s objective?",
+    "options": [
+      "Request a public certificate in the us-east-2 region for api.tutorialsdojo.com using AWS Certificate Manager (ACM). Create a regional API Gateway domain name and associate it with api.tutorialsdojo.com and the ACM certificate. In Route 53, create an alias record for api.tutorialsdojo.com that points to the API Gateway domain name.",
+      "Import an existing public certificate for api.tutorialsdojo.com into AWS Certificate Manager (ACM) in the us-east-2. In Route 53, create a CNAME record for api.tutorialsdojo.com that points to the invoke URL of the API Gateway stage.",
+      "Request a public certificate in the us-east-1 region for api.tutorialsdojo.com using AWS Certificate Manager (ACM). Create a regional API Gateway domain name and associate it with api.tutorialsdojo.com and the ACM certificate. In Route 53, create an alias record for api.tutorialsdojo.com that points to the API Gateway domain name.",
+      "Use the AWS Certificate Manager Private Certificate Authority (ACM PCA) to generate a private certificate for api.tutorialsdojo.com. Override the invoke URL using stage variables."
+    ],
+    "answer": 0,
+    "explanation": "For a regional API Gateway endpoint the ACM certificate must be in the same Region as the API (us-east-2); only edge-optimized APIs (which use CloudFront) need the certificate in us-east-1. The steps are: request the public ACM certificate, create the API Gateway custom domain name (regional) with that certificate, map the API stage to it with a base path mapping, and create a Route 53 alias record pointing to the regional domain name that API Gateway returns. The us-east-1 certificate cannot be used for a regional domain in us-east-2. Importing a certificate and using a CNAME to the invoke URL does not attach the custom domain to the API (the TLS certificate would not match the invoke URL host). A private CA certificate is not trusted by public clients, and stage variables do not change the invoke URL."
+  },
+  "concept": "API Gateway custom domain: regional endpoint needs an ACM certificate in the same Region, plus a Route 53 alias",
+  "tests": "Knowing where the ACM certificate must live for a regional API Gateway custom domain (same Region; us-east-1 only for edge-optimized and CloudFront) and that DNS uses an alias record to the API Gateway domain name.",
+  "expected": "ACM public certificate in the API's Region, regional custom domain name with a base path mapping to the stage, Route 53 alias A record to the API Gateway domain name. Triggers: 'regional API Gateway', 'custom domain name', 'HTTPS', 'Route 53 hosted zone'.",
+  "why_not": "A certificate in us-east-1 only works for edge-optimized APIs (CloudFront) and CloudFront itself, not for a regional endpoint in us-east-2. A CNAME to the invoke URL does not create a custom domain on the API, and an imported certificate is not auto-renewed. A private certificate from ACM PCA is not trusted by public clients, and stage variables never override the invoke URL.",
+  "keywords": [
+    "API Gateway",
+    "custom domain name",
+    "regional endpoint",
+    "edge-optimized",
+    "ACM",
+    "us-east-1",
+    "Route 53 alias",
+    "base path mapping",
+    "invoke URL",
+    "HTTPS"
+  ],
+  "services": [
+    "api-gateway",
+    "acm",
+    "route53"
+  ],
+  "topics": [
+    "integration",
+    "edge-dns"
+  ],
+  "domain": 1,
+  "related": [
+    "u-20260929-alb-sni-multiple-certificates"
+  ]
+}

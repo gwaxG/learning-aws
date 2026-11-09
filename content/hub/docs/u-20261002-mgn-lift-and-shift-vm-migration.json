@@ -1,0 +1,47 @@
+{
+  "id": "u-20261002-mgn-lift-and-shift-vm-migration",
+  "source": {
+    "type": "user",
+    "added": "2026-10-02",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A company hosts all its applications on its data center on the US East Coast. Most of the workloads are legacy applications that are hosted on individual virtual machines running in Linux and Windows operating systems. The company plans to migrate all of its VM workloads to the AWS cloud. To minimize changes in the applications during the migration process, it has been decided that the company will use a “lift-and-shift” strategy. The company also wants to minimize downtime during the migration process.\nWhich of the following options should the Solutions Architect implement for this scenario?",
+    "options": [
+      "Utilize AWS DataSync to migrate the application workloads to AWS. Deploy the AWS DataSync VM on the on-premises data center. Once replication is completed, launch Amazon EC2 instances based on the created AMIs.",
+      "Export the on-premises VMs and upload the images to an Amazon S3 bucket. Use VM Import/Export service to import the images and launch them as Amazon EC2 instances.",
+      "Use the AWS Application Discovery Service for lift-and-shift migrations. Deploy the AWS Application Discovery Agent to the on-premises data center to start the replication process. After the replication task is completed, launch Amazon EC2 instances based on the created AMIs.",
+      "Install the AWS Replication Agent on each of the on-premises VMs to continuously replicate the servers to AWS. Use AWS Migration Service (AWS MGN) to launch test instances and perform cutover once testing is completed."
+    ],
+    "answer": 3,
+    "explanation": "AWS Application Migration Service (MGN) is the recommended rehost (lift-and-shift) service. The AWS Replication Agent installed on each source server continuously replicates its disks to a staging area in AWS; you launch test instances, then perform the cutover, so downtime is limited to the final switch and the applications need no changes. DataSync moves files and cannot migrate whole servers. VM Import/Export is a one-time export, upload and import with no continuous replication, so downtime is long. Application Discovery Service only collects server inventory and utilization data and does not replicate anything."
+  },
+  "concept": "AWS Application Migration Service (MGN): lift-and-shift with continuous replication and minimal downtime",
+  "tests": "Choosing AWS MGN with the Replication Agent for rehosting VMs to EC2 with minimal downtime, and telling it apart from DataSync, VM Import/Export and Application Discovery Service.",
+  "expected": "Install the AWS Replication Agent on each source server, replicate continuously, launch test instances, then cut over. Triggers: 'lift-and-shift', 'rehost', 'VMs', 'minimize downtime', 'minimize changes to the applications'.",
+  "why_not": "DataSync copies files and objects, not whole servers or OS disks. VM Import/Export is a one-time image import with no continuous replication, so the cutover downtime is long. Application Discovery Service only discovers and measures servers for planning, it has no replication and no migration function.",
+  "keywords": [
+    "AWS MGN",
+    "Application Migration Service",
+    "lift-and-shift",
+    "rehost",
+    "Replication Agent",
+    "continuous replication",
+    "cutover",
+    "VM Import/Export",
+    "DataSync",
+    "Application Discovery Service"
+  ],
+  "services": [
+    "mgn",
+    "migration-hub",
+    "datasync"
+  ],
+  "topics": [
+    "data-migration"
+  ],
+  "domain": 2,
+  "related": [
+    "u-20260928-dms-full-load-cdc-s3-ssl"
+  ]
+}

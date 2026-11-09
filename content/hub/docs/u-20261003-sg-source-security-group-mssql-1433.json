@@ -1,0 +1,49 @@
+{
+  "id": "u-20261003-sg-source-security-group-mssql-1433",
+  "source": {
+    "type": "user",
+    "added": "2026-10-03",
+    "origin": "user-supplied practice question (missed); category 'CSAA – Design Resilient Architectures'; the security group screenshot was not included, the MS SQL rule is assumed open to a wide source"
+  },
+  "question": {
+    "stem": "A newly hired Solutions Architect is checking all of the security groups and network access control list rules of the company’s AWS resources. For security purposes, the MS SQL connection via port 1433 of the database tier should be secured. Below is the security group configuration of their Microsoft SQL Server database: [screenshot of the security group rules, not included]\nThe application tier hosted in an Auto Scaling group of EC2 instances is the only identified resource that needs to connect to the database. The Architect should ensure that the architecture complies with the best practice of granting least privilege.\nWhich of the following changes should be made to the security group configuration?",
+    "options": [
+      "For the MS SQL rule, change the Source to the static AnyCast IP address attached to the application tier.",
+      "For the MS SQL rule, change the Source to the security group ID attached to the application tier.",
+      "For the MS SQL rule, change the Source to the EC2 instance IDs of the underlying instances of the Auto Scaling group.",
+      "For the MS SQL rule, change the Source to the Network ACL ID attached to the application tier."
+    ],
+    "answer": 1,
+    "explanation": "A security group rule can use another security group as its Source. Setting the database rule's Source to the application tier's security group allows port 1433 only from instances that carry that group, so it keeps working as the Auto Scaling group adds and replaces instances and follows least privilege. A security group source cannot be an instance ID, a network ACL ID, and an application tier of EC2 instances has no 'AnyCast' IP address (anycast IPs belong to Global Accelerator), and fixed IPs would break as instances change."
+  },
+  "concept": "Security group rule source = another security group (SG reference) for least privilege with Auto Scaling",
+  "tests": "Restricting a database port to the application tier by referencing the application tier's security group as the rule source, instead of IPs, instance IDs or NACL IDs.",
+  "expected": "Edit the inbound rule (TCP 1433) and set Source = the app tier's security group ID. Triggers: 'only the application tier needs to connect', 'Auto Scaling group', 'least privilege', 'security group'.",
+  "why_not": "AnyCast static IPs belong to Global Accelerator, EC2 instances in an Auto Scaling group do not have one, and IP-based sources break when instances are replaced. Instance IDs are not valid security group sources and change with scaling. A network ACL ID cannot be a source: NACLs work on CIDR ranges at the subnet level and are not referenced by security groups.",
+  "keywords": [
+    "security group",
+    "SG reference",
+    "source",
+    "port 1433",
+    "MS SQL",
+    "least privilege",
+    "Auto Scaling group",
+    "application tier",
+    "database tier",
+    "NACL"
+  ],
+  "services": [
+    "security-groups",
+    "nacl",
+    "auto-scaling",
+    "rds"
+  ],
+  "topics": [
+    "vpc-networking"
+  ],
+  "domain": 2,
+  "related": [
+    "u-20260929-nacl-sg-https-ephemeral",
+    "u-20260927-intra-vpc-sg-nacl"
+  ]
+}

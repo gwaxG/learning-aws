@@ -1,0 +1,46 @@
+{
+  "id": "u-20260929-parameter-store-securestring-cost",
+  "source": {
+    "type": "user",
+    "added": "2026-09-29",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A company runs a multi-tier web application in the AWS Cloud. The application tier is hosted on Amazon EC2 instances and the backend database is hosted on an Amazon Aurora for MySQL DB cluster. For security compliance, all of the application variables such as DB hostnames, environment settings, product keys, and database passwords must be stored securely with encryption.\nWhich of the following options is the most cost-effective solution to meet the requirements?",
+    "options": [
+      "Store the values by creating secrets in AWS Secrets Manager. Use AWS Key Management Service (AWS KMS) for the encryption. Use the `BatchGetSecretValue` API to retrieve multiple secrets efficiently. Update the application to retrieve the values of the secrets.",
+      "Store the values by creating SecureString type parameters in AWS Systems Manager Parameter Store. Use AWS Key Management Service (AWS KMS) for the encryption. Update the application to retrieve the parameter values.",
+      "Store the values as key-value pairs in AWS Systems Manager OpsCenter. By default, the key-value pairs will be encrypted at rest. Configure the application to retrieve the variables when it starts.",
+      "Store the values in a file saved in an Amazon S3 bucket. Enable encryption on the S3 bucket. Configure the application to download the file contents when it starts."
+    ],
+    "answer": 1,
+    "explanation": "Parameter Store SecureString parameters are KMS-encrypted and standard parameters are free, so it is the cheapest managed way to keep config values and secrets. Secrets Manager also works but charges per secret per month plus API calls, and nothing here needs automatic rotation. OpsCenter is an operations-issue (OpsItem) tool, not a configuration or secret store. An S3 file is not a secrets store: no per-value access control or auditing of reads, and it is easy to expose."
+  },
+  "concept": "SSM Parameter Store: SecureString for cheap encrypted config and secrets (no rotation needed)",
+  "tests": "Choosing between Secrets Manager and Parameter Store SecureString: when only encrypted storage is required (no automatic rotation) and cost matters, Parameter Store is the answer.",
+  "expected": "SecureString parameters in Systems Manager Parameter Store, encrypted with KMS; the app reads them via the SSM API using its IAM role. Triggers: 'most cost-effective', 'variables, hostnames, passwords', no mention of rotation.",
+  "why_not": "Secrets Manager costs per secret and per API call and its main benefit (automatic rotation) is not required. OpsCenter is for operational issues (OpsItems), not for storing configuration. A file in S3 lacks secret-store features (fine-grained per-value access, audit, versioning semantics) and is a security anti-pattern.",
+  "keywords": [
+    "Parameter Store",
+    "SecureString",
+    "Secrets Manager",
+    "KMS",
+    "most cost-effective",
+    "application variables",
+    "database password",
+    "no rotation",
+    "OpsCenter",
+    "Systems Manager"
+  ],
+  "services": [
+    "systems-manager",
+    "secrets-manager",
+    "kms",
+    "aurora"
+  ],
+  "topics": [
+    "iam-security"
+  ],
+  "domain": 1,
+  "related": []
+}

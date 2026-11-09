@@ -134,6 +134,20 @@ try {
   }
 }
 
+// ---- Weak points map ----
+{
+  const { checkWeakPoints } = await import("./weak-lib.mjs");
+  const weak = JSON.parse(await readFile("content/weak/weak-points.json", "utf8"));
+  const services = JSON.parse(await readFile("content/maps/services.json", "utf8"));
+  const serviceIds = new Set(services.categories.flatMap((c) => c.services.map((s) => s.id)));
+  const topics = new Map();
+  for (const t of manifest.topics) {
+    const tp = JSON.parse(await readFile(`content/topics/${t.slug}.json`, "utf8"));
+    topics.set(t.slug, tp.essentials.map((e) => e.heading));
+  }
+  checkWeakPoints(weak, serviceIds, topics).forEach((m) => errors.push(m));
+}
+
 if (errors.length) {
   console.error(`✗ ${errors.length} content errors:\n` + errors.join("\n"));
   process.exit(1);

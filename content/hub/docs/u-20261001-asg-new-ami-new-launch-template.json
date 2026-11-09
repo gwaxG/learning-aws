@@ -1,0 +1,45 @@
+{
+  "id": "u-20261001-asg-new-ami-new-launch-template",
+  "source": {
+    "type": "user",
+    "added": "2026-10-01",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A tech company is currently using Auto Scaling for their web application. A new AMI now needs to be used for launching a fleet of EC2 instances. Which of the following changes needs to be done?",
+    "options": [
+      "Create a new target group.",
+      "Do nothing. You can start directly launching EC2 instances in the Auto Scaling group with the same launch template.",
+      "Create a new launch template.",
+      "Create a new target group and launch template."
+    ],
+    "answer": 2,
+    "explanation": "The AMI ID is defined in the launch template (or launch configuration) that the Auto Scaling group uses, and an existing template cannot be edited. To use a new AMI, create a new launch template (or a new version of it) and point the Auto Scaling group at it; new instances then launch from the new AMI. The target group is unrelated to the AMI, and the same unchanged template keeps launching the old AMI."
+  },
+  "concept": "Auto Scaling: new AMI requires a new launch template (version)",
+  "tests": "Knowing that the AMI is part of the launch template, so a new AMI means a new launch template (version) attached to the Auto Scaling group.",
+  "expected": "Create a new launch template (or version) with the new AMI and update the Auto Scaling group. Existing instances are not replaced automatically (use instance refresh). Trigger: 'new AMI' for an Auto Scaling fleet.",
+  "why_not": "A new target group is about load balancer routing and has nothing to do with the AMI. Doing nothing keeps launching the old AMI because the template still references it. New target group plus template adds an unnecessary target group.",
+  "keywords": [
+    "Auto Scaling",
+    "launch template",
+    "AMI",
+    "target group",
+    "instance refresh",
+    "launch configuration",
+    "template version",
+    "EC2 fleet"
+  ],
+  "services": [
+    "auto-scaling",
+    "ec2",
+    "elb"
+  ],
+  "topics": [
+    "ec2-compute"
+  ],
+  "domain": 1,
+  "related": [
+    "u-20260928-scale-out-elb-or-route53-weighted"
+  ]
+}

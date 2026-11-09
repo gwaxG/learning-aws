@@ -1,0 +1,45 @@
+{
+  "id": "u-20261004-efa-os-bypass-hpc",
+  "source": {
+    "type": "user",
+    "added": "2026-10-04",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A company is working on an autonomous vehicle development and deployment project using AWS. The solution requires High Performance Computing (HPC) in order to collect, store and manage massive amounts of data as well as to support deep learning frameworks. The Linux EC2 instances that will be used should have a lower latency and higher throughput than the TCP transport traditionally used in cloud-based HPC systems. It should also enhance the performance of inter-instance communication and must include an OS-bypass functionality to allow the HPC to communicate directly with the network interface hardware to provide low-latency, reliable transport functionality.\nWhich of the following is the MOST suitable solution that you should implement to achieve the above requirements?",
+    "options": [
+      "Attach an Elastic Network Adapter (ENA) on each Amazon EC2 instance to accelerate High Performance Computing (HPC).",
+      "Attach an Elastic Network Interface (ENI) on each Amazon EC2 instance to accelerate High Performance Computing (HPC).",
+      "Attach an Elastic Fabric Adapter (EFA) on each Amazon EC2 instance to accelerate High Performance Computing (HPC).",
+      "Attach a Private Virtual Interface (VIF) on each Amazon EC2 instance to accelerate High Performance Computing (HPC)."
+    ],
+    "answer": 2,
+    "explanation": "An Elastic Fabric Adapter (EFA) is a network device for EC2 instances that accelerates HPC and machine-learning workloads. It adds OS-bypass (applications talk to the network hardware directly through libraries such as MPI/NCCL, using the Scalable Reliable Datagram protocol) for lower latency and higher throughput than TCP, and it is supported on Linux instances. An ENA provides enhanced networking (high bandwidth, low latency) but has no OS-bypass. An ENI is only a basic virtual network interface. A private VIF is a Direct Connect construct for reaching VPC resources from on-premises and cannot be attached to an EC2 instance."
+  },
+  "concept": "EFA = ENA + OS-bypass for HPC/ML inter-node communication",
+  "tests": "Recognizing EFA from the OS-bypass / lower latency than TCP / HPC keywords versus ENA, ENI and a Direct Connect private VIF.",
+  "expected": "Elastic Fabric Adapter attached to Linux EC2 instances (ideally in a cluster placement group). Triggers: \"OS-bypass\", \"lower latency and higher throughput than TCP\", \"HPC\", \"deep learning\", \"inter-instance communication\".",
+  "why_not": "ENA only provides enhanced networking (up to 100 Gbps) with no OS-bypass. An ENI is just a virtual network card (IP, security groups, MAC) and does not accelerate anything. A private VIF is a Direct Connect virtual interface for on-premises to VPC traffic, it cannot be attached to EC2 instances.",
+  "keywords": [
+    "EFA",
+    "Elastic Fabric Adapter",
+    "OS-bypass",
+    "HPC",
+    "ENA",
+    "ENI",
+    "private VIF",
+    "MPI",
+    "cluster placement group",
+    "low latency"
+  ],
+  "services": [
+    "ec2",
+    "placement-groups",
+    "direct-connect"
+  ],
+  "topics": [
+    "ec2-compute"
+  ],
+  "domain": 3,
+  "related": []
+}

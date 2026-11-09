@@ -1,0 +1,53 @@
+{
+  "id": "u-20261002-tgw-per-region-peering-hundreds-of-vpcs",
+  "source": {
+    "type": "user",
+    "added": "2026-10-02",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A company has hundreds of VPCs with multiple VPN connections to their data centers spanning 5 AWS Regions. As the number of its workloads grows, the company must be able to scale its networks across multiple accounts and VPCs to keep up. A Solutions Architect is tasked to interconnect all of the company’s on-premises networks, VPNs, and VPCs into a single gateway, which includes support for inter-region peering across multiple AWS regions.\nWhich of the following is the BEST solution that the architect should set up to support the required interconnectivity?",
+    "options": [
+      "Set up an AWS Direct Connect Gateway to achieve inter-region VPC access to all of the AWS resources and on-premises data centers. Set up a link aggregation group (LAG) to aggregate multiple connections at a single AWS Direct Connect endpoint in order to treat them as a single, managed connection. Launch a virtual private gateway in each VPC and then create a public virtual interface for each AWS Direct Connect connection to the Direct Connect Gateway.",
+      "Set up an AWS Transit Gateway in each region to interconnect all networks within it. Then, route traffic between the transit gateways through a peering connection.",
+      "Enable inter-region VPC peering that allows peering relationships to be established between multiple VPCs across different AWS regions. Set up a networking configuration that ensures that the traffic will always stay on the global AWS backbone and never traverse the public Internet.",
+      "Set up an AWS VPN CloudHub for inter-region VPC access and a Direct Connect gateway for the VPN connections to the on-premises data centers. Create a virtual private gateway in each VPC, then create a private virtual interface for each AWS Direct Connect connection to the Direct Connect gateway."
+    ],
+    "answer": 1,
+    "explanation": "AWS Transit Gateway is the hub that connects VPCs, VPNs and Direct Connect (through a Direct Connect gateway) with transitive routing and scales to thousands of attachments. A Transit Gateway is Regional, so with 5 Regions you deploy one per Region and connect them with Transit Gateway peering attachments, which gives inter-Region connectivity over the AWS backbone. VPC peering is a one-to-one, non-transitive link, so hundreds of VPCs would need a full mesh. A Direct Connect gateway (with VGWs and a public virtual interface, which is not even valid for this) and VPN CloudHub do not interconnect hundreds of VPCs across Regions."
+  },
+  "concept": "Transit Gateway per Region + TGW peering: interconnect hundreds of VPCs, VPNs and Regions",
+  "tests": "Choosing Transit Gateways (one per Region, joined by TGW peering) to interconnect hundreds of VPCs, VPNs and on-premises networks across Regions, instead of VPC peering, Direct Connect gateway or VPN CloudHub.",
+  "expected": "One Transit Gateway per Region, VPCs and VPNs attached to it, Transit Gateways peered across Regions (static routes), shared with RAM across accounts. Triggers: 'hundreds of VPCs', 'single gateway', 'multiple accounts', 'inter-Region peering', 'VPN connections'.",
+  "why_not": "A Direct Connect gateway connects on-premises to VPCs through VGWs and does not give VPC-to-VPC transitive routing; a public virtual interface is also the wrong type for private VPC access. Inter-Region VPC peering is non-transitive and one-to-one, so hundreds of VPCs mean a huge full mesh, not a single gateway. VPN CloudHub links branch offices through one VGW in a hub-and-spoke VPN, it is not an inter-Region VPC fabric and is not combined with a Direct Connect gateway this way.",
+  "keywords": [
+    "Transit Gateway",
+    "TGW peering",
+    "inter-Region peering",
+    "hundreds of VPCs",
+    "Direct Connect gateway",
+    "VPN CloudHub",
+    "VPC peering",
+    "transitive routing",
+    "hub-and-spoke",
+    "RAM"
+  ],
+  "services": [
+    "transit-gateway",
+    "vpc-peering",
+    "site-to-site-vpn",
+    "direct-connect",
+    "vpc",
+    "ram"
+  ],
+  "topics": [
+    "vpc-networking"
+  ],
+  "domain": 3,
+  "related": [
+    "u-20260929-dx-gateway-transit-gateway-multi-account",
+    "u-20260929-peering-not-transitive-dev-prod",
+    "vpc-q4",
+    "e2-q35"
+  ]
+}

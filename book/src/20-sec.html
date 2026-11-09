@@ -1,0 +1,85 @@
+<section class="ch" id="c-sec" data-weak="3">
+<h2>4. Защита данных и безопасность <span class="b b3">слабо</span></h2>
+
+<div class="sub" data-weak="3">
+<h3>KMS и шифрование <span class="b b3">слабо</span></h3>
+<ul>
+<li><b>KMS</b> — managed ключи в HSM. Типы: <b>AWS owned</b> (невидимы), <b>AWS managed</b> (<code>aws/s3</code>, бесплатно, ротация раз в год автоматически, политику не изменить), <b>customer managed (CMK)</b> (ты управляешь политикой; автоматическая ротация включается галочкой, раз в год).</li>
+<li>Ключ привязан к <b>Region</b>. Для cross-Region — multi-Region keys или повторное шифрование при копировании.</li>
+<li><b>Envelope encryption</b>: KMS шифрует data key, data key шифрует данные. Прямой Encrypt в KMS ограничен 4 КБ.</li>
+<li><b>Key policy</b> обязательна у каждого ключа; доступ роли = key policy + IAM (или grants).</li>
+<li><b>CloudHSM</b> — выделенный HSM под твоим контролем (FIPS 140-2 Level 3), когда нужен полный контроль ключей или требование compliance. Для обычного шифрования хватит KMS.</li>
+</ul>
+<h4>Шифрование S3 (SSE)</h4>
+<div class="tw"><table>
+<tr><th>Вариант</th><th>Ключ</th><th>Когда</th></tr>
+<tr><td>SSE-S3</td><td>AES-256, ключи у AWS</td><td>Дефолт, шифрование без усилий; автоматическая ротация без настроек</td></tr>
+<tr><td>SSE-KMS</td><td>ключ в KMS</td><td>Аудит использования в CloudTrail, контроль доступа к ключу, ротация CMK</td></tr>
+<tr><td>SSE-C</td><td>ключ клиента в каждом запросе</td><td>Ты хранишь ключи сам; только HTTPS</td></tr>
+<tr><td>Client-side</td><td>до отправки</td><td>AWS вообще не видит открытый текст</td></tr>
+</table></div>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>«Принудительно шифровать каждую загрузку AES-256»: <b>bucket policy с Deny</b>, если нет заголовка <code>x-amz-server-side-encryption: AES256</code>. Default encryption на bucket включён автоматически (SSE-S3), но Deny-политика нужна, когда требуют именно <b>enforce</b>.</div>
+<ul>
+<li><b>В транзите</b>: TLS; на S3 запрет HTTP через условие <code>aws:SecureTransport = false</code> → Deny.</li>
+<li><b>EBS</b>: шифрование KMS, данные и snapshots зашифрованы. <b>Незашифрованный том/snapshot нельзя зашифровать на месте</b>: сделай snapshot → копируй с включённым шифрованием → создай том. Можно включить «шифрование по умолчанию» для Region.</li>
+<li><b>RDS</b>: шифруется при создании; для существующей — snapshot → копия с шифрованием → restore. Read replica шифрованной БД тоже шифруется.</li>
+</ul>
+</div>
+
+<div class="sub" data-weak="3">
+<h3>Secrets Manager и Parameter Store <span class="b b3">слабо</span></h3>
+<div class="tw"><table>
+<tr><th></th><th>Secrets Manager</th><th>SSM Parameter Store</th></tr>
+<tr><td>Для чего</td><td>пароли БД, API-ключи</td><td>конфиги, флаги, иногда секреты</td></tr>
+<tr><td>Авто-ротация</td><td><b>да</b> (Lambda; RDS из коробки)</td><td>нет</td></tr>
+<tr><td>Цена</td><td>платно за секрет</td><td>Standard бесплатно</td></tr>
+<tr><td>Кросс-Region репликация</td><td>да</td><td>нет</td></tr>
+</table></div>
+<div class="box tip"><b>Триггер</b>«Автоматическая ротация пароля БД» → <b>Secrets Manager</b>. «Дёшево хранить конфигурацию» → Parameter Store.</div>
+<h4>ACM</h4>
+<p>Бесплатные публичные сертификаты с автообновлением, для ELB, CloudFront, API Gateway. <b>Сертификат живёт в Region</b>: для CloudFront — <b>us-east-1</b>; для ALB и <b>regional</b> API Gateway — в Region ресурса. На EC2 ACM-сертификат установить нельзя (для этого нужен собственный).</p>
+</div>
+
+<div class="sub" data-weak="3">
+<h3>Аудит и соответствие: CloudTrail, Config <span class="b b3">слабо</span></h3>
+<div class="tw"><table>
+<tr><th>Сервис</th><th>Отвечает на вопрос</th></tr>
+<tr><td><b>CloudTrail</b></td><td>Кто, что и когда вызвал в API (аудит действий). По умолчанию 90 дней в Event history; trail в S3 — дольше; log file validation — целостность.</td></tr>
+<tr><td><b>Config</b></td><td>Как <b>настроен</b> ресурс и как менялась конфигурация; соответствует ли правилам (managed/custom rules); auto-remediation через SSM.</td></tr>
+<tr><td><b>CloudWatch</b></td><td>Метрики, логи, алармы: что происходит сейчас.</td></tr>
+</table></div>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>
+<ul><li>«Проверять политику паролей (длина 12)» → Config managed rule <code>iam-password-policy</code>, а не CloudTrail.</li>
+<li>«Автоматически удалять ключи старше 90 дней» → Config <code>access-keys-rotated</code> → EventBridge → Lambda (удаляет/деактивирует ключ).</li></ul></div>
+<p><b>Шаблон автоматизации:</b> событие или правило (Config, GuardDuty, CloudTrail) → <b>EventBridge</b> → цель (Lambda, SNS, SSM Automation, Step Functions).</p>
+</div>
+
+<div class="sub">
+<h3>Защита от угроз</h3>
+<div class="tw"><table>
+<tr><th>Сервис</th><th>Что делает</th></tr>
+<tr><td><b>GuardDuty</b></td><td>Обнаружение угроз по CloudTrail, VPC Flow Logs, DNS (необычные API, майнинг, C2). Без агентов.</td></tr>
+<tr><td><b>Inspector</b></td><td>Сканирует EC2, ECR-образы, Lambda на уязвимости (CVE) и сетевую доступность.</td></tr>
+<tr><td><b>Macie</b></td><td>Находит персональные и чувствительные данные в S3.</td></tr>
+<tr><td><b>Security Hub</b></td><td>Сводная картина безопасности и проверки стандартов (CIS, PCI) по аккаунтам.</td></tr>
+<tr><td><b>Detective</b></td><td>Расследование: связывает логи, показывает причину инцидента.</td></tr>
+<tr><td><b>WAF</b></td><td>L7-фильтр для CloudFront, ALB, API Gateway, AppSync: SQLi, XSS, rate-based, geo, IP.</td></tr>
+<tr><td><b>Shield</b></td><td>DDoS. Standard бесплатно, Advanced — платно (Route 53, CloudFront, ELB, EIP; SRT, возмещение расходов).</td></tr>
+<tr><td><b>Firewall Manager</b></td><td>Централизованно применяет WAF, SG, Network Firewall на аккаунты Organization.</td></tr>
+<tr><td><b>Network Firewall</b></td><td>Управляемый фаервол для VPC: stateful-правила, фильтрация доменов.</td></tr>
+</table></div>
+<div class="box trap"><b>DDoS-ответ</b>CloudFront + Shield + WAF + ALB с Auto Scaling, БД в private subnet. EFA и Dedicated Instances DDoS не смягчают.</div>
+</div>
+
+<div class="sub">
+<h3>S3 security</h3>
+<ul>
+<li><b>Block Public Access</b> (на аккаунт и bucket) — главный выключатель публичности.</li>
+<li><b>ACL</b> считаются устаревшими; включай <b>Bucket owner enforced</b> (ACL отключены).</li>
+<li><b>Object Lock</b> (WORM): Governance (можно обойти с правом) и Compliance (нельзя никому, включая root). <b>Glacier Vault Lock</b> — то же для vault.</li>
+<li><b>MFA Delete</b> при versioning: удаление версий только с MFA.</li>
+<li><b>VPC endpoint + bucket policy с <code>aws:SourceVpce</code></b> — доступ только из твоей VPC.</li>
+<li><b>Access Points</b> — отдельная политика на приложение/команду вместо одной огромной bucket policy.</li>
+</ul>
+</div>
+</section>

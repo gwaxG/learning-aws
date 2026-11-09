@@ -1,0 +1,52 @@
+{
+  "id": "u-20261010-dynamodb-gateway-endpoint-aws-backup-cross-account",
+  "source": {
+    "type": "user",
+    "added": "2026-10-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A GraphQL API hosted is hosted in an Amazon EKS cluster with AWS Fargate launch type and deployed using AWS SAM. The API is connected to an Amazon DynamoDB table with DynamoDB Accelerator (DAX) as its data store. Both resources are hosted in the us-east-1 region.\nThe AWS IAM authenticator for Kubernetes is integrated into the EKS cluster for role-based access control (RBAC) and cluster authentication. A solutions architect must improve network security by preventing database calls from traversing the public internet. An automated cross-account backup for the DynamoDB table is also required for long-term retention.\nWhich of the following should the solutions architect implement to meet the requirement?",
+    "options": [
+      "Create a DynamoDB gateway endpoint. Set up a Network Access Control List (NACL) rule that allows outbound traffic to the dynamodb.us-east-1.amazonaws.com gateway endpoint. Use the built-in on-demand DynamoDB backups for cross-account backup and recovery.",
+      "Create a DynamoDB gateway endpoint. Associate the endpoint to the appropriate route table. Use AWS Backup to automatically copy the on-demand DynamoDB backups to another AWS account for disaster recovery.",
+      "Create a DynamoDB interface endpoint. Associate the endpoint to the appropriate route table. Enable Point-in-Time Recovery (PITR) to restore the DynamoDB table to a particular point in time on the same or a different AWS account.",
+      "Create a DynamoDB interface endpoint. Set up a stateless rule using AWS Network Firewall to control all outbound traffic to only use the dynamodb.us-east-1.amazonaws.com endpoint. Integrate the DynamoDB table with Amazon Timestream to allow point-in-time recovery from a different AWS account."
+    ],
+    "answer": 1,
+    "explanation": "A VPC gateway endpoint for DynamoDB keeps database calls on the AWS network instead of the public internet: you create the endpoint and associate it with the route tables of the subnets used by the workload (here the EKS Fargate pods). For automated, long-term, cross-account backups, AWS Backup can schedule DynamoDB backups and copy them to a backup vault in another AWS account. A NACL rule cannot reference or route to an endpoint, and the native on-demand backups cannot be copied cross-account by themselves. PITR restores to a new table in the same account and Region, not to another account. Network Firewall rules do not create private connectivity, and Amazon Timestream is a time-series database, not a DynamoDB recovery mechanism."
+  },
+  "concept": "DynamoDB gateway endpoint (route table) for private access + AWS Backup for cross-account copies",
+  "tests": "Wiring a gateway endpoint through route tables and picking AWS Backup for automated cross-account, long-term DynamoDB backups, versus NACL rules, Network Firewall, PITR and Timestream.",
+  "expected": "Gateway endpoint for DynamoDB associated with the route tables of the workload subnets, plus an AWS Backup plan that copies DynamoDB backups to a vault in another account. Triggers: \"preventing database calls from traversing the public internet\", \"automated cross-account backup\", \"long-term retention\".",
+  "why_not": "A NACL rule cannot reach or route to an endpoint and native on-demand backups are not cross-account. An interface endpoint is not the DynamoDB answer (gateway endpoint is free and route-table based) and PITR restores only to a new table in the same account and Region. Network Firewall does not create private connectivity and Timestream is not a DynamoDB recovery tool.",
+  "keywords": [
+    "DynamoDB",
+    "gateway endpoint",
+    "route table",
+    "AWS Backup",
+    "cross-account backup",
+    "PITR",
+    "NACL",
+    "interface endpoint",
+    "Network Firewall",
+    "Timestream",
+    "DAX",
+    "EKS Fargate"
+  ],
+  "services": [
+    "dynamodb",
+    "vpc-endpoints",
+    "backup",
+    "dax",
+    "eks",
+    "fargate",
+    "nacl"
+  ],
+  "topics": [
+    "vpc-networking",
+    "databases"
+  ],
+  "domain": 1,
+  "related": []
+}

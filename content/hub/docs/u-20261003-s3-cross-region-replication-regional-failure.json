@@ -1,0 +1,52 @@
+{
+  "id": "u-20261003-s3-cross-region-replication-regional-failure",
+  "source": {
+    "type": "user",
+    "added": "2026-10-03",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A financial firm is designing an application architecture for its online trading platform that must have high availability and fault tolerance. Their Solutions Architect configured the application to use an Amazon S3 bucket located in the us-east-1 region to store large amounts of intraday financial data. The stored financial data in the bucket must not be affected even if there is an outage in one of the Availability Zones or if there’s a regional service failure.\nWhat should the Architect do to avoid any costly service disruptions and ensure data durability?",
+    "options": [
+      "Create a Lifecycle Policy to regularly backup the S3 bucket to Amazon Glacier.",
+      "Enable Cross-Region Replication.",
+      "Copy the S3 bucket to an EBS-backed EC2 instance.",
+      "Create a new S3 bucket in another region and configure Cross-Account Access to the bucket located in us-east-1."
+    ],
+    "answer": 1,
+    "explanation": "S3 already stores objects redundantly across several AZs in a Region, which covers an AZ outage. To survive a Region-wide failure, enable Cross-Region Replication (versioning is required on both buckets) so every new object is copied automatically to a bucket in another Region. A lifecycle rule moving data to Glacier stays in the same Region and is for cost, not DR. Copying to an EBS-backed EC2 instance is manual, small-scale and also in one Region. A second bucket with cross-account access only grants permissions, it does not copy any data."
+  },
+  "concept": "S3 Cross-Region Replication protects data from a regional failure (AZ resilience is built in)",
+  "tests": "Knowing S3 is already multi-AZ, and that surviving a Region failure needs Cross-Region Replication (versioning on both buckets), not lifecycle transitions, EC2 copies or cross-account access.",
+  "expected": "Enable versioning on source and destination buckets, then configure a CRR rule (optionally RTC for a 15-minute SLA). Triggers: 'outage of an AZ or a regional service failure', 'S3 bucket', 'data durability'.",
+  "why_not": "A lifecycle policy to Glacier stays in the same Region and only changes storage class for cost. Copying to an EC2 instance's EBS volume is manual, size-limited and single-Region. A bucket in another Region with cross-account access only permits access, it does not replicate the data.",
+  "keywords": [
+    "S3",
+    "Cross-Region Replication",
+    "CRR",
+    "versioning",
+    "regional failure",
+    "Availability Zone",
+    "durability",
+    "lifecycle policy",
+    "Glacier",
+    "Replication Time Control"
+  ],
+  "services": [
+    "s3",
+    "s3-replication",
+    "glacier",
+    "ebs"
+  ],
+  "topics": [
+    "storage",
+    "ha-dr"
+  ],
+  "domain": 2,
+  "related": [
+    "hadr-q5",
+    "hadr-q7",
+    "sto-q8",
+    "e1-q8"
+  ]
+}

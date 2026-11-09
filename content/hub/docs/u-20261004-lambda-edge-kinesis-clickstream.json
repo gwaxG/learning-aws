@@ -1,0 +1,47 @@
+{
+  "id": "u-20261004-lambda-edge-kinesis-clickstream",
+  "source": {
+    "type": "user",
+    "added": "2026-10-04",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A company needs to implement a solution that will process real-time streaming data of its users across the globe. This will enable them to track and analyze globally-distributed user activity on their website and mobile applications, including clickstream analysis. The solution should process the data in close geographical proximity to their users and respond to user requests at low latencies.\nWhich of the following is the most suitable solution for this scenario?",
+    "options": [
+      "Use a CloudFront web distribution and Route 53 with a latency-based routing policy, in order to process the data in close geographical proximity to users and respond to user requests at low latencies. Process real-time streaming data using Kinesis and durably store the results to an Amazon S3 bucket.",
+      "Integrate CloudFront with Lambda@Edge in order to process the data in close geographical proximity to users and respond to user requests at low latencies. Process real-time streaming data using Amazon Athena and durably store the results to an Amazon S3 bucket.",
+      "Integrate CloudFront with Lambda@Edge in order to process the data in close geographical proximity to users and respond to user requests at low latencies. Process real-time streaming data using Kinesis and durably store the results to an Amazon S3 bucket.",
+      "Use a CloudFront web distribution and Route 53 with a Geoproximity routing policy in order to process the data in close geographical proximity to users and respond to user requests at low latencies. Process real-time streaming data using Kinesis and durably store the results to an Amazon S3 bucket."
+    ],
+    "answer": 2,
+    "explanation": "Lambda@Edge runs code at CloudFront edge locations close to users, so requests are processed with low latency, and Kinesis is the service that ingests and processes real-time streaming data such as clickstreams; the results are stored durably in S3. Route 53 routing policies (latency-based, geoproximity) only direct DNS queries to an endpoint and process no data, so options 1 and 4 do not process anything near the user. Amazon Athena is an interactive SQL query service over data in S3, not a real-time stream processor, which rules out option 2."
+  },
+  "concept": "Global clickstream processing: CloudFront + Lambda@Edge for edge compute, Kinesis for streaming, S3 for durable storage",
+  "tests": "Telling edge compute (Lambda@Edge) from DNS routing policies, and Kinesis (real-time streams) from Athena (SQL over S3).",
+  "expected": "CloudFront with Lambda@Edge processing near users, Kinesis for the real-time stream, S3 for durable results. Triggers: \"globally-distributed users\", \"clickstream\", \"real-time streaming\", \"process in close geographical proximity\", \"low latency\".",
+  "why_not": "Route 53 latency-based or geoproximity routing only picks the endpoint DNS returns, it does not run code near users (options 1 and 4). Athena queries data already in S3 with SQL, it is not a real-time streaming processor (option 2).",
+  "keywords": [
+    "Lambda@Edge",
+    "CloudFront",
+    "Kinesis",
+    "clickstream",
+    "real-time streaming",
+    "Athena",
+    "Route 53",
+    "latency-based routing",
+    "geoproximity",
+    "S3"
+  ],
+  "services": [
+    "cloudfront",
+    "kinesis-data-streams",
+    "athena",
+    "route53",
+    "s3"
+  ],
+  "topics": [
+    "edge-dns"
+  ],
+  "domain": 3,
+  "related": []
+}

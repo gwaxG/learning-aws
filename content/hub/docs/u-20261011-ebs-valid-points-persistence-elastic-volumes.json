@@ -1,0 +1,45 @@
+{
+  "id": "u-20261011-ebs-valid-points-persistence-elastic-volumes",
+  "source": {
+    "type": "user",
+    "added": "2026-10-11",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A company plans to migrate all of their applications to AWS. The Solutions Architect suggested to store all the data to EBS volumes. The Chief Technical Officer is worried that EBS volumes are not appropriate for the existing workloads due to compliance requirements, downtime scenarios, and IOPS performance.\nWhich of the following are valid points in proving that EBS is the best service to use for migration? (Select TWO.)",
+    "options": [
+      "When you create an EBS volume in an Availability Zone, it is automatically replicated on a separate AWS region to prevent data loss due to a failure of any single hardware component.",
+      "EBS volumes can be attached to any EC2 Instance in any Availability Zone.",
+      "An EBS volume is off-instance storage that can persist independently from the life of an instance.",
+      "EBS volumes support live configuration changes while in production which means that you can modify the volume type, volume size, and IOPS capacity without service interruptions.",
+      "Amazon EBS provides the ability to create snapshots (backups) of any EBS volume and write a copy of the data in the volume to Amazon RDS, where it is stored redundantly in multiple Availability Zones"
+    ],
+    "answer": [
+      2,
+      3
+    ],
+    "explanation": "Valid EBS facts: a volume is off-instance storage that persists independently of the EC2 instance's life, and with Elastic Volumes you can change volume type, size and IOPS live in production without interruption. A volume is replicated automatically only within its own Availability Zone (not to another Region), and can be attached only to instances in the same Availability Zone. Snapshots are stored in Amazon S3, not in Amazon RDS."
+  },
+  "concept": "EBS: persists independently, Elastic Volumes live changes, replicated within its AZ only, snapshots in S3",
+  "tests": "Separating true EBS properties from look-alike false ones (cross-Region replication, any-AZ attach, snapshots in RDS).",
+  "expected": "Off-instance persistent storage and live modification of type, size and IOPS (Elastic Volumes). Traps: replication is within one AZ, attach only in the same AZ, snapshots go to S3.",
+  "why_not": "EBS is replicated only inside its AZ, not to another Region. A volume attaches only to instances in the same AZ. Snapshots are stored in S3, not RDS.",
+  "keywords": [
+    "EBS",
+    "Elastic Volumes",
+    "persist independently",
+    "replicated within AZ",
+    "same Availability Zone",
+    "snapshots S3",
+    "Multi-Attach"
+  ],
+  "services": [
+    "ebs",
+    "ec2"
+  ],
+  "topics": [
+    "storage"
+  ],
+  "domain": 2,
+  "related": []
+}

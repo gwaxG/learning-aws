@@ -1,0 +1,50 @@
+{
+  "id": "u-20260930-lambda-vpc-eni-ip-throttling",
+  "source": {
+    "type": "user",
+    "added": "2026-10-01",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A company is using Amazon VPC that has a CIDR block of 10.31.0.0/27 that is connected to the on-premises data center. There was a requirement to create a Lambda function that will process massive amounts of cryptocurrency transactions every minute and then store the results to EFS. After setting up the serverless architecture and connecting the Lambda function to the VPC, the Solutions Architect noticed an increase in invocation errors with EC2 error types such as EC2ThrottledException at certain times of the day.\nWhich of the following are the possible causes of this issue? (Select TWO.)",
+    "options": [
+      "Your Lambda function exceeds the VPC quota for Elastic Network Interfaces (ENIs) or available IP addresses in the subnet.",
+      "The attached IAM execution role of your function does not have the necessary permissions to access the resources of your VPC.",
+      "Your VPC does not have a NAT gateway.",
+      "The Lambda function is placed in a VPC subnet with limited IP address capacity.",
+      "The associated security group of your function does not allow outbound connections."
+    ],
+    "answer": [
+      0,
+      3
+    ],
+    "explanation": "A VPC-attached Lambda function uses ENIs in the subnet. Under peak load it needs more ENIs and IP addresses; a /27 subnet has only 27 usable IPs, and the ENI quota can also be hit. When capacity runs out, EC2 throttles the requests and invocations fail with EC2ThrottledException at busy times. Missing IAM permissions, a missing NAT gateway or a restrictive security group cause constant failures or timeouts, not periodic throttling."
+  },
+  "concept": "Lambda in a VPC: ENI quota / subnet IP exhaustion causes EC2ThrottledException",
+  "tests": "Diagnosing periodic EC2ThrottledException errors for a VPC-attached Lambda function: ENI quota and subnet IP capacity.",
+  "expected": "Exceeded ENI quota or available IPs, and a subnet with limited IP capacity (small CIDR like /27). Fix: larger subnets in several AZs, request an ENI quota increase. Triggers: 'EC2ThrottledException', 'at certain times of the day', 'massive amounts', tiny CIDR.",
+  "why_not": "Execution role without VPC permissions gives a constant access error (EC2AccessDeniedException), not peak-time throttling. No NAT gateway affects internet access only, and EFS is reached over the private network. A security group blocking outbound traffic causes timeouts, not EC2 throttling.",
+  "keywords": [
+    "Lambda",
+    "VPC",
+    "ENI",
+    "EC2ThrottledException",
+    "subnet IP addresses",
+    "/27",
+    "ENI quota",
+    "EFS",
+    "NAT gateway",
+    "execution role"
+  ],
+  "services": [
+    "lambda",
+    "vpc",
+    "efs"
+  ],
+  "topics": [
+    "serverless-containers",
+    "vpc-networking"
+  ],
+  "domain": 2,
+  "related": []
+}

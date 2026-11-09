@@ -1,0 +1,71 @@
+<section class="ch" id="c-compute" data-weak="3">
+<h2>8. Вычисления: EC2, Lambda, контейнеры <span class="b b3">слабо</span></h2>
+
+<div class="sub" data-weak="3">
+<h3>EC2: модели оплаты <span class="b b3">слабо</span></h3>
+<div class="tw"><table>
+<tr><th>Модель</th><th>Скидка</th><th>Когда</th></tr>
+<tr><td>On-Demand</td><td>0</td><td>непредсказуемо/кратко</td></tr>
+<tr><td>Reserved (Standard)</td><td>до ~72%, 1–3 года</td><td>стабильная нагрузка. Можно <b>продать на RI Marketplace</b> (Convertible — нельзя)</td></tr>
+<tr><td>Reserved Convertible</td><td>до ~66%</td><td>можно менять семейство/ОС</td></tr>
+<tr><td>Savings Plans: <b>Compute</b></td><td>до ~66%</td><td>EC2 (любое семейство/Region/ОС), Fargate, Lambda: максимальная гибкость</td></tr>
+<tr><td>Savings Plans: EC2 Instance</td><td>до ~72%</td><td>одно семейство в Region</td></tr>
+<tr><td>Spot</td><td>до ~90%</td><td>прерываемое, отказоустойчивое (batch, CI, big data); 2 минуты до прерывания</td></tr>
+<tr><td>Dedicated Host / Instance</td><td>—</td><td>лицензии привязаны к сокетам/ядрам (BYOL), compliance</td></tr>
+<tr><td>Capacity Reservation</td><td>—</td><td>гарантия ёмкости в AZ (без скидки; скидку даёт RI/SP)</td></tr>
+</table></div>
+<h4>Платишь ли ты за состояние</h4>
+<ul>
+<li><b>running</b> — за инстанс; <b>stopped</b> — только за EBS (и Elastic IP, если не привязан); <b>hibernated</b> — EBS (RAM сохраняется на EBS); <b>terminated</b> — ничего.</li>
+<li><b>Stop/start</b>: данные <b>instance store теряются</b>, меняется публичный IP (Elastic IP остаётся), хост может смениться. Перезагрузка (reboot) данные сохраняет.</li>
+</ul>
+<h4>Placement groups</h4>
+<div class="tw"><table>
+<tr><th>Тип</th><th>Суть</th><th>Для</th></tr>
+<tr><td>Cluster</td><td>одна AZ, плотно: минимальная задержка</td><td>HPC, tightly-coupled. Нет HA</td></tr>
+<tr><td>Spread</td><td>разное железо, до 7 инстансов на AZ</td><td>мало критичных инстансов</td></tr>
+<tr><td>Partition</td><td>группы стоек, до 7 партиций на AZ</td><td>HDFS, Cassandra, Kafka</td></tr>
+</table></div>
+<h4>Сеть инстанса</h4>
+<ul>
+<li><b>ENI</b> — виртуальная сетевая карта (private IP, SG, MAC), можно перенести на другой инстанс. <b>ENA</b> — enhanced networking до 100 Гбит/с. <b>EFA</b> = ENA + <b>OS-bypass</b> для HPC/ML (MPI/NCCL, Linux, лучше с cluster placement group). Нужен «OS-bypass, ниже задержка чем TCP» → <b>EFA</b>.</li>
+</ul>
+<h4>AMI, user data, лицензии</h4>
+<ul>
+<li><b>AMI</b> привязан к Region (копируется между ними); user data выполняется при первом запуске; instance metadata — <code>169.254.169.254</code>.</li>
+<li><b>AWS License Manager</b> — отслеживает лицензии и <b>Enforce license limit</b> не даёт запустить инстанс сверх купленных (Windows Server, SQL Server); алерт через SNS. Fleet Manager/RAM/ACM лицензиями не управляют.</li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>
+<ul><li>HPC с OS-bypass → <b>EFA</b>, не ENA/ENI.</li>
+<li>Ограничить число запусков числом лицензий → <b>License Manager</b> с enforce limit.</li>
+<li>Instance store не для постоянных данных: пропадает при stop/terminate/сбое хоста.</li></ul></div>
+</div>
+
+<div class="sub">
+<h3>Lambda</h3>
+<ul>
+<li>Event-driven, до <b>15 минут</b>, память 128 МБ–10 ГБ (CPU пропорционально), /tmp до 10 ГБ. Платишь за вызовы и GB·с.</li>
+<li><b>Concurrency</b>: лимит аккаунта на Region (по умолчанию 1000); <b>reserved</b> — гарантия и потолок для функции (защищает от «соседей» и от перегрузки downstream БД); <b>provisioned</b> — тёплые экземпляры против cold start.</li>
+<li><b>В VPC</b>: Lambda создаёт ENI в подсети; для доступа в интернет нужен NAT. Не хватит IP в подсети — throttling.</li>
+<li><b>Источники</b>: S3, SQS, SNS, DynamoDB Streams, Kinesis, API Gateway, EventBridge, ALB. Асинхронные вызовы: 2 ретрая, DLQ/destinations.</li>
+<li><b>Lambda@Edge</b> — у edge CloudFront (viewer/origin events).</li>
+</ul>
+</div>
+
+<div class="sub" data-weak="1">
+<h3>Контейнеры <span class="b b1">слегка</span></h3>
+<div class="tw"><table>
+<tr><th>Сервис</th><th>Суть</th></tr>
+<tr><td><b>ECS</b></td><td>оркестратор AWS; запуск на EC2 или Fargate</td></tr>
+<tr><td><b>EKS</b></td><td>управляемый Kubernetes (если нужен K8s/переносимость)</td></tr>
+<tr><td><b>Fargate</b></td><td>serverless-вычисления для контейнеров: нет серверов</td></tr>
+<tr><td><b>ECR</b></td><td>реестр образов, скан уязвимостей</td></tr>
+<tr><td><b>App Runner</b></td><td>самый простой запуск веб-контейнера</td></tr>
+</table></div>
+<ul>
+<li>ECS: <b>task role</b> (права задачи), execution role (ECR, логи), service autoscaling.</li>
+<li><b>EKS масштабирование</b>: pods → <b>HPA</b> (нужен Metrics Server); nodes → <b>Cluster Autoscaler</b> (или Karpenter); с Fargate — без нод.</li>
+</ul>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>«Масштабировать узлы EKS с минимальными усилиями» → <b>Cluster Autoscaler</b> + Metrics Server. CloudWatch alarms и ручной ASG — лишние усилия.</div>
+</div>
+</section>

@@ -1,0 +1,43 @@
+{
+  "id": "u-20261102-s3-lifecycle-glacier-zero-days-audit-data",
+  "source": {
+    "type": "user",
+    "added": "2026-11-02",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A company has 10 TB of infrequently accessed financial data files that would need to be stored in AWS. These data would be accessed infrequently during specific weeks when they are retrieved for auditing purposes. The retrieval time is not strict as long as it does not exceed 24 hours.\nWhich of the following would be a secure, durable, and cost-effective solution for this scenario?",
+    "options": [
+      "Upload the data to S3 and set a lifecycle policy to transition data to Glacier after 0 days.",
+      "Upload the data to Amazon FSx for Windows File Server using the Server Message Block (SMB) protocol.",
+      "Upload the data to S3 then use a lifecycle policy to transfer data to S3-IA.",
+      "Upload the data to S3 then use a lifecycle policy to transfer data to S3 One Zone-IA."
+    ],
+    "answer": 0,
+    "explanation": "Retrieval within 24 hours and rare access point to the S3 Glacier classes: a lifecycle rule can transition objects after 0 days, so the data lands in Glacier right away and is stored at the lowest cost (Bulk retrieval takes about 5-12 hours, Standard 3-5 hours). S3 Standard-IA is more expensive for data that is read only a few times a year. One Zone-IA is cheaper than Standard-IA but keeps data in a single AZ (not durable enough for financial records) and still costs more than Glacier. FSx for Windows File Server is a live SMB file system and costs far more than an archive class."
+  },
+  "concept": "Lifecycle transition after 0 days = archive immediately; hours-tolerant retrieval = Glacier",
+  "tests": "Matching access pattern and retrieval time to a storage class: Glacier for rare access with up to 24 h retrieval, versus IA classes and FSx.",
+  "expected": "S3 + lifecycle rule to S3 Glacier (Flexible Retrieval) after 0 days. Triggers: \"infrequently accessed\", \"retrieval time ... does not exceed 24 hours\", \"cost-effective\".",
+  "why_not": "S3 Standard-IA and One Zone-IA are millisecond-access classes priced above Glacier; One Zone-IA is also single-AZ (not durable). FSx for Windows is an always-on file system, far more expensive and not an archive.",
+  "keywords": [
+    "lifecycle policy",
+    "0 days",
+    "S3 Glacier",
+    "Standard-IA",
+    "One Zone-IA",
+    "FSx for Windows",
+    "retrieval time",
+    "audit data"
+  ],
+  "services": [
+    "glacier",
+    "s3-lifecycle",
+    "s3-storage-classes"
+  ],
+  "topics": [
+    "storage"
+  ],
+  "domain": 4,
+  "related": []
+}

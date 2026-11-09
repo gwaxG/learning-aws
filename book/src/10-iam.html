@@ -1,0 +1,48 @@
+<section class="ch" id="c-iam" data-weak="3">
+<h2>3. Идентичность и доступ: IAM, Organizations</h2>
+
+<div class="sub">
+<h3>IAM: основы</h3>
+<ul>
+<li><b>User</b> — долгоживущая личность (пароль, access keys). <b>Group</b> — набор users (в группу нельзя вложить группу, группа не может быть principal). <b>Role</b> — временные credentials через STS, без постоянных ключей.</li>
+<li><b>Policy</b> — JSON: Effect, Action, Resource, Condition. Identity-based (на user/role) и resource-based (S3 bucket policy, KMS key policy, SQS, trust policy роли).</li>
+<li>Для EC2, Lambda, ECS всегда <b>role</b> (instance profile), никогда ключи в коде или AMI.</li>
+<li><b>Root</b>: MFA, нет ключей, использовать только для задач, требующих root.</li>
+</ul>
+<div class="box tip"><b>Логика вычисления политик</b>
+<ol><li>По умолчанию всё запрещено (implicit deny).</li><li>Любой <b>explicit Deny</b> побеждает всё.</li><li>Иначе нужен хотя бы один Allow.</li></ol>
+SCP и permission boundary только <b>ограничивают</b> максимум и сами ничего не разрешают: итог — пересечение.</div>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>MFA на группу пользователей и Parameter Store против Secrets Manager. Политика ключа KMS против прав роли: чтобы роль могла использовать ключ, нужны <b>оба</b> — key policy допускает (или делегирует IAM), и IAM-политика роли разрешает.</div>
+<h4>Кросс-аккаунтный доступ</h4>
+<p>В аккаунте B создай role с <b>trust policy</b> на аккаунт A; в A пользователь получает право <code>sts:AssumeRole</code>. Временные credentials, без обмена ключами. Для внешних сторон добавляй <b>ExternalId</b>.</p>
+<h4>Federation</h4>
+<ul><li><b>IAM Identity Center</b> (бывший SSO) — вход сотрудников во все аккаунты Organization из корпоративного IdP.</li>
+<li><b>Cognito</b> — пользователи твоего приложения (User Pool = каталог и токены, Identity Pool = временные AWS credentials).</li>
+<li><b>SAML 2.0 / OIDC</b> federation — прямой вход в консоль через IdP.</li></ul>
+</div>
+
+<div class="sub" data-weak="3">
+<h3>Organizations и multi-account <span class="b b3">слабо</span></h3>
+<p><b>Organizations</b>: управляющий аккаунт, организационные единицы (OU) и member-аккаунты. Даёт consolidated billing (общий счёт, объёмные скидки, общее покрытие RI/Savings Plans) и централизованное управление через SCP.</p>
+<ul>
+<li><b>SCP</b> — потолок прав для аккаунтов и OU. Не выдаёт права, не действует на management account, действует на root user member-аккаунта. Типичные SCP: запрет выхода из Region, запрет отключать CloudTrail/Config, запрет root.</li>
+<li><b>Control Tower</b> — готовая landing zone: multi-account среда по best practice, <b>Account Factory</b> создаёт аккаунты по шаблону, <b>guardrails</b> (preventive = SCP, detective = Config rules), dashboard несоответствий. Ответ на «настроить и управлять multi-account окружением с наименьшими усилиями».</li>
+<li><b>RAM</b> — делится ресурсами (подсети, TGW, License Manager configs) между аккаунтами без копирования.</li>
+<li><b>Организационный CloudTrail</b> — один trail для всех аккаунтов; <b>Config aggregator</b> — сводный вид соответствия.</li>
+<li><b>Delegated administrator</b> — сервис (GuardDuty, Security Hub, Config) администрируется из отдельного security-аккаунта.</li>
+</ul>
+<div class="box trap"><b>Модель «много аккаунтов»</b>Отдельные аккаунты: prod/dev, log archive, security/audit, shared services (сеть). Граница аккаунта — самая сильная граница безопасности и биллинга. Если спрашивают «изолировать» — новый аккаунт, а не новый VPC.</div>
+<div class="box miss"><b>⚠ Ты ошибался здесь</b>Вопрос про landing zone с dashboard несоответствия → <b>Control Tower</b> (Account Factory + guardrails), а не ручная Organizations + Config. SCP не даёт прав: без IAM-политики доступа всё равно нет.</div>
+</div>
+
+<div class="sub">
+<h3>Доступ для приложений и ресурсов</h3>
+<ul>
+<li><b>S3 bucket policy</b> — resource-based, умеет Deny по условиям (<code>aws:SecureTransport</code>, <code>aws:SourceVpce</code>, org id).</li>
+<li><b>Presigned URL</b> — временный доступ к объекту от имени создателя.</li>
+<li><b>Permission boundary</b> — максимум прав, который IAM-админ может делегировать пользователю/роли.</li>
+<li><b>Access Analyzer</b> — находит ресурсы, доступные извне, и неиспользуемые права.</li>
+<li><b>Credential report / last used</b> — аудит ключей и паролей.</li>
+</ul>
+</div>
+</section>

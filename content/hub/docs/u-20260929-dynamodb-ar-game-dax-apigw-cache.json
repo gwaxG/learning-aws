@@ -1,0 +1,52 @@
+{
+  "id": "u-20260929-dynamodb-ar-game-dax-apigw-cache",
+  "source": {
+    "type": "user",
+    "added": "2026-09-29",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "A company currently has an Augment Reality (AR) mobile game that has a serverless backend. It is using a DynamoDB table which was launched using the AWS CLI to store all the user data and information gathered from the players and a Lambda function to pull the data from DynamoDB. The game is being used by millions of users each day to read and store data.\nHow would you design the application to improve its overall performance and make it more scalable while keeping the costs low? (Select TWO)",
+    "options": [
+      "Configure CloudFront with DynamoDB as the origin; cache frequently accessed data on the client device using ElastiCache.",
+      "Use AWS IAM Identity Center to authenticate users and have them directly access DynamoDB using single sign-on. Manually set the provisioned read and write capacity to a higher RCU and WCU.",
+      "Enable DynamoDB Accelerator (DAX) and ensure that the Auto Scaling is enabled and increase the maximum provisioned read and write capacity.",
+      "Use API Gateway in conjunction with Lambda and turn on the caching on frequently accessed data and enable DynamoDB global replication.",
+      "Since Auto Scaling is enabled by default, the provisioned read and write capacity will adjust automatically. Also enable DynamoDB Accelerator (DAX) to improve the performance from milliseconds to microseconds."
+    ],
+    "answer": [
+      2,
+      3
+    ],
+    "explanation": "DAX gives microsecond reads for hot items, and DynamoDB Auto Scaling (explicitly enabled, with a higher max) absorbs traffic growth without over-provisioning. API Gateway with response caching in front of Lambda reduces Lambda/DynamoDB calls, and global tables bring data closer to players worldwide. CloudFront cannot use DynamoDB as an origin and ElastiCache is a server-side cache, not a device cache. Identity Center is for workforce SSO, not millions of game players, and manual capacity does not scale. The last option is wrong because Auto Scaling is NOT enabled by default for a table created with the AWS CLI/API (only the console default enables it)."
+  },
+  "concept": "DynamoDB: DAX for hot reads + auto scaling (CLI-created tables have none by default)",
+  "tests": "How to scale and speed up a serverless Lambda + DynamoDB backend cheaply: DAX cache, explicit Auto Scaling, API Gateway caching, global tables — and the trap that Auto Scaling is not on by default for tables created via CLI.",
+  "expected": "Pick DAX + explicitly enabled Auto Scaling (higher max capacity), and API Gateway caching in front of Lambda + DynamoDB global tables. Triggers: 'millions of users', 'read and store data', 'improve performance', 'keeping costs low', 'launched using the AWS CLI'.",
+  "why_not": "CloudFront can't front DynamoDB as an origin and ElastiCache doesn't run on client devices. IAM Identity Center is for workforce SSO, and manually raised capacity is static and costly. 'Auto Scaling is enabled by default' is false for CLI-created tables.",
+  "keywords": [
+    "DynamoDB",
+    "DAX",
+    "DynamoDB Auto Scaling",
+    "API Gateway caching",
+    "global tables",
+    "AWS CLI",
+    "provisioned capacity",
+    "microsecond latency",
+    "millions of users",
+    "serverless"
+  ],
+  "services": [
+    "dynamodb",
+    "dax",
+    "api-gateway",
+    "dynamodb-global",
+    "lambda"
+  ],
+  "topics": [
+    "databases",
+    "serverless-containers"
+  ],
+  "domain": 3,
+  "related": []
+}

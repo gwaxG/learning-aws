@@ -1,0 +1,42 @@
+{
+  "id": "u-20261102-asg-target-tracking-avoid-over-provisioning",
+  "source": {
+    "type": "user",
+    "added": "2026-11-02",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A company hosted a web application in an Auto Scaling group of EC2 instances. The IT manager is concerned about the over-provisioning of the resources that can cause higher operating costs. A Solutions Architect has been instructed to create a cost-effective solution without affecting the performance of the application.\nWhich dynamic scaling policy should be used to satisfy this requirement?",
+    "options": [
+      "Use simple scaling.",
+      "Use scheduled scaling.",
+      "Use target tracking scaling.",
+      "Use suspend and resume scaling."
+    ],
+    "answer": 2,
+    "explanation": "Target tracking scaling keeps a metric (for example average CPU 50%) at or near a target value by adding and removing capacity automatically, so the group scales in as well as out and does not stay over-provisioned, without hurting performance. Simple scaling must wait for the scaling activity and cooldown to finish before reacting to another alarm and needs alarms and thresholds you tune by hand. Scheduled scaling is for predictable, time-based patterns, not for tracking real demand. Suspend and resume only pauses scaling processes; it is not a scaling policy."
+  },
+  "concept": "Target tracking = dynamic scaling that follows a metric target, scaling in and out",
+  "tests": "Choosing the right Auto Scaling policy type for cost-efficient, demand-following capacity.",
+  "expected": "Target tracking scaling policy (e.g. ASGAverageCPUUtilization or ALBRequestCountPerTarget). Triggers: \"dynamic scaling policy\", \"over-provisioning\", \"without affecting performance\".",
+  "why_not": "Simple scaling: waits for cooldown between actions, coarse single step. Scheduled scaling: only for known time patterns. Suspend/resume: pauses scaling processes, not a policy.",
+  "keywords": [
+    "target tracking",
+    "simple scaling",
+    "step scaling",
+    "scheduled scaling",
+    "suspend and resume",
+    "over-provisioning",
+    "Auto Scaling group",
+    "cooldown"
+  ],
+  "services": [
+    "auto-scaling"
+  ],
+  "topics": [
+    "ec2-compute",
+    "cost"
+  ],
+  "domain": 4,
+  "related": []
+}

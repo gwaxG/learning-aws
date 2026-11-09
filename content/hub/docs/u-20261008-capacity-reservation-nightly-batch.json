@@ -1,0 +1,42 @@
+{
+  "id": "u-20261008-capacity-reservation-nightly-batch",
+  "source": {
+    "type": "user",
+    "added": "2026-10-08",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A multinational corporate and investment bank regularly processes steady workloads of accruals, loan interests, and other critical financial calculations every night from 10 PM to 3 AM on their on-premises data center for their corporate clients. Once the process is done, the results are then uploaded to the Oracle General Ledger which means that the processing should not be delayed or interrupted. The CTO has decided to move its IT infrastructure to AWS to save costs. The company needs to reserve compute capacity in a specific Availability Zone to properly run their workloads.\nAs the Senior Solutions Architect, how can you implement a cost-effective architecture in AWS for their financial system?",
+    "options": [
+      "Use Regional Reserved Instances to reserve capacity on a specific Availability Zone and lower the operating cost through its billing discounts.",
+      "Use On-Demand EC2 instances which allows you to pay for the instances that you launch and use by the second. Reserve compute capacity in a specific Availability Zone to avoid any interruption.",
+      "Use On-Demand Capacity Reservations, which provide compute capacity that is always available on the specified recurring schedule.",
+      "Use Dedicated Hosts, which provide a physical host that is fully dedicated to running your instances, and bring your existing per-socket, per-core, or per-VM software licenses to reduce costs."
+    ],
+    "answer": 2,
+    "explanation": "On-Demand Capacity Reservations reserve compute capacity for EC2 in a specific Availability Zone for any duration, with no 1-year or 3-year commitment, independently of billing discounts. You are billed from the moment the reservation is active, so for a job that runs only 5 hours a night you can automate creating and cancelling the reservation (and terminating the instances) to pay only for what you need, while the capacity is guaranteed. Regional Reserved Instances give a billing discount but do not reserve capacity in an AZ (only Zonal RIs do). Plain On-Demand cannot reserve capacity at all and costs more than the other options. Dedicated Hosts are for per-socket/core licensing and would sit idle 19 hours a day."
+  },
+  "concept": "On-Demand Capacity Reservation = guaranteed AZ capacity without a term; Regional RI = discount only",
+  "tests": "Choosing Capacity Reservations to guarantee capacity in a specific AZ for a short recurring window, versus Regional RIs, plain On-Demand and Dedicated Hosts.",
+  "expected": "On-Demand Capacity Reservation in the chosen AZ (create and cancel by automation around the nightly window), optionally combined with Savings Plans or Regional RIs for the discount. Triggers: \"reserve compute capacity in a specific Availability Zone\", \"should not be delayed or interrupted\", \"only 10 PM to 3 AM\".",
+  "why_not": "Regional RIs give the billing discount but do not reserve capacity in an AZ (only Zonal RIs do). Plain On-Demand cannot reserve capacity, so an interruption or capacity shortage is possible, and it is the most expensive. Dedicated Hosts are a licensing/compliance tool and would be underutilized 19 hours a day.",
+  "keywords": [
+    "Capacity Reservation",
+    "Regional Reserved Instance",
+    "Zonal Reserved Instance",
+    "Dedicated Hosts",
+    "On-Demand",
+    "Savings Plans",
+    "specific Availability Zone",
+    "nightly batch"
+  ],
+  "services": [
+    "ec2-purchasing",
+    "ec2"
+  ],
+  "topics": [
+    "ec2-compute"
+  ],
+  "domain": 4,
+  "related": []
+}

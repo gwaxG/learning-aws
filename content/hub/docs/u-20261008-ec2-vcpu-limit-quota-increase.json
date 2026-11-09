@@ -1,0 +1,42 @@
+{
+  "id": "u-20261008-ec2-vcpu-limit-quota-increase",
+  "source": {
+    "type": "user",
+    "added": "2026-10-08",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "You are automating the creation of EC2 instances in your VPC. Hence, you wrote a python script to trigger the Amazon EC2 API to request 50 EC2 instances in a single Availability Zone. However, you noticed that after 20 successful requests, subsequent requests failed.\nWhat could be a reason for this issue and how would you resolve it?",
+    "options": [
+      "There was an issue with the Amazon EC2 API. Just resend the requests and these will be provisioned successfully.",
+      "By default, AWS allows you to provision a maximum of 20 instances per region. Select a different region and retry the failed request.",
+      "By default, AWS allows you to provision a maximum of 20 instances per Availability Zone. Select a different Availability Zone and retry the failed request.",
+      "There is a vCPU-based On-Demand Instance limit per region which is why subsequent requests failed. Just submit the limit increase form to AWS and retry the failed requests once approved."
+    ],
+    "answer": 3,
+    "explanation": "On-Demand Instances are limited by a vCPU-based On-Demand Instance limit per Region (there are also limits of 20 Reserved Instances and a dynamic Spot limit per Region). New accounts may start with lower limits. If you need more, submit the limit (quota) increase request for that Region, and retry after approval. The limit is tied to the Region, not to the Availability Zone, and it is not a fixed 20 instances."
+  },
+  "concept": "EC2 launch limits are vCPU-based quotas per Region, raised via a quota increase request",
+  "tests": "Recognizing a service quota as the cause of launch failures and the fix (request an increase for the Region), not an API fault, a fixed per-AZ limit or a Region switch.",
+  "expected": "Requests succeed up to the vCPU quota, then fail with an instance-limit error; request a quota increase for that Region (Service Quotas / limit form) and retry. Triggers: \"after N successful requests, subsequent requests failed\", \"automating the creation of EC2 instances\".",
+  "why_not": "It is not an API outage (the failure is deterministic and quota-based). The limit is per Region and vCPU-based, not a flat 20 instances per Region or per AZ, and switching Region or AZ is unnecessary because the quota can be increased.",
+  "keywords": [
+    "EC2 limits",
+    "vCPU-based limit",
+    "Service Quotas",
+    "limit increase",
+    "On-Demand Instance limit",
+    "Region",
+    "Reserved Instances limit",
+    "Spot limit"
+  ],
+  "services": [
+    "ec2",
+    "ec2-purchasing"
+  ],
+  "topics": [
+    "ec2-compute"
+  ],
+  "domain": 2,
+  "related": []
+}

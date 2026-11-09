@@ -1,0 +1,52 @@
+{
+  "id": "u-20261003-dynamodb-streams-trigger-lambda",
+  "source": {
+    "type": "user",
+    "added": "2026-10-03",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A leading IT consulting company has an application which processes a large stream of financial data by an Amazon ECS Cluster then stores the result to a DynamoDB table. You have to design a solution to detect new entries in the DynamoDB table then automatically trigger a Lambda function to run some tests to verify the processed data.\nWhat solution can be easily implemented to alert the Lambda function of new entries while requiring minimal configuration change to your architecture?",
+    "options": [
+      "Invoke the Lambda functions using SNS each time that the ECS Cluster successfully processed financial data.",
+      "Use CloudWatch Alarms to trigger the Lambda function whenever a new entry is created in the DynamoDB table.",
+      "Enable DynamoDB Streams to capture table activity and automatically trigger the Lambda function.",
+      "Use Systems Manager Automation to detect new entries in the DynamoDB table then automatically invoke the Lambda function for processing."
+    ],
+    "answer": 2,
+    "explanation": "DynamoDB Streams records item-level changes (inserts, updates, deletes) in order for 24 hours, and a Lambda function can be attached as an event source mapping that is invoked automatically for new records. It only needs the stream enabled on the table and a mapping to the function, with no change to the ECS application. The SNS option requires changing the ECS application code. CloudWatch alarms watch metric thresholds, not individual new items. Systems Manager Automation runs operational runbooks and does not watch DynamoDB for new entries."
+  },
+  "concept": "DynamoDB Streams + Lambda event source mapping: react to new items with minimal changes",
+  "tests": "Choosing DynamoDB Streams with a Lambda trigger to react to table changes, instead of changing the producer, CloudWatch alarms or Systems Manager.",
+  "expected": "Enable DynamoDB Streams (new image / new and old images) and add the Lambda function as a trigger (event source mapping). Triggers: 'detect new entries in the DynamoDB table', 'automatically trigger a Lambda', 'minimal configuration change'.",
+  "why_not": "Invoking Lambda from SNS means modifying the ECS application to publish on every write, which is the opposite of minimal change. CloudWatch alarms evaluate metrics against thresholds, they cannot fire per new item. Systems Manager Automation executes runbooks and does not monitor table changes.",
+  "keywords": [
+    "DynamoDB Streams",
+    "Lambda trigger",
+    "event source mapping",
+    "new entries",
+    "item-level changes",
+    "change data capture",
+    "ECS",
+    "SNS",
+    "CloudWatch alarm",
+    "minimal configuration"
+  ],
+  "services": [
+    "dynamodb",
+    "lambda",
+    "ecs",
+    "sns",
+    "cloudwatch",
+    "systems-manager"
+  ],
+  "topics": [
+    "databases",
+    "serverless-containers"
+  ],
+  "domain": 3,
+  "related": [
+    "db-q7",
+    "e1-q20"
+  ]
+}

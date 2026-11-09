@@ -1,0 +1,9 @@
+name: three-tier
+description: React + FastAPI + PostgreSQL three-tier app on AWS (CloudFront/S3, ALB, ECS Fargate, RDS)
+runtime:
+  name: python
+  options:
+    toolchain: uv
+config:
+  aws:region:
+    value: eu-west-1

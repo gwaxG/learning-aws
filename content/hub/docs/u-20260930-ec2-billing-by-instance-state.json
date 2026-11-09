@@ -1,0 +1,51 @@
+{
+  "id": "u-20260930-ec2-billing-by-instance-state",
+  "source": {
+    "type": "user",
+    "added": "2026-09-30",
+    "origin": "user-supplied practice question"
+  },
+  "question": {
+    "stem": "In Amazon EC2, you can manage your instances from the moment you launch them up to their termination. You can flexibly control your computing costs by changing the EC2 instance state.\nWhich of the following statements is true regarding EC2 billing? (Select TWO.)",
+    "options": [
+      "You will be billed when your On-Demand instance is in `pending` state.",
+      "You will be billed when your Spot instance is preparing to stop with a `stopping` state.",
+      "You will be billed when your On-Demand instance is preparing to hibernate with a `stopping` state.",
+      "You will be billed when your Reserved instance is in `terminated` state.",
+      "You will not be billed for any instance usage while an instance is not in the `running` state."
+    ],
+    "answer": [
+      2,
+      3
+    ],
+    "explanation": "On-Demand/Spot instances are not billed in `pending`, and a Spot instance that is stopping is not billed. An instance preparing to hibernate (`stopping`) is billed because it is still writing RAM to EBS. A Reserved Instance is billed for the whole reservation term even when the instance is `terminated`, since you pay for the reservation. So 'not billed while not running' is false."
+  },
+  "concept": "EC2 billing by state: pending/stopped not billed; hibernate-stopping and Reserved Instances are billed",
+  "tests": "EC2 instance-state billing rules: running is billed, pending and stopped are not, stopping-to-hibernate is billed, and Reserved Instances bill through the term regardless of state.",
+  "expected": "Billed: instance preparing to hibernate (stopping) and Reserved Instance even when terminated. Not billed: pending, Spot stopping, stopped. Triggers: 'billing', 'instance state', 'hibernate', 'Reserved'.",
+  "why_not": "pending is not billed (instance is just starting). A stopping Spot instance isn't billed (only hibernate-stopping is, because of RAM-to-EBS writing). 'Not billed when not running' ignores hibernate-stopping and Reserved Instances.",
+  "keywords": [
+    "EC2 billing",
+    "instance state",
+    "pending",
+    "stopping",
+    "hibernate",
+    "Reserved Instance",
+    "terminated",
+    "Spot",
+    "running",
+    "On-Demand"
+  ],
+  "services": [
+    "ec2",
+    "ec2-purchasing"
+  ],
+  "topics": [
+    "ec2-compute",
+    "cost"
+  ],
+  "domain": 4,
+  "related": [
+    "u-20260929-ec2-stop-start-instance-store"
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "id": "u-20261004-health-events-eventbridge-sns",
+  "source": {
+    "type": "user",
+    "added": "2026-10-04",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A company has a fixed set of Amazon EC2 instances inside a VPC in the AWS cloud. The instances run a mission-critical application. In a recent incident, one of the EC2 instances suddenly powered down which affected the availability of the application. To avoid this incident in the future, the management wants to get notified of any upcoming AWS events that may affect these EC2 instances.\nWhich of the following options is the recommended action to meet the above requirements?",
+    "options": [
+      "Set up an Amazon EventBridge (Amazon CloudWatch Events) rule to check for any status change for Amazon EC2 instances. Set the target to an AWS Lambda function that will send a notification and restart the affected Amazon EC2 instances.",
+      "Create an Amazon EventBridge (Amazon CloudWatch Events) rule that is scheduled to run every 24 hours. Set the target to an AWS Lambda function that will check AWS Service Health Dashboard and send notifications for any events that may affect Amazon EC2 instances.",
+      "Create an Amazon EventBridge (Amazon CloudWatch Events) rule to check for AWS Personal Health Dashboard events that are related to Amazon EC2 instances. To send notifications, set an Amazon SNS topic as a target for the rule.",
+      "Set up an Amazon EventBridge (Amazon CloudWatch Events) rule to check for AWS Service Health Dashboard events that are related to Amazon EC2 instances. To send notifications, set an Amazon SNS topic as a target for the rule."
+    ],
+    "answer": 2,
+    "explanation": "The AWS Health Dashboard (formerly Personal Health Dashboard) shows AWS events that affect your own resources, such as scheduled maintenance or instance retirement, and publishes them as AWS Health events to EventBridge. An EventBridge rule that matches AWS Health events for EC2 with an SNS topic as the target notifies management in advance with no code. A status-change rule only fires after the instance has already changed state, which is too late. A scheduled Lambda polling the Service Health Dashboard is custom work, and the Service Health Dashboard shows general service status for all customers and does not emit events to EventBridge."
+  },
+  "concept": "AWS Health (Personal Health Dashboard) events → EventBridge rule → SNS to get notified of upcoming events affecting EC2",
+  "tests": "Knowing that notifications about upcoming AWS events affecting your resources come from AWS Health events via an EventBridge rule with an SNS target, not from EC2 state-change events or the general Service Health Dashboard.",
+  "expected": "EventBridge rule with event source aws.health (service EC2) and an SNS topic target. Triggers: 'notified of any upcoming AWS events that may affect these EC2 instances', 'scheduled maintenance', 'instance retirement'.",
+  "why_not": "EC2 state-change rules fire only after the instance already changed state, so they cannot warn about upcoming events and auto-restarting is not the goal. A 24-hour scheduled Lambda that reads the Service Health Dashboard is custom code and the Service Health Dashboard is the public status page for all customers, not events for your resources. The Service Health Dashboard does not publish events to EventBridge, only the Personal Health Dashboard (AWS Health) does.",
+  "keywords": [
+    "AWS Health",
+    "Personal Health Dashboard",
+    "Service Health Dashboard",
+    "EventBridge",
+    "SNS",
+    "scheduled maintenance",
+    "instance retirement",
+    "aws.health",
+    "upcoming events",
+    "notification"
+  ],
+  "services": [
+    "health",
+    "eventbridge",
+    "sns",
+    "ec2",
+    "lambda",
+    "cloudwatch"
+  ],
+  "topics": [
+    "monitoring"
+  ],
+  "domain": 2,
+  "related": []
+}

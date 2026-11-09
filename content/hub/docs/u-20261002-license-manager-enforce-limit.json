@@ -1,0 +1,48 @@
+{
+  "id": "u-20261002-license-manager-enforce-limit",
+  "source": {
+    "type": "user",
+    "added": "2026-10-02",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A food company bought 50 licenses of Windows Server to be used by developers when launching Amazon EC2 instances to deploy and test applications. The company recently adopted AWS Systems Manager Application Manager to group and monitor EC2-based workloads by team.\nThe developers are free to provision EC2 instances as long as a license is available. The licenses are tied to the total CPU count of each virtual machine. The company wants to ensure that developers won’t be able to launch new instances once the licenses are exhausted, and wants to receive notifications when all licenses are in use.\nWhich of the following options is the recommended solution to meet the company’s requirements?",
+    "options": [
+      "Define licensing rules on AWS License Manager to track and control license usage. Enable the option to “Enforce license limit” to prevent going over the number of allocated licenses. Add an Amazon SNS topic to send notifications and alerts.",
+      "Upload the licenses on AWS Systems Manager Fleet Manager to be encrypted and distributed to EC2 instances. Attach an IAM role on the EC2 instances to request a license from the Fleet Manager. Set up an Amazon SNS to send notifications and alerts once all licenses are used.",
+      "Configure AWS Resource Access Manager (AWS RAM) to track and control the licenses used by AWS resources. Configure AWS RAM to provide available licenses for EC2 instances. Set up an Amazon SNS to send notifications and alerts once all licenses are used.",
+      "Define license configuration rules on AWS Certificate Manager to track and control license usage. Enable the option to “Enforce certificate limit” to prevent going over the number of allocated licenses. Add an Amazon SQS queue with ChangeVisibility Timeout configured to send notifications and alerts."
+    ],
+    "answer": 0,
+    "explanation": "AWS License Manager tracks software licenses (by vCPU, core, socket or instance count) for EC2 and on-premises servers. A license configuration with a license count and the 'Enforce license limit' option blocks launches of new instances once the limit is reached, and it can publish notifications to an SNS topic when usage hits a threshold. Fleet Manager is a Systems Manager console for managing servers and does not distribute licenses. RAM shares AWS resources between accounts and does not track license usage. AWS Certificate Manager issues TLS/SSL certificates, which have nothing to do with software licenses, and SQS is not a notification service."
+  },
+  "concept": "AWS License Manager: track licenses and enforce the limit on EC2 launches",
+  "tests": "Choosing AWS License Manager (license configuration with 'Enforce license limit' + SNS) to cap launches when BYOL licenses are exhausted.",
+  "expected": "License Manager license configuration (count by vCPU/core/socket/instance), 'Enforce license limit' to block launches, SNS for threshold alerts. Triggers: 'licenses', 'won't be able to launch instances once exhausted', 'tied to CPU count', 'notifications when all licenses are in use'.",
+  "why_not": "Fleet Manager is a console for managing and remotely administering servers, it does not store or distribute licenses. RAM shares resources like subnets or Transit Gateways between accounts and has no license tracking. AWS Certificate Manager manages TLS certificates, not software licenses, and 'Enforce certificate limit' does not exist; SQS is a queue, not an alerting service.",
+  "keywords": [
+    "AWS License Manager",
+    "license configuration",
+    "Enforce license limit",
+    "vCPU",
+    "BYOL",
+    "Windows Server licenses",
+    "SNS notifications",
+    "Systems Manager Fleet Manager",
+    "RAM",
+    "Certificate Manager"
+  ],
+  "services": [
+    "license-manager",
+    "ec2",
+    "systems-manager",
+    "sns",
+    "ram",
+    "acm"
+  ],
+  "topics": [
+    "ec2-compute"
+  ],
+  "domain": 4,
+  "related": []
+}
