@@ -1,0 +1,101 @@
+# Deploys the static trainer (site/) to AWS with Pulumi (infra/) on every merge to main/master.
+# Setup and the OIDC trust policy: infra/README.md. Nothing reaches AWS until the repo variable DEPLOY_ENABLED=true.
+name: learning-aws-deploy
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - "site/**"
+      - "infra/**"
+      - ".github/workflows/learning-aws-deploy.yml"
+  pull_request:
+    paths:
+      - "site/**"
+      - "infra/**"
+      - ".github/workflows/learning-aws-deploy.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # GitHub OIDC token, exchanged for temporary AWS credentials (no stored keys)
+
+env:
+  AWS_REGION: eu-west-1
+  PULUMI_STACK: prod
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Site content is valid and generated files are fresh
+        working-directory: site
+        run: |
+          node scripts/build-hub.mjs --check
+          node scripts/validate-content.mjs
+          node --test
+      - uses: astral-sh/setup-uv@v5
+      - name: Infrastructure unit tests (Pulumi mocks, no AWS)
+        working-directory: infra
+        run: uv run --python 3.12 pytest
+
+  preview:
+    if: github.event_name == 'pull_request' && vars.DEPLOY_ENABLED == 'true' && github.event.pull_request.head.repo.full_name == github.repository
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+      - uses: pulumi/setup-pulumi@v2
+      - name: pulumi preview
+        working-directory: infra
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          SITE_DOMAIN: ${{ vars.SITE_DOMAIN }}
+          SITE_ZONE: ${{ vars.SITE_ZONE }}
+          SITE_BASIC_AUTH: ${{ secrets.SITE_BASIC_AUTH }}
+        run: |
+          pulumi stack select "$PULUMI_STACK" --create
+          [ -n "$SITE_DOMAIN" ] && pulumi config set domain "$SITE_DOMAIN"
+          [ -n "$SITE_ZONE" ] && pulumi config set zoneName "$SITE_ZONE"
+          [ -n "$SITE_BASIC_AUTH" ] && pulumi config set --secret basicAuth "$SITE_BASIC_AUTH"
+          pulumi preview --diff --non-interactive | tee "$GITHUB_STEP_SUMMARY"
+
+  deploy:
+    if: github.event_name != 'pull_request' && vars.DEPLOY_ENABLED == 'true'
+    needs: test
+    runs-on: ubuntu-latest
+    environment: prod # optional: add required reviewers in Settings > Environments for a manual approval
+    concurrency:
+      group: learning-aws-pulumi-prod # Pulumi locks the stack: deploys queue, never run in parallel or get cancelled
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+      - uses: pulumi/setup-pulumi@v2
+      - name: pulumi up
+        working-directory: infra
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          SITE_DOMAIN: ${{ vars.SITE_DOMAIN }}
+          SITE_ZONE: ${{ vars.SITE_ZONE }}
+          SITE_BASIC_AUTH: ${{ secrets.SITE_BASIC_AUTH }}
+        run: |
+          pulumi stack select "$PULUMI_STACK" --create
+          [ -n "$SITE_DOMAIN" ] && pulumi config set domain "$SITE_DOMAIN"
+          [ -n "$SITE_ZONE" ] && pulumi config set zoneName "$SITE_ZONE"
+          [ -n "$SITE_BASIC_AUTH" ] && pulumi config set --secret basicAuth "$SITE_BASIC_AUTH"
+          pulumi up --yes --skip-preview --non-interactive
+          echo "Site: $(pulumi stack output url)" | tee -a "$GITHUB_STEP_SUMMARY"

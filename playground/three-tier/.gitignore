@@ -1,8 +1,0 @@
-node_modules/
-dist/
-.venv/
-__pycache__/
-.env
-*.pyc
-.pytest_cache/
-Pulumi.*.yaml

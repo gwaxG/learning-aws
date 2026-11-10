@@ -4,9 +4,10 @@ A personal, offline study trainer for the **AWS Certified Solutions Architect �
 
 ## Run it
 
-ES modules + `fetch` need an HTTP origin (opening `index.html` as `file://` is blocked by CORS), so serve the folder:
+ES modules + `fetch` need an HTTP origin (opening `index.html` as `file://` is blocked by CORS), so serve the `site/` folder:
 
 ```bash
+cd site
 node serve.js          # → http://localhost:8000
 # or: python3 -m http.server 8000
 ```
@@ -79,3 +80,13 @@ node scripts/build-hub.mjs         # rebuild content/hub/index.json (after any h
 Pass mark is 720/1000; the score is scaled `100 + (correct/total) × 900`.
 
 See [CLAUDE.md](CLAUDE.md) for the maps' schemas and the workflow for adding new questions.
+
+## Repository layout and deployment
+
+```
+site/    the trainer (index.html, css/, js/, content/, scripts/, tests/, book/, serve.js, CLAUDE.md)
+infra/   Pulumi (Python): S3 + CloudFront + ACM + Route 53 for site/  (see infra/README.md)
+.github/workflows/learning-aws-deploy.yml   tests on PRs, `pulumi up` on merge to main/master
+docs/    design notes
+```
+Deploy: `cd infra && pulumi up` (config and CI setup in [infra/README.md](infra/README.md)).
