@@ -1,0 +1,46 @@
+{
+  "id": "u-20261110-s3-multipart-transfer-acceleration-global-uploads",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A news network uses Amazon Simple Storage Service (Amazon S3) to aggregate the raw video footage from its reporting teams across the US. The news network has recently expanded into new geographies in Europe and Asia. The technical teams at the overseas branch offices have reported huge delays in uploading large video files to the destination Amazon S3 bucket.\nWhich of the following are the MOST cost-effective options to improve the file upload speed into Amazon S3 (Select two)",
+    "options": [
+      "Create multiple AWS Site-to-Site VPN connections between the AWS Cloud and branch offices in Europe and Asia. Use these VPN connections for faster file uploads into Amazon S3",
+      "Use multipart uploads for faster file uploads into the destination Amazon S3 bucket",
+      "Create multiple AWS Direct Connect connections between the AWS Cloud and branch offices in Europe and Asia. Use the direct connect connections for faster file uploads into Amazon S3",
+      "Use Amazon S3 Transfer Acceleration (Amazon S3TA) to enable faster file uploads into the destination S3 bucket",
+      "Use AWS Global Accelerator for faster file uploads into the destination Amazon S3 bucket"
+    ],
+    "answer": [
+      1,
+      3
+    ],
+    "explanation": "Two S3-native levers: S3 Transfer Acceleration sends the upload to the nearest CloudFront edge location, which forwards it over the AWS backbone, and multipart upload splits a large object into parts uploaded in parallel (recommended from about 100 MB, with per-part retry). Direct Connect takes weeks to months and is overkill; Site-to-Site VPN runs over the internet and does not speed up S3 uploads; Global Accelerator fronts ALB/NLB/EC2 endpoints and cannot front an S3 bucket."
+  },
+  "concept": "Fast long-distance S3 uploads: Transfer Acceleration + multipart upload",
+  "tests": "Choosing the cheap S3-native upload accelerators and rejecting network products (VPN, Direct Connect, Global Accelerator) that do not speed up S3.",
+  "expected": "Use S3 Transfer Acceleration and multipart upload. Triggers: \"delays uploading large files\", \"overseas offices\", \"MOST cost-effective\".",
+  "why_not": "VPN: encrypted but still over the variable public internet, does not accelerate S3. Direct Connect: months to provision and costly, overkill. Global Accelerator: supports ALB, NLB, EC2 and Elastic IP endpoints, not S3 buckets.",
+  "keywords": [
+    "S3 Transfer Acceleration",
+    "multipart upload",
+    "upload speed",
+    "Global Accelerator",
+    "Direct Connect",
+    "Site-to-Site VPN",
+    "overseas offices"
+  ],
+  "services": [
+    "s3-performance",
+    "s3",
+    "global-accelerator"
+  ],
+  "topics": [
+    "storage"
+  ],
+  "domain": 4,
+  "related": []
+}

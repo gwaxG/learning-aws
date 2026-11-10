@@ -531,7 +531,8 @@
             "Web ACL: rules by IP, geo, headers, SQLi, XSS",
             "Rate-based rules against HTTP floods",
             "Managed rule groups (AWS and Marketplace)",
-            "Doesn't work on NLB (L4)"
+            "Doesn't work on NLB (L4)",
+            "Geo match rule blocks or allows by country on an ALB, API Gateway or CloudFront; security groups and NACLs cannot filter by country, and CloudFront geo restriction needs CloudFront in front"
           ],
           "use_when": [
             "Protection against SQL injection / XSS",
@@ -1251,7 +1252,8 @@
             "Provider: NLB (or GWLB) + endpoint service; consumer: interface endpoint",
             "One-way access to a specific service, not the whole VPC",
             "Works with overlapping CIDRs",
-            "Scales to thousands of consumers (SaaS)"
+            "Scales to thousands of consumers (SaaS)",
+            "Expose a database privately to another VPC/account: the provider fronts it with an NLB and publishes an endpoint service, the consumer creates an interface endpoint; no peering, Transit Gateway, VPN, Direct Connect or internet needed"
           ],
           "use_when": [
             "Expose a service to hundreds of customer VPCs without peering",
@@ -1446,7 +1448,8 @@
             "VIF: private (VPC), public (AWS public services), transit (TGW)",
             "Direct Connect Gateway — access to VPCs in different Regions and accounts; associates only with a virtual private gateway or a Transit Gateway (transit VIF), NOT with VPC peering",
         "New accounts sharing an existing DX: DX Gateway + Transit Gateway (no new DX per account)",
-            "HA: two DX connections in different locations; cheap option — DX + VPN backup"
+            "HA: two DX connections in different locations; cheap option — DX + VPN backup",
+            "Direct Connect is dedicated and low latency but NOT encrypted: add a Site-to-Site VPN (IPsec) over it for dedicated plus encrypted; VPN alone has variable internet latency"
           ],
           "use_when": [
             "Consistent latency and high throughput",
@@ -1906,7 +1909,8 @@
             "Spread across multiple AZs; cooldown/warm-up",
             "Mixed instances (On-Demand + Spot); warm pools; lifecycle hooks",
             "Default termination policy: balance AZs, then oldest launch template",
-            "Avoid over-provisioning without hurting performance = target tracking scaling (keeps a metric at a target, scales in and out); simple scaling waits for cooldown, scheduled is for predictable patterns, suspend/resume is not a policy"
+            "Avoid over-provisioning without hurting performance = target tracking scaling (keeps a metric at a target, scales in and out); simple scaling waits for cooldown, scheduled is for predictable patterns, suspend/resume is not a policy",
+            "Maintenance on one instance: put it into Standby (stays in the group, takes no traffic, desired capacity drops by one) or suspend the ReplaceUnhealthy process then set-instance-health Healthy and resume; suspending ScheduledActions only stops scheduled scaling"
           ],
           "use_when": [
             "Keep CPU at ~50% → target tracking",
@@ -2055,7 +2059,8 @@
           "facts": [
             "Same APIs; EC2, EBS, ECS, EKS, RDS, S3 on Outposts locally",
             "AWS installs and maintains it; you're responsible for physical security",
-            "Connects to a parent Region"
+            "Connects to a parent Region",
+            "Kubernetes with AWS APIs and all data on premises: Outposts rack runs EKS (EKS Anywhere on Outposts) locally; Direct Connect with cloud EKS, Local Zones and Snowball Edge do not keep workloads in your data center"
           ],
           "use_when": [
             "Low latency to on-prem systems, data must stay local (data residency)",
@@ -2468,7 +2473,9 @@
             "Standard-IA and One Zone-IA: min 30 days, retrieval fee; One Zone — single AZ",
             "Glacier Instant Retrieval (ms, min 90 days), Flexible Retrieval (minutes–hours, min 90 days), Deep Archive (up to 12–48 h, min 180 days)",
             "Express One Zone — single-digit ms latency, single AZ, directory buckets",
-            "All have 11 nines of durability (One Zone loses data if the AZ is lost)"
+            "All have 11 nines of durability (One Zone loses data if the AZ is lost)",
+            "Billing basis differs: S3 and EFS bill the stored GB (about $0.023 vs $0.30 per GB-month) while EBS bills the PROVISIONED size, so a 1 GB file on a 100 GB gp2 volume costs about $10 versus $0.30 on EFS and $0.023 on S3 Standard",
+            "Rarely read data (for example twice a year) that still needs millisecond access fits Standard-IA (lower storage price plus retrieval fee, 99.9% availability); Deep Archive takes hours, Intelligent-Tiering adds a monitoring fee"
           ],
           "use_when": [
             "Unknown/changing access pattern → Intelligent-Tiering",
@@ -2510,7 +2517,8 @@
             "Transition actions (to IA/Glacier) and expiration actions",
             "Filter by prefix/tag; actions for noncurrent versions",
             "Delete incomplete multipart uploads",
-            "Minimum 30 days in Standard before transitioning to IA"
+            "Minimum 30 days in Standard before transitioning to IA",
+            "Lifecycle transitions move only down the waterfall; unsupported: any class back to Standard, Intelligent-Tiering to Standard-IA, One Zone-IA to Standard-IA or Intelligent-Tiering"
           ],
           "use_when": [
             "After 30 days to IA, after 90 to Glacier, delete after 7 years",
@@ -2631,7 +2639,9 @@
             "More prefixes → more parallel throughput",
             "Multipart upload and byte-range fetches for parallelism",
             "Transfer Acceleration for long-distance uploads",
-            "S3 Select / Express One Zone for low latency"
+            "S3 Select / Express One Zone for low latency",
+            "Multipart upload is recommended from about 100 MB (required above 5 GB, max object 5 TB): parts upload in parallel and failed parts are retried alone. Combine it with Transfer Acceleration for far-away clients; Global Accelerator, VPN and Direct Connect are not cost-effective ways to speed up S3 uploads",
+            "Transfer Acceleration is billed only for transfers that were actually accelerated (AWS does not charge if it was no faster), and data transfer INTO S3 from the internet is free"
           ],
           "use_when": [
             "Uploading large files from far away is slow → Transfer Acceleration + multipart",
@@ -2758,7 +2768,8 @@
             "Data is lost on stop, terminate, hibernate or host failure (reboot preserves it)",
         "Stop/start: instance-store data lost + host may change, but Elastic IP and primary ENI stay attached",
             "Very high IOPS / low latency",
-            "Size is fixed by the instance type"
+            "Size is fixed by the instance type",
+            "Replicated or disposable data needing very high random I/O at the lowest cost: instance store (included in the instance price, lost on stop, terminate or host failure)"
           ],
           "use_when": [
             "Buffer, cache, scratch data",
@@ -2794,7 +2805,8 @@
             "Storage classes: Standard, IA, Archive + lifecycle management",
             "Throughput modes: Elastic (recommended), Provisioned, Bursting",
             "Shared storage for hundreds of ECS tasks with constant high-frequency reads/writes (small data set, ~10 TB): EFS with Provisioned Throughput + Max I/O performance mode, mounted in the ECS task definition. Bursting throughput scales with stored size and cannot sustain constant heavy demand; performance mode is chosen at creation and cannot be changed. FSx for Windows is SMB for Windows workloads; DynamoDB is a database and cannot be mounted",
-            "Mounts in EC2, ECS, EKS, Lambda"
+            "Mounts in EC2, ECS, EKS, Lambda",
+            "EFS access control layers: security groups on mount targets (network), IAM file system policy / IAM authorization (who can mount and write), access points and POSIX permissions; NACLs act at subnet level and GuardDuty only detects"
           ],
           "use_when": [
             "Shared file system for many Linux EC2 instances across AZs",
@@ -2838,7 +2850,9 @@
             "FSx for Lustre — HPC/ML, hundreds of GB/s, S3 integration (lazy load, write back)",
             "Lustre: scratch (temporary, cheap) vs persistent",
             "FSx for NetApp ONTAP — NFS/SMB/iSCSI, NetApp migration",
-            "FSx for OpenZFS — NFS, ZFS migration"
+            "FSx for OpenZFS — NFS, ZFS migration",
+            "FSx for Windows File Server supports SMB, Active Directory and Microsoft DFS namespaces (shares in one tree up to hundreds of PB); FSx for Lustre has no DFS",
+            "FSx for Lustre links to an S3 bucket: S3 objects appear as files, hot data is processed in the parallel file system, results are written back to S3 where cold data stays cheap (EDA, HPC, ML)"
           ],
           "use_when": [
             "Windows apps with SMB and Active Directory → FSx for Windows",
@@ -2978,7 +2992,8 @@
             "Manual snapshots are kept indefinitely; cross-Region copy",
             "Storage autoscaling; encryption only at creation (otherwise snapshot → copy encrypted → restore)",
             "IAM database authentication (MySQL/PostgreSQL only, not SQL Server)",
-            "Encrypt in-flight data to RDS (e.g. SQL Server): download the RDS root CA certificate, import it on the clients and configure the application to connect with SSL, and force SSL for every connection with the rds.force_ssl parameter = true (static parameter: reboot the DB instance). TDE only encrypts data at rest on SQL Server/Oracle, IAM DB authentication is only a login method, and security groups on port 443 do not encrypt anything (databases do not listen on 443)"
+            "Encrypt in-flight data to RDS (e.g. SQL Server): download the RDS root CA certificate, import it on the clients and configure the application to connect with SSL, and force SSL for every connection with the rds.force_ssl parameter = true (static parameter: reboot the DB instance). TDE only encrypts data at rest on SQL Server/Oracle, IAM DB authentication is only a login method, and security groups on port 443 do not encrypt anything (databases do not listen on 443)",
+            "RDS Custom (Oracle, SQL Server) gives OS and database customization with automated backups and Multi-AZ; plain RDS has no host OS access, and self-managing on EC2 is high maintenance"
           ],
           "use_when": [
             "Relational OLTP workload without managing the DB",
@@ -3019,7 +3034,8 @@
             "Failover triggers — PRIMARY only: AZ outage, network loss, compute or storage failure, OS patching / instance class change, reboot with failover",
             "The standby (Multi-AZ instance) doesn't serve reads",
             "Multi-AZ DB cluster: 2 readable standbys, failover ~35 s",
-            "Backups are taken from the standby — no load on the primary"
+            "Backups are taken from the standby — no load on the primary",
+            "Multi-AZ replicates synchronously to a standby in another AZ of the same Region (HA); read replicas replicate asynchronously and can be same-AZ, cross-AZ or cross-Region, so never swap the two modes"
           ],
           "use_when": [
             "High availability and automatic DB failover",
@@ -3098,7 +3114,8 @@
             "Connection pooling — critical for Lambda (many short-lived connections)",
             "Reduces failover time by up to ~66%",
             "IAM authentication, secrets in Secrets Manager",
-            "Serverless, Multi-AZ, accessible only from within the VPC"
+            "Serverless, Multi-AZ, accessible only from within the VPC",
+            "RDS Proxy pools and reuses connections so traffic spikes do not exhaust Aurora/RDS connections; combine with SQS buffering and ASG workers for write bursts (ElastiCache is not a durable write buffer, API Gateway throttling rejects demand)"
           ],
           "use_when": [
             "Lambda exhausts connections to RDS",
@@ -3136,7 +3153,8 @@
             "Up to 15 Aurora Replicas, failover usually < 30 s",
             "Writer endpoint, reader endpoint (load-balanced), custom endpoints",
             "Backtrack (MySQL), cloning, Aurora Auto Scaling replicas",
-            "Aurora I/O-Optimized for I/O-intensive workloads"
+            "Aurora I/O-Optimized for I/O-intensive workloads",
+            "Babelfish for Aurora PostgreSQL understands T-SQL and the SQL Server wire protocol, so SQL Server apps move with minimal refactoring; pair it with SCT (schema) and DMS (data)"
           ],
           "use_when": [
             "High-performance, highly available relational DB",
@@ -3217,7 +3235,8 @@
             "1 primary Region + up to 10 secondary Regions (read-only)",
             "Storage-level replication, usually < 1 s",
             "Managed failover/switchover; RTO about 1 minute, RPO ~ seconds",
-            "Write forwarding from secondary Regions"
+            "Write forwarding from secondary Regions",
+            "For one globally readable table keep Aurora: a Global Database cluster (primary Region plus read-only secondary Regions) for it and separate regional clusters for regional-only tables; moving to DynamoDB means rewriting SQL access"
           ],
           "use_when": [
             "Global application with low read latency worldwide",
@@ -3311,7 +3330,8 @@
             "API-compatible with DynamoDB — minimal code changes",
             "Caches items and query results",
         "Microsecond reads for hot items; pair with DynamoDB Auto Scaling (DAX doesn't scale table capacity)",
-            "Cluster in a VPC, Multi-AZ"
+            "Cluster in a VPC, Multi-AZ",
+            "DynamoDB alone is single-digit milliseconds and not in-memory; DynamoDB + DAX adds an in-memory cache (microsecond reads) and is a valid in-memory leaderboard design"
           ],
           "use_when": [
             "Read-heavy DynamoDB, need microsecond latency",
@@ -3380,7 +3400,8 @@
             "Memcached: simple multithreaded cache, no replication/persistence",
             "Patterns: lazy loading (cache-aside), write-through, TTL",
             "Session store for stateless applications",
-            "Requires application code changes; serverless option available"
+            "Requires application code changes; serverless option available",
+            "Redis (sorted sets, Multi-AZ replicas) is the standard in-memory store for gaming leaderboards; Aurora, Neptune and plain DynamoDB are not in-memory"
           ],
           "use_when": [
             "Reduce load on RDS and read latency",
@@ -3616,7 +3637,8 @@
             "Retention 1 min – 14 days (default 4 days)",
             "Visibility timeout default 30 s, max 12 h",
             "ASG can scale on ApproximateNumberOfMessages (backlog per instance)",
-            "DLQ after maxReceiveCount; delay queues up to 15 min; long polling up to 20 s"
+            "DLQ after maxReceiveCount; delay queues up to 15 min; long polling up to 20 s",
+            "SQS standard + Lambda (batched event source mapping) + DynamoDB auto scaling is a fully serverless ingestion pipeline with no capacity to provision; Firehose cannot write directly to DynamoDB"
           ],
           "use_when": [
             "Decouple producer and consumer, buffer during load spikes",
@@ -3663,7 +3685,8 @@
             "Queue name must end with .fifo",
             "300 msg/s without batching, 3,000 with batching; high throughput mode — much more",
             "Message group ID — ordering within a group; deduplication ID / content-based dedup (5-min window)",
-            "Exactly-once processing"
+            "Exactly-once processing",
+            "FIFO queues give exactly-once processing (deduplication) and ordering; standard queues and EventBridge are at-least-once, so duplicates are possible"
           ],
           "use_when": [
             "Order of operations is critical (transactions, commands)",
@@ -4170,7 +4193,8 @@
             "Crawlers automatically infer schemas and populate the Data Catalog",
             "Data Catalog is used by Athena, Redshift Spectrum, EMR",
             "Job bookmarks — keep state between runs so the job processes only NEW data (fix for 'old data reprocessed / job gets slower'); no custom cleanup needed",
-            "Glue DataBrew — visual data preparation; Glue Data Quality"
+            "Glue DataBrew — visual data preparation; Glue Data Quality",
+            "DataBrew is the no-code visual data preparation tool for analysts and engineers: 250+ transformations, shareable versioned recipes, built-in data profiling and lineage; Glue Studio is visual ETL that generates Spark code and has no column profiling"
           ],
           "use_when": [
             "Serverless ETL: convert CSV to Parquet (crawler discovers schema + scheduled/triggered ETL job)",

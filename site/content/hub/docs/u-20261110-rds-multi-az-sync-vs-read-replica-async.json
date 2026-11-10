@@ -1,0 +1,42 @@
+{
+  "id": "u-20261110-rds-multi-az-sync-vs-read-replica-async",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A new DevOps engineer has just joined a development team and wants to understand the replication capabilities for Amazon RDS Multi-AZ deployment as well as Amazon RDS Read-replicas.\nWhich of the following correctly summarizes these capabilities for the given database?",
+    "options": [
+      "Multi-AZ follows synchronous replication and spans at least two Availability Zones (AZs) within a single region. Read replicas follow asynchronous replication and can be within an Availability Zone (AZ), Cross-AZ, or Cross-Region",
+      "Multi-AZ follows asynchronous replication and spans one Availability Zone (AZ) within a single region. Read replicas follow synchronous replication and can be within an Availability Zone (AZ), Cross-AZ, or Cross-Region",
+      "Multi-AZ follows asynchronous replication and spans at least two Availability Zones (AZs) within a single region. Read replicas follow asynchronous replication and can be within an Availability Zone (AZ), Cross-AZ, or Cross-Region",
+      "Multi-AZ follows asynchronous replication and spans at least two Availability Zones (AZs) within a single region. Read replicas follow synchronous replication and can be within an Availability Zone (AZ), Cross-AZ, or Cross-Region"
+    ],
+    "answer": 0,
+    "explanation": "Multi-AZ replicates synchronously to a standby in another AZ of the same Region (high availability, automatic failover, no read traffic on the classic standby). Read replicas use the engine's native asynchronous replication (scale reads, can sit in the same AZ, another AZ or another Region, so replica lag is possible)."
+  },
+  "concept": "Multi-AZ = synchronous (HA); read replicas = asynchronous (scale reads)",
+  "tests": "Not swapping the replication modes of Multi-AZ and read replicas.",
+  "expected": "Multi-AZ synchronous within one Region, read replicas asynchronous incl. cross-Region. Triggers: \"replication capabilities\", Multi-AZ vs read replicas.",
+  "why_not": "Any option with asynchronous Multi-AZ is wrong (that would risk data loss at failover); any option with synchronous read replicas is wrong (writes would depend on every replica); \"one AZ\" contradicts Multi-AZ, which needs at least two.",
+  "keywords": [
+    "RDS Multi-AZ",
+    "read replicas",
+    "synchronous replication",
+    "asynchronous replication",
+    "cross-Region",
+    "replica lag"
+  ],
+  "services": [
+    "rds-multi-az",
+    "read-replicas",
+    "rds"
+  ],
+  "topics": [
+    "databases",
+    "ha-dr"
+  ],
+  "domain": 2,
+  "related": []
+}

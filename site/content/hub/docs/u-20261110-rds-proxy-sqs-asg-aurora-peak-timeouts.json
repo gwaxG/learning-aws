@@ -1,0 +1,47 @@
+{
+  "id": "u-20261110-rds-proxy-sqs-asg-aurora-peak-timeouts",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A digital event-ticketing platform hosts its core transaction-processing service on AWS. The service runs on Amazon EC2 instances and stores finalized transactions in an Amazon Aurora PostgreSQL database. During periods of high user activity - such as flash ticket sales or holiday promotions - the application begins timing out, causing failed or delayed purchases. A solutions architect has been asked to redesign the backend for scalability and cost-efficiency, without reengineering the database layer.\nWhich combination of actions will meet these goals in the most cost-effective and scalable manner? (Select two)",
+    "options": [
+      "Implement Amazon RDS Proxy between the application and the Aurora PostgreSQL cluster. Deploy EC2 instances in an Auto Scaling group to retry transactions as needed",
+      "Modify the application to publish purchase events to an Amazon SQS queue. Launch an Auto Scaling group of EC2 workers that poll the queue and process purchases asynchronously",
+      "Use an Amazon ElastiCache cluster to cache database queries. Configure the application to store purchase transactions in the cache before writing to the database",
+      "Deploy read replicas for the Aurora database in another Region and configure EC2 instances to read and write from the nearest replica based on latency",
+      "Deploy an Amazon API Gateway with throttling and usage plans to slow down incoming purchase requests during peak times and maintain application stability"
+    ],
+    "answer": [
+      0,
+      1
+    ],
+    "explanation": "Two fixes for write spikes against Aurora: RDS Proxy pools and reuses database connections so many app instances do not exhaust the database, and an SQS queue with an Auto Scaling group of workers buffers bursts and processes purchases asynchronously. ElastiCache is not a durable write buffer, read replicas are read-only (and cross-Region writes are impossible), and API Gateway throttling rejects customers instead of adding capacity."
+  },
+  "concept": "Peak-load timeouts on Aurora: RDS Proxy (connection pooling) + SQS buffering with ASG workers",
+  "tests": "Matching database-connection exhaustion and bursty writes to RDS Proxy and queue-based decoupling.",
+  "expected": "RDS Proxy plus SQS with ASG workers. Triggers: \"timeouts during peaks\", \"without reengineering the database\", \"cost-effective and scalable\".",
+  "why_not": "ElastiCache as a write buffer: not durable, a node failure loses purchases. Cross-Region read replicas: read-only, cannot take writes. API Gateway throttling: suppresses demand (failed purchases) rather than scaling.",
+  "keywords": [
+    "RDS Proxy",
+    "connection pooling",
+    "SQS",
+    "Auto Scaling group",
+    "Aurora PostgreSQL",
+    "flash sale"
+  ],
+  "services": [
+    "rds-proxy",
+    "sqs",
+    "aurora",
+    "auto-scaling"
+  ],
+  "topics": [
+    "databases",
+    "integration"
+  ],
+  "domain": 3,
+  "related": []
+}

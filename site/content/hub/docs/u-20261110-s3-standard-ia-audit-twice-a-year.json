@@ -1,0 +1,42 @@
+{
+  "id": "u-20261110-s3-standard-ia-audit-twice-a-year",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "An audit department generates and accesses the audit reports only twice in a financial year. The department uses AWS Step Functions to orchestrate the report creating process that has failover and retry scenarios built into the solution. The underlying data to create these audit reports is stored on Amazon S3, runs into hundreds of Terabytes and should be available with millisecond latency.\nAs an AWS Certified Solutions Architect – Associate, which is the MOST cost-effective storage class that you would recommend to be used for this use-case?",
+    "options": [
+      "Amazon S3 Standard",
+      "Amazon S3 Glacier Deep Archive",
+      "Amazon S3 Intelligent-Tiering (S3 Intelligent-Tiering)",
+      "Amazon S3 Standard-Infrequent Access (S3 Standard-IA)"
+    ],
+    "answer": 3,
+    "explanation": "Data read only twice a year but needed with millisecond latency fits S3 Standard-IA: same latency and durability as Standard, lower per-GB storage price plus a retrieval fee. Its 99.9% availability is acceptable because the workflow retries. Standard costs more for rarely read data, Intelligent-Tiering adds a per-object monitoring fee that is not worth it for a known pattern, and Glacier Deep Archive takes hours to retrieve."
+  },
+  "concept": "Rarely read but millisecond access = S3 Standard-IA",
+  "tests": "Choosing between S3 storage classes by access frequency and latency, and using the retry design to accept 99.9% availability.",
+  "expected": "S3 Standard-IA. Triggers: \"twice in a financial year\", \"millisecond latency\", \"MOST cost-effective\", retries built in.",
+  "why_not": "S3 Standard: pays the highest storage price for data that is rarely read. Intelligent-Tiering: monitoring fee, and the pattern is already known. Glacier Deep Archive: retrieval takes hours, breaks the millisecond requirement.",
+  "keywords": [
+    "S3 Standard-IA",
+    "infrequent access",
+    "millisecond latency",
+    "Glacier Deep Archive",
+    "Intelligent-Tiering",
+    "audit reports"
+  ],
+  "services": [
+    "s3-storage-classes",
+    "s3",
+    "glacier"
+  ],
+  "topics": [
+    "storage",
+    "cost"
+  ],
+  "domain": 4,
+  "related": []
+}

@@ -1,0 +1,42 @@
+{
+  "id": "u-20261110-privatelink-nlb-expose-rds-cross-account",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A biotech research company needs to perform data analytics on real-time lab results provided by a partner organization. The partner stores these lab results in an Amazon RDS for MySQL instance within the partner’s own AWS account. The research company has a private VPC that does not have internet access, Direct Connect, or a VPN connection. However, the company must establish secure and private connectivity to the RDS database in the partner’s VPC. The solution must allow the research company to connect from its VPC while minimizing complexity and complying with data security requirements.\nWhich solution will meet these requirements?",
+    "options": [
+      "Set up VPC peering between the company’s VPC and the partner’s VPC. Use AWS Transit Gateway in the partner's account to route traffic from the company’s VPC to the database. Modify the RDS subnet route tables to allow access from the company’s CIDR block",
+      "Instruct the partner to create a Network Load Balancer (NLB) in front of the Amazon RDS for MySQL instance. Use AWS PrivateLink to expose the NLB as an interface VPC endpoint in the research company’s VPC",
+      "Configure a client VPN endpoint in the company’s account. Have researchers connect to the VPN from their local machines. Establish a Direct Connect gateway to the partner’s VPC and route RDS traffic via this connection",
+      "Instruct the partner to enable public access on the Amazon RDS instance and add a security group rule to allow inbound access from the company’s IP range. The company accesses the database over the public internet through a NAT Gateway configured in a private subnet"
+    ],
+    "answer": 1,
+    "explanation": "AWS PrivateLink exposes a service privately to other VPCs and accounts: the partner fronts the database with a Network Load Balancer (the NLB targets the DB, for example via its IP or an RDS Proxy), publishes it as an endpoint service, and the research company creates an interface VPC endpoint in its own VPC. Traffic stays on the AWS network with no internet, VPN or Direct Connect. Peering plus Transit Gateway is a contradictory design, Client VPN/Direct Connect are not available, and public RDS plus NAT breaks the no-internet rule."
+  },
+  "concept": "Private cross-account access to a database = NLB + PrivateLink endpoint service + interface endpoint",
+  "tests": "Using PrivateLink to share a service across VPCs/accounts without peering, internet or VPN.",
+  "expected": "NLB in front of RDS, exposed with PrivateLink as an interface endpoint. Triggers: \"private connectivity\", partner's VPC and account, \"no internet/DX/VPN\", \"minimizing complexity\".",
+  "why_not": "Peering plus Transit Gateway: you use one or the other, and it is more complex (also overlapping CIDR risks). Client VPN plus Direct Connect gateway: DX is explicitly unavailable, and Client VPN serves users, not VPC-to-VPC. Public RDS via NAT: needs an internet gateway and exposes the database.",
+  "keywords": [
+    "PrivateLink",
+    "Network Load Balancer",
+    "interface VPC endpoint",
+    "cross-account",
+    "RDS",
+    "endpoint service"
+  ],
+  "services": [
+    "privatelink",
+    "elb",
+    "rds",
+    "vpc-endpoints"
+  ],
+  "topics": [
+    "vpc-networking"
+  ],
+  "domain": 1,
+  "related": []
+}

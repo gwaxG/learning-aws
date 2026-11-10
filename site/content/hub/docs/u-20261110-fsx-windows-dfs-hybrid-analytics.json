@@ -1,0 +1,40 @@
+{
+  "id": "u-20261110-fsx-windows-dfs-hybrid-analytics",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A large financial institution operates an on-premises data center with hundreds of petabytes of data managed on Microsoft’s Distributed File System (DFS). The CTO wants the organization to transition into a hybrid cloud environment and run data-intensive analytics workloads that support DFS.\nWhich of the following AWS services can facilitate the migration of these workloads?",
+    "options": [
+      "Amazon FSx for Windows File Server",
+      "Amazon FSx for Lustre",
+      "Microsoft SQL Server on AWS",
+      "AWS Directory Service for Microsoft Active Directory (AWS Managed Microsoft AD)"
+    ],
+    "answer": 0,
+    "explanation": "FSx for Windows File Server is SMB/NTFS storage with Active Directory integration and it supports Microsoft DFS namespaces (and DFS replication), letting you organize shares into one folder tree up to hundreds of PB. FSx for Lustre is a Linux HPC file system without DFS; SQL Server on AWS is a database; AWS Managed Microsoft AD is a directory service and does not store files or support DFS."
+  },
+  "concept": "Microsoft DFS namespaces = FSx for Windows File Server",
+  "tests": "Matching a Windows file-system feature (DFS, SMB, AD) to FSx for Windows File Server rather than to Lustre or a directory service.",
+  "expected": "Amazon FSx for Windows File Server. Triggers: \"Microsoft's Distributed File System (DFS)\", \"hundreds of petabytes\", Windows file shares.",
+  "why_not": "FSx for Lustre: POSIX HPC file system, no DFS or SMB. SQL Server on AWS: a relational database, not a file system. Managed Microsoft AD: identity service, no file storage or DFS.",
+  "keywords": [
+    "FSx for Windows File Server",
+    "DFS",
+    "SMB",
+    "Distributed File System",
+    "Active Directory",
+    "hybrid"
+  ],
+  "services": [
+    "fsx",
+    "directory-service"
+  ],
+  "topics": [
+    "storage"
+  ],
+  "domain": 3,
+  "related": []
+}

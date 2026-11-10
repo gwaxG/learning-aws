@@ -1,0 +1,43 @@
+{
+  "id": "u-20261110-fsx-lustre-eda-hot-cold-data",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "An Electronic Design Automation (EDA) application produces massive volumes of data that can be divided into two categories. The 'hot data' needs to be both processed and stored quickly in a parallel and distributed fashion. The 'cold data' needs to be kept for reference with quick access for reads and updates at a low cost.\nWhich of the following AWS services is BEST suited to accelerate the aforementioned chip design process?",
+    "options": [
+      "AWS Glue",
+      "Amazon FSx for Windows File Server",
+      "Amazon FSx for Lustre",
+      "Amazon EMR"
+    ],
+    "answer": 2,
+    "explanation": "FSx for Lustre is a parallel, high-throughput file system for HPC/EDA/ML that integrates with S3: S3 objects appear as files, hot data is processed in the parallel file system and results are written back to S3, where cold data stays cheap. FSx for Windows cannot present S3 objects as files; EMR and Glue are big-data processing/ETL, not a fast shared file system."
+  },
+  "concept": "HPC / EDA hot-and-cold data = FSx for Lustre linked to S3",
+  "tests": "Choosing the parallel file system with S3 integration for HPC workloads.",
+  "expected": "Amazon FSx for Lustre. Triggers: \"Electronic Design Automation\", \"hot data parallel and distributed\", \"cold data\" kept cheaply (S3).",
+  "why_not": "FSx for Windows: SMB file server, no S3 link, not HPC-parallel. EMR: Hadoop/Spark cluster for analytics, not a low-latency file system. Glue: batch ETL service, no storage or speed benefit for chip design.",
+  "keywords": [
+    "FSx for Lustre",
+    "EDA",
+    "HPC",
+    "parallel file system",
+    "S3 integration",
+    "hot data",
+    "cold data"
+  ],
+  "services": [
+    "fsx",
+    "s3",
+    "emr",
+    "glue"
+  ],
+  "topics": [
+    "storage"
+  ],
+  "domain": 3,
+  "related": []
+}

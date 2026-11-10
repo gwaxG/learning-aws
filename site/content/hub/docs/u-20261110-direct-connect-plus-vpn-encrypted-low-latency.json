@@ -1,0 +1,41 @@
+{
+  "id": "u-20261110-direct-connect-plus-vpn-encrypted-low-latency",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "The engineering team at an e-commerce company wants to establish a dedicated, encrypted, low latency, and high throughput connection between its data center and AWS Cloud. The engineering team has set aside sufficient time to account for the operational overhead of establishing this connection.\nAs a solutions architect, which of the following solutions would you recommend to the company?",
+    "options": [
+      "Use AWS Direct Connect to establish a connection between the data center and AWS Cloud",
+      "Use AWS site-to-site VPN to establish a connection between the data center and AWS Cloud",
+      "Use AWS Transit Gateway to establish a connection between the data center and AWS Cloud",
+      "Use AWS Direct Connect plus virtual private network (VPN) to establish a connection between the data center and AWS Cloud"
+    ],
+    "answer": 3,
+    "explanation": "Direct Connect is dedicated, low-latency and high-throughput but not encrypted by itself. Running a Site-to-Site VPN (IPsec) over Direct Connect adds encryption, giving dedicated plus encrypted. A VPN alone rides the variable public internet, and Transit Gateway is a routing hub, not a link to the data center."
+  },
+  "concept": "Dedicated + encrypted + low latency = Direct Connect + VPN",
+  "tests": "Remembering that Direct Connect is not encrypted by default.",
+  "expected": "Direct Connect plus VPN (IPsec). Triggers: \"dedicated, encrypted, low latency, high throughput\", time available for setup.",
+  "why_not": "Direct Connect alone: no encryption. Site-to-Site VPN alone: encrypted but over the internet, variable latency and throughput. Transit Gateway: connects VPCs and networks but is not itself a connection.",
+  "keywords": [
+    "Direct Connect",
+    "VPN",
+    "IPsec",
+    "encrypted",
+    "dedicated connection",
+    "hybrid connectivity"
+  ],
+  "services": [
+    "direct-connect",
+    "site-to-site-vpn",
+    "transit-gateway"
+  ],
+  "topics": [
+    "vpc-networking"
+  ],
+  "domain": 3,
+  "related": []
+}

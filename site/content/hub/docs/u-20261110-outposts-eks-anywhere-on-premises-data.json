@@ -1,0 +1,40 @@
+{
+  "id": "u-20261110-outposts-eks-anywhere-on-premises-data",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A financial services company operates a containerized microservices architecture using Kubernetes in its on-premises data center. Due to strict industry regulations and internal security policies, all application data and workloads must remain physically within the on-premises environment. The company’s infrastructure team wants to modernize its Kubernetes stack and take advantage of AWS-managed services and APIs, including automated Kubernetes upgrades, Amazon CloudWatch integration, and access to AWS IAM features — but without migrating any data or compute resources to the cloud.\nWhich AWS solution will best meet the company’s requirements for modernization while ensuring that all data remains on premises?",
+    "options": [
+      "Set up a dedicated AWS Direct Connect connection between the on-premises environment and an AWS Region. Deploy Amazon EKS in the cloud and connect it to the local Kubernetes cluster. Use IAM roles and API Gateway to integrate authentication and traffic flow for hybrid workloads",
+      "Deploy Amazon ECS with Fargate in a nearby AWS Local Zone. Use CloudWatch Logs to forward events to the primary region. Connect the Local Zone to the company’s data center over a VPN. Configure containers to pull data from on-premises storage through a mounted file share",
+      "Use an AWS Snowball Edge Compute Optimized device to run EKS-compatible Docker containers on-site. Periodically export application logs and container snapshots to Amazon S3 using Snowball’s offline data transfer features. Use the Snowball console to orchestrate workloads in batches",
+      "Install an AWS Outposts rack in the company’s data center. Use Amazon EKS Anywhere on Outposts to run containerized workloads locally while integrating with AWS APIs"
+    ],
+    "answer": 3,
+    "explanation": "AWS Outposts racks put AWS infrastructure and APIs in your own data center, so Kubernetes (Amazon EKS on Outposts, or EKS Anywhere) runs locally with AWS tooling such as IAM and CloudWatch while data never leaves the premises. A cloud-hosted EKS cluster or a Local Zone runs in AWS facilities, and Snowball Edge is for temporary edge/offline transfer, not long-running production clusters."
+  },
+  "concept": "Kubernetes with AWS APIs and data staying in your data center = AWS Outposts (EKS)",
+  "tests": "Matching data-residency plus AWS-managed Kubernetes to Outposts instead of cloud, Local Zone or Snow options.",
+  "expected": "AWS Outposts rack with EKS (EKS Anywhere on Outposts). Triggers: \"all data and workloads must remain physically on premises\", \"AWS-managed services and APIs\", Kubernetes.",
+  "why_not": "Direct Connect + EKS in the cloud: workloads and data move to the cloud. ECS on Fargate in a Local Zone: Local Zones are AWS-operated sites outside your data center, and ECS is not Kubernetes. Snowball Edge: for offline/edge batch work, not a managed long-term Kubernetes platform.",
+  "keywords": [
+    "AWS Outposts",
+    "EKS Anywhere",
+    "data residency",
+    "on-premises Kubernetes",
+    "Local Zone",
+    "Snowball Edge"
+  ],
+  "services": [
+    "outposts",
+    "eks"
+  ],
+  "topics": [
+    "serverless-containers"
+  ],
+  "domain": 1,
+  "related": []
+}

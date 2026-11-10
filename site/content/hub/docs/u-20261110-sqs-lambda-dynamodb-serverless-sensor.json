@@ -1,0 +1,43 @@
+{
+  "id": "u-20261110-sqs-lambda-dynamodb-serverless-sensor",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A leading carmaker would like to build a new car-as-a-sensor service by leveraging fully serverless components that are provisioned and managed automatically by AWS. The development team at the carmaker does not want an option that requires the capacity to be manually provisioned, as it does not want to respond manually to changing volumes of sensor data.\nGiven these constraints, which of the following solutions is the BEST fit to develop this car-as-a-sensor service?",
+    "options": [
+      "Ingest the sensor data in Amazon Kinesis Data Firehose, which directly writes the data into an auto-scaled Amazon DynamoDB table for downstream processing",
+      "Ingest the sensor data in an Amazon Simple Queue Service (Amazon SQS) standard queue, which is polled by an application running on an Amazon EC2 instance and the data is written into an auto-scaled Amazon DynamoDB table for downstream processing",
+      "Ingest the sensor data in an Amazon Simple Queue Service (Amazon SQS) standard queue, which is polled by an AWS Lambda function in batches and the data is written into an auto-scaled Amazon DynamoDB table for downstream processing",
+      "Ingest the sensor data in Amazon Kinesis Data Streams, which is polled by an application running on an Amazon EC2 instance and the data is written into an auto-scaled Amazon DynamoDB table for downstream processing"
+    ],
+    "answer": 2,
+    "explanation": "SQS standard queues scale automatically with no capacity to provision, a Lambda function polls the queue in batches (event source mapping) and writes to an auto-scaled DynamoDB table, so every tier is serverless. Firehose cannot write directly to DynamoDB (its destinations are S3, Redshift, OpenSearch, Splunk and HTTP endpoints). Options with an EC2 consumer are not serverless, and a Kinesis stream also needs shard capacity planning unless on-demand mode."
+  },
+  "concept": "Fully serverless ingestion = SQS + Lambda (batches) + DynamoDB auto scaling",
+  "tests": "Spotting the all-serverless pipeline and knowing Firehose cannot target DynamoDB.",
+  "expected": "SQS standard + Lambda + DynamoDB. Triggers: \"fully serverless\", \"does not want capacity manually provisioned\", sensor data.",
+  "why_not": "Firehose to DynamoDB: Firehose does not support DynamoDB as a destination. SQS or Kinesis Data Streams with an EC2 consumer: servers must be provisioned, patched and scaled, so not serverless.",
+  "keywords": [
+    "serverless",
+    "SQS",
+    "Lambda",
+    "DynamoDB auto scaling",
+    "Kinesis Data Firehose",
+    "sensor data"
+  ],
+  "services": [
+    "sqs",
+    "lambda",
+    "dynamodb",
+    "firehose"
+  ],
+  "topics": [
+    "integration",
+    "serverless-containers"
+  ],
+  "domain": 2,
+  "related": []
+}

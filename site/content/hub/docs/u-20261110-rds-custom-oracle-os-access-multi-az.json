@@ -1,0 +1,41 @@
+{
+  "id": "u-20261110-rds-custom-oracle-os-access-multi-az",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A healthcare company uses its on-premises infrastructure to run legacy applications that require specialized customizations to the underlying Oracle database as well as its host operating system (OS). The company also wants to improve the availability of the Oracle database layer. The company has hired you as an AWS Certified Solutions Architect – Associate to build a solution on AWS that meets these requirements while minimizing the underlying infrastructure maintenance effort.\nWhich of the following options represents the best solution for this use case?",
+    "options": [
+      "Leverage multi-AZ configuration of Amazon RDS for Oracle that allows the Database Administrator (DBA) to access and customize the database environment and the underlying operating system",
+      "Deploy the Oracle database layer on multiple Amazon EC2 instances spread across two Availability Zones (AZs). This deployment configuration guarantees high availability and also allows the Database Administrator (DBA) to access and customize the database environment and the underlying operating system",
+      "Leverage multi-AZ configuration of Amazon RDS Custom for Oracle that allows the Database Administrator (DBA) to access and customize the database environment and the underlying operating system",
+      "Leverage cross AZ read-replica configuration of Amazon RDS for Oracle that allows the Database Administrator (DBA) to access and customize the database environment and the underlying operating system"
+    ],
+    "answer": 2,
+    "explanation": "RDS Custom for Oracle gives the DBA access to the database environment and the host OS (privileged access, special patches, third-party agents) while AWS still automates backups, monitoring and Multi-AZ failover, so maintenance stays low. Standard RDS for Oracle never exposes the host OS. Oracle on EC2 allows OS access but you manage servers, patching and the multi-AZ design yourself."
+  },
+  "concept": "OS-level customization of Oracle/SQL Server with managed HA = RDS Custom (Multi-AZ)",
+  "tests": "Choosing RDS Custom when both DB/OS customization and low operational effort are required.",
+  "expected": "Multi-AZ Amazon RDS Custom for Oracle. Triggers: \"customizations to the underlying Oracle database and host OS\", \"improve availability\", \"minimizing maintenance effort\".",
+  "why_not": "RDS for Oracle (Multi-AZ or cross-AZ read replica): no access to the host OS, and a read replica is not an HA setup. Oracle on EC2 across two AZs: customization possible, but you own server health, patching and failover, so high maintenance.",
+  "keywords": [
+    "RDS Custom for Oracle",
+    "host OS access",
+    "Multi-AZ",
+    "legacy applications",
+    "Oracle on EC2",
+    "customization"
+  ],
+  "services": [
+    "rds",
+    "rds-multi-az",
+    "ec2"
+  ],
+  "topics": [
+    "databases"
+  ],
+  "domain": 2,
+  "related": []
+}

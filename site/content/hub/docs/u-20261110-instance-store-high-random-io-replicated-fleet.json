@@ -1,0 +1,43 @@
+{
+  "id": "u-20261110-instance-store-high-random-io-replicated-fleet",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A research group runs its flagship application on a fleet of Amazon EC2 instances for a specialized task that must deliver high random I/O performance. Each instance in the fleet would have access to a dataset that is replicated across the instances by the application itself. Because of the resilient application architecture, the specialized task would continue to be processed even if any instance goes down, as the underlying application would ensure the replacement instance has access to the required dataset.\nWhich of the following options is the MOST cost-optimal and resource-efficient solution to build this fleet of Amazon EC2 instances?",
+    "options": [
+      "Use Amazon EC2 instances with Amazon EFS mount points",
+      "Use Instance Store based Amazon EC2 instances",
+      "Use Amazon EC2 instances with access to Amazon S3 based storage",
+      "Use Amazon Elastic Block Store (Amazon EBS) based EC2 instances"
+    ],
+    "answer": 1,
+    "explanation": "Instance store volumes are physically attached to the host, give very high random I/O and their cost is included in the instance price. Their data is lost when the instance stops, terminates or the host fails, which the application already tolerates because it replicates data itself. EBS (io1/io2) costs extra, EFS needs separate resources, and S3 does not deliver high random I/O."
+  },
+  "concept": "Replicated data + high random I/O at lowest cost = instance store",
+  "tests": "Knowing when ephemeral instance store is the right, cheapest storage.",
+  "expected": "Instance store based EC2 instances. Triggers: \"high random I/O\", \"dataset replicated by the application\", \"MOST cost-optimal\", any instance may fail.",
+  "why_not": "EBS: needs provisioned IOPS volumes for similar performance and is billed separately. EFS: network file system, extra resources and cost. S3: object storage, no high random I/O.",
+  "keywords": [
+    "instance store",
+    "high random I/O",
+    "ephemeral storage",
+    "replicated dataset",
+    "EBS",
+    "EFS"
+  ],
+  "services": [
+    "instance-store",
+    "ebs",
+    "efs",
+    "ec2"
+  ],
+  "topics": [
+    "storage",
+    "ec2-compute"
+  ],
+  "domain": 3,
+  "related": []
+}

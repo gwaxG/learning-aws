@@ -1,0 +1,42 @@
+{
+  "id": "u-20261110-sqs-fifo-exactly-once-permit-requests",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A government agency is developing a online application to assist users in submitting permit requests through a web-based interface. The system architecture consists of a front-end web application tier and a background processing tier that handles the validation and submission of the forms. The application is expected to see high traffic and it must ensure that every submitted request is processed exactly once, with no loss of data.\nWhich design choice best satisfies these requirements?",
+    "options": [
+      "Leverage Amazon API Gateway to pass the form submissions to AWS Lambda for processing in real time",
+      "Implement an Amazon SQS standard queue to reliably buffer and deliver form submissions from the web application layer to the processing tier",
+      "Leverage Amazon EventBridge to send events from the web application to the processing tier for asynchronous form handling",
+      "Implement an Amazon SQS FIFO queue to reliably buffer and deliver form submissions from the web application layer to the processing tier"
+    ],
+    "answer": 3,
+    "explanation": "SQS FIFO queues buffer messages durably between tiers and provide exactly-once processing (deduplication) with ordering, which is what 'processed exactly once, no loss' requires. Standard queues and EventBridge are at-least-once, so duplicates are possible; API Gateway to Lambda is synchronous and has no durable buffer for high traffic."
+  },
+  "concept": "Exactly-once processing between tiers = SQS FIFO",
+  "tests": "Knowing delivery guarantees: FIFO exactly-once vs standard/EventBridge at-least-once.",
+  "expected": "SQS FIFO. Triggers: \"processed exactly once\", \"no loss of data\", web tier to processing tier.",
+  "why_not": "SQS standard: at-least-once, best-effort ordering, duplicates possible. EventBridge: at-least-once delivery, no ordering. API Gateway + Lambda: synchronous, no durable queue between tiers and no exactly-once guarantee.",
+  "keywords": [
+    "SQS FIFO",
+    "exactly once",
+    "SQS standard",
+    "at-least-once",
+    "EventBridge",
+    "decoupling"
+  ],
+  "services": [
+    "sqs",
+    "sqs-fifo",
+    "eventbridge",
+    "api-gateway"
+  ],
+  "topics": [
+    "integration"
+  ],
+  "domain": 2,
+  "related": []
+}

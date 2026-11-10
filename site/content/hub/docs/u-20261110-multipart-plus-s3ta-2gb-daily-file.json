@@ -1,0 +1,39 @@
+{
+  "id": "u-20261110-multipart-plus-s3ta-2gb-daily-file",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A data analytics company measures what the consumers watch and what advertising they’re exposed to. This real-time data is ingested into its on-premises data center and subsequently, the daily data feed is compressed into a single file and uploaded on Amazon S3 for backup. The typical compressed file size is around 2 gigabytes.\nWhich of the following is the fastest way to upload the daily compressed file into Amazon S3?",
+    "options": [
+      "Upload the compressed file in a single operation",
+      "Upload the compressed file using multipart upload",
+      "Upload the compressed file using multipart upload with Amazon S3 Transfer Acceleration (Amazon S3TA)",
+      "FTP the compressed file into an Amazon EC2 instance that runs in the same region as the Amazon S3 bucket. Then transfer the file from the Amazon EC2 instance into the Amazon S3 bucket"
+    ],
+    "answer": 2,
+    "explanation": "Fastest is to combine both: multipart upload sends parts of the 2 GB file in parallel (and retries only failed parts), and Transfer Acceleration routes each part through the nearest edge location over the AWS backbone. Multipart alone leaves the long internet path; a single PUT is slow and fragile above 100 MB; FTP to an EC2 relay adds a hop and scripting."
+  },
+  "concept": "Large file, far from the bucket: multipart upload + S3 Transfer Acceleration together",
+  "tests": "Recognizing that multipart (parallelism) and Transfer Acceleration (network path) are complementary, so the combination is the fastest option.",
+  "expected": "Multipart upload with S3TA. Triggers: \"fastest way\", about 2 GB file, on-premises source.",
+  "why_not": "Single operation: no parallelism or resume, not recommended above 100 MB. Multipart only: faster, but still uses the public internet path, so adding S3TA is faster. EC2 relay over FTP: extra hop and custom scripting, not the fastest.",
+  "keywords": [
+    "multipart upload",
+    "S3 Transfer Acceleration",
+    "2 GB file",
+    "fastest upload",
+    "single PUT"
+  ],
+  "services": [
+    "s3-performance",
+    "s3"
+  ],
+  "topics": [
+    "storage"
+  ],
+  "domain": 3,
+  "related": []
+}

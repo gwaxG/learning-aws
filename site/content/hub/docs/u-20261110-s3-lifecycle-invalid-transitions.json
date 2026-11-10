@@ -1,0 +1,46 @@
+{
+  "id": "u-20261110-s3-lifecycle-invalid-transitions",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "The IT department at a consulting firm is conducting a training workshop for new developers. As part of an evaluation exercise on Amazon S3, the new developers were asked to identify the invalid storage class lifecycle transitions for objects stored on Amazon S3.\nCan you spot the INVALID lifecycle transitions from the options below? (Select two)",
+    "options": [
+      "Amazon S3 Standard => Amazon S3 Intelligent-Tiering",
+      "Amazon S3 Standard-IA => Amazon S3 One Zone-IA",
+      "Amazon S3 One Zone-IA => Amazon S3 Standard-IA",
+      "Amazon S3 Intelligent-Tiering => Amazon S3 Standard",
+      "Amazon S3 Standard-IA => Amazon S3 Intelligent-Tiering"
+    ],
+    "answer": [
+      2,
+      3
+    ],
+    "explanation": "Lifecycle transitions follow a one-way waterfall from hotter to colder classes. Unsupported: any class back to S3 Standard, Intelligent-Tiering to Standard-IA, and One Zone-IA to Standard-IA or Intelligent-Tiering. So One Zone-IA => Standard-IA and Intelligent-Tiering => Standard are invalid, while Standard => Intelligent-Tiering, Standard-IA => One Zone-IA and Standard-IA => Intelligent-Tiering are valid."
+  },
+  "concept": "S3 lifecycle moves only down the waterfall, never back to Standard",
+  "tests": "Knowing which S3 lifecycle transitions are unsupported.",
+  "expected": "Invalid: One Zone-IA => Standard-IA and Intelligent-Tiering => Standard. Rule: Standard -> (Standard-IA, Intelligent-Tiering, One Zone-IA) -> Glacier classes -> Deep Archive; never back up; One Zone-IA cannot go to Standard-IA or Intelligent-Tiering.",
+  "why_not": "Standard => Intelligent-Tiering, Standard-IA => One Zone-IA and Standard-IA => Intelligent-Tiering are all supported downward moves in the waterfall.",
+  "keywords": [
+    "S3 lifecycle",
+    "storage class transitions",
+    "waterfall",
+    "One Zone-IA",
+    "Intelligent-Tiering",
+    "Standard-IA"
+  ],
+  "services": [
+    "s3-lifecycle",
+    "s3-storage-classes",
+    "s3"
+  ],
+  "topics": [
+    "storage",
+    "cost"
+  ],
+  "domain": 4,
+  "related": []
+}

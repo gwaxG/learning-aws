@@ -1,0 +1,44 @@
+{
+  "id": "u-20261110-asg-standby-suspend-replaceunhealthy-maintenance",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "The DevOps team at an e-commerce company wants to perform some maintenance work on a specific Amazon EC2 instance that is part of an Auto Scaling group using a step scaling policy. The team is facing a maintenance challenge - every time the team deploys a maintenance patch, the instance health check status shows as out of service for a few minutes. This causes the Auto Scaling group to provision another replacement instance immediately.\nAs a solutions architect, which are the MOST time/resource efficient steps that you would recommend so that the maintenance work can be completed at the earliest? (Select two)",
+    "options": [
+      "Delete the Auto Scaling group and apply the maintenance fix to the given instance. Create a new Auto Scaling group and add all the instances again using the manual scaling policy",
+      "Put the instance into the Standby state and then update the instance by applying the maintenance patch. Once the instance is ready, you can exit the Standby state and then return the instance to service",
+      "Suspend the `ScheduledActions` process type for the Auto Scaling group and apply the maintenance patch to the instance. Once the instance is ready, you can you can manually set the instance's health status back to healthy and activate the `ScheduledActions` process type again",
+      "Take a snapshot of the instance, create a new Amazon Machine Image (AMI) and then launch a new instance using this AMI. Apply the maintenance patch to this new instance and then add it back to the Auto Scaling Group by using the manual scaling policy. Terminate the earlier instance that had the maintenance issue",
+      "Suspend the `ReplaceUnhealthy` process type for the Auto Scaling group and apply the maintenance patch to the instance. Once the instance is ready, you can manually set the instance's health status back to healthy and activate the `ReplaceUnhealthy` process type again"
+    ],
+    "answer": [
+      1,
+      4
+    ],
+    "explanation": "Two supported ways to patch one ASG instance without a replacement: move it to Standby (it stays in the group but takes no traffic, and the desired capacity is reduced by one) and later exit Standby; or suspend the ReplaceUnhealthy process so unhealthy instances are not terminated, patch, set the instance health back to Healthy and resume the process. ScheduledActions only controls scheduled scaling and does not stop replacement; rebuilding the group or cloning an AMI is slow and wasteful."
+  },
+  "concept": "Patch one ASG instance: Standby state or suspend ReplaceUnhealthy",
+  "tests": "Knowing which Auto Scaling process or state stops unhealthy-instance replacement during maintenance.",
+  "expected": "Standby + suspend ReplaceUnhealthy. Triggers: \"maintenance on a specific instance\", \"ASG provisions a replacement immediately\", \"MOST time/resource efficient\". Process names: Launch, Terminate, HealthCheck, ReplaceUnhealthy, AZRebalance, ScheduledActions, AddToLoadBalancer.",
+  "why_not": "Delete and recreate the ASG: loses config and is heavy. Suspend ScheduledActions: only stops scheduled scaling, replacement still happens. Snapshot, new AMI and new instance: slow and unnecessary, the patch can be applied in place.",
+  "keywords": [
+    "Auto Scaling Standby",
+    "ReplaceUnhealthy",
+    "suspend process",
+    "ScheduledActions",
+    "maintenance",
+    "health check"
+  ],
+  "services": [
+    "auto-scaling",
+    "ec2"
+  ],
+  "topics": [
+    "ec2-compute"
+  ],
+  "domain": 2,
+  "related": []
+}

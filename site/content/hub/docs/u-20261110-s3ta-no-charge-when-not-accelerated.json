@@ -1,0 +1,41 @@
+{
+  "id": "u-20261110-s3ta-no-charge-when-not-accelerated",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A junior scientist working with the Deep Space Research Laboratory at NASA is trying to upload a high-resolution image of a nebula into Amazon S3. The image size is approximately 3 gigabytes. The junior scientist is using Amazon S3 Transfer Acceleration (Amazon S3TA) for faster image upload. It turns out that Amazon S3TA did not result in an accelerated transfer.\nGiven this scenario, which of the following is correct regarding the charges for this image transfer?",
+    "options": [
+      "The junior scientist does not need to pay any transfer charges for the image upload",
+      "The junior scientist only needs to pay Amazon S3 transfer charges for the image upload",
+      "The junior scientist needs to pay both S3 transfer charges and S3TA transfer charges for the image upload",
+      "The junior scientist only needs to pay S3TA transfer charges for the image upload"
+    ],
+    "answer": 0,
+    "explanation": "Data transferred INTO S3 from the internet is free, and with Transfer Acceleration you pay the S3TA fee only for transfers that were actually accelerated (AWS checks and does not charge if it was no faster than a normal upload). So nothing is charged for this upload."
+  },
+  "concept": "S3 inbound transfer is free; S3TA is billed only when it actually accelerates",
+  "tests": "Knowing the S3TA billing rule and that inbound data transfer to S3 is free.",
+  "expected": "No transfer charges at all. Triggers: \"S3TA did not result in an accelerated transfer\", upload INTO S3.",
+  "why_not": "S3 transfer charges: there are none for inbound internet transfer (only outbound). S3TA charges: apply only to accelerated transfers, and this one was not accelerated. Both: both components are zero here.",
+  "keywords": [
+    "S3 Transfer Acceleration",
+    "transfer charges",
+    "data transfer in",
+    "S3TA pricing",
+    "free inbound"
+  ],
+  "services": [
+    "s3-performance",
+    "s3",
+    "data-transfer-costs"
+  ],
+  "topics": [
+    "cost",
+    "storage"
+  ],
+  "domain": 3,
+  "related": []
+}

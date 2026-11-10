@@ -1,0 +1,45 @@
+{
+  "id": "u-20261110-leaderboard-elasticache-redis-dax",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "The engineering team at an in-home fitness company is evaluating multiple in-memory data stores with the ability to power its on-demand, live leaderboard. The company's leaderboard requires high availability, low latency, and real-time processing to deliver customizable user data for the community of users working out together virtually from the comfort of their home.\nAs a solutions architect, which of the following solutions would you recommend? (Select two)",
+    "options": [
+      "Power the on-demand, live leaderboard using Amazon Neptune as it meets the in-memory, high availability, low latency requirements",
+      "Power the on-demand, live leaderboard using Amazon RDS for Aurora as it meets the in-memory, high availability, low latency requirements",
+      "Power the on-demand, live leaderboard using Amazon DynamoDB with DynamoDB Accelerator (DAX) as it meets the in-memory, high availability, low latency requirements",
+      "Power the on-demand, live leaderboard using Amazon ElastiCache for Redis as it meets the in-memory, high availability, low latency requirements",
+      "Power the on-demand, live leaderboard using Amazon DynamoDB as it meets the in-memory, high availability, low latency requirements"
+    ],
+    "answer": [
+      2,
+      3
+    ],
+    "explanation": "The requirement says in-memory. ElastiCache for Redis (sorted sets, Multi-AZ replicas) is the classic leaderboard store, and DynamoDB with DAX adds an in-memory cache in front of DynamoDB. Plain DynamoDB, Aurora and Neptune are disk-based databases, not in-memory."
+  },
+  "concept": "In-memory leaderboard = ElastiCache for Redis or DynamoDB + DAX",
+  "tests": "Recognizing which AWS stores are in-memory (ElastiCache, DAX, MemoryDB) versus disk-based databases.",
+  "expected": "ElastiCache for Redis and DynamoDB with DAX. Triggers: \"in-memory\", \"live leaderboard\", \"low latency\".",
+  "why_not": "DynamoDB alone: single-digit millisecond but not in-memory (needs DAX). Aurora: relational, disk-based. Neptune: graph database, not in-memory.",
+  "keywords": [
+    "leaderboard",
+    "ElastiCache for Redis",
+    "DAX",
+    "in-memory",
+    "sorted sets",
+    "DynamoDB"
+  ],
+  "services": [
+    "elasticache",
+    "dax",
+    "dynamodb"
+  ],
+  "topics": [
+    "databases"
+  ],
+  "domain": 3,
+  "related": []
+}

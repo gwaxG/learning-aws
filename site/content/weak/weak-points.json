@@ -66,6 +66,7 @@
       "severity": 3,
       "why": "The only miss in the diagnostic (IPv6 egress) plus the largest cluster of questions you brought in: peering, Direct Connect, NACLs, endpoints, subnets and route tables, Lambda ENIs.",
       "evidence": [
+        "Missed: private cross-account access to RDS = NLB + PrivateLink endpoint service (picked peering + Transit Gateway); dedicated + encrypted + low latency = Direct Connect + VPN (picked Direct Connect alone).",
         "Missed (twice): many accounts on one existing Direct Connect (DX gateway + Transit Gateway; VPC peering is not supported over a DX gateway, new DX per account or VPN CloudHub is not dedicated)",
         "Missed (twice): private access from a private-subnet EC2 to S3 at the lowest cost (Gateway VPC endpoint is free; interface endpoint costs per hour and per GB, VPN and custom endpoint service are not for S3)",
         "Missed: private DynamoDB access from EKS on Fargate (gateway endpoint associated with route tables, not a NACL rule, interface endpoint or Network Firewall) plus cross-account backup via AWS Backup (not PITR)",
@@ -89,7 +90,8 @@
         "Tier-to-tier least privilege: security group rule Source = the other tier's security group ID (works with Auto Scaling); a source can never be an instance ID or NACL ID",
         "No DNS hostname in a new VPC = enable DNS resolution (enableDnsSupport) and DNS hostnames (enableDnsHostnames); both also needed for private hosted zones; a public hostname also needs a public IPv4 address",
         "Gateway endpoint (S3, DynamoDB) is wired through route table associations; NACLs cannot target endpoints, and a gateway endpoint is the default for private DynamoDB/S3 access from private subnets",
-        "Private-subnet workload to S3 or DynamoDB, cheapest = Gateway endpoint (free, route table); interface endpoint (PrivateLink) only for on-prem/other Region/VPC access or other services; custom endpoint service = publishing your own service"
+        "Private-subnet workload to S3 or DynamoDB, cheapest = Gateway endpoint (free, route table); interface endpoint (PrivateLink) only for on-prem/other Region/VPC access or other services; custom endpoint service = publishing your own service",
+        "PrivateLink (NLB + endpoint service + interface endpoint) shares a service across accounts without peering; Direct Connect is not encrypted, add a VPN."
       ],
       "theory": [
         {
@@ -129,7 +131,8 @@
         "transit-gateway",
         "direct-connect",
         "bastion-host",
-        "site-to-site-vpn"
+        "site-to-site-vpn",
+        "privatelink"
       ]
     },
     {
@@ -138,6 +141,7 @@
       "severity": 3,
       "why": "Self-reported weak area, and the SCP question needed a full explanation. Multi-account questions mix identity, billing, networking and governance, so it helps to have one mental model.",
       "evidence": [
+        "Missed (twice): AD Connector + IAM Identity Center permission sets for an on-premises AD (picked AWS Managed Microsoft AD with a trust).",
         "Missed: SSO for 1200 corporate users to personal S3 folders (identity provider/federation proxy + STS temporary credentials + IAM role and policy; not IAM users, WorkDocs or third-party SSO)",
         "Missed: setting up and governing a multi-account environment with a non-compliance dashboard (Control Tower landing zone + Account Factory + guardrails, not StackSets/Config aggregator or Service Catalog)",
         "Self-reported: Organizations and accounts feel weak",
@@ -197,6 +201,7 @@
       "severity": 3,
       "why": "Several questions here needed an explanation first: key policy vs role permissions, groups for MFA, Parameter Store vs Secrets Manager. Policy evaluation itself is solid (diagnostic: correct). Organizations and SCPs moved to their own area.",
       "evidence": [
+        "Missed: blocking countries on an ALB = AWS WAF geo match (picked CloudFront geo restriction in a VPC).",
         "Missed: encrypted weekly-accessed files needing envelope encryption, rotation and an audit of key use (S3 + SSE-KMS; SSE-S3 has no key audit, SSE-C is self-managed, Deep Archive is for rare access)",
         "Missed: encrypting data stored in S3 for HIPAA (client-side encryption and SSE AES-256; not EBS encryption or snapshots, and S3 has no AES-128)",
         "Missed: encrypting in-flight data to RDS SQL Server (rds.force_ssl=true + reboot and RDS root CA certificate; not TDE, IAM DB auth or port 443 security groups)",
@@ -219,7 +224,8 @@
         "Enforce encryption on S3 uploads = bucket policy denying PutObject without the x-amz-server-side-encryption header; SSE-S3 keys are rotated automatically by AWS; SCPs apply to accounts/OUs not buckets; Object Lock is about immutability not keys",
         "S3 data encryption = client-side encryption and/or SSE AES-256 (no AES-128; EBS encryption does not cover S3)",
         "RDS in-flight encryption = SSL: rds.force_ssl=true (static, reboot) + RDS root CA on the clients; TDE = at rest; IAM DB auth = MySQL/PostgreSQL login only",
-        "Audit trail of key use = KMS (CloudTrail); SSE-S3 and SSE-C give none"
+        "Audit trail of key use = KMS (CloudTrail); SSE-S3 and SSE-C give none",
+        "Block countries: WAF geo match on the ALB; security groups and NACLs cannot filter by country; CloudFront geo restriction needs CloudFront."
       ],
       "theory": [
         {
@@ -253,6 +259,10 @@
         {
           "topic": "databases",
           "heading": "RDS engines, Multi-AZ vs Read Replicas"
+        },
+        {
+          "topic": "edge-dns",
+          "heading": "CloudFront security"
         }
       ],
       "services": [
@@ -265,7 +275,8 @@
         "eventbridge",
         "lambda",
         "s3",
-        "s3-security"
+        "s3-security",
+        "waf"
       ]
     },
     {
@@ -274,6 +285,7 @@
       "severity": 3,
       "why": "Details that exam questions twist: billing by instance state, Reserved Instance marketplace, placement group types, SNI, launch templates and AMIs.",
       "evidence": [
+        "Missed: patch one ASG instance = Standby or suspend ReplaceUnhealthy (picked ScheduledActions and an AMI rebuild); instance store for a replicated high-random-I/O fleet (picked EFS).",
         "Missed (twice): EC2 billing by instance state (stopping-to-hibernate and Reserved Instance on a terminated instance ARE billed) and decommissioning Reserved Instances (sell on the RI Marketplace + snapshot EBS and terminate)",
         "Missed: programmatic cost/usage data and forecasts (Cost Explorer API; Budgets only alerts, CSV export is manual)",
         "Missed: avoiding over-provisioning in an Auto Scaling group (target tracking scaling; simple scaling waits for cooldown, scheduled is for predictable patterns, suspend/resume is not a policy)",
@@ -300,7 +312,8 @@
         "Launch failures after N instances = vCPU-based quota per Region: request a quota increase for that Region and retry",
         "Interruptible, queue-driven, temporary workers = Spot (no bid price anymore, 2-minute notice)",
         "Cut cost without hurting performance in an ASG = target tracking policy",
-        "Code needs cost data or a forecast = Cost Explorer API, not Budgets"
+        "Code needs cost data or a forecast = Cost Explorer API, not Budgets",
+        "ASG maintenance: Standby or suspend ReplaceUnhealthy (ScheduledActions is only scheduled scaling); replicated data + high random I/O = instance store."
       ],
       "theory": [
         {
@@ -352,6 +365,9 @@
       "severity": 3,
       "why": "Specific features that decide the answer: Glacier retrieval options, File Gateway, Transfer Acceleration, AWS Backup retention, and CloudFront private content.",
       "evidence": [
+        "Missed: S3 upload speed: multipart + Transfer Acceleration (picked Global Accelerator, which cannot front S3); multipart + S3TA for a 2 GB daily file (picked multipart only); S3TA is not charged when it does not accelerate (picked 'S3 transfer charges').",
+        "Missed: storage cost order S3 < EFS < EBS (EBS is billed on provisioned GB); S3 Standard-IA for data read twice a year (picked Standard); invalid lifecycle transitions (missed Intelligent-Tiering => Standard).",
+        "Missed: FSx for Windows for Microsoft DFS (picked Managed AD); FSx for Lustre for EDA hot/cold data (picked EMR); EFS access control = security groups + IAM policy (picked GuardDuty).",
         "Missed (twice): immutable retention with versioning (Standard + versioning + Object Lock compliance mode + lifecycle to Deep Archive; governance mode can be bypassed by privileged users)",
         "Missed: 10 TB of audit data read rarely with up to 24 h retrieval (S3 lifecycle to Glacier after 0 days; not IA classes, One Zone-IA or FSx)",
         "Missed (twice): scope of EBS encryption (snapshots of an encrypted volume and volumes restored from them are encrypted; data between volume and instance is encrypted too)",
@@ -377,7 +393,10 @@
         "EBS: replicated only in its AZ, attach only in the same AZ, Elastic Volumes change type/size/IOPS live, snapshots live in S3 (not RDS)",
         "Many containers sharing a file system with constant heavy I/O = EFS mounted in the task definition, Provisioned Throughput (Bursting scales with stored size) + Max I/O; FSx for Windows = SMB, DynamoDB cannot be mounted",
         "Encrypted EBS: snapshots and volumes restored from them are encrypted automatically, and data moving between volume and instance is encrypted as well as data at rest",
-        "Rare access + hours-tolerant retrieval = Glacier via lifecycle (0 days is allowed)"
+        "Rare access + hours-tolerant retrieval = Glacier via lifecycle (0 days is allowed)",
+        "Far-away S3 uploads: multipart + Transfer Acceleration together; S3TA is free when it does not accelerate and inbound transfer is free.",
+        "Cost per GB: S3 < EFS < EBS (provisioned); rarely read with millisecond access = Standard-IA; lifecycle only goes down the waterfall (never back to Standard).",
+        "File systems: Windows/DFS/SMB = FSx Windows; HPC with S3 hot/cold = FSx Lustre; EFS access = security groups + IAM policy."
       ],
       "theory": [
         {
@@ -415,6 +434,10 @@
         {
           "topic": "storage",
           "heading": "EFS vs FSx vs instance store"
+        },
+        {
+          "topic": "storage",
+          "heading": "Lifecycle policies & cost optimization"
         }
       ],
       "services": [
@@ -427,7 +450,11 @@
         "s3-replication",
         "ebs",
         "efs",
-        "ecs"
+        "ecs",
+        "fsx",
+        "s3-performance",
+        "s3-storage-classes",
+        "s3-lifecycle"
       ]
     },
     {
@@ -436,6 +463,9 @@
       "severity": 3,
       "why": "Narrow facts you met once: Glue job bookmarks, the ML services family, moving Aurora to Serverless v2, DAX vs API Gateway caching. Core DR and queue choices are solid (diagnostic: Aurora Global Database and SQS FIFO correct).",
       "evidence": [
+        "Missed: DataBrew for no-code prep with profiling and recipes (picked Glue Studio); in-memory leaderboard = ElastiCache Redis + DynamoDB with DAX (picked plain DynamoDB); RDS Multi-AZ synchronous vs read replicas asynchronous (swapped them).",
+        "Missed: RDS Custom for Oracle host-OS access (picked plain RDS Multi-AZ); RDS Proxy + SQS/ASG for Aurora peak timeouts (picked an ElastiCache write buffer); Aurora Global Database + Aurora for regional tables (picked DynamoDB).",
+        "Missed: fully serverless ingestion = SQS + Lambda + DynamoDB (picked Firehose to DynamoDB); exactly-once between tiers = SQS FIFO (picked API Gateway + Lambda).",
         "Missed: automated cross-account long-term DynamoDB backup (AWS Backup copy to another account; PITR restores only to a new table in the same account, Timestream is not a recovery tool)",
         "Missed: collecting and processing application logs for an audit report (S3 + EMR; not Glacier, a single EC2 instance or ParallelCluster)",
         "Missed: triggering Lambda for new DynamoDB items (DynamoDB Streams + Lambda event source mapping; not SNS from the producer, CloudWatch alarms or Systems Manager)",
@@ -452,7 +482,11 @@
         "Region-outage DR by service: Redshift = cross-Region snapshot copy; Aurora = Global Database; DynamoDB = global tables; S3 = cross-Region replication; same-Region snapshots/Multi-AZ never cover a Region failure",
         "React to DynamoDB changes with no producer changes = DynamoDB Streams + Lambda trigger; CloudWatch alarms fire on metric thresholds, never per item",
         "Large-scale log processing = S3 (store) + EMR (Spark/Hadoop, Spot task nodes) or Athena for SQL; Glacier tiers need retrieval first, ParallelCluster is HPC",
-        "DynamoDB backups: PITR = 35 days, new table, same account/Region; cross-account or long-term = AWS Backup plan with a copy to another account vault"
+        "DynamoDB backups: PITR = 35 days, new table, same account/Region; cross-account or long-term = AWS Backup plan with a copy to another account vault",
+        "No-code data prep with profiling and recipes = DataBrew; Glue Studio generates Spark code.",
+        "In-memory = ElastiCache Redis, DAX, MemoryDB (DynamoDB, Aurora, Neptune are not); Multi-AZ = sync, read replicas = async.",
+        "Managed Oracle with host-OS access = RDS Custom; Aurora spikes = RDS Proxy + SQS buffering; same engine across Regions = Aurora Global Database.",
+        "Serverless ingestion = SQS + Lambda (Firehose cannot target DynamoDB); exactly once = SQS FIFO."
       ],
       "theory": [
         {
@@ -478,6 +512,18 @@
         {
           "topic": "data-migration",
           "heading": "EMR basics"
+        },
+        {
+          "topic": "databases",
+          "heading": "RDS engines, Multi-AZ vs Read Replicas"
+        },
+        {
+          "topic": "databases",
+          "heading": "ElastiCache: Redis vs Memcached + strategies"
+        },
+        {
+          "topic": "integration",
+          "heading": "SQS — Standard vs FIFO"
         }
       ],
       "services": [
@@ -492,7 +538,17 @@
         "redshift",
         "emr",
         "athena",
-        "backup"
+        "backup",
+        "elasticache",
+        "rds",
+        "rds-multi-az",
+        "read-replicas",
+        "rds-proxy",
+        "aurora",
+        "sqs",
+        "sqs-fifo",
+        "lambda",
+        "firehose"
       ]
     },
     {
@@ -501,6 +557,7 @@
       "severity": 2,
       "why": "Several look-alike services solve different migration problems; picking by what is being moved (servers, databases, files, bulk offline data) decides the answer.",
       "evidence": [
+        "Missed: SQL Server to Aurora PostgreSQL = Babelfish + SCT + DMS (picked Aurora Global Database as a compatibility step).",
         "Missed: cheapest DR for on-premises SQL Server with RPO 60 s / RTO 1 h (AWS Elastic Disaster Recovery, pilot-light style; warm standby on RDS + DMS and Always On multi-site cost far more)",
         "Missed: managed, accelerated data replication over Direct Connect (DataSync agent through a service/VPC endpoint; not Storage Gateway types or the Internet path)",
         "Missed: lift-and-shift of VMs with minimal downtime (chose VM Import/Export instead of MGN with the Replication Agent)",
@@ -512,7 +569,8 @@
         "VM Import/Export is a one-time image import with no continuous replication, so downtime is long",
         "Files over the network (NFS/SMB) = DataSync; very large data or weak link = Snow Family; databases and ongoing changes = DMS (+ SCT for a different engine)",
         "DataSync over Direct Connect: agent activated against a VPC (service) endpoint on the private VIF; Storage Gateway is ongoing hybrid access (file/volume/tape), not bulk replication",
-        "Low-cost DR for on-premises servers with tight RPO/RTO = AWS Elastic Disaster Recovery"
+        "Low-cost DR for on-premises servers with tight RPO/RTO = AWS Elastic Disaster Recovery",
+        "T-SQL app moving to Aurora PostgreSQL: Babelfish for compatibility, SCT for schema, DMS for data."
       ],
       "theory": [
         {
@@ -602,13 +660,15 @@
       "severity": 1,
       "why": "Container questions test which layer scales (pods vs nodes) and which option has the least operational overhead.",
       "evidence": [
+        "Missed: Kubernetes with all data on premises = Outposts rack + EKS (picked cloud EKS over Direct Connect).",
         "Missed: scaling EKS worker nodes with least overhead (Cluster Autoscaler with the Metrics Server, not CloudWatch alarms or hand-built Auto Scaling policies)"
       ],
       "rules": [
         "EKS pods scale with the Horizontal Pod Autoscaler (Metrics Server); worker nodes scale with the Cluster Autoscaler (or Karpenter)",
         "CloudWatch alarms alert only; they never add nodes by themselves",
         "Fargate (ECS or EKS) removes node management: choose it when 'least operational overhead' and no host access is needed",
-        "ECS is the simple AWS-native orchestrator; EKS when Kubernetes tooling or portability (Helm, operators) is required; EKS charges a control-plane fee"
+        "ECS is the simple AWS-native orchestrator; EKS when Kubernetes tooling or portability (Helm, operators) is required; EKS charges a control-plane fee",
+        "Data must stay in your data center but you want AWS-managed Kubernetes: Outposts (EKS), not Direct Connect + EKS, Local Zones or Snowball."
       ],
       "theory": [
         {
@@ -630,7 +690,8 @@
         "fargate",
         "ecr",
         "auto-scaling",
-        "app-runner"
+        "app-runner",
+        "outposts"
       ]
     },
     {

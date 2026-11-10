@@ -1,0 +1,42 @@
+{
+  "id": "u-20261110-databrew-no-code-profiling-recipes",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A healthcare analytics company centralizes clinical and operational datasets in an Amazon S3–based data lake. Incoming data is ingested in Apache Parquet format from multiple hospitals and wearable health devices. To ensure quality and standardization, the company applies several transformation steps: anomaly filtering, datetime normalization, and aggregation by patient cohort. The company needs a solution to support a code-free interface that enables data engineers and business analysts to collaborate on data preparation workflows. The company also requires data lineage tracking, data profiling capabilities, and an easy way to share transformation logic across teams without writing or managing code.\nWhich AWS solution best meets these requirements?",
+    "options": [
+      "Use AWS Glue Studio’s visual canvas to design data transformation workflows on top of the Parquet files in Amazon S3. Configure Glue Studio jobs to run these transformations without writing code. Share the job definitions with team members for reuse. Use the visual job editor to track transformation progress and inspect profiling statistics for each dataset column",
+      "Create Amazon Athena SQL queries to perform transformation steps directly on S3. Store queries in AWS Glue Data Catalog and share saved queries with other users through Amazon Athena's query editor",
+      "Use Amazon AppFlow to move and transform Parquet files in S3. Configure AppFlow transformations and mappings within the visual interface. Share flows with collaborators through AWS IAM policies and scheduled executions",
+      "Use AWS Glue DataBrew to visually build transformation workflows on top of the raw Parquet files in S3. Use DataBrew recipes to track, audit, and share the transformation steps with others. Enable data profiling to inspect column statistics, null values, and data types across datasets"
+    ],
+    "answer": 3,
+    "explanation": "AWS Glue DataBrew is the serverless, no-code data preparation tool for analysts and engineers: 250+ point-and-click transformations, reusable and versioned recipes that can be shared, built-in data profiling (column statistics, nulls, outliers) and lineage. Glue Studio is a visual ETL builder that generates Spark code and has no built-in column profiling; Athena needs SQL; AppFlow moves data between SaaS apps and AWS."
+  },
+  "concept": "No-code data preparation with profiling and shareable recipes = AWS Glue DataBrew",
+  "tests": "Telling DataBrew (no-code prep, recipes, profiling) from Glue Studio, Athena and AppFlow.",
+  "expected": "AWS Glue DataBrew. Triggers: \"code-free interface\", \"data profiling\", \"data lineage\", \"share transformation logic\", analysts and engineers.",
+  "why_not": "Glue Studio: visual ETL for developers that generates Spark scripts, no column profiling or recipe library. Athena: SQL is code, no visual prep or profiling. AppFlow: SaaS-to-AWS data movement with basic mappings, not dataset preparation.",
+  "keywords": [
+    "Glue DataBrew",
+    "recipes",
+    "data profiling",
+    "data lineage",
+    "no code",
+    "Glue Studio",
+    "Parquet"
+  ],
+  "services": [
+    "glue",
+    "athena",
+    "appflow"
+  ],
+  "topics": [
+    "data-migration"
+  ],
+  "domain": 2,
+  "related": []
+}

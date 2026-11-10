@@ -1,0 +1,42 @@
+{
+  "id": "u-20261110-storage-cost-order-s3-efs-ebs",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A technology blogger wants to write a review on the comparative pricing for various storage types available on AWS Cloud. The blogger has created a test file of size 1 gigabytes with some random data. Next he copies this test file into AWS S3 Standard storage class, provisions an Amazon EBS volume (General Purpose SSD (gp2)) with 100 gigabytes of provisioned storage and copies the test file into the Amazon EBS volume, and lastly copies the test file into an Amazon EFS Standard Storage filesystem. At the end of the month, he analyses the bill for costs incurred on the respective storage types for the test file.\nWhat is the correct order of the storage charges incurred for the test file on these three storage types?",
+    "options": [
+      "Cost of test file storage on Amazon S3 Standard < Cost of test file storage on Amazon EBS < Cost of test file storage on Amazon EFS",
+      "Cost of test file storage on Amazon S3 Standard < Cost of test file storage on Amazon EFS < Cost of test file storage on Amazon EBS",
+      "Cost of test file storage on Amazon EBS < Cost of test file storage on Amazon S3 Standard < Cost of test file storage on Amazon EFS",
+      "Cost of test file storage on Amazon EFS < Cost of test file storage on Amazon S3 Standard < Cost of test file storage on Amazon EBS"
+    ],
+    "answer": 1,
+    "explanation": "The billing basis differs. S3 Standard (about $0.023 per GB-month) and EFS Standard (about $0.30 per GB-month) bill only the data actually stored, so the 1 GB file costs about $0.023 on S3 and $0.30 on EFS. EBS bills the PROVISIONED size: a 100 GB gp2 volume at about $0.10 per GB-month costs about $10 no matter how little is stored. So S3 < EFS < EBS."
+  },
+  "concept": "S3 and EFS bill used GB; EBS bills provisioned GB",
+  "tests": "Knowing the per-GB price order of S3, EFS and EBS and that EBS is charged on provisioned (not used) capacity.",
+  "expected": "S3 Standard < EFS Standard < EBS (for a small file on a big volume). Triggers: \"provisioned storage\", \"cost for the test file\". Rule of thumb: S3 cheapest per GB, EFS about 10x S3, EBS charged for the whole provisioned volume.",
+  "why_not": "Every other order puts EBS below EFS or S3, which ignores that the 100 GB volume is billed in full ($10) and that EFS ($0.30/GB used) costs more per GB than S3 ($0.023).",
+  "keywords": [
+    "storage pricing",
+    "S3 Standard",
+    "EBS gp2 provisioned",
+    "EFS Standard",
+    "billing basis",
+    "cost comparison"
+  ],
+  "services": [
+    "s3-storage-classes",
+    "ebs",
+    "efs"
+  ],
+  "topics": [
+    "cost",
+    "storage"
+  ],
+  "domain": 4,
+  "related": []
+}

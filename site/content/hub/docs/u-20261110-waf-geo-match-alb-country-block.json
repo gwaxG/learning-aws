@@ -1,0 +1,42 @@
+{
+  "id": "u-20261110-waf-geo-match-alb-country-block",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A media company runs a photo-sharing web application that is accessed across three different countries. The application is deployed on several Amazon Elastic Compute Cloud (Amazon EC2) instances running behind an Application Load Balancer. With new government regulations, the company has been asked to block access from two countries and allow access only from the home country of the company.\nWhich configuration should be used to meet this changed requirement?",
+    "options": [
+      "Configure the security group for the Amazon EC2 instances",
+      "Use Geo Restriction feature of Amazon CloudFront in a Amazon Virtual Private Cloud (Amazon VPC)",
+      "Configure AWS Web Application Firewall (AWS WAF) on the Application Load Balancer in a Amazon Virtual Private Cloud (Amazon VPC)",
+      "Configure the security group on the Application Load Balancer"
+    ],
+    "answer": 2,
+    "explanation": "AWS WAF can be attached to an Application Load Balancer, and a web ACL with a geo match rule allows or blocks requests by country. Security groups filter by IP, port and protocol only, never by country. CloudFront geo restriction works only on a CloudFront distribution (and CloudFront is not part of a VPC), and the app is served directly from the ALB."
+  },
+  "concept": "Country-based blocking in front of an ALB = AWS WAF geo match rule",
+  "tests": "Knowing which layer can filter by geography: WAF (ALB, API Gateway, CloudFront) and CloudFront geo restriction, but not security groups or NACLs.",
+  "expected": "AWS WAF with a geo match rule on the ALB. Triggers: \"block access from two countries\", \"allow only the home country\", ALB without CloudFront.",
+  "why_not": "Security groups (EC2 or ALB): rules use IPs, ports and other SGs, there is no country attribute. CloudFront Geo Restriction: needs a CloudFront distribution in front of the app and CloudFront does not live in a VPC, so the stated setup is wrong.",
+  "keywords": [
+    "AWS WAF",
+    "geo match",
+    "country block",
+    "geo restriction",
+    "Application Load Balancer",
+    "security group"
+  ],
+  "services": [
+    "waf",
+    "elb",
+    "cloudfront"
+  ],
+  "topics": [
+    "edge-dns",
+    "iam-security"
+  ],
+  "domain": 1,
+  "related": []
+}

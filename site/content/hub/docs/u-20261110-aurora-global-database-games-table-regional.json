@@ -1,0 +1,40 @@
+{
+  "id": "u-20261110-aurora-global-database-games-table-regional",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "The flagship application for a gaming company connects to an Amazon Aurora database and the entire technology stack is currently deployed in the United States. Now, the company has plans to expand to Europe and Asia for its operations. It needs the `games` table to be accessible globally but needs the `users` and `games_played` tables to be regional only.\nHow would you implement this with minimal application refactoring?",
+    "options": [
+      "Use a Amazon DynamoDB global table for the `games` table and use Amazon Aurora for the `users` and `games_played` tables",
+      "Use an Amazon Aurora Global Database for the `games` table and use Amazon DynamoDB tables for the `users` and `games_played` tables",
+      "Use an Amazon Aurora Global Database for the `games` table and use Amazon Aurora for the `users` and `games_played` tables",
+      "Use a Amazon DynamoDB global table for the `games` table and use Amazon DynamoDB tables for the `users` and `games_played` tables"
+    ],
+    "answer": 2,
+    "explanation": "Stay on Aurora to avoid refactoring: an Aurora Global Database cluster (one primary Region plus read-only secondary Regions with low-latency local reads) holds the globally readable `games` table, and separate regional Aurora clusters hold the regional-only `users` and `games_played` tables. DynamoDB uses a different NoSQL API, so any option with DynamoDB means rewriting the application."
+  },
+  "concept": "Minimal refactoring across Regions: keep Aurora; Global Database for the global table, regional clusters for the rest",
+  "tests": "Keeping the same database engine to avoid refactoring while splitting global vs regional data.",
+  "expected": "Aurora Global Database for `games` plus regional Aurora clusters for the other tables. Triggers: \"minimal application refactoring\", table global vs regional only.",
+  "why_not": "Any DynamoDB option: DynamoDB is NoSQL with a completely different API, forcing application rewrites of SQL access.",
+  "keywords": [
+    "Aurora Global Database",
+    "DynamoDB global tables",
+    "refactoring",
+    "regional tables",
+    "multi-Region"
+  ],
+  "services": [
+    "aurora-global",
+    "aurora",
+    "dynamodb-global"
+  ],
+  "topics": [
+    "databases"
+  ],
+  "domain": 1,
+  "related": []
+}

@@ -1,0 +1,46 @@
+{
+  "id": "u-20261110-efs-access-security-groups-iam-policy",
+  "source": {
+    "type": "user",
+    "added": "2026-11-10",
+    "origin": "user-supplied practice question (missed)"
+  },
+  "question": {
+    "stem": "A company has moved its business critical data to Amazon Elastic File System (Amazon EFS) which will be accessed by multiple Amazon EC2 instances.\nAs an AWS Certified Solutions Architect - Associate, which of the following would you recommend to exercise access control such that only the permitted Amazon EC2 instances can read from the Amazon EFS file system? (Select two)",
+    "options": [
+      "Use VPC security groups to control the network traffic to and from your file system",
+      "Use network access control list (network ACL) to control the network traffic to and from your Amazon EC2 instance",
+      "Set up the IAM policy root credentials to control and configure the clients accessing the Amazon EFS file system",
+      "Use Amazon GuardDuty to curb unwanted access to Amazon EFS file system",
+      "Use an IAM policy to control access for clients who can mount your file system with the required permissions"
+    ],
+    "answer": [
+      0,
+      4
+    ],
+    "explanation": "EFS access control uses VPC security groups on the mount targets (network level, allow NFS 2049 only from the permitted instances' security group) and IAM (a file system policy and IAM authorization decide who can mount and with what permissions), plus access points and POSIX permissions for files. NACLs work at subnet level, GuardDuty only detects threats, and there are no root-credential IAM policies."
+  },
+  "concept": "EFS access control: security groups + IAM file system policy (+ access points, POSIX)",
+  "tests": "Knowing the layers that control which clients can mount and read EFS.",
+  "expected": "Security groups and an IAM policy. Triggers: \"only the permitted EC2 instances can read from EFS\".",
+  "why_not": "Network ACL: subnet-level and stateless, not per instance. IAM policy root credentials: does not exist. GuardDuty: threat detection, not access control.",
+  "keywords": [
+    "EFS access control",
+    "security groups",
+    "IAM policy",
+    "mount target",
+    "access points",
+    "NFS"
+  ],
+  "services": [
+    "efs",
+    "security-groups",
+    "iam"
+  ],
+  "topics": [
+    "storage",
+    "iam-security"
+  ],
+  "domain": 1,
+  "related": []
+}
